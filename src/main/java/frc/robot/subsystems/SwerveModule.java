@@ -104,7 +104,8 @@ public class SwerveModule {
 
     // Get the raw absolute encoder reading in radians
     public double getAbsoluteEncoderRadRaw() {
-        double angle = absoluteEncoder.getAbsolutePosition() * (Math.PI / 180.0); // convert degrees to radians
+        // TODO please review whether .getValueAsDouble() preserves original behavior.
+        double angle = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * (Math.PI / 180.0); // convert degrees to radians
         return angle; // shorthand for if the encoder is reversed, multiply by -1, else do nothing (multiply by 1)
     }
 
