@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
+//import org.littletonrobotics.junction.Logger;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -72,7 +72,7 @@ public class SwerveSubsystem extends SubsystemBase {
           Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
   // create a Logger object for logging
-  public Logger logger = Logger.getInstance();
+  //public Logger logger = Logger.getInstance();
 
   public SwerveSubsystem() {
     //pause for 500 milliseconds
