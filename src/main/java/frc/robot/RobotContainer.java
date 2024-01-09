@@ -1,12 +1,14 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-// Hello World!
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.SwerveAuto;
+import frc.robot.subsystems.SwerveSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -15,11 +17,26 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+      public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+    //object for presenting selection of options in shuffleboard/ smartdashboard
+    SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    public final Joystick m_driver = new Joystick(1);
+
+    //controller buttons intialized
+    public final XboxController m_operator = new XboxController(0);
+    public final JoystickButton m_joyA = new JoystickButton(m_operator, 1); // button A
+    public final JoystickButton m_joyB = new JoystickButton(m_operator, 2); // button B
+    public final JoystickButton m_joyX = new JoystickButton(m_operator, 3); // button X
+    public final JoystickButton m_joyY = new JoystickButton(m_operator, 4); // button Y
+    public final JoystickButton m_joyLB = new JoystickButton(m_operator, 5); // Left bumper
+    public final JoystickButton m_joyRB = new JoystickButton(m_operator, 6); // Right bumper
+    public final JoystickButton m_joyBK = new JoystickButton(m_operator, 7); // Back Button
+    public final JoystickButton m_joyST = new JoystickButton(m_operator, 8); // Start Button
+
+    public final SwerveAuto autoCmd = new SwerveAuto(swerveSubsystem);
+
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
