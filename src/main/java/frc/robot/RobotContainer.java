@@ -6,9 +6,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AutoBaseCmd;
+import frc.robot.commands.AutoEngageCmd;
 import frc.robot.commands.SwerveAuto;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -40,10 +43,17 @@ public class RobotContainer {
 
     public final SwerveAuto autoCmd = new SwerveAuto(swerveSubsystem);
 
+    //autonomous paths
+    Command blue1_auto = new AutoBaseCmd(swerveSubsystem, "paths/Blue1_CubeExit.wpilib.json", "paths/Blue1B.wpilib.json");
+    Command blue2_auto = new AutoBaseCmd(swerveSubsystem, "paths/Blue2A.wpilib.json", "paths/Blue2B.wpilib.json");
+    Command blue3_auto = new AutoBaseCmd(swerveSubsystem, "paths/Blue3_CubeExit.wpilib.json", "paths/Blue3B.wpilib.json");
+    Command red1_auto = new AutoBaseCmd(swerveSubsystem, "paths/Red1_CubeExit.wpilib.json", "paths/Red1B.wpilib.json");
+    Command red2_auto = new AutoBaseCmd(swerveSubsystem, "paths/Red2A.wpilib.json", "paths/Red2B.wpilib.json");
+    Command red3_auto = new AutoBaseCmd(swerveSubsystem, "paths/Red3_CubeExit.wpilib.json", "paths/Red3B.wpilib.json");
+
+    
+
   public RobotContainer() {
-    // Configure the trigger bindings
-    m_autoChooser.setDefaultOption("Blue1", blue1_auto);
-    m_autoChooser.addOption("blue2", blue2_auto);
 
     SmartDashboard.putData(m_autoChooser);
     swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, m_driver));
