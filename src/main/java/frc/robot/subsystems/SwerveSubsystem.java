@@ -169,7 +169,7 @@ public class SwerveSubsystem extends SubsystemBase {
     odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
     // Log various data points
-    logger.recordOutput("swerve.pitch", getPitchDeg());
+    /*logger.recordOutput("swerve.pitch", getPitchDeg());
     logger.recordOutput("swerve.steer.front.left.abs", frontLeft.getAbsoluteEncoderRad());
     logger.recordOutput("swerve.steer.front.right.abs", frontRight.getAbsoluteEncoderRad());
     logger.recordOutput("swerve.steer.back.left.abs", backLeft.getAbsoluteEncoderRad());
@@ -179,7 +179,7 @@ public class SwerveSubsystem extends SubsystemBase {
     logger.recordOutput("swerve.drive.front.left.velocity", frontLeft.getDriveVelocity());
     logger.recordOutput("swerve.drive.front.right.velocity", frontRight.getDriveVelocity());
     logger.recordOutput("swerve.drive.back.left.velocity", backLeft.getDriveVelocity());
-    logger.recordOutput("swerve.drive.back.right.velocity", backRight.getDriveVelocity());
+    logger.recordOutput("swerve.drive.back.right.velocity", backRight.getDriveVelocity());*/
   }
 
   // Stops all of the robot's swerve modules
