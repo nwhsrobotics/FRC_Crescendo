@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
@@ -21,7 +21,7 @@ public class SwerveModule {
 
     public final PIDController turningPidController;
 
-    private final CANCoder absoluteEncoder;
+    private final CANcoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
 
@@ -31,7 +31,7 @@ public class SwerveModule {
      * @param turningMotorId The ID of the CANSparkMax turning motor.
      * @param driveMotorReversed A boolean indicating whether the drive motor is reversed.
      * @param turningMotorReversed A boolean indicating whether the turning motor is reversed.
-     * @param absoluteEncoderId The ID of the CANCoder absolute encoder.
+     * @param absoluteEncoderId The ID of the CANcoder absolute encoder.
      * @param absoluteEncoderOffset The offset of the absolute encoder in radians.
      * @param absoluteEncoderReversed A boolean indicating whether the absolute encoder is reversed.
      */
@@ -43,7 +43,7 @@ public class SwerveModule {
         this.absoluteEncoderReversed = absoluteEncoderReversed;
 
         // Initialize the absolute encoder using the given id
-        absoluteEncoder = new CANCoder(absoluteEncoderId);
+        absoluteEncoder = new CANcoder(absoluteEncoderId);
 
         // Initialize the drive and turning motors using the given ids
         driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
