@@ -3,11 +3,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.SwerveAuto;
+import frc.robot.commands.SwerveJoystickDefaultCmd;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /**
@@ -39,6 +42,11 @@ public class RobotContainer {
 
   public RobotContainer() {
     // Configure the trigger bindings
+    m_autoChooser.setDefaultOption("Blue1", blue1_auto);
+    m_autoChooser.addOption("blue2", blue2_auto);
+
+    SmartDashboard.putData(m_autoChooser);
+    swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, m_driver));
     configureBindings();
   }
 
@@ -52,10 +60,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+        //assign the button bindings to different commands
+    new JoystickButton(m_driver, 3).onTrue(new InstantCommand(() -> swerveSubsystem.resetHeadingAndPose()));
+    new JoystickButton(m_driver, 2).onTrue(new InstantCommand(() -> swerveSubsystem.switchFR()));
+    new JoystickButton(m_driver, 4).onTrue(new InstantCommand(() -> swerveSubsystem.resetHeadingAndPose()));
+    // new JoystickButton(m_driver, 11).onTrue(new InstantCommand(() -> swerveSubsystem.brake()));
+    // new JoystickButton(m_driver, 5).onTrue(new InstantCommand(() -> swerveSubsystem.brake()));
   }
 
   /**
@@ -63,8 +73,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  /*public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }*/
+  public Command getAutonomousCommand() {
+        //returns what autonomous path is chosen in shuffleboard currently
+        return m_autoChooser.getSelected();
+    }
 }
