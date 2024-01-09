@@ -74,39 +74,6 @@ public final class Constants {
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * 0.25;
     }
 
-    public static final class ShoulderConstants {
-        public static final double kp = 0.5;
-        public static final double absOffset = 0.095;
-        public static final double ki = 0.0;
-        public static final double kd = 0.0;
-        public static final double kIz = 0.0;
-        public static final double kFFz = 0.0;
-        public static final double kMaxOutput = 1.0;
-        public static final double kMinOutput = -1.0;
-        public static final int LeftShoulderCanID = 8;
-        public static final int RightShoulderCanID = 6;
-        public static final double kAngleRange = 55.0;
-    }
-
-    public static final class ExtendArmConstants {
-        public static final double EXTEND_SPEED_IPS = 20.0;
-        public static final double ACCEL_MAX_V_IPS = 60.0;
-        public static final double ACCEL_MAX_A_IPS2 = 60.0; //about 0.2gs @ 80 in/s
-        public static final double SECONDS_PER_TICK = 0.02;
-        public static final double kp = 0.2;
-        public static final double kMaxOutput = 1.0;
-        public static final double kMinOutput = -1.0;
-        public static final int ExtendArmCanID24 = 24;
-        public static final int ExtendArmCanID25 = 25;
-        public static final double MAX_EXTEND_INCH = 20.0;
-        public static final double MIN_VEL_IPS = 4;
-        public static final double MIN_X_INCH = 1;
-    }
-
-    public static final class GrabberConstants {
-        public static final int forwardChannel = 1;
-        public static final int reverseChannel = 3;
-    }
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4.0;
@@ -138,30 +105,6 @@ public final class Constants {
         public static final double kPreciseSpdMetersPerSecond = 0.5;
     }
 
-    public static final class WristConstants {
-        public static final double kp = 0.05;
-        public static final double ki = 0.0;
-        public static final double kd = 0.0;
-        public static final double kIz = 0.0;
-        public static final double kFFz = 0.0;
-        public static final double absAOffset = 0.638;
-        public static final double absBOffset = 0.99;
-        public static final double kMaxOutput = 1.0;
-        public static final double kMinOutput = -1.0;
-        public static final double kMaxRoll = 115.0;
-        public static final double kMinRoll = -115.0;
-        public static final double kMaxPitch = 130.0;
-        public static final double kMinPitch = -90.0;
-        public static final int WristCanIDA = 9;
-        public static final int WristCanIDB = 13;
-        public static final int AbsoluteEncoderAChannel = 2;
-        public static final int AbsoluteEncoderBChannel = 1;
-        public static final double WRIST_GEAR_RATIO_RIGHT = 100.0;
-        public static final double WRIST_GEAR_RATIO_LEFT = 50.0;
-        public static final double REVS_PER_OUTPUT_DEGREE_RIGHT = WRIST_GEAR_RATIO_RIGHT / 360.0;
-        public static final double REVS_PER_OUTPUT_DEGREE_LEFT = WRIST_GEAR_RATIO_LEFT / 360.0;
-        public static final double JOYSTICK_DEADBAND = 0.1;
-    }
 
     public static enum RuntimeEnvironment {
         /** Running on physical robot. */
