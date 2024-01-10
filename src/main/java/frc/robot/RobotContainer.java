@@ -54,6 +54,9 @@ public class RobotContainer {
     
 
   public RobotContainer() {
+    // Configure the trigger bindings
+    //m_autoChooser.setDefaultOption("Blue1", blue1_auto);
+    //m_autoChooser.addOption("blue2", blue2_auto);
 
     SmartDashboard.putData(m_autoChooser);
     swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, m_driver));
