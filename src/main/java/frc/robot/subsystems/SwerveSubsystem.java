@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-//import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.Logger;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -70,9 +70,6 @@ public class SwerveSubsystem extends SubsystemBase {
   // create a SwerveDriveOdometry object to handle odometry calculations
   private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
           Rotation2d.fromDegrees(getHeading()), getModulePositions());
-
-  // create a Logger object for logging
-  //public Logger logger = Logger.getInstance();
 
   public SwerveSubsystem() {
     //pause for 500 milliseconds
@@ -169,17 +166,17 @@ public class SwerveSubsystem extends SubsystemBase {
     odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
     // Log various data points
-    /*logger.recordOutput("swerve.pitch", getPitchDeg());
-    logger.recordOutput("swerve.steer.front.left.abs", frontLeft.getAbsoluteEncoderRad());
-    logger.recordOutput("swerve.steer.front.right.abs", frontRight.getAbsoluteEncoderRad());
-    logger.recordOutput("swerve.steer.back.left.abs", backLeft.getAbsoluteEncoderRad());
-    logger.recordOutput("swerve.steer.back.right.abs", backRight.getAbsoluteEncoderRad());
-    logger.recordOutput("swerve.pose", getPose());
-    logger.recordOutput("swerve.heading", getHeading());
-    logger.recordOutput("swerve.drive.front.left.velocity", frontLeft.getDriveVelocity());
-    logger.recordOutput("swerve.drive.front.right.velocity", frontRight.getDriveVelocity());
-    logger.recordOutput("swerve.drive.back.left.velocity", backLeft.getDriveVelocity());
-    logger.recordOutput("swerve.drive.back.right.velocity", backRight.getDriveVelocity());*/
+    Logger.recordOutput("swerve.pitch", getPitchDeg());
+    Logger.recordOutput("swerve.steer.front.left.abs", frontLeft.getAbsoluteEncoderRad());
+    Logger.recordOutput("swerve.steer.front.right.abs", frontRight.getAbsoluteEncoderRad());
+    Logger.recordOutput("swerve.steer.back.left.abs", backLeft.getAbsoluteEncoderRad());
+    Logger.recordOutput("swerve.steer.back.right.abs", backRight.getAbsoluteEncoderRad());
+    Logger.recordOutput("swerve.pose", getPose());
+    Logger.recordOutput("swerve.heading", getHeading());
+    Logger.recordOutput("swerve.drive.front.left.velocity", frontLeft.getDriveVelocity());
+    Logger.recordOutput("swerve.drive.front.right.velocity", frontRight.getDriveVelocity());
+    Logger.recordOutput("swerve.drive.back.left.velocity", backLeft.getDriveVelocity());
+    Logger.recordOutput("swerve.drive.back.right.velocity", backRight.getDriveVelocity());
   }
 
   // Stops all of the robot's swerve modules
