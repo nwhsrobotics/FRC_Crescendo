@@ -217,10 +217,11 @@ public class SwerveSubsystem extends SubsystemBase {
             Units.degreesToRadians(540), Units.degreesToRadians(720));
 
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    //TODO: Pathfinding command where you press button to activate and then can cancel by moving joystick
     Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
             path,
             constraints,
-            1.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+            2.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
     );
   }
 
