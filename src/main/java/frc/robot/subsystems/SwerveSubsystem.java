@@ -31,6 +31,8 @@ public class SwerveSubsystem extends SubsystemBase {
   // boolean variable to indicate if the robot is Field Relative
   public boolean isFR = true;
   private SwerveDriveKinematics kinematics;
+  public String lastPath;
+  public Command pathfindingCommand;
 
   // 4 instances of SwerveModule to represent each wheel module
   public final SwerveModule frontLeft = new SwerveModule(
@@ -208,6 +210,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void pathFindThenFollowPath(String pathName){
+    lastPath = pathName;
         // Load the path we want to pathfind to and follow
     PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
 
@@ -218,7 +221,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
     //TODO: Pathfinding command where you press button to activate and then can cancel by moving joystick
-    Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
+    pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
             path,
             constraints,
             2.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
