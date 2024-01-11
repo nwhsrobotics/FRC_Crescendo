@@ -1,5 +1,9 @@
 package frc.robot;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 // IMPORTANT: SET UP FOR NEOS for both driving and turning
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -105,6 +109,14 @@ public final class Constants {
         public static final double kPreciseSpdMetersPerSecond = 0.5;
     }
 
+    public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+      new PIDConstants(1.0, 0, 0), // Translation constants 
+      new PIDConstants(1.0, 0, 0), // Rotation constants 
+      DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4.0, 
+      0.72401139493795, // Drive base radius (distance from center to furthest module) 
+      new ReplanningConfig()
+    );
+    
 
     public static enum RuntimeEnvironment {
         /** Running on physical robot. */
