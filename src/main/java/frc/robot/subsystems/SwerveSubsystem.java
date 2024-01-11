@@ -2,6 +2,11 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
@@ -14,6 +19,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
@@ -23,6 +30,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // boolean variable to indicate if the robot is Field Relative
   public boolean isFR = true;
+  private SwerveDriveKinematics kinematics;
 
   // 4 instances of SwerveModule to represent each wheel module
   public final SwerveModule frontLeft = new SwerveModule(
@@ -81,6 +89,25 @@ public class SwerveSubsystem extends SubsystemBase {
     // set the yaw of the gyro to 0
     m_gyro.zeroYaw();
     ;
+        AutoBuilder.configureHolonomic(
+      this::getPose, 
+      this::resetOdometry, 
+      this::getSpeeds, 
+      this::driveRobotRelative, 
+      Constants.pathFollowerConfig,
+      () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+      },
+      this
+    );
   }
 
   // set the speed of the robot in the x direction
@@ -88,6 +115,7 @@ public class SwerveSubsystem extends SubsystemBase {
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, 0.0, 0.0);
     setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds));
   }
+
 
   // get the heading (yaw) of the robot
   public double getHeading() {
@@ -105,6 +133,21 @@ public class SwerveSubsystem extends SubsystemBase {
     resetOdometry(new Pose2d()); // reset the robot's odometry pose
   }
 
+  public ChassisSpeeds getSpeeds() {
+    return kinematics.toChassisSpeeds(getModuleStates());
+  }
+
+  public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+    driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation()));
+  }
+
+  public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+
+    SwerveModuleState[] targetStates = kinematics.toSwerveModuleStates(targetSpeeds);
+    setModuleStates(targetStates);
+  }
+
   public void switchFR() {
     isFR = !isFR; // switch between field-relative and robot-relative driving
   }
@@ -120,6 +163,14 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // reset the odometry system using the current heading, module positions, and specified pose
     odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), pose);
+  }
+
+  public SwerveModuleState[] getModuleStates() {
+    SwerveModuleState[] states = new SwerveModuleState[4];
+    for (int i = 0; i < swerveMods.length; i++) {
+      states[i] = swerveMods[i].getState();
+    }
+    return states;
   }
 
   public void straighten() {
@@ -154,6 +205,23 @@ public class SwerveSubsystem extends SubsystemBase {
             thetaController,
             this::setModuleStates,
             this);
+  }
+
+  public void pathFindThenFollowPath(String pathName){
+        // Load the path we want to pathfind to and follow
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+
+    // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
+    PathConstraints constraints = new PathConstraints(
+            3.0, 4.0,
+            Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
+            path,
+            constraints,
+            1.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+    );
   }
 
   // This method is called periodically to update the robot's state and log data
@@ -209,4 +277,6 @@ public class SwerveSubsystem extends SubsystemBase {
     backLeft.turningMotor.set(backLeft.turningPidController.calculate(backLeft.getTurningPosition(), -Math.PI / 4));
     backRight.turningMotor.set(backRight.turningPidController.calculate(backLeft.getTurningPosition(), Math.PI / 4));
   }
+
+  
 }
