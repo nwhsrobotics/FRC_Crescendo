@@ -94,7 +94,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // set the yaw of the gyro to 0
     m_gyro.zeroYaw();
     ;
-        AutoBuilder.configureHolonomic(
+      AutoBuilder.configureHolonomic(
       this::getPose, 
       this::resetOdometry, 
       this::getSpeeds, 

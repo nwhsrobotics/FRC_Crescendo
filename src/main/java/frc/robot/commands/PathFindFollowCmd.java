@@ -32,11 +32,13 @@ public class PathFindFollowCmd extends Command {
   public void execute() {
     if(controller.getRawButtonPressed(1)){
       if(number == 1){
+      //this will basically take to the starting of the path then follow the path (only recommended if on opposite side of field away from source)
       swerveSubsystem.pathFindThenFollowPath("Source");
-      //or
+      //or if in middle of the field
       //if wanting to path find to exact coord then do this (odometry has to be perfect also the below example is of source)
         //TODO: having more cameras on a robot like limelights will drastically increase field odometry accuracy with pose estimation
         //camera pos estimating accuracy for encoder drift 
+        //or just use limelight instead of odometry to get distance and rotation to tags and add onto current pos2d for target pos2d
       swerveSubsystem.pathFindToPos( new Pose2d(15.50, 1.01, Rotation2d.fromDegrees(15)));
       number = 2;
       } else {
