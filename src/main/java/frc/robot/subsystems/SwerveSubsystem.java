@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import org.littletonrobotics.junction.Logger;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -35,6 +34,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public boolean isFR = true;
   private SwerveDriveKinematics kinematics;
   public String lastPath;
+  public Pose2d lastPose2d;
+  public String lastPathType;
   public Command pathfindingCommand;
 
   // 4 instances of SwerveModule to represent each wheel module
@@ -214,6 +215,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void pathFindThenFollowPath(String pathName){
     lastPath = pathName;
+    lastPathType = "Path";
         // Load the path we want to pathfind to and follow
     PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
 
@@ -234,6 +236,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public void pathFindToPos(Pose2d coords){
     // Since we are using a holonomic drivetrain, the rotation component of this pose
 // represents the goal holonomic rotation
+    lastPose2d = coords;
+    lastPathType = "Pos";
 
 // Create the constraints to use while pathfinding
     PathConstraints constraints = new PathConstraints(
@@ -241,7 +245,6 @@ public class SwerveSubsystem extends SubsystemBase {
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
 
 // Since AutoBuilder is configured, we can use it to build pathfinding commands
-//pathfinding TODO: Fix lastPath String or Pose2d
     pathfindingCommand = AutoBuilder.pathfindToPose(
             coords,
             constraints,
