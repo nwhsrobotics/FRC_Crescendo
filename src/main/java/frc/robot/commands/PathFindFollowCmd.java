@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class PathFindFollowCmd extends Command {
@@ -32,6 +33,8 @@ public class PathFindFollowCmd extends Command {
   public void execute() {
     if(controller.getRawButtonPressed(1)){
       if(pathControlToggle){
+        swerveSubsystem.pathfindingCommand.cancel();
+        swerveSubsystem.pathfindingCommand = null;
       //this will basically take to the starting of the path then follow the path (only recommended if on opposite side of field away from source)
       swerveSubsystem.pathFindThenFollowPath("Source");
       //or if in middle of the field
@@ -39,6 +42,18 @@ public class PathFindFollowCmd extends Command {
         //TODO: having more cameras on a robot like limelights will drastically increase field odometry accuracy with pose estimation
         //camera pos estimating accuracy for encoder drift 
         //or just use limelight instead of odometry to get distance and rotation to tags and add onto current pos2d for target pos2d
+      //swerveSubsystem.pathFindToPos( new Pose2d(15.50, 1.01, Rotation2d.fromDegrees(15)));
+      pathControlToggle = false;
+      } else {
+        swerveSubsystem.pathfindingCommand.cancel();
+        swerveSubsystem.pathfindingCommand = null;
+        pathControlToggle = true;
+      }
+    } 
+    if(controller.getRawButtonPressed(2)){
+      if(pathControlToggle){
+      swerveSubsystem.pathfindingCommand.cancel();
+      swerveSubsystem.pathfindingCommand = null;
       swerveSubsystem.pathFindToPos( new Pose2d(15.50, 1.01, Rotation2d.fromDegrees(15)));
       pathControlToggle = false;
       } else {

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.8863445419198543,
-      "y": 5.515621031242063
+      "x": 1.3491521419562087,
+      "y": 5.495887145620446
     },
     "rotation": 0.0
   },
@@ -15,6 +15,18 @@
           "type": "path",
           "data": {
             "pathName": "Auto Speaker"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auto exit"
           }
         }
       ]
