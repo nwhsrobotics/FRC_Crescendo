@@ -64,7 +64,6 @@ public class Robot extends LoggedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile(m_autonomousCommand.getName()));
       m_autonomousCommand.schedule();
     }
   }
