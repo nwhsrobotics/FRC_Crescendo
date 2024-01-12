@@ -8,8 +8,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
-import static frc.robot.commands.PathFindFollowCmd.pathControlToggle;
-
 public class SwerveJoystickDefaultCmd extends Command {
 
     private final SwerveSubsystem swerveSubsystem;
@@ -49,20 +47,6 @@ public class SwerveJoystickDefaultCmd extends Command {
         ChassisSpeeds chassisSpeeds = (swerveSubsystem.isFR)
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotatingSpeed, Rotation2d.fromDegrees(swerveSubsystem.getHeading()))
                 : ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotatingSpeed, new Rotation2d(0));
-
-        if(xSpeed != 0 && ySpeed != 0 && rotatingSpeed != 0){
-            swerveSubsystem.pathfindingCommand.cancel();
-            swerveSubsystem.pathfindingCommand = null;
-        }
-        if(xSpeed == 0 && ySpeed == 0 && rotatingSpeed == 0){
-            if(pathControlToggle) {
-                if (swerveSubsystem.lastPathType.equals("Path")) {
-                    swerveSubsystem.pathFindThenFollowPath(swerveSubsystem.lastPath);
-                } else if (swerveSubsystem.lastPathType.equals("Pos")){
-                    swerveSubsystem.pathFindToPos(swerveSubsystem.lastPose2d);
-                }
-            }
-        }
 
         // sets the module states for each module based on the ChassisSpeeds
         swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds));

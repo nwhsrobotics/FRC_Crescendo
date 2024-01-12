@@ -30,7 +30,6 @@ public class RobotContainer {
     public final Joystick m_driver = new Joystick(1);
     public final XboxController m_operator = new XboxController(0);
 
-    public final PathFindFollowCmd pathFindFollowCmd = new PathFindFollowCmd(swerveSubsystem, m_operator);
     public final AutoEngageCmd autoEngageCmd = new AutoEngageCmd(swerveSubsystem);
 
     //controller buttons intialized
@@ -62,12 +61,8 @@ public class RobotContainer {
     //m_autoChooser.addOption("blue2", blue2_auto);
     //SmartDashboard.putData(m_autoChooser);
     //TODO: Named commands have to be registed before auto is registered intialize swerve subsystem below here
-    NamedCommands.registerCommand("autoBalance", autoEngageCmd);
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
     //NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
     swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, m_driver));
-    pathFindFollowCmd.schedule();
     configureBindings();
   }
 
