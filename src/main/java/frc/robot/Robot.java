@@ -6,6 +6,8 @@ package frc.robot;
 
 import org.littletonrobotics.junction.LoggedRobot;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -62,6 +64,7 @@ public class Robot extends LoggedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
+      m_robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile(m_autonomousCommand.getName()));
       m_autonomousCommand.schedule();
     }
   }
