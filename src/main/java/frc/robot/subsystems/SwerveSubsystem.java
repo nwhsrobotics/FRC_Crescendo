@@ -241,6 +241,7 @@ public class SwerveSubsystem extends SubsystemBase {
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
 
 // Since AutoBuilder is configured, we can use it to build pathfinding commands
+//pathfinding TODO: Fix lastPath String or Pose2d
     pathfindingCommand = AutoBuilder.pathfindToPose(
             coords,
             constraints,

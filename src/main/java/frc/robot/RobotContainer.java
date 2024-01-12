@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,6 +21,7 @@ import frc.robot.subsystems.SwerveSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
     public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
     //object for presenting selection of options in shuffleboard/ smartdashboard
@@ -58,10 +60,13 @@ public class RobotContainer {
     //m_autoChooser.setDefaultOption("Blue1", blue1_auto);
     //m_autoChooser.addOption("blue2", blue2_auto);
     //SmartDashboard.putData(m_autoChooser);
+      //TODO: Named commands have to be registed be auto is registered intialize swerve subsystem below here
+    NamedCommands.registerCommand("autoBalance", swerve.autoBalanceCommand());
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
     //NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
     swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, m_driver));
+    pathFindFollowCmd.schedule();
     configureBindings();
   }
 
