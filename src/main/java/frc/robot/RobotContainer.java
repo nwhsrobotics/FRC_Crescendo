@@ -1,25 +1,16 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.util.PathPlannerLogging;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AutoBaseCmd;
-import frc.robot.commands.AutoEngageCmd;
-import frc.robot.commands.SwerveAuto;
-import frc.robot.commands.SwerveJoystickDefaultCmd;
+import frc.robot.commands.*;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /**
@@ -35,9 +26,12 @@ public class RobotContainer {
     SendableChooser<Command> autoChooser = new SendableChooser<>();
 
     public final Joystick m_driver = new Joystick(1);
+    public final XboxController m_operator = new XboxController(0);
+
+    public final PathFindFollowCmd pathFindFollowCmd = new PathFindFollowCmd(swerveSubsystem, m_operator);
 
     //controller buttons intialized
-    public final XboxController m_operator = new XboxController(0);
+
     public final JoystickButton m_joyA = new JoystickButton(m_operator, 1); // button A
     public final JoystickButton m_joyB = new JoystickButton(m_operator, 2); // button B
     public final JoystickButton m_joyX = new JoystickButton(m_operator, 3); // button X
