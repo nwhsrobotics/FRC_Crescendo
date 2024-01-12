@@ -35,6 +35,8 @@ public class PathFindFollowCmd extends Command {
       swerveSubsystem.pathFindThenFollowPath("Source");
       //or
       //if wanting to path find to exact coord then do this (odometry has to be perfect also the below example is of source)
+        //TODO: having more cameras on a robot like limelights will drastically increase field odometry accuracy with pose estimation
+        //camera pos estimating accuracy for encoder drift 
       swerveSubsystem.pathFindToPos( new Pose2d(15.50, 1.01, Rotation2d.fromDegrees(15)));
       number = 2;
       } else {
