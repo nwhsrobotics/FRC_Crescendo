@@ -13,7 +13,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class PathFindFollowCmd extends Command {
   private SwerveSubsystem swerveSubsystem;
   private XboxController controller;
-  private int number;
+  public static boolean pathControlToggle;
   /** Creates a new PathFindFollowCmd. */
   public PathFindFollowCmd(SwerveSubsystem swerve, XboxController driver) {
     swerveSubsystem = swerve;
@@ -24,14 +24,14 @@ public class PathFindFollowCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    number = 1;
+    pathControlToggle = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(controller.getRawButtonPressed(1)){
-      if(number == 1){
+      if(pathControlToggle){
       //this will basically take to the starting of the path then follow the path (only recommended if on opposite side of field away from source)
       swerveSubsystem.pathFindThenFollowPath("Source");
       //or if in middle of the field
@@ -40,11 +40,11 @@ public class PathFindFollowCmd extends Command {
         //camera pos estimating accuracy for encoder drift 
         //or just use limelight instead of odometry to get distance and rotation to tags and add onto current pos2d for target pos2d
       swerveSubsystem.pathFindToPos( new Pose2d(15.50, 1.01, Rotation2d.fromDegrees(15)));
-      number = 2;
+      pathControlToggle = false;
       } else {
         swerveSubsystem.pathfindingCommand.cancel();
         swerveSubsystem.pathfindingCommand = null;
-        number = 1;
+        pathControlToggle = true;
       }
     } 
   }
