@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import org.littletonrobotics.junction.Logger;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -222,11 +223,29 @@ public class SwerveSubsystem extends SubsystemBase {
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
 
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
-    //TODO: Pathfinding command where you press button to activate and then can cancel by moving joystick
+    //what pathfinding basically does is path find to start of a path and then continue in that path, if you wanna not follow the path after make it pathfind to specific location
     pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
             path,
             constraints,
             2.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+    );
+  }
+
+  public void pathFindToPos(Pose2d coords){
+    // Since we are using a holonomic drivetrain, the rotation component of this pose
+// represents the goal holonomic rotation
+
+// Create the constraints to use while pathfinding
+    PathConstraints constraints = new PathConstraints(
+            kPhysicalMaxSpeedMetersPerSecond / 4.0, kMaxAccelerationMetersPerSecondSquared / 2.0,
+            kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
+
+// Since AutoBuilder is configured, we can use it to build pathfinding commands
+    pathfindingCommand = AutoBuilder.pathfindToPose(
+            coords,
+            constraints,
+            0.0, // Goal end velocity in meters/sec
+            0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
     );
   }
 
