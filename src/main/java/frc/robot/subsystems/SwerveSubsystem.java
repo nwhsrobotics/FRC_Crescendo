@@ -26,6 +26,10 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
+import static frc.robot.Constants.AutoConstants.*;
+import static frc.robot.Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
+import static frc.robot.Constants.DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+
 public class SwerveSubsystem extends SubsystemBase {
 
   // boolean variable to indicate if the robot is Field Relative
@@ -216,8 +220,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
     PathConstraints constraints = new PathConstraints(
-            3.0, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared,
-            Units.degreesToRadians(540), Units.degreesToRadians(720));
+      kPhysicalMaxSpeedMetersPerSecond / 4.0, kMaxAccelerationMetersPerSecondSquared / 2.0,
+            kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
 
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
     //TODO: Pathfinding command where you press button to activate and then can cancel by moving joystick
@@ -261,7 +265,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // Sets the states of the robot's swerve modules based on the desired states
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     // Scales all speeds down instead of truncating them if they exceed the max speed
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, kPhysicalMaxSpeedMetersPerSecond);
     frontLeft.setDesiredState(desiredStates[0]);
     frontRight.setDesiredState(desiredStates[1]);
     backLeft.setDesiredState(desiredStates[2]);
