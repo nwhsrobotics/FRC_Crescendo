@@ -52,7 +52,7 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
     SmartDashboard.putData("Auto Chooser", autoChooser);
     swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, m_driver));
-    pathFindFollowCmd.schedule();
+    //pathFindFollowCmd.schedule();
     configureBindings();
   }
 
