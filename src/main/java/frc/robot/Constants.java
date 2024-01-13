@@ -113,7 +113,7 @@ public final class Constants {
       new PIDConstants(1.0, 0, 0), // Translation constants 
       new PIDConstants(1.0, 0, 0), // Rotation constants 
       DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4.0, 
-      0.72401139493795, // Drive base radius (distance from center to furthest module) 
+      0.36200569746898, // or Math.sqrt(kTrackWidth*kTrackWidth + kWheelBase*kWheelBase) Drive base radius (distance from center to furthest module) 
       new ReplanningConfig()
     );
     
