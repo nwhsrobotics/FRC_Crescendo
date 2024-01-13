@@ -86,15 +86,6 @@ public class SwerveSubsystem extends SubsystemBase {
           Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
   public SwerveSubsystem() {
-    //pause for 500 milliseconds
-    try {
-      Thread.sleep(500);
-    } catch (InterruptedException e) {
-    }
-
-    // set the yaw of the gyro to 0
-    m_gyro.zeroYaw();
-    ;
       AutoBuilder.configureHolonomic(
       this::getPose, 
       this::resetOdometry, 
@@ -114,6 +105,15 @@ public class SwerveSubsystem extends SubsystemBase {
       },
       this
     );
+    //pause for 500 milliseconds
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+    }
+
+    // set the yaw of the gyro to 0
+    m_gyro.zeroYaw();
+    ;
   }
 
   // set the speed of the robot in the x direction
