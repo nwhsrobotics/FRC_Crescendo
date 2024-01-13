@@ -110,8 +110,8 @@ public final class Constants {
     }
 
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(1.0, 0, 0), // Translation constants 
-      new PIDConstants(1.0, 0, 0), // Rotation constants 
+      new PIDConstants(AutoConstants.kPXController, 0, 0), // Translation constants 
+      new PIDConstants(AutoConstants.kPThetaController, 0, 0), // Rotation constants 
       DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4.0, 
       0.36200569746898, // or Math.sqrt(kTrackWidth*kTrackWidth + kWheelBase*kWheelBase) Drive base radius (distance from center to furthest module) 
       new ReplanningConfig()
@@ -128,7 +128,7 @@ public final class Constants {
     }
     public static final class LoggerConstants {
         public static final RuntimeEnvironment MODE = RuntimeEnvironment.REAL;
-        public static final String RUNNING_UNDER = "2023.q1";
+        public static final String RUNNING_UNDER = "2024.q1";
         // SET TO FALSE IF WE'RE RUNNING OUT OF BANDWIDTH.
         public static final boolean SILENT_NT4 = false;
     }

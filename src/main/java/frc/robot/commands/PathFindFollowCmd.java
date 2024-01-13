@@ -55,7 +55,7 @@ public class PathFindFollowCmd extends Command {
       swerveSubsystem.pathfindingCommand.cancel();
       swerveSubsystem.pathfindingCommand = null;
       //or if in middle of the field as it will go to this specific point
-      swerveSubsystem.pathFindToPos( new Pose2d(15.50, 1.01, Rotation2d.fromDegrees(15)));
+      swerveSubsystem.pathFindToPos( new Pose2d(15.50, 1.01, Rotation2d.fromDegrees(15))); //pos in meters
       pathControlToggle = false;
       } else {
         swerveSubsystem.pathfindingCommand.cancel();
