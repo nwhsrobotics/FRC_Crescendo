@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 //import org.littletonrobotics.junction.Logger;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
@@ -23,7 +26,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // boolean variable to indicate if the robot is Field Relative
     public boolean isFR = true;
-
+    public SwerveDriveKinematics kinematics;
     // 4 instances of SwerveModule to represent each wheel module
     public final SwerveModule frontLeft = new SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
@@ -75,6 +78,27 @@ public class SwerveSubsystem extends SubsystemBase {
     //public Logger logger = Logger.getInstance();
 
     public SwerveSubsystem() {
+        AutoBuilder.configureHolonomic(
+      this::getPose, 
+      this::resetOdometry, 
+      this::getSpeeds, 
+      this::driveRobotRelative, 
+      Constants.pathFollowerConfig,
+      () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+      },
+      this
+    );
+
+
         //pause for 500 milliseconds
         try {
             Thread.sleep(500);
@@ -102,6 +126,13 @@ public class SwerveSubsystem extends SubsystemBase {
         return -m_gyro.getPitch();
     }
 
+    public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+        ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+    
+        SwerveModuleState[] targetStates = kinematics.toSwerveModuleStates(targetSpeeds);
+        setModuleStates(targetStates);
+    }
+
     // reset the heading (yaw) and the odometry pose of the robot
     public void resetHeadingAndPose() {
         m_gyro.zeroYaw(); // reset the yaw angle
@@ -111,6 +142,11 @@ public class SwerveSubsystem extends SubsystemBase {
     public void switchFR() {
         isFR = !isFR; // switch between field-relative and robot-relative driving
     }
+
+    public ChassisSpeeds getSpeeds() {
+        return kinematics.toChassisSpeeds(getModuleStates());
+    }
+    
 
     public Pose2d getPose() {
         return odometer.getPoseMeters(); // get the robot's current pose from the odometry system
@@ -132,6 +168,14 @@ public class SwerveSubsystem extends SubsystemBase {
             s_mod.turningMotor.set(0); // stop turning once the desired angle is reached
         }
     }
+
+    public SwerveModuleState[] getModuleStates() {
+        SwerveModuleState[] states = new SwerveModuleState[4];
+        for (int i = 0; i < swerveMods.length; i++) {
+          states[i] = swerveMods[i].getState();
+        }
+        return states;
+      }
 
     public SwerveModulePosition[] getModulePositions() {
         // get the current position of each swerve module
