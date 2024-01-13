@@ -46,26 +46,11 @@ public class RobotContainer {
 
     public final SwerveAuto autoCmd = new SwerveAuto(swerveSubsystem);
 
-    //autonomous paths
-    Command blue1_auto = new AutoBaseCmd(swerveSubsystem, "paths/Blue1_CubeExit.wpilib.json", "paths/Blue1B.wpilib.json");
-    Command blue2_auto = new AutoBaseCmd(swerveSubsystem, "paths/Blue2A.wpilib.json", "paths/Blue2B.wpilib.json");
-    Command blue3_auto = new AutoBaseCmd(swerveSubsystem, "paths/Blue3_CubeExit.wpilib.json", "paths/Blue3B.wpilib.json");
-    Command red1_auto = new AutoBaseCmd(swerveSubsystem, "paths/Red1_CubeExit.wpilib.json", "paths/Red1B.wpilib.json");
-    Command red2_auto = new AutoBaseCmd(swerveSubsystem, "paths/Red2A.wpilib.json", "paths/Red2B.wpilib.json");
-    Command red3_auto = new AutoBaseCmd(swerveSubsystem, "paths/Red3_CubeExit.wpilib.json", "paths/Red3B.wpilib.json");
-
-
-
   public RobotContainer() {
-    // Configure the trigger bindings
-    //m_autoChooser.setDefaultOption("Blue1", blue1_auto);
-    //m_autoChooser.addOption("blue2", blue2_auto);
-    //SmartDashboard.putData(m_autoChooser);
     //TODO: Named commands have to be registed before auto is registered intialize swerve subsystem below here
     NamedCommands.registerCommand("autoBalance", autoEngageCmd);
-    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    //NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
     swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, m_driver));
     pathFindFollowCmd.schedule();
     configureBindings();
@@ -97,5 +82,11 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
         //returns what autonomous path is chosen in shuffleboard currently
         return autoChooser.getSelected();
+        /*        // Load the path you want to follow using its name in the GUI
+        PathPlannerPath path = PathPlannerPath.fromPathFile("Square");
+
+        // Create a path following command using AutoBuilder. This will also trigger event markers.
+        return AutoBuilder.followPathWithEvents(path); 
+        return new PathPlannerAuto("Auto Square");*/
     }
 }
