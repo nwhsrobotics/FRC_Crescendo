@@ -26,7 +26,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // boolean variable to indicate if the robot is Field Relative
     public boolean isFR = true;
-    public SwerveDriveKinematics kinematics;
     // 4 instances of SwerveModule to represent each wheel module
     public final SwerveModule frontLeft = new SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
@@ -129,7 +128,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
         ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
     
-        SwerveModuleState[] targetStates = kinematics.toSwerveModuleStates(targetSpeeds);
+        SwerveModuleState[] targetStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
         setModuleStates(targetStates);
     }
 
@@ -144,7 +143,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public ChassisSpeeds getSpeeds() {
-        return kinematics.toChassisSpeeds(getModuleStates());
+        return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
     }
     
 

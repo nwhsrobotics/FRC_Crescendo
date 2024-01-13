@@ -114,8 +114,8 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
-        public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
+        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond/2;
+        public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond/2;
 
         public static final TrajectoryConfig autoTrajectoryConfig =
         new TrajectoryConfig(
@@ -146,7 +146,7 @@ public final class Constants {
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
       new PIDConstants(AutoConstants.kPXController, 0, 0), // Translation constants 
       new PIDConstants(AutoConstants.kPThetaController, 0, 0), // Rotation constants 
-      DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4.0, 
+      DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 12.0, 
       Math.sqrt(DriveConstants.kTrackWidth*DriveConstants.kTrackWidth + DriveConstants.kWheelBase*DriveConstants.kWheelBase) / 2.0,// Drive base radius (distance from center to furthest module) 
       new ReplanningConfig()
     );

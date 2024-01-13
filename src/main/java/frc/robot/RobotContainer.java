@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -84,6 +85,8 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //returns what autonomous path is chosen in shuffleboard currently
-        return autoChooser.getSelected();
+        //return autoChooser.getSelected();
+        return new PathPlannerAuto("Auto Square");
+
     }
 }
