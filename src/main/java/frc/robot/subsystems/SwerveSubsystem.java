@@ -8,9 +8,13 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -19,6 +23,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -84,6 +89,15 @@ public class SwerveSubsystem extends SubsystemBase {
   // create a SwerveDriveOdometry object to handle odometry calculations
   private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
           Rotation2d.fromDegrees(getHeading()), getModulePositions());
+
+  /*private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+          kinematics,
+          m_gyro.getRotation2d(),
+          getModulePositions(),
+          new Pose2d(),
+          VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(18)),
+          VecBuilder.fill(0.9, 0.9, Units.degreesToRadians(162)));
+          */
 
   public SwerveSubsystem() {
       AutoBuilder.configureHolonomic(
@@ -261,6 +275,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Update the robot's odometer
     odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
+    //TODO: VISION with limelight or photonvision
+    //poseEstimator.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(getHeading()), getModulePositions());
+    //poseEstimator.addVisionMeasurement(lastPose2d, Timer.getFPGATimestamp());
 
     // Log various data points
     Logger.recordOutput("swerve.pitch", getPitchDeg());
