@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-
 import frc.robot.subsystems.SwerveSubsystem;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -12,7 +11,7 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.patched.SwerveControllerCommand;
 
 /**
  * This class is an implementation of the SequentialCommandGroup class that is
@@ -46,6 +45,7 @@ public class AutoBaseCmd extends SequentialCommandGroup {
          * @param trajBPath    path to Trajectory B file
          */
         public AutoBaseCmd(SwerveSubsystem s_Swerve, String trajAPath, String trajBPath) {
+   
 
                 // Get paths to trajectory files
                 Path trajectoryPathA = Filesystem.getDeployDirectory().toPath().resolve(trajAPath);
