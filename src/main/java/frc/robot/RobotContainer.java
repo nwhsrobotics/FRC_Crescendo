@@ -1,5 +1,8 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +23,7 @@ public class RobotContainer {
     public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
     //object for presenting selection of options in shuffleboard/ smartdashboard
-    SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+    SendableChooser<Command> autoChooser = new SendableChooser<>();
 
     public final Joystick m_driver = new Joystick(2);
 
@@ -64,17 +67,9 @@ public class RobotContainer {
 
     public RobotContainer() {
         //choose autonomous paths in shuffleboard
-        m_autoChooser.setDefaultOption("Blue1", blue1_auto);
-        m_autoChooser.addOption("blue2", blue2_auto);
-        m_autoChooser.addOption("blue3", blue3_auto);
-        m_autoChooser.addOption("red1", red1_auto);
-        m_autoChooser.addOption("red2", red2_auto);
-        m_autoChooser.addOption("red3", red3_auto);
-        m_autoChooser.addOption("blue charging station", bluecharge);
-        m_autoChooser.addOption("red charging station", redcharge);
-
-        SmartDashboard.putData(m_autoChooser);
-        swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, m_driver));
+      autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
+      SmartDashboard.putData("Auto Chooser", autoChooser);
+      swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, m_driver));
         configureButtonBindings();
     }
 
@@ -89,6 +84,6 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //returns what autonomous path is chosen in shuffleboard currently
-        return m_autoChooser.getSelected();
+        return autoChooser.getSelected();
     }
 }
