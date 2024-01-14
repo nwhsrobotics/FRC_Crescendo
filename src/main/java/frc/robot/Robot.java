@@ -109,7 +109,8 @@ public class Robot extends TimedRobot {
 
         // schedule the autonomous command (example)
         if (m_autonomousCommand != null) {
-            m_robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile(m_autonomousCommand.getName()));
+            //auto paths can preset pos by default (reset odometry)
+            //TODO: Be careful when calling auto paths it resets odometry and assumes you know where you are starting from if not then use pathFindThenFollowPath
             m_autonomousCommand.schedule();
         }
     }
