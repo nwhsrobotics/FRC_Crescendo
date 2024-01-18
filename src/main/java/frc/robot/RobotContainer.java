@@ -26,7 +26,7 @@ public class RobotContainer {
     //object for presenting selection of options in shuffleboard/ smartdashboard
     SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-    public final Joystick m_driver = new Joystick(2);
+    public final Joystick m_driver = new Joystick(0);
 
     public final SwerveAuto autoCmd = new SwerveAuto(swerveSubsystem);
 
