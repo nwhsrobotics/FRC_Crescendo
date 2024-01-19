@@ -11,34 +11,41 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
-import java.lang.Math; 
+import java.lang.Math;
 
+/**
+ * Represents a swerve module with independent drive and turning motors.
+ */
 public class SwerveModule {
+    // Drive and Turning Motors
     public final CANSparkMax driveMotor;
     public final CANSparkMax turningMotor;
 
+    // Encoders
     public final RelativeEncoder driveEncoder;
-    private final RelativeEncoder turningEncoder; // built in NEO encoder (steering)
+    private final RelativeEncoder turningEncoder; // built-in NEO encoder (steering)
 
+    // PID Controller for Turning
     public final PIDController turningPidController;
 
+    // Absolute Encoder for Steering
     private final CANcoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
 
     /**
      * Initializes a new instance of the SwerveModule class.
-     * @param driveMotorId The ID of the CANSparkMax drive motor.
-     * @param turningMotorId The ID of the CANSparkMax turning motor.
-     * @param driveMotorReversed A boolean indicating whether the drive motor is reversed.
-     * @param turningMotorReversed A boolean indicating whether the turning motor is reversed.
-     * @param absoluteEncoderId The ID of the CANcoder absolute encoder.
+     *
+     * @param driveMotorId          The ID of the CANSparkMax drive motor.
+     * @param turningMotorId        The ID of the CANSparkMax turning motor.
+     * @param driveMotorReversed    A boolean indicating whether the drive motor is reversed.
+     * @param turningMotorReversed  A boolean indicating whether the turning motor is reversed.
+     * @param absoluteEncoderId     The ID of the CANcoder absolute encoder.
      * @param absoluteEncoderOffset The offset of the absolute encoder in radians.
      * @param absoluteEncoderReversed A boolean indicating whether the absolute encoder is reversed.
      */
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
-            int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
-
+                        int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
         // Set the absolute encoder offset and reversed value
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
@@ -76,24 +83,39 @@ public class SwerveModule {
 
         // Enable continuous input for the PID controller to handle full rotation of the wheels
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
+
         // Reset the encoders
         resetEncoders();
+
         // Set the turning motor to the calculated value from the PID controller
         turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(), 0));
-
     }
 
-    // Get the position of the drive encoder in meters
+    /**
+     * Get the position of the drive encoder in meters.
+     *
+     * @return The position of the drive encoder.
+     */
     public double getDrivePosition() {
         return driveEncoder.getPosition();
     }
 
-    // Get the position of the turning encoder in radians
+    /**
+     * Get the position of the turning encoder in radians.
+     *
+     * @return The position of the turning encoder.
+     */
     public double getTurningPosition() {
         return turningEncoder.getPosition();
     }
 
+    /**
+     * Get the wrapped position of the turning encoder in radians.
+     *
+     * @return The wrapped position of the turning encoder.
+     */
     public double getTurningPositionWrapped() {
+        // Wrap the angle to be between -180 and 180 degrees
         double angle = Math.toDegrees(getTurningPosition()) % 360.0;
         // reduce the angle  
         angle =  angle % 360.0; 
@@ -108,23 +130,39 @@ public class SwerveModule {
         return Math.toRadians(angle);
     }
 
-    // Get the velocity of the drive encoder in meters per second
+    /**
+     * Get the velocity of the drive encoder in meters per second.
+     *
+     * @return The velocity of the drive encoder.
+     */
     public double getDriveVelocity() {
         return driveEncoder.getVelocity();
     }
 
-    // Get the velocity of the turning encoder in radians per second
+    /**
+     * Get the velocity of the turning encoder in radians per second.
+     *
+     * @return The velocity of the turning encoder.
+     */
     public double getTurningVelocity() {
         return turningEncoder.getVelocity();
     }
 
-    // Get the raw absolute encoder reading in radians
+    /**
+     * Get the raw absolute encoder reading in radians.
+     *
+     * @return The raw absolute encoder reading.
+     */
     public double getAbsoluteEncoderRadRaw() {
         double angle = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI; // convert degrees to radians
         return angle; // shorthand for if the encoder is reversed, multiply by -1, else do nothing (multiply by 1)
     }
 
-    // Get the absolute encoder reading in radians with correction for reversed encoders and offset
+    /**
+     * Get the absolute encoder reading in radians with correction for reversed encoders and offset.
+     *
+     * @return The absolute encoder reading.
+     */
     public double getAbsoluteEncoderRad() {
         double angle = this.getAbsoluteEncoderRadRaw();
         angle -= absoluteEncoderOffsetRad;
@@ -140,28 +178,44 @@ public class SwerveModule {
         return angle;
     }
 
-    // Reset the turning encoder position to the previous value of the absolute encoder
+    /**
+     * Reset the turning encoder position to the previous value of the absolute encoder.
+     */
     public void resetTurnEncoder() {
         turningEncoder.setPosition(getAbsoluteEncoderRad());
     }
 
-    // Reset both drive and turning encoders to 0 and reset the turning encoder position
+    /**
+     * Reset both drive and turning encoders to 0 and reset the turning encoder position.
+     */
     public void resetEncoders() {
         driveEncoder.setPosition(0);
         resetTurnEncoder();
     }
 
-    // Get the current state of the swerve module (drive velocity and turning angle)
+    /**
+     * Get the current state of the swerve module (drive velocity and turning angle).
+     *
+     * @return The current state of the swerve module.
+     */
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition())); // SwerveModuleState takes the velocity and the angle of the module for params
     }
 
-    // Get the current position of the swerve module (drive position and turning angle)
+    /**
+     * Get the current position of the swerve module (drive position and turning angle).
+     *
+     * @return The current position of the swerve module.
+     */
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getTurningPosition()));
     }
 
-    // Set the desired state of the swerve module (drive velocity and turning angle)
+    /**
+     * Set the desired state of the swerve module (drive velocity and turning angle).
+     *
+     * @param state The desired state of the swerve module.
+     */
     public void setDesiredState(SwerveModuleState state) {
         // If the desired speed is close to 0, stop the module
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
@@ -177,10 +231,11 @@ public class SwerveModule {
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
     }
 
-    // Stop the swerve module by setting both motors to 0
+    /**
+     * Stop the swerve module by setting both motors to 0.
+     */
     public void stop() {
         driveMotor.set(0);
         turningMotor.set(0);
     }
-
 }
