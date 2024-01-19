@@ -104,6 +104,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        //TODO: NO need to resetHeadingAndPose because pathplanner automatically does it with auto commands (this might be whats causing robot to jerk when renable in autonoumous)
         m_robotContainer.swerveSubsystem.resetHeadingAndPose();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
