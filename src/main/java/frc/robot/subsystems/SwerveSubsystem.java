@@ -22,11 +22,14 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
+/**
+ * Represents the swerve drive subsystem, managing four swerve modules and handling overall robot control.
+ */
 public class SwerveSubsystem extends SubsystemBase {
 
     // boolean variable to indicate if the robot is Field Relative
     public boolean isFR = true;
-    // 4 instances of SwerveModule to represent each wheel module
+    // 4 instances of SwerveModule to represent each wheel module with the constants
     public final SwerveModule frontLeft = new SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
             DriveConstants.kFrontLeftTurningMotorPort,
@@ -76,108 +79,162 @@ public class SwerveSubsystem extends SubsystemBase {
     // create a Logger object for logging
     //public Logger logger = Logger.getInstance();
 
+    /**
+     * Constructor for the SwerveSubsystem class.
+     * Configures the AutoBuilder for holonomic/swerve path planning and initializes the gyro.
+     */
     public SwerveSubsystem() {
+        // Configure AutoBuilder for holonomic/swerve path planning & paths
         AutoBuilder.configureHolonomic(
-      this::getPose, 
-      this::resetOdometry, 
-      this::getSpeeds, 
-      this::driveRobotRelative, 
-      Constants.pathFollowerConfig,
-      () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+            this::getPose,               // Supplier for getting the robot's pose
+            this::resetOdometry,         // Runnable for resetting odometry
+            this::getSpeeds,             // Supplier for getting the robot's speeds
+            this::driveRobotRelative,    // Consumer for driving the robot relative to its orientation
+            Constants.pathFollowerConfig, // Path follower configuration
+            () -> {
+                // Boolean supplier that controls when the path will be mirrored for the red alliance
+                // This will flip the path being followed to the red side of the field.
+                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-      },
-      this
-    );
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+            },
+            this
+        );
 
-
-        //pause for 500 milliseconds
+        // Pause for 500 milliseconds to allow the gyro to stabilize
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
+            // Handle interrupted exception
         }
 
-        // set the yaw of the gyro to 0
+        // Set the yaw of the gyro to 0
         m_gyro.zeroYaw();
-        ;
     }
 
-    // set the speed of the robot in the x direction
+
+    /**
+     * Set the speed of the robot in the x direction.
+     *
+     * @param xSpeed The desired speed in the x direction.
+     */
     public void setSpeed(double xSpeed) {
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, 0.0, 0.0);
         setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds));
     }
 
-    // get the heading (yaw) of the robot
+    /**
+     * Get the heading (yaw) of the robot.
+     *
+     * @return The heading of the robot in degrees.
+     */
     public double getHeading() {
         return Math.IEEEremainder(m_gyro.getAngle(), 360) * -1;
     }
 
-    // get the pitch of the robot in degrees
+    /**
+     * Get the pitch of the robot in degrees.
+     *
+     * @return The pitch of the robot in degrees.
+     */
     public double getPitchDeg() {
         return -m_gyro.getPitch();
     }
 
+    /**
+     * Drive the robot relative to its current orientation.
+     *
+     * @param robotRelativeSpeeds The desired robot-relative speeds.
+     */
     public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
         ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
-    
+
         SwerveModuleState[] targetStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
         setModuleStates(targetStates);
     }
 
-    // reset the heading (yaw) and the odometry pose of the robot
+    /**
+     * Reset the heading (yaw) and the odometry pose of the robot.
+     */
     public void resetHeadingAndPose() {
-        m_gyro.zeroYaw(); // reset the yaw angle
-        resetOdometry(new Pose2d()); // reset the robot's odometry pose
+        m_gyro.zeroYaw(); // Reset the yaw angle
+        resetOdometry(new Pose2d()); // Reset the robot's odometry pose
     }
 
+    /**
+     * Switch between field-relative and robot-relative driving.
+     */
     public void switchFR() {
         isFR = !isFR; // switch between field-relative and robot-relative driving
     }
 
+    /**
+     * Get the speeds of the robot.
+     *
+     * @return The speeds of the robot.
+     */
     public ChassisSpeeds getSpeeds() {
         return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
     }
-    
 
+    /**
+     * Get the current pose of the robot in meters.
+     *
+     * @return The current pose of the robot.
+     */
     public Pose2d getPose() {
         return odometer.getPoseMeters(); // get the robot's current pose from the odometry system
     }
 
+    /**
+     * Reset the odometry with the specified pose.
+     *
+     * @param pose The desired pose for resetting odometry.
+     */
     public void resetOdometry(Pose2d pose) {
-        // reset the drive encoder positions on all four swerve modules
+        // Reset the drive encoder positions on all four swerve modules
         for (SwerveModule sModule : swerveMods)
             sModule.driveEncoder.setPosition(0);
 
-        // reset the odometry system using the current heading, module positions, and specified pose
+        // Reset the odometry system using the current heading, module positions, and specified pose
         odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), pose);
     }
 
+    /**
+     * Straighten the orientation of each swerve module.
+     */
     public void straighten() {
-        // turn each swerve module to point straight ahead
+        // Turn each swerve module to point straight ahead
         for (SwerveModule s_mod : swerveMods) {
             s_mod.turningMotor.set(s_mod.turningPidController.calculate(s_mod.getAbsoluteEncoderRad(), 0)); // use PID control to turn to the desired angle
-            s_mod.turningMotor.set(0); // stop turning once the desired angle is reached
+            s_mod.turningMotor.set(0); // Stop turning once the desired angle is reached
         }
     }
 
+    /**
+     * Get the states of all swerve modules.
+     *
+     * @return The states of all swerve modules.
+     */
     public SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (int i = 0; i < swerveMods.length; i++) {
-          states[i] = swerveMods[i].getState();
+            states[i] = swerveMods[i].getState();
         }
         return states;
-      }
+    }
 
+    /**
+     * Get the positions of all swerve modules.
+     *
+     * @return The positions of all swerve modules.
+     */
     public SwerveModulePosition[] getModulePositions() {
-        // get the current position of each swerve module
+        // Get the current position of each swerve module
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
         for (int i = 0; i < swerveMods.length; i++) {
             positions[i] = swerveMods[i].getPosition();
@@ -185,12 +242,18 @@ public class SwerveSubsystem extends SubsystemBase {
         return positions;
     }
 
+    /**
+     * Get a trajectory command for the specified trajectory.
+     *
+     * @param traj The trajectory to follow.
+     * @return The swerve controller command for the trajectory.
+     */
     public SwerveControllerCommand getTrajCmd(Trajectory traj) {
-        // create a PID controller for the heading (yaw) error
+        // Create a PID controller for the heading (yaw) error
         var thetaController = new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        // create a new swerve controller command using the specified trajectory, odometry, and controllers
+        // Create a new swerve controller command using the specified trajectory, odometry, and controllers
         return new SwerveControllerCommand(
                 traj,
                 this::getPose,
@@ -230,14 +293,22 @@ public class SwerveSubsystem extends SubsystemBase {
         logger.recordOutput("swerve.drive.back.right.velocity", backRight.getDriveVelocity());*/
     }
 
-    // Stops all of the robot's swerve modules
+    /**
+     * Stops all of the robot's swerve modules.
+     * Iterates through each swerve module and stops its motion.
+     */
     public void stopModules() {
         for (SwerveModule sMod : swerveMods) {
             sMod.stop();
         }
     }
 
-    // Sets the states of the robot's swerve modules based on the desired states
+    /**
+     * Sets the states of the robot's swerve modules based on the desired states.
+     * Scales all speeds down instead of truncating them if they exceed the max speed.
+     * 
+     * @param desiredStates An array of SwerveModuleState representing the desired states for each swerve module.
+     */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // Scales all speeds down instead of truncating them if they exceed the max speed
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
@@ -247,6 +318,12 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.setDesiredState(desiredStates[3]);
     }
 
+
+    /**
+     * Check if the robot is in a clover state.
+     *
+     * @return True if the robot is in a cloverleaf configuration, false otherwise.
+     */
     public boolean isClover(){
         return frontLeft.getTurningPositionWrapped() > Math.PI/4 - Math.toRadians(1.0) && frontLeft.getTurningPositionWrapped() < Math.PI/4 + Math.toRadians(1.0)
         && frontLeft.getTurningPositionWrapped() > Math.PI/4 - Math.toRadians(1.0) && frontLeft.getTurningPositionWrapped() < Math.PI/4 + Math.toRadians(1.0)
@@ -255,17 +332,21 @@ public class SwerveSubsystem extends SubsystemBase {
         && backRight.getTurningPositionWrapped() > Math.PI/4 - Math.toRadians(1.0) && backRight.getTurningPositionWrapped() < Math.PI/4 + Math.toRadians(1.0);
     }
 
-    // Activates the robot's brakes
+    /**
+     * Activate the robot's brakes/clover.
+     */
     public void brake() {
         // Stops all swerve modules
         for (SwerveModule sMod : swerveMods) {
             sMod.stop();
         }
+
         System.out.println("======================");
-        System.out.println(frontLeft.getTurningPositionWrapped() + " " +  Math.PI/4);
-        System.out.println(frontRight.getTurningPositionWrapped() + " " +  -Math.PI/4);
-        System.out.println(backLeft.getTurningPositionWrapped() + " " +  -Math.PI/4);
-        System.out.println(backRight.getTurningPositionWrapped() + " " +  Math.PI/4);
+        System.out.println(frontLeft.getTurningPositionWrapped() + " " + Math.PI / 4);
+        System.out.println(frontRight.getTurningPositionWrapped() + " " + -Math.PI / 4);
+        System.out.println(backLeft.getTurningPositionWrapped() + " " + -Math.PI / 4);
+        System.out.println(backRight.getTurningPositionWrapped() + " " + Math.PI / 4);
+
         // Sets the turning motors to their braking positions
         frontLeft.turningMotor.set(frontLeft.turningPidController.calculate(frontLeft.getTurningPosition(), Math.PI / 4));
         frontRight.turningMotor.set(frontRight.turningPidController.calculate(frontRight.getTurningPosition(), -Math.PI / 4));
