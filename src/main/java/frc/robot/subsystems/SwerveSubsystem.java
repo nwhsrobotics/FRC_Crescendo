@@ -37,7 +37,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // boolean variable to indicate if the robot is Field Relative
   public boolean isFR = true;
-  private SwerveDriveKinematics kinematics;
   public String lastPath;
   public Pose2d lastPose2d;
   public String lastPathType;
@@ -90,14 +89,14 @@ public class SwerveSubsystem extends SubsystemBase {
   private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
           Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
-  /*private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
-          kinematics,
+  private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+          DriveConstants.kDriveKinematics,
           m_gyro.getRotation2d(),
           getModulePositions(),
           new Pose2d(),
           VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(18)),
           VecBuilder.fill(0.9, 0.9, Units.degreesToRadians(162)));
-          */
+          
 
   public SwerveSubsystem() {
       AutoBuilder.configureHolonomic(
@@ -154,7 +153,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public ChassisSpeeds getSpeeds() {
-    return kinematics.toChassisSpeeds(getModuleStates());
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
   }
 
   public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
@@ -164,7 +163,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
 
-    SwerveModuleState[] targetStates = kinematics.toSwerveModuleStates(targetSpeeds);
+    SwerveModuleState[] targetStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
     setModuleStates(targetStates);
   }
 
@@ -227,45 +226,58 @@ public class SwerveSubsystem extends SubsystemBase {
             this);
   }
 
-  public void pathFindThenFollowPath(String pathName){
-    lastPath = pathName;
-    lastPathType = "Path";
+    /**
+     * Finds a path and follows it based on the specified path name.
+     * Loads the path from a file, sets constraints, and uses AutoBuilder to create a pathfinding command.
+     * 
+     * @param pathName The name of the path file to load and follow.
+     */
+    public void pathFindThenFollowPath(String pathName){
+        lastPath = pathName;
+        lastPathType = "Path";
+
         // Load the path we want to pathfind to and follow
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
 
-    // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
-    PathConstraints constraints = new PathConstraints(
-      kPhysicalMaxSpeedMetersPerSecond / 4.0, kMaxAccelerationMetersPerSecondSquared / 2.0,
-            kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
-
-    // Since AutoBuilder is configured, we can use it to build pathfinding commands
-    //what pathfinding basically does is path find to start of a path and then continue in that path, if you wanna not follow the path after make it pathfind to specific location
-    pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
-            path,
-            constraints,
-            2.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
-    );
-  }
-
-  public void pathFindToPos(Pose2d coords){
-    // Since we are using a holonomic drivetrain, the rotation component of this pose
-// represents the goal holonomic rotation
-    lastPose2d = coords;
-    lastPathType = "Pos";
-
-// Create the constraints to use while pathfinding
-    PathConstraints constraints = new PathConstraints(
+        // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
+        PathConstraints constraints = new PathConstraints(
             kPhysicalMaxSpeedMetersPerSecond / 4.0, kMaxAccelerationMetersPerSecondSquared / 2.0,
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
 
-// Since AutoBuilder is configured, we can use it to build pathfinding commands
-    pathfindingCommand = AutoBuilder.pathfindToPose(
-            coords,
-            constraints,
-            0.0, // Goal end velocity in meters/sec
-            0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
-    );
-  }
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        // What pathfinding does is pathfind to the start of a path and then continue along that path.
+        // If you don't want to continue along the path, you can make it pathfind to a specific location.
+        pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
+                path,
+                constraints,
+                2.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+        );
+    }
+
+    /**
+     * Finds a path to a specified position and sets up a pathfinding command.
+     * Utilizes AutoBuilder to build the pathfinding command.
+     * 
+     * @param coords The target pose to pathfind to, where the rotation component represents the goal holonomic rotation.
+     */
+    public void pathFindToPos(Pose2d coords){
+        // Since we are using a holonomic drivetrain, the rotation component of this pose represents the goal holonomic rotation
+        lastPose2d = coords;
+        lastPathType = "Pos";
+
+        // Create the constraints to use while pathfinding
+        PathConstraints constraints = new PathConstraints(
+                kPhysicalMaxSpeedMetersPerSecond / 4.0, kMaxAccelerationMetersPerSecondSquared / 2.0,
+                kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
+
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        pathfindingCommand = AutoBuilder.pathfindToPose(
+                coords,
+                constraints,
+                0.0, // Goal end velocity in meters/sec
+                0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+        );
+    }
 
   // This method is called periodically to update the robot's state and log data
   @Override
