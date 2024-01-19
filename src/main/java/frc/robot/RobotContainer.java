@@ -85,8 +85,8 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //returns what autonomous path is chosen in shuffleboard currently
-        //return autoChooser.getSelected();
-        return new PathPlannerAuto("Test Auto");
+        return autoChooser.getSelected();
+        //return new PathPlannerAuto("Test Auto");
 
     }
 }
