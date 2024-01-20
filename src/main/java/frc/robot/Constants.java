@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 //Most values are from SDS SwerveLib setup for MK4_L2
 public final class Constants {
     public static final class ModuleConstants {
@@ -187,7 +188,9 @@ public final class Constants {
     }
     public static final class LoggerConstants {
         public static final RuntimeEnvironment MODE = RuntimeEnvironment.REAL;
-        public static final String RUNNING_UNDER = "2023.q1";
+        public static final String RUNNING_UNDER = "2024.pre";
+        public static final ModuleType PDU_TYPE = ModuleType.kRev;
+        
         // SET TO FALSE IF WE'RE RUNNING OUT OF BANDWIDTH.
         public static final boolean SILENT_NT4 = false;
     }
