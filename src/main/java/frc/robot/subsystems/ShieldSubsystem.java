@@ -6,9 +6,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class SheildSubsystem extends SubsystemBase {
+public class ShieldSubsystem extends SubsystemBase {
   /** Creates a new SheildSubsystem. */
-  public SheildSubsystem() {}
+  public ShieldSubsystem() {}
 
   @Override
   public void periodic() {
