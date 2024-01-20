@@ -10,21 +10,19 @@ import frc.robot.Constants.LoggerConstants;*/
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.LoggerConstants;
 
-
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the
- * name of this class or
- * the package after creating this project, you must also update the
- * build.gradle file in the
- * project.
- */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     public RobotContainer m_robotContainer;
 
@@ -35,30 +33,33 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        /*
-        Logger logger = Logger.getInstance();
-        logger.recordMetadata("version", LoggerConstants.RUNNING_UNDER);
+        Logger.recordMetadata("version", LoggerConstants.RUNNING_UNDER);
+        Logger.recordMetadata("build_commit", BuildConstants.GIT_SHA);
+        Logger.recordMetadata("build_branch", BuildConstants.GIT_BRANCH);
+        Logger.recordMetadata("build_git_uncommitted_changes", String.valueOf(BuildConstants.DIRTY));
+        Logger.recordMetadata("build_timestamp", BuildConstants.BUILD_DATE);
 
         switch (LoggerConstants.MODE) {
             case REAL:
-                logger.addDataReceiver(new WPILOGWriter("/media/sda1/"));
+                Logger.addDataReceiver(new WPILOGWriter("/media/sda1/"));
                 if (!LoggerConstants.SILENT_NT4) {
-                    logger.addDataReceiver(new NT4Publisher());
+                    Logger.addDataReceiver(new NT4Publisher());
                 }
+                new PowerDistribution(1, LoggerConstants.PDU_TYPE);
                 break;
             case SIMULATION:
-                logger.addDataReceiver(new WPILOGWriter(""));
-                logger.addDataReceiver(new NT4Publisher());
+                Logger.addDataReceiver(new WPILOGWriter(""));
+                Logger.addDataReceiver(new NT4Publisher());
                 break;
             case REPLAY:
                 setUseTiming(false);
                 String logPath = LogFileUtil.findReplayLog();
-                logger.setReplaySource(new WPILOGReader(logPath));
-                logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+                Logger.setReplaySource(new WPILOGReader(logPath));
+                Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
                 break;
         }
 
-        logger.start();*/
+        Logger.start();
 
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
