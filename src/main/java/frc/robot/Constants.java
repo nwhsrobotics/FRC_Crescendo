@@ -79,38 +79,22 @@ public final class Constants {
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * 0.25;
     }
 
-    public static final class ShoulderConstants {
-        public static final double kp = 0.5;
-        public static final double absOffset = 0.095;
-        public static final double ki = 0.0;
-        public static final double kd = 0.0;
-        public static final double kIz = 0.0;
-        public static final double kFFz = 0.0;
-        public static final double kMaxOutput = 1.0;
-        public static final double kMinOutput = -1.0;
-        public static final int LeftShoulderCanID = 8;
-        public static final int RightShoulderCanID = 6;
-        public static final double kAngleRange = 55.0;
+    public static final class ClimbConstants {
     }
 
-    public static final class ExtendArmConstants {
-        public static final double EXTEND_SPEED_IPS = 20.0;
-        public static final double ACCEL_MAX_V_IPS = 60.0;
-        public static final double ACCEL_MAX_A_IPS2 = 60.0; //about 0.2gs @ 80 in/s
-        public static final double SECONDS_PER_TICK = 0.02;
-        public static final double kp = 0.2;
-        public static final double kMaxOutput = 1.0;
-        public static final double kMinOutput = -1.0;
-        public static final int ExtendArmCanID24 = 24;
-        public static final int ExtendArmCanID25 = 25;
-        public static final double MAX_EXTEND_INCH = 20.0;
-        public static final double MIN_VEL_IPS = 4;
-        public static final double MIN_X_INCH = 1;
+    public static final class ArmConstants {
     }
 
-    public static final class GrabberConstants {
-        public static final int forwardChannel = 1;
-        public static final int reverseChannel = 3;
+    public static final class ShooterConstants {
+    }
+
+    public static final class IndexConstants {
+    }
+
+    public static final class IntakeConstants {
+    }
+
+    public static final class SheildConstants {
     }
 
     public static final class AutoConstants {
