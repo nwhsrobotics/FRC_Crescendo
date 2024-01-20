@@ -14,13 +14,11 @@ public class SwerveClover extends Command {
     }
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {
         swerveSubsystem.brake();
-        //System.out.println("ran");
     }
 
     @Override
