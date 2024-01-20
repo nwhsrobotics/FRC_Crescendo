@@ -1,12 +1,7 @@
 package frc.robot.subsystems;
 
-//import org.littletonrobotics.junction.Logger;
-import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,8 +12,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import org.littletonrobotics.junction.Logger;
+import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
@@ -26,9 +26,14 @@ import frc.robot.Constants.DriveConstants;
  * Represents the swerve drive subsystem, managing four swerve modules and handling overall robot control.
  */
 public class SwerveSubsystem extends SubsystemBase {
+    // when the robot is set to "field relative,"
+    // linear movement will be relative to the field.
+    //
+    // for example, even if the robot is oriented towards the driver station,
+    // holding forwards will move the robot away from the driver station,
+    // because that is the forwards direction relative to the field.
+    public boolean isFieldRelative = true;
 
-    // boolean variable to indicate if the robot is Field Relative
-    public boolean isFR = true;
     // 4 instances of SwerveModule to represent each wheel module with the constants
     public final SwerveModule frontLeft = new SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
@@ -76,9 +81,6 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
-    // create a Logger object for logging
-    //public Logger logger = Logger.getInstance();
-
     /**
      * Constructor for the SwerveSubsystem class.
      * Configures the AutoBuilder for holonomic/swerve path planning and initializes the gyro.
@@ -105,17 +107,11 @@ public class SwerveSubsystem extends SubsystemBase {
             this
         );
 
-        // Pause for 500 milliseconds to allow the gyro to stabilize
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            // Handle interrupted exception
-        }
-
-        // Set the yaw of the gyro to 0
-        m_gyro.zeroYaw();
+        // Pause for 500 milliseconds to allow the gyro to stabilize.
+        // Set the yaw of the gyro to 0 afterwards.
+        Commands.waitSeconds(0.5)
+            .andThen(new RunCommand(() -> m_gyro.zeroYaw()));
     }
-
 
     /**
      * Set the speed of the robot in the x direction.
@@ -169,7 +165,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * Switch between field-relative and robot-relative driving.
      */
     public void switchFR() {
-        isFR = !isFR; // switch between field-relative and robot-relative driving
+        isFieldRelative = !isFieldRelative; // switch between field-relative and robot-relative driving
     }
 
     /**
@@ -268,29 +264,30 @@ public class SwerveSubsystem extends SubsystemBase {
     // This method is called periodically to update the robot's state and log data
     @Override
     public void periodic() {
-        // Log whether the robot is field-relative or not
-        SmartDashboard.putBoolean("FIELD RELATIVE?", isFR);
-        SmartDashboard.putNumber("FL abs", frontLeft.getAbsoluteEncoderRadRaw());
-        SmartDashboard.putNumber("FR ABS", frontRight.getAbsoluteEncoderRadRaw());
-        SmartDashboard.putNumber("BL ABS", backLeft.getAbsoluteEncoderRadRaw());
-        SmartDashboard.putNumber("BR ABS", backRight.getAbsoluteEncoderRadRaw());
-
         // Update the robot's odometer
         odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
 
-        // Log various data points
-        /*
-        logger.recordOutput("swerve.pitch", getPitchDeg());
-        logger.recordOutput("swerve.steer.front.left.abs", frontLeft.getAbsoluteEncoderRad());
-        logger.recordOutput("swerve.steer.front.right.abs", frontRight.getAbsoluteEncoderRad());
-        logger.recordOutput("swerve.steer.back.left.abs", backLeft.getAbsoluteEncoderRad());
-        logger.recordOutput("swerve.steer.back.right.abs", backRight.getAbsoluteEncoderRad());
-        logger.recordOutput("swerve.pose", getPose());
-        logger.recordOutput("swerve.heading", getHeading());
-        logger.recordOutput("swerve.drive.front.left.velocity", frontLeft.getDriveVelocity());
-        logger.recordOutput("swerve.drive.front.right.velocity", frontRight.getDriveVelocity());
-        logger.recordOutput("swerve.drive.back.left.velocity", backLeft.getDriveVelocity());
-        logger.recordOutput("swerve.drive.back.right.velocity", backRight.getDriveVelocity());*/
+        // Log position of robot.
+        Logger.recordOutput("swerve.pose", getPose());
+
+        // Log whether robot is driving in field relative mode.
+        Logger.recordOutput("swerve.isfieldrelative", isFieldRelative);
+
+        // Log pitch and heading of IMU.
+        Logger.recordOutput("swerve.pitch", getPitchDeg());
+        Logger.recordOutput("swerve.heading", getHeading());
+
+        // Log steering direction.
+        Logger.recordOutput("swerve.steer.front.left.abs", frontLeft.getAbsoluteEncoderRad());
+        Logger.recordOutput("swerve.steer.front.right.abs", frontRight.getAbsoluteEncoderRad());
+        Logger.recordOutput("swerve.steer.back.left.abs", backLeft.getAbsoluteEncoderRad());
+        Logger.recordOutput("swerve.steer.back.right.abs", backRight.getAbsoluteEncoderRad());
+
+        // Log travel velocity.
+        Logger.recordOutput("swerve.drive.front.left.velocity", frontLeft.getDriveVelocity());
+        Logger.recordOutput("swerve.drive.front.right.velocity", frontRight.getDriveVelocity());
+        Logger.recordOutput("swerve.drive.back.left.velocity", backLeft.getDriveVelocity());
+        Logger.recordOutput("swerve.drive.back.right.velocity", backRight.getDriveVelocity());
     }
 
     /**
@@ -318,7 +315,6 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.setDesiredState(desiredStates[3]);
     }
 
-
     /**
      * Check if the robot is in a clover state.
      *
@@ -326,26 +322,16 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public boolean isClover(){
         return frontLeft.getTurningPositionWrapped() > Math.PI/4 - Math.toRadians(1.0) && frontLeft.getTurningPositionWrapped() < Math.PI/4 + Math.toRadians(1.0)
-        && frontLeft.getTurningPositionWrapped() > Math.PI/4 - Math.toRadians(1.0) && frontLeft.getTurningPositionWrapped() < Math.PI/4 + Math.toRadians(1.0)
-        && frontRight.getTurningPositionWrapped() > -Math.PI/4 - Math.toRadians(1.0) && frontRight.getTurningPositionWrapped() < -Math.PI/4 + Math.toRadians(1.0)
-        && backLeft.getTurningPositionWrapped() > -Math.PI/4 - Math.toRadians(1.0) && backLeft.getTurningPositionWrapped() < -Math.PI/4 + Math.toRadians(1.0)
-        && backRight.getTurningPositionWrapped() > Math.PI/4 - Math.toRadians(1.0) && backRight.getTurningPositionWrapped() < Math.PI/4 + Math.toRadians(1.0);
+            && frontRight.getTurningPositionWrapped() > -Math.PI/4 - Math.toRadians(1.0) && frontRight.getTurningPositionWrapped() < -Math.PI/4 + Math.toRadians(1.0)
+            && backLeft.getTurningPositionWrapped() > -Math.PI/4 - Math.toRadians(1.0) && backLeft.getTurningPositionWrapped() < -Math.PI/4 + Math.toRadians(1.0)
+            && backRight.getTurningPositionWrapped() > Math.PI/4 - Math.toRadians(1.0) && backRight.getTurningPositionWrapped() < Math.PI/4 + Math.toRadians(1.0);
     }
 
     /**
-     * Activate the robot's brakes/clover.
+     * Orient wheels into a "clover" formation, in order to brake.
      */
     public void brake() {
-        // Stops all swerve modules
-        for (SwerveModule sMod : swerveMods) {
-            sMod.stop();
-        }
-
-        System.out.println("======================");
-        System.out.println(frontLeft.getTurningPositionWrapped() + " " + Math.PI / 4);
-        System.out.println(frontRight.getTurningPositionWrapped() + " " + -Math.PI / 4);
-        System.out.println(backLeft.getTurningPositionWrapped() + " " + -Math.PI / 4);
-        System.out.println(backRight.getTurningPositionWrapped() + " " + Math.PI / 4);
+        stopModules();
 
         // Sets the turning motors to their braking positions
         frontLeft.turningMotor.set(frontLeft.turningPidController.calculate(frontLeft.getTurningPosition(), Math.PI / 4));
