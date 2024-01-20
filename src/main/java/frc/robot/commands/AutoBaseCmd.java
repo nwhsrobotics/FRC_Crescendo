@@ -11,7 +11,7 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.patched.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 /**
  * This class is an implementation of the SequentialCommandGroup class that is
