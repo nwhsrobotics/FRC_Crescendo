@@ -45,7 +45,7 @@ public class SwerveJoystickDefaultCmd extends Command {
                         : (-m_driver.getTwist() + OIConstants.kZDeadband) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient;
 
         // calculates the ChassisSpeeds based on the xSpeed, ySpeed, and rotatingSpeed
-        ChassisSpeeds chassisSpeeds = (swerveSubsystem.isFR)
+        ChassisSpeeds chassisSpeeds = (swerveSubsystem.isFieldRelative)
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotatingSpeed, Rotation2d.fromDegrees(swerveSubsystem.getHeading()))
                 : ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotatingSpeed, new Rotation2d(0));
 
