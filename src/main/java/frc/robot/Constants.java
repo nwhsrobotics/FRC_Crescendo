@@ -136,32 +136,7 @@ public final class Constants {
       new ReplanningConfig()
     );
 
-    public static final class WristConstants {
-        public static final double kp = 0.05;
-        public static final double ki = 0.0;
-        public static final double kd = 0.0;
-        public static final double kIz = 0.0;
-        public static final double kFFz = 0.0;
-        public static final double absAOffset = 0.638;
-        public static final double absBOffset = 0.99;
-        public static final double kMaxOutput = 1.0;
-        public static final double kMinOutput = -1.0;
-        public static final double kMaxRoll = 115.0;
-        public static final double kMinRoll = -115.0;
-        public static final double kMaxPitch = 130.0;
-        public static final double kMinPitch = -90.0;
-        public static final int WristCanIDA = 9;
-        public static final int WristCanIDB = 13;
-        public static final int AbsoluteEncoderAChannel = 2;
-        public static final int AbsoluteEncoderBChannel = 1;
-        public static final double WRIST_GEAR_RATIO_RIGHT = 100.0;
-        public static final double WRIST_GEAR_RATIO_LEFT = 50.0;
-        public static final double REVS_PER_OUTPUT_DEGREE_RIGHT = WRIST_GEAR_RATIO_RIGHT / 360.0;
-        public static final double REVS_PER_OUTPUT_DEGREE_LEFT = WRIST_GEAR_RATIO_LEFT / 360.0;
-        public static final double JOYSTICK_DEADBAND = 0.1;
-    }
-
-    public static enum RuntimeEnvironment {
+        public static enum RuntimeEnvironment {
         /** Running on physical robot. */
         REAL,
         /** Running on simulated robot. */
