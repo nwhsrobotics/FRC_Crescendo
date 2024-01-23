@@ -80,38 +80,22 @@ public final class Constants {
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * 0.25;
     }
 
-    public static final class ShoulderConstants {
-        public static final double kp = 0.5;
-        public static final double absOffset = 0.095;
-        public static final double ki = 0.0;
-        public static final double kd = 0.0;
-        public static final double kIz = 0.0;
-        public static final double kFFz = 0.0;
-        public static final double kMaxOutput = 1.0;
-        public static final double kMinOutput = -1.0;
-        public static final int LeftShoulderCanID = 8;
-        public static final int RightShoulderCanID = 6;
-        public static final double kAngleRange = 55.0;
+    public static final class ClimbConstants {
     }
 
-    public static final class ExtendArmConstants {
-        public static final double EXTEND_SPEED_IPS = 20.0;
-        public static final double ACCEL_MAX_V_IPS = 60.0;
-        public static final double ACCEL_MAX_A_IPS2 = 60.0; //about 0.2gs @ 80 in/s
-        public static final double SECONDS_PER_TICK = 0.02;
-        public static final double kp = 0.2;
-        public static final double kMaxOutput = 1.0;
-        public static final double kMinOutput = -1.0;
-        public static final int ExtendArmCanID24 = 24;
-        public static final int ExtendArmCanID25 = 25;
-        public static final double MAX_EXTEND_INCH = 20.0;
-        public static final double MIN_VEL_IPS = 4;
-        public static final double MIN_X_INCH = 1;
+    public static final class ArmConstants {
     }
 
-    public static final class GrabberConstants {
-        public static final int forwardChannel = 1;
-        public static final int reverseChannel = 3;
+    public static final class ShooterConstants {
+    }
+
+    public static final class IndexConstants {
+    }
+
+    public static final class IntakeConstants {
+    }
+
+    public static final class SheildConstants {
     }
 
     public static final class AutoConstants {
@@ -126,9 +110,9 @@ public final class Constants {
         
         public static final double kMaxAccelerationMetersPerSecondSquared = 5;
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI;
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 0.70;
+        public static final double kPXController = 5;
+        public static final double kPYController = 5;
+        public static final double kPThetaController = 5;
 
         //creates a TrapezoidProfile to determine setpoints for autonomous
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
@@ -146,6 +130,7 @@ public final class Constants {
 
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
         //TODO: make P 5.0 because current speed too low also use telementary tab in pathplanner to fine tune rotation constant by the debug graphs
+        //TODO: Actually the example methods are different driveRobotRelative setState than what we have, maybe thats the issue
       new PIDConstants(AutoConstants.kPXController, 0, 0), // Translation constants 
       new PIDConstants(AutoConstants.kPThetaController, 0, 0), // Rotation constants 
       DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 12.0, 
@@ -153,32 +138,7 @@ public final class Constants {
       new ReplanningConfig()
     );
 
-    public static final class WristConstants {
-        public static final double kp = 0.05;
-        public static final double ki = 0.0;
-        public static final double kd = 0.0;
-        public static final double kIz = 0.0;
-        public static final double kFFz = 0.0;
-        public static final double absAOffset = 0.638;
-        public static final double absBOffset = 0.99;
-        public static final double kMaxOutput = 1.0;
-        public static final double kMinOutput = -1.0;
-        public static final double kMaxRoll = 115.0;
-        public static final double kMinRoll = -115.0;
-        public static final double kMaxPitch = 130.0;
-        public static final double kMinPitch = -90.0;
-        public static final int WristCanIDA = 9;
-        public static final int WristCanIDB = 13;
-        public static final int AbsoluteEncoderAChannel = 2;
-        public static final int AbsoluteEncoderBChannel = 1;
-        public static final double WRIST_GEAR_RATIO_RIGHT = 100.0;
-        public static final double WRIST_GEAR_RATIO_LEFT = 50.0;
-        public static final double REVS_PER_OUTPUT_DEGREE_RIGHT = WRIST_GEAR_RATIO_RIGHT / 360.0;
-        public static final double REVS_PER_OUTPUT_DEGREE_LEFT = WRIST_GEAR_RATIO_LEFT / 360.0;
-        public static final double JOYSTICK_DEADBAND = 0.1;
-    }
-
-    public static enum RuntimeEnvironment {
+        public static enum RuntimeEnvironment {
         /** Running on physical robot. */
         REAL,
         /** Running on simulated robot. */
