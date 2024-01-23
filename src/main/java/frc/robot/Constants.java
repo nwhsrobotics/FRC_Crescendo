@@ -109,9 +109,9 @@ public final class Constants {
         
         public static final double kMaxAccelerationMetersPerSecondSquared = 5;
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI;
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 0.70;
+        public static final double kPXController = 5;
+        public static final double kPYController = 5;
+        public static final double kPThetaController = 5;
 
         //creates a TrapezoidProfile to determine setpoints for autonomous
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
