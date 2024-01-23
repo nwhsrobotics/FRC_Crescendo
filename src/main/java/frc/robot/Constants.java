@@ -129,6 +129,7 @@ public final class Constants {
 
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
         //TODO: make P 5.0 because current speed too low also use telementary tab in pathplanner to fine tune rotation constant by the debug graphs
+        //TODO: Actually the example methods are different driveRobotRelative setState than what we have, maybe thats the issue
       new PIDConstants(AutoConstants.kPXController, 0, 0), // Translation constants 
       new PIDConstants(AutoConstants.kPThetaController, 0, 0), // Rotation constants 
       DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 12.0, 
