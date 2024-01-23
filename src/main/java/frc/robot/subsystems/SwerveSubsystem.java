@@ -192,10 +192,21 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param pose The desired pose for resetting odometry.
      */
     public void resetOdometry(Pose2d pose) {
+        System.out.println("Odometry was reset!!! " + pose.toString());
+
         // Reset the drive encoder positions on all four swerve modules
+        // TODO: NUKE THIS SHIT TO OBLIVION
+        //
+        // why?
+        // well, re-enabling a second time resets odometry to (0, 0).
+        // these two lines break odometry testing.
+        //
+        // resetPosition is passed module positions, it already compensates for the reset.
+        /*
         for (SwerveModule sModule : swerveMods)
             sModule.driveEncoder.setPosition(0);
-
+        */
+        
         // Reset the odometry system using the current heading, module positions, and specified pose
         odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), pose);
     }
