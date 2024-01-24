@@ -4,16 +4,12 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import org.littletonrobotics.junction.Logger;
@@ -93,7 +89,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 this::resetOdometry,         // Runnable for resetting odometry
                 this::getSpeeds,             // Supplier for getting the robot's speeds
                 this::driveRobotRelative,    // Consumer for driving the robot relative to its orientation
-                Constants.pathFollowerConfig, // Path follower configuration
+                AutoConstants.pathFollowerConfig, // Path follower configuration
                 () -> {
                     // Boolean supplier that controls when the path will be mirrored for the red alliance
                     // This will flip the path being followed to the red side of the field.
