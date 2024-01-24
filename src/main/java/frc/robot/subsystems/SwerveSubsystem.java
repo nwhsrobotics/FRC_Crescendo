@@ -4,12 +4,19 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.LimelightHelpers;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import org.littletonrobotics.junction.Logger;
@@ -75,8 +82,16 @@ public class SwerveSubsystem extends SubsystemBase {
     public final AHRS m_gyro = new AHRS(SerialPort.Port.kUSB);
 
     // create a SwerveDriveOdometry object to handle odometry calculations
-    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
-            Rotation2d.fromDegrees(getHeading()), getModulePositions());
+    /*private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
+            Rotation2d.fromDegrees(getHeading()), getModulePositions());*/
+
+    private final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(
+        DriveConstants.kDriveKinematics,
+        m_gyro.getRotation2d(),
+        getModulePositions(),
+        new Pose2d(),
+        VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(18)),
+        VecBuilder.fill(0.9, 0.9, Units.degreesToRadians(162)));
 
     /**
      * Constructor for the SwerveSubsystem class.
@@ -182,7 +197,8 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return The current pose of the robot.
      */
     public Pose2d getPose() {
-        return odometer.getPoseMeters(); // get the robot's current pose from the odometry system
+        // return odometer.getPoseMeters();
+        return odometer.getEstimatedPosition(); // get the robot's current pose from the odometry system
     }
 
     /**
@@ -308,15 +324,39 @@ public class SwerveSubsystem extends SubsystemBase {
      * This resets the destination for automatic tele-op pathfinding.
      */
     public void resetDestinationForPathfinding() {
-        this.pathfindingCommand = new InstantCommand(() -> {
-        });
+        pathfindingCommand = new InstantCommand(() -> {});
     }
 
     // This method is called periodically to update the robot's state and log data
     @Override
     public void periodic() {
         // Update the robot's odometer
-        odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
+        //odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
+
+        odometer.updateWithTime(Timer.getFPGATimestamp(), m_gyro.getRotation2d(), getModulePositions());
+        //var alliance = DriverStation.getAlliance();
+        /*if (alliance.isPresent()) {
+            if(alliance.get() == DriverStation.Alliance.Red){
+                odometer.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiRed("Limelight"), Timer.getFPGATimestamp());
+            } else {
+                odometer.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("Limelight"), Timer.getFPGATimestamp());
+            }
+        }
+
+        LimelightHelpers.Results result =
+        LimelightHelpers.getLatestResults("limelight").targetingResults;
+        if (!(result.botpose[0] == 0 && result.botpose[1] == 0) && alliance.isPresent()) {
+            if (alliance.get() == Alliance.Blue) {
+            odometer.addVisionMeasurement(
+                LimelightHelpers.toPose2D(result.botpose_wpiblue),
+                Timer.getFPGATimestamp() - (result.latency_capture / 1000.0) - (result.latency_pipeline / 1000.0));
+            } else if (alliance.get() == Alliance.Red) {
+            // double[] botpose = LimelightHelpers.getBotPose_wpiRed("limelight");
+            odometer.addVisionMeasurement(
+                LimelightHelpers.toPose2D(result.botpose_wpired),
+                Timer.getFPGATimestamp() - (result.latency_capture / 1000.0) - (result.latency_pipeline / 1000.0));
+            }
+        }*/
 
         // Log position of robot.
         Logger.recordOutput("swerve.pose", getPose());
