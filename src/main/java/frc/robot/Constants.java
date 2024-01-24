@@ -114,11 +114,6 @@ public final class Constants {
                 new Translation2d(DriveConstants.kWheelBase / 2, DriveConstants.kTrackWidth / 2).getNorm(),// Drive base radius (distance from center to furthest module)
                 new ReplanningConfig()
         );
-
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-                new TrapezoidProfile.Constraints(
-                        kMaxAngularSpeedRadiansPerSecond,
-                        kMaxAngularAccelerationRadiansPerSecondSquared);
     }
 
     public static final class OIConstants {
