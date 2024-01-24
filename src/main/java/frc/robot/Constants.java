@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
@@ -35,7 +34,7 @@ public final class Constants {
                 new Translation2d(kWheelBase / 2, kTrackWidth / 2), //front left
                 new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //front right
                 new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //back left
-                new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //backright
+                new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //back right
 
         public static final int kFrontLeftDriveMotorPort = 6;
         public static final int kBackLeftDriveMotorPort = 1;
@@ -102,20 +101,20 @@ public final class Constants {
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 2;
         public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
-
-        public static final TrajectoryConfig autoTrajectoryConfig =
-                new TrajectoryConfig(
-                        Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-                        Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                        .setKinematics(Constants.DriveConstants.kDriveKinematics);
-
         public static final double kMaxAccelerationMetersPerSecondSquared = 5;
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI;
         public static final double kPXController = 5;
         public static final double kPYController = 5;
         public static final double kPThetaController = 5;
 
-        //creates a TrapezoidProfile to determine setpoints for autonomous
+        public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+                new PIDConstants(AutoConstants.kPXController, 0, 0), // Translation constants
+                new PIDConstants(AutoConstants.kPThetaController, 0, 0), // Rotation constants
+                DriveConstants.kPhysicalMaxSpeedMetersPerSecond,
+                new Translation2d(DriveConstants.kWheelBase / 2, DriveConstants.kTrackWidth / 2).getNorm(),// Drive base radius (distance from center to furthest module)
+                new ReplanningConfig()
+        );
+
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
                 new TrapezoidProfile.Constraints(
                         kMaxAngularSpeedRadiansPerSecond,
@@ -128,14 +127,6 @@ public final class Constants {
         public static final int kJoystickPort = 2;
         public static final double kPreciseSpdMetersPerSecond = 0.5;
     }
-
-    public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(AutoConstants.kPXController, 0, 0), // Translation constants
-            new PIDConstants(AutoConstants.kPThetaController, 0, 0), // Rotation constants
-            DriveConstants.kPhysicalMaxSpeedMetersPerSecond,
-            Math.sqrt(DriveConstants.kTrackWidth * DriveConstants.kTrackWidth + DriveConstants.kWheelBase * DriveConstants.kWheelBase) / 2.0,// Drive base radius (distance from center to furthest module)
-            new ReplanningConfig()
-    );
 
     public static final class FavoritePositions {
         // TODO: confirm robot size; affects location coordinates.
