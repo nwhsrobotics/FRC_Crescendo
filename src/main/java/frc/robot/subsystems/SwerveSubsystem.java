@@ -1,31 +1,22 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import org.littletonrobotics.junction.Logger;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * Represents the swerve drive subsystem, managing four swerve modules and handling overall robot control.
@@ -41,7 +32,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public String lastPath;
     public Pose2d lastPose2d;
     public String lastPathType;
-    
+
     public Command pathfindingCommand;
 
     // 4 instances of SwerveModule to represent each wheel module with the constants
@@ -82,7 +73,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     // array of SwerveModules for convenience in accessing all modules
-    public final SwerveModule[] swerveMods = { frontLeft, frontRight, backLeft, backRight };
+    public final SwerveModule[] swerveMods = {frontLeft, frontRight, backLeft, backRight};
 
     // create an AHRS object for gyro
     public final AHRS m_gyro = new AHRS(SerialPort.Port.kUSB);
@@ -98,23 +89,23 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveSubsystem() {
         // Configure AutoBuilder for holonomic/swerve path planning & paths
         AutoBuilder.configureHolonomic(
-            this::getPose,               // Supplier for getting the robot's pose
-            this::resetOdometry,         // Runnable for resetting odometry
-            this::getSpeeds,             // Supplier for getting the robot's speeds
-            this::driveRobotRelative,    // Consumer for driving the robot relative to its orientation
-            Constants.pathFollowerConfig, // Path follower configuration
-            () -> {
-                // Boolean supplier that controls when the path will be mirrored for the red alliance
-                // This will flip the path being followed to the red side of the field.
-                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+                this::getPose,               // Supplier for getting the robot's pose
+                this::resetOdometry,         // Runnable for resetting odometry
+                this::getSpeeds,             // Supplier for getting the robot's speeds
+                this::driveRobotRelative,    // Consumer for driving the robot relative to its orientation
+                Constants.pathFollowerConfig, // Path follower configuration
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                var alliance = DriverStation.getAlliance();
-                if (alliance.isPresent()) {
-                    return alliance.get() == DriverStation.Alliance.Red;
-                }
-                return false;
-            },
-            this
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
+                this
         );
 
         resetDestinationForPathfinding();
@@ -122,7 +113,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // Pause for 500 milliseconds to allow the gyro to stabilize.
         // Set the yaw of the gyro to 0 afterwards.
         Commands.waitSeconds(0.5)
-            .andThen(new RunCommand(() -> m_gyro.zeroYaw()));
+                .andThen(new RunCommand(() -> m_gyro.zeroYaw()));
     }
 
     /**
@@ -218,7 +209,7 @@ public class SwerveSubsystem extends SubsystemBase {
         for (SwerveModule sModule : swerveMods)
             sModule.driveEncoder.setPosition(0);
         */
-        
+
         // Reset the odometry system using the current heading, module positions, and specified pose
         odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), pose);
     }
@@ -284,13 +275,13 @@ public class SwerveSubsystem extends SubsystemBase {
                 this);
     }
 
-        /**
+    /**
      * Finds a path and follows it based on the specified path name.
      * Loads the path from a file, sets constraints, and uses AutoBuilder to create a pathfinding command.
-     * 
+     *
      * @param pathName The name of the path file to load and follow.
      */
-    public void pathFindThenFollowPath(String pathName){
+    public void pathFindThenFollowPath(String pathName) {
         lastPath = pathName;
         lastPathType = "Path";
 
@@ -299,8 +290,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
         // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
         PathConstraints constraints = new PathConstraints(
-            DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 2.0,
-            AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
+                DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 2.0,
+                AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
 
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         // What pathfinding does is pathfind to the start of a path and then continue along that path.
@@ -309,7 +300,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 path,
                 constraints,
                 2.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
-            
+
         );
         pathfindingCommand.schedule();
     }
@@ -317,10 +308,10 @@ public class SwerveSubsystem extends SubsystemBase {
     /**
      * Finds a path to a specified position and sets up a pathfinding command.
      * Utilizes AutoBuilder to build the pathfinding command.
-     * 
+     *
      * @param coords The target pose to pathfind to, where the rotation component represents the goal holonomic rotation.
      */
-    public void pathFindToPos(Pose2d coords){
+    public void pathFindToPos(Pose2d coords) {
         // Since we are using a holonomic drivetrain, the rotation component of this pose represents the goal holonomic rotation
         // lastPose2d = coords;
         // lastPathType = "Pos";
@@ -346,7 +337,8 @@ public class SwerveSubsystem extends SubsystemBase {
      * This resets the destination for automatic tele-op pathfinding.
      */
     public void resetDestinationForPathfinding() {
-        this.pathfindingCommand = new InstantCommand(() -> {});
+        this.pathfindingCommand = new InstantCommand(() -> {
+        });
     }
 
     // This method is called periodically to update the robot's state and log data
@@ -391,7 +383,7 @@ public class SwerveSubsystem extends SubsystemBase {
     /**
      * Sets the states of the robot's swerve modules based on the desired states.
      * Scales all speeds down instead of truncating them if they exceed the max speed.
-     * 
+     *
      * @param desiredStates An array of SwerveModuleState representing the desired states for each swerve module.
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -408,11 +400,11 @@ public class SwerveSubsystem extends SubsystemBase {
      *
      * @return True if the robot is in a cloverleaf configuration, false otherwise.
      */
-    public boolean isClover(){
-        return frontLeft.getTurningPositionWrapped() > Math.PI/4 - Math.toRadians(1.0) && frontLeft.getTurningPositionWrapped() < Math.PI/4 + Math.toRadians(1.0)
-            && frontRight.getTurningPositionWrapped() > -Math.PI/4 - Math.toRadians(1.0) && frontRight.getTurningPositionWrapped() < -Math.PI/4 + Math.toRadians(1.0)
-            && backLeft.getTurningPositionWrapped() > -Math.PI/4 - Math.toRadians(1.0) && backLeft.getTurningPositionWrapped() < -Math.PI/4 + Math.toRadians(1.0)
-            && backRight.getTurningPositionWrapped() > Math.PI/4 - Math.toRadians(1.0) && backRight.getTurningPositionWrapped() < Math.PI/4 + Math.toRadians(1.0);
+    public boolean isClover() {
+        return frontLeft.getTurningPositionWrapped() > Math.PI / 4 - Math.toRadians(1.0) && frontLeft.getTurningPositionWrapped() < Math.PI / 4 + Math.toRadians(1.0)
+                && frontRight.getTurningPositionWrapped() > -Math.PI / 4 - Math.toRadians(1.0) && frontRight.getTurningPositionWrapped() < -Math.PI / 4 + Math.toRadians(1.0)
+                && backLeft.getTurningPositionWrapped() > -Math.PI / 4 - Math.toRadians(1.0) && backLeft.getTurningPositionWrapped() < -Math.PI / 4 + Math.toRadians(1.0)
+                && backRight.getTurningPositionWrapped() > Math.PI / 4 - Math.toRadians(1.0) && backRight.getTurningPositionWrapped() < Math.PI / 4 + Math.toRadians(1.0);
     }
 
     /**
