@@ -1,6 +1,9 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +24,8 @@ public class RobotContainer {
     public final Joystick m_driver = new Joystick(0);
 
     public RobotContainer() {
+        //TODO: THIS COMMAND is there just for testing (preset pos is disabled for Auto Square path) to test how we can build auto in pathplanner itself
+        NamedCommands.registerCommand("resetOdometry", new InstantCommand(() -> swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto Square"))));
         //choose autonomous paths in shuffleboard
         autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
         SmartDashboard.putData("Auto Chooser", autoChooser);
