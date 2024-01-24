@@ -48,6 +48,16 @@ public class SwerveJoystickDefaultCmd extends Command {
         ChassisSpeeds chassisSpeeds = (swerveSubsystem.isFieldRelative)
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotatingSpeed, Rotation2d.fromDegrees(swerveSubsystem.getHeading()))
                 : ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotatingSpeed, new Rotation2d(0));
+        
+        if(xSpeed != 0 && ySpeed != 0 && rotatingSpeed != 0){
+            swerveSubsystem.pathfindingCommand.cancel();   
+        }
+        else {
+            if (swerveSubsystem.pathfindingCommand.isFinished()) {
+                // run pathfinding command again.
+                swerveSubsystem.pathfindingCommand.schedule();
+            }
+        }
 
         // sets the module states for each module based on the ChassisSpeeds
         swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds));

@@ -4,6 +4,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 // IMPORTANT: SET UP FOR NEOS for both driving and turning
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -133,12 +135,21 @@ public final class Constants {
         //TODO: Actually the example methods are different driveRobotRelative setState than what we have, maybe thats the issue
       new PIDConstants(AutoConstants.kPXController, 0, 0), // Translation constants 
       new PIDConstants(AutoConstants.kPThetaController, 0, 0), // Rotation constants 
-      DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 12.0, 
+      DriveConstants.kPhysicalMaxSpeedMetersPerSecond, 
       Math.sqrt(DriveConstants.kTrackWidth*DriveConstants.kTrackWidth + DriveConstants.kWheelBase*DriveConstants.kWheelBase) / 2.0,// Drive base radius (distance from center to furthest module) 
       new ReplanningConfig()
     );
 
-        public static enum RuntimeEnvironment {
+    public static final class FavoritePositions {
+        // TODO: confirm robot size; affects location coordinates.
+        public static final Pose2d SOURCE = new Pose2d(15.45, 0.87, Rotation2d.fromDegrees(-60.00));
+        public static final Pose2d AMP = new Pose2d(1.97, 7.80, Rotation2d.fromDegrees(90.00));
+
+        // TODO: consider other stage locations.
+        public static final Pose2d STAGE = new Pose2d(5.84, 3.99, Rotation2d.fromDegrees(-180.00));
+    }
+
+    public static enum RuntimeEnvironment {
         /** Running on physical robot. */
         REAL,
         /** Running on simulated robot. */
