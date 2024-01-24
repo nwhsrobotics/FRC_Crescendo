@@ -347,8 +347,9 @@ public class SwerveSubsystem extends SubsystemBase {
         LimelightHelpers.getLatestResults("limelight").targetingResults;
         if (!(result.botpose[0] == 0 && result.botpose[1] == 0) && alliance.isPresent()) {
             if (alliance.get() == Alliance.Blue) {
+                //LimelightHelpers.toPose2D(result.botpose_wpiblue)
             odometer.addVisionMeasurement(
-                LimelightHelpers.toPose2D(result.botpose_wpiblue),
+                result.getBotPose2d_wpiBlue(),
                 Timer.getFPGATimestamp() - (result.latency_capture / 1000.0) - (result.latency_pipeline / 1000.0));
             } else if (alliance.get() == Alliance.Red) {
             // double[] botpose = LimelightHelpers.getBotPose_wpiRed("limelight");
