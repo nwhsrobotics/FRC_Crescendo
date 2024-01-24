@@ -3,15 +3,14 @@ package frc.robot;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-// IMPORTANT: SET UP FOR NEOS for both driving and turning
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+
 //Most values are from SDS SwerveLib setup for MK4_L2
 public final class Constants {
     public static final class ModuleConstants {
@@ -70,10 +69,10 @@ public final class Constants {
 
         //FOR ALL OFFSETS: turn wheels until they become straight, replace with the value of encoders
         //THE BLACK GEAR SHOULD BE ON THE OUTSIDE FOR ALL WHEELS, regardless of side
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 0.523087448669004 + Math.PI/2;//2.66 + Math.PI;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 3.733709237713651 + Math.PI/2;//5.24 - Math.PI;
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 3.637068448076855 + Math.PI/2;//0.61 + Math.PI;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 5.781573589540982 + Math.PI/2;//5.20 - Math.PI;
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 0.523087448669004 + Math.PI / 2;//2.66 + Math.PI;
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 3.733709237713651 + Math.PI / 2;//5.24 - Math.PI;
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 3.637068448076855 + Math.PI / 2;//0.61 + Math.PI;
+        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 5.781573589540982 + Math.PI / 2;//5.20 - Math.PI;
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 6380.0 / 60.0 * (ModuleConstants.kDriveMotorGearRatio) * ModuleConstants.kWheelDiameterMeters * Math.PI; // set up for NEOs to drive
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = kPhysicalMaxSpeedMetersPerSecond / Math.hypot(DriveConstants.kTrackWidth / 2.0, DriveConstants.kWheelBase / 2.0); //adapted from SDS
@@ -101,15 +100,15 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond/2;
-        public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond/2;
+        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 2;
+        public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
 
         public static final TrajectoryConfig autoTrajectoryConfig =
-        new TrajectoryConfig(
-                Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            .setKinematics(Constants.DriveConstants.kDriveKinematics);
-        
+                new TrajectoryConfig(
+                        Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                        Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                        .setKinematics(Constants.DriveConstants.kDriveKinematics);
+
         public static final double kMaxAccelerationMetersPerSecondSquared = 5;
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI;
         public static final double kPXController = 5;
@@ -131,13 +130,11 @@ public final class Constants {
     }
 
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-        //TODO: make P 5.0 because current speed too low also use telementary tab in pathplanner to fine tune rotation constant by the debug graphs
-        //TODO: Actually the example methods are different driveRobotRelative setState than what we have, maybe thats the issue
-      new PIDConstants(AutoConstants.kPXController, 0, 0), // Translation constants 
-      new PIDConstants(AutoConstants.kPThetaController, 0, 0), // Rotation constants 
-      DriveConstants.kPhysicalMaxSpeedMetersPerSecond, 
-      Math.sqrt(DriveConstants.kTrackWidth*DriveConstants.kTrackWidth + DriveConstants.kWheelBase*DriveConstants.kWheelBase) / 2.0,// Drive base radius (distance from center to furthest module) 
-      new ReplanningConfig()
+            new PIDConstants(AutoConstants.kPXController, 0, 0), // Translation constants
+            new PIDConstants(AutoConstants.kPThetaController, 0, 0), // Rotation constants
+            DriveConstants.kPhysicalMaxSpeedMetersPerSecond,
+            Math.sqrt(DriveConstants.kTrackWidth * DriveConstants.kTrackWidth + DriveConstants.kWheelBase * DriveConstants.kWheelBase) / 2.0,// Drive base radius (distance from center to furthest module)
+            new ReplanningConfig()
     );
 
     public static final class FavoritePositions {
@@ -149,19 +146,26 @@ public final class Constants {
         public static final Pose2d STAGE = new Pose2d(5.84, 3.99, Rotation2d.fromDegrees(-180.00));
     }
 
-    public static enum RuntimeEnvironment {
-        /** Running on physical robot. */
+    public enum RuntimeEnvironment {
+        /**
+         * Running on physical robot.
+         */
         REAL,
-        /** Running on simulated robot. */
+        /**
+         * Running on simulated robot.
+         */
         SIMULATION,
-        /** Replaying robot from log file. */
+        /**
+         * Replaying robot from log file.
+         */
         REPLAY
     }
+
     public static final class LoggerConstants {
         public static final RuntimeEnvironment MODE = RuntimeEnvironment.REAL;
         public static final String RUNNING_UNDER = "2024.pre";
         public static final ModuleType PDU_TYPE = ModuleType.kRev;
-        
+
         // SET TO FALSE IF WE'RE RUNNING OUT OF BANDWIDTH.
         public static final boolean SILENT_NT4 = false;
     }

@@ -1,17 +1,16 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkBase.IdleMode;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
-import java.lang.Math;
 
 /**
  * Represents a swerve module with independent drive and turning motors.
@@ -36,12 +35,12 @@ public class SwerveModule {
     /**
      * Initializes a new instance of the SwerveModule class.
      *
-     * @param driveMotorId          The ID of the CANSparkMax drive motor.
-     * @param turningMotorId        The ID of the CANSparkMax turning motor.
-     * @param driveMotorReversed    A boolean indicating whether the drive motor is reversed.
-     * @param turningMotorReversed  A boolean indicating whether the turning motor is reversed.
-     * @param absoluteEncoderId     The ID of the CANcoder absolute encoder.
-     * @param absoluteEncoderOffset The offset of the absolute encoder in radians.
+     * @param driveMotorId            The ID of the CANSparkMax drive motor.
+     * @param turningMotorId          The ID of the CANSparkMax turning motor.
+     * @param driveMotorReversed      A boolean indicating whether the drive motor is reversed.
+     * @param turningMotorReversed    A boolean indicating whether the turning motor is reversed.
+     * @param absoluteEncoderId       The ID of the CANcoder absolute encoder.
+     * @param absoluteEncoderOffset   The offset of the absolute encoder in radians.
      * @param absoluteEncoderReversed A boolean indicating whether the absolute encoder is reversed.
      */
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
@@ -118,15 +117,15 @@ public class SwerveModule {
         // Wrap the angle to be between -180 and 180 degrees
         double angle = Math.toDegrees(getTurningPosition()) % 360.0;
         // reduce the angle  
-        angle =  angle % 360.0; 
+        angle = angle % 360.0;
 
         // force it to be the positive remainder, so that 0 <= angle < 360  
-        angle = (angle + 360.0) % 360.0;  
+        angle = (angle + 360.0) % 360.0;
 
         // force into the minimum absolute value residue class, so that -180 < angle <= 180  
-        if (angle > 180.0)  
-            angle -= 360.0; 
-        
+        if (angle > 180.0)
+            angle -= 360.0;
+
         return Math.toRadians(angle);
     }
 
