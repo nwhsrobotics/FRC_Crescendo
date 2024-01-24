@@ -195,10 +195,8 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param pose The desired pose for resetting odometry.
      */
     public void resetOdometry(Pose2d pose) {
-        System.out.println("Odometry was reset!!! " + pose.toString());
-
         // Reset the drive encoder positions on all four swerve modules
-        // TODO: NUKE THIS SHIT TO OBLIVION
+        // TODO: Remove this.
         //
         // why?
         // well, re-enabling a second time resets odometry to (0, 0).
@@ -253,44 +251,21 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Get a trajectory command for the specified trajectory.
-     *
-     * @param traj The trajectory to follow.
-     * @return The swerve controller command for the trajectory.
-     */
-    public SwerveControllerCommand getTrajCmd(Trajectory traj) {
-        // Create a PID controller for the heading (yaw) error
-        var thetaController = new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        // Create a new swerve controller command using the specified trajectory, odometry, and controllers
-        return new SwerveControllerCommand(
-                traj,
-                this::getPose,
-                Constants.DriveConstants.kDriveKinematics,
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                this::setModuleStates,
-                this);
-    }
-
-    /**
      * Finds a path and follows it based on the specified path name.
      * Loads the path from a file, sets constraints, and uses AutoBuilder to create a pathfinding command.
      *
      * @param pathName The name of the path file to load and follow.
      */
     public void pathFindThenFollowPath(String pathName) {
-        lastPath = pathName;
-        lastPathType = "Path";
+        //lastPath = pathName;
+        //lastPathType = "Path";
 
         // Load the path we want to pathfind to and follow
         PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
 
         // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
         PathConstraints constraints = new PathConstraints(
-                DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 2.0,
+                DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 8.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 8.0,
                 AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
 
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
