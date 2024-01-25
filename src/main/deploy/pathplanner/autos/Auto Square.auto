@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.2788871226858771,
+      "y": 4.74288880104151
+    },
+    "rotation": 0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,13 +14,25 @@
         {
           "type": "named",
           "data": {
-            "name": "resetOdometry"
+            "name": "wait5Sec"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Square"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Straight"
           }
         }
       ]
