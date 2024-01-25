@@ -4,8 +4,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveJoystickDefaultCmd extends Command {
@@ -32,16 +32,16 @@ public class SwerveJoystickDefaultCmd extends Command {
         // calculates the xSpeed, ySpeed and rotatingSpeed based on the joystick axis and deadbands
         double xSpeed = Math.abs(-m_driver.getY()) < OIConstants.kXYDeadband ? 0
                 : -m_driver.getY() > 0
-                ? (-m_driver.getY() - OIConstants.kXYDeadband) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband))
-                : (-m_driver.getY() + OIConstants.kXYDeadband) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband));
+                ? (-m_driver.getY() - OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband))
+                : (-m_driver.getY() + OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband));
         double ySpeed = Math.abs(-m_driver.getX()) < OIConstants.kXYDeadband ? 0
                 : -m_driver.getX() > 0
-                ? (-m_driver.getX() - OIConstants.kXYDeadband) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband))
-                : (-m_driver.getX() + OIConstants.kXYDeadband) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband));
+                ? (-m_driver.getX() - OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband))
+                : (-m_driver.getX() + OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband));
         double rotatingSpeed = Math.abs(-m_driver.getTwist()) < OIConstants.kZDeadband ? 0
                 : -m_driver.getTwist() > 0
-                ? (-m_driver.getTwist() - OIConstants.kZDeadband) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient
-                : (-m_driver.getTwist() + OIConstants.kZDeadband) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient;
+                ? (-m_driver.getTwist() - OIConstants.kZDeadband) * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient
+                : (-m_driver.getTwist() + OIConstants.kZDeadband) * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient;
 
         // calculates the ChassisSpeeds based on the xSpeed, ySpeed, and rotatingSpeed
         ChassisSpeeds chassisSpeeds = (swerveSubsystem.isFieldRelative)
