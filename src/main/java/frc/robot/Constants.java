@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
-//Most values are from SDS SwerveLib setup for MK4_L2
 public final class Constants {
     public static final class ModuleConstants {
         public static final double kWheelDiameterMeters = 0.10033; // set up for MK4(i)
@@ -74,9 +73,6 @@ public final class Constants {
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 6380.0 / 60.0 * (ModuleConstants.kDriveMotorGearRatio) * ModuleConstants.kWheelDiameterMeters * Math.PI; // set up for NEOs to drive
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = kPhysicalMaxSpeedMetersPerSecond / Math.hypot(DriveConstants.kTrackWidth / 2.0, DriveConstants.kWheelBase / 2.0); //adapted from SDS
-
-        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond * 0.25;
-        public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * 0.25;
     }
 
     public static final class ClimbConstants {
@@ -119,7 +115,9 @@ public final class Constants {
         public static final double kXYDeadband = 0.05;
         public static final double kZDeadband = 0.05;
         public static final int kJoystickPort = 2;
-        public static final double kPreciseSpdMetersPerSecond = 0.5;
+    
+        public static final double kTeleDriveMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 0.25;
+        public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond * 0.25;
     }
 
     public static final class FavoritePositions {
