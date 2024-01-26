@@ -38,10 +38,10 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        new JoystickButton(m_driver, 1).onTrue(new InstantCommand(() -> swerveSubsystem.resetDestinationForPathfinding()));
-        new JoystickButton(m_driver, 12).onTrue(new InstantCommand(() -> swerveSubsystem.pathFindToPos(FavoritePositions.AMP)));
-        new JoystickButton(m_driver, 11).onTrue(new InstantCommand(() -> swerveSubsystem.pathFindToPos(FavoritePositions.SOURCE)));
-        new JoystickButton(m_driver, 10).onTrue(new InstantCommand(() -> swerveSubsystem.pathFindToPos(FavoritePositions.STAGE)));
+        new JoystickButton(m_driver, 1).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.toggle()));
+        new JoystickButton(m_driver, 12).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.AMP)));
+        new JoystickButton(m_driver, 11).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SOURCE)));
+        new JoystickButton(m_driver, 10).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.STAGE)));
     }
 
     public Command getAutonomousCommand() {
