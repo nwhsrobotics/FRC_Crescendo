@@ -99,6 +99,9 @@ public class PenguinLogistics {
      * Navigate to position.
      * 
      * This will initialize a new navigation command.
+     * If an existing navigation command is scheduled, that command will be cancelled,
+     * before being overwritten.
+     * 
      * If autonavigation is disabled, calls to this method will be ignored.
      * 
      * @param destination - position to navigate to.
@@ -106,6 +109,10 @@ public class PenguinLogistics {
     public void navigateTo(Pose2d destination) {
         if (!this.enabled || !RobotState.isTeleop()) {
             return;
+        }
+
+        if (this.navigationCommand != null && this.navigationCommand.isScheduled()) {
+            this.navigationCommand.cancel();
         }
 
         this.navigationCommand = this.swerve.pathfindToPosition(destination);
