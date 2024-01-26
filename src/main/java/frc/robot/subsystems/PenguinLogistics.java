@@ -1,3 +1,20 @@
+/**
+ *     ===========   /=\
+ *   //   /===\   \\/ o \
+ *  //   /     \ __=====/
+ * // __|   O   |  \\\
+ * ||/  |__     |  _||
+ * ||\_ |  \    | / ||
+ * ||\ \|   \___|/  ||
+ * \\ \ |       |__ //
+ *  \\/  \     //  //
+ *   \\ / \===/   //
+ *     ===========
+ * 
+ * --[P E N G U I N]--
+ *      LOGISTICS
+ */
+
 package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
