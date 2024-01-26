@@ -60,7 +60,7 @@ public class SwerveJoystickDefaultCmd extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        // stops all the modules in the SwerveSubsystem
+        swerveSubsystem.autonavigator.disable();
         swerveSubsystem.stopModules();
     }
 
