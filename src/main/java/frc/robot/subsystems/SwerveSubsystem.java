@@ -36,7 +36,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public Pose2d lastPose2d;
     public String lastPathType;
 
-    public Command pathfindingCommand;
+    public PenguinLogistics autonavigator;
 
     // 4 instances of SwerveModule to represent each wheel module with the constants
     public final SwerveModule frontLeft = new SwerveModule(
@@ -93,6 +93,10 @@ public class SwerveSubsystem extends SubsystemBase {
         VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(18)),
         VecBuilder.fill(0.9, 0.9, Units.degreesToRadians(162)));
 
+    private final PathConstraints kPathfindingConstraints = new PathConstraints(
+        DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 8.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 8.0,
+        AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
+
     /**
      * Constructor for the SwerveSubsystem class.
      * Configures the AutoBuilder for holonomic/swerve path planning and initializes the gyro.
@@ -119,7 +123,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 this
         );
 
-        resetDestinationForPathfinding();
+        this.autonavigator = new PenguinLogistics(this);
 
         // Pause for 500 milliseconds to allow the gyro to stabilize.
         // Set the yaw of the gyro to 0 afterwards.
@@ -283,48 +287,32 @@ public class SwerveSubsystem extends SubsystemBase {
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         // What pathfinding does is pathfind to the start of a path and then continue along that path.
         // If you don't want to continue along the path, you can make it pathfind to a specific location.
+        /*
         pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
                 path,
                 constraints,
                 2.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
-
         );
         pathfindingCommand.schedule();
+        */
     }
 
     /**
-     * Finds a path to a specified position and sets up a pathfinding command.
-     * Utilizes AutoBuilder to build the pathfinding command.
-     *
-     * @param coords The target pose to pathfind to, where the rotation component represents the goal holonomic rotation.
+     * Run pathfinding to given position.
+     * 
+     * @param position - position to pathfind to.
+     * @return - scheduled pathfinding command.
      */
-    public void pathFindToPos(Pose2d coords) {
-        // Since we are using a holonomic drivetrain, the rotation component of this pose represents the goal holonomic rotation
-        // lastPose2d = coords;
-        // lastPathType = "Pos";
-
-        // Create the constraints to use while pathfinding
-        PathConstraints constraints = new PathConstraints(
-                DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 8.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 8.0,
-                AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
-
-        // Since AutoBuilder is configured, we can use it to build pathfinding commands
-        pathfindingCommand = AutoBuilder.pathfindToPose(
-                coords,
-                constraints,
-                0.0, // Goal end velocity in meters/sec
-                0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+    public Command pathfindToPosition(Pose2d position) {
+        Command command = AutoBuilder.pathfindToPose(
+            position,
+            this.kPathfindingConstraints,
+            0.0, // Goal end velocity in meters/sec
+            0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
-        pathfindingCommand.schedule();
-        lastPose2d = coords;
-    }
+        command.schedule();
 
-    /**
-     * Set the current pathfinding command to do nothing.
-     * This resets the destination for automatic tele-op pathfinding.
-     */
-    public void resetDestinationForPathfinding() {
-        pathfindingCommand = new InstantCommand(() -> {});
+        return command;
     }
 
     // This method is called periodically to update the robot's state and log data
