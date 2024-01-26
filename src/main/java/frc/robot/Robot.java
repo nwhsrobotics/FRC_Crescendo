@@ -19,6 +19,9 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     public RobotContainer m_robotContainer;
@@ -121,7 +124,7 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        System.out.println(m_robotContainer.swerveSubsystem.getPose());
+        // System.out.println(m_robotContainer.swerveSubsystem.getPose());
     }
 
     @Override
@@ -133,6 +136,9 @@ public class Robot extends LoggedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
+
+        // TODO: formalize auto paths to end at same location.
+        m_robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point"));
     }
 
     /**

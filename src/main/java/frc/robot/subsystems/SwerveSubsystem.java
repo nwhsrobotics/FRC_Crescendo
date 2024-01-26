@@ -87,7 +87,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics,
-        m_gyro.getRotation2d(),
+        Rotation2d.fromDegrees(getHeading()),
         getModulePositions(),
         new Pose2d(),
         VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(18)),
@@ -320,8 +320,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void periodic() {
         // Update the robot's odometer
         //odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
-
-        odometer.updateWithTime(Timer.getFPGATimestamp(), m_gyro.getRotation2d(), getModulePositions());
+        odometer.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(getHeading()), getModulePositions());
         //var alliance = DriverStation.getAlliance();
         /*if (alliance.isPresent()) {
             if(alliance.get() == DriverStation.Alliance.Red){

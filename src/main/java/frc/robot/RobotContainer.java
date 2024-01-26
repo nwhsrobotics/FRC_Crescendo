@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -27,9 +28,11 @@ public class RobotContainer {
     public RobotContainer() {
         //TODO: THIS COMMAND is there just for testing (preset pos is disabled for Auto Square path) to test how we can build auto in pathplanner itself
         //NamedCommands.registerCommand("resetOdometry", new InstantCommand(() -> swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto Square"))));
-        NamedCommands.registerCommand("wait5Sec", new WaitCommand(5.0));
         //choose autonomous paths in shuffleboard
+        NamedCommands.registerCommand("waitSec", Commands.print("Passed marker 2\n HIIIIIIIIIIIIIII\n HIIIIIIII"));
+        NamedCommands.registerCommand("beepboop", Commands.print("Passed marker 2\n HIIIIIIIIIIIIIII\n HIIIIIIII"));
         autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
+        
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, m_driver));

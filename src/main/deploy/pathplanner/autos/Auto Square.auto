@@ -12,27 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "wait5Sec"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Square"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Straight"
           }
         }
       ]
