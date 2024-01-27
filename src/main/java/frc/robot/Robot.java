@@ -95,6 +95,7 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void disabledInit() {
+        m_robotContainer.swerveSubsystem.autonavigator.disable();
     }
 
     @Override
@@ -146,6 +147,7 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        m_robotContainer.driverControls.processCycle();
     }
 
     @Override
