@@ -23,8 +23,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 public class Robot extends LoggedRobot {
-    private Command m_autonomousCommand;
-    public RobotContainer m_robotContainer;
+    private Command autonomousCommand;
+    public RobotContainer robotContainer;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -64,7 +64,7 @@ public class Robot extends LoggedRobot {
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
-        m_robotContainer = new RobotContainer();
+        robotContainer = new RobotContainer();
     }
 
     /**
@@ -97,7 +97,7 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void disabledInit() {
-        m_robotContainer.swerveSubsystem.autonavigator.disable();
+        robotContainer.swerveSubsystem.autonavigator.disable();
     }
 
     @Override
@@ -111,14 +111,14 @@ public class Robot extends LoggedRobot {
     @Override
     public void autonomousInit() {
         //TODO: NO need to resetHeadingAndPose because pathplanner automatically does it with auto commands (this might be whats causing robot to jerk when renable in autonoumous)
-        //m_robotContainer.swerveSubsystem.resetHeadingAndPose();
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        //robotContainer.swerveSubsystem.resetHeadingAndPose();
+        autonomousCommand = robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
-        if (m_autonomousCommand != null) {
+        if (autonomousCommand != null) {
             //auto paths can preset pos by default (reset odometry)
             //TODO: Be careful when calling auto paths it resets odometry and assumes you know where you are starting from if not then use pathFindThenFollowPath
-            m_autonomousCommand.schedule();
+            autonomousCommand.schedule();
         }
     }
 
@@ -127,7 +127,7 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        // System.out.println(m_robotContainer.swerveSubsystem.getPose());
+        // System.out.println(robotContainer.swerveSubsystem.getPose());
     }
 
     @Override
@@ -136,12 +136,12 @@ public class Robot extends LoggedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.cancel();
+        if (autonomousCommand != null) {
+            autonomousCommand.cancel();
         }
 
         // TODO: formalize auto paths to end at same location.
-        m_robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point"));
+        robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point"));
     }
 
     /**
@@ -149,7 +149,7 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        m_robotContainer.driverControls.processCycle();
+        robotContainer.driverControls.processCycle();
     }
 
     @Override
