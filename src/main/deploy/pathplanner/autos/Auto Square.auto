@@ -20,7 +20,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Square"
+            "pathName": "Square 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Square 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Square 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Square 4"
           }
         }
       ]
