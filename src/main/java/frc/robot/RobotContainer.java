@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.FavoritePositions;
+import frc.robot.commands.SwerveAutoWait;
+import frc.robot.commands.SwerveClover;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
 import frc.robot.subsystems.DriverControls;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -28,6 +30,10 @@ public class RobotContainer {
     //XboxController controller = new XboxController(0);
 
     public RobotContainer() {
+        NamedCommands.registerCommand("wait", new WaitCommand(5.0));
+        NamedCommands.registerCommand("test", Commands.print("Ok this is a test"));
+        NamedCommands.registerCommand("waitTest", new SwerveAutoWait(this));
+        //NamedCommands.registerCommand("wait", new SwerveClover(swerveSubsystem));
         autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
         
         SmartDashboard.putData("Auto Chooser", autoChooser);
