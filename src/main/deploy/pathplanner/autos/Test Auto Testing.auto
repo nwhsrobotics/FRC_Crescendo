@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.84,
-      "y": 6.14818918653015
+      "x": 2.0,
+      "y": 7.0
     },
     "rotation": 0
   },
@@ -12,15 +12,21 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "wait"
+            "pathName": "please work 1"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "test"
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "please work 2"
           }
         }
       ]
