@@ -12,9 +12,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Straight"
+            "name": "wait"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "test"
           }
         }
       ]
