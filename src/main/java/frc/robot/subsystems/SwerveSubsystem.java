@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.LimelightHelpers;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -92,10 +94,6 @@ public class SwerveSubsystem extends SubsystemBase {
         new Pose2d(),
         VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(18)),
         VecBuilder.fill(0.9, 0.9, Units.degreesToRadians(162)));
-
-    private final PathConstraints kPathfindingConstraints = new PathConstraints(
-        DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 8.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 8.0,
-        AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
 
     /**
      * Constructor for the SwerveSubsystem class.
@@ -306,7 +304,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public Command pathfindToPosition(Pose2d position) {
         Command command = AutoBuilder.pathfindToPose(
             position,
-            this.kPathfindingConstraints,
+            OIConstants.kPathfindingConstraints,
             0.0, // Goal end velocity in meters/sec
             0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
