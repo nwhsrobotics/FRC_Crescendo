@@ -81,7 +81,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public final SwerveModule[] swerveMods = {frontLeft, frontRight, backLeft, backRight};
 
     // create an AHRS object for gyro
-    public final AHRS m_gyro = new AHRS(SerialPort.Port.kUSB);
+    public final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
     // create a SwerveDriveOdometry object to handle odometry calculations
     /*private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
@@ -126,7 +126,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // Pause for 500 milliseconds to allow the gyro to stabilize.
         // Set the yaw of the gyro to 0 afterwards.
         Commands.waitSeconds(0.5)
-                .andThen(new RunCommand(() -> m_gyro.zeroYaw()));
+                .andThen(new RunCommand(() -> gyro.zeroYaw()));
     }
 
     /**
@@ -145,7 +145,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return The heading of the robot in degrees.
      */
     public double getHeading() {
-        return Math.IEEEremainder(m_gyro.getAngle(), 360) * -1;
+        return Math.IEEEremainder(gyro.getAngle(), 360) * -1;
     }
 
     /**
@@ -154,7 +154,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return The pitch of the robot in degrees.
      */
     public double getPitchDeg() {
-        return -m_gyro.getPitch();
+        return -gyro.getPitch();
     }
 
     /**
@@ -173,7 +173,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * Reset the heading (yaw) and the odometry pose of the robot.
      */
     public void resetHeadingAndPose() {
-        m_gyro.zeroYaw(); // Reset the yaw angle
+        gyro.zeroYaw(); // Reset the yaw angle
         resetOdometry(new Pose2d()); // Reset the robot's odometry pose
     }
 
