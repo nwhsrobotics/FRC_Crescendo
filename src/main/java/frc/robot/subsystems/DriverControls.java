@@ -7,7 +7,7 @@ import frc.robot.Constants.OIConstants;
 
 /**
  * Handles driver inputs.
- * 
+ * <p>
  * This should be initialized in "RobotContainer" and ran under ".teleopPeriodic" of "Robot."
  */
 public class DriverControls {

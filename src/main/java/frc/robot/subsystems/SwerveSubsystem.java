@@ -4,23 +4,25 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.LimelightHelpers;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -83,17 +85,13 @@ public class SwerveSubsystem extends SubsystemBase {
     // create an AHRS object for gyro
     public final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
-    // create a SwerveDriveOdometry object to handle odometry calculations
-    /*private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
-            Rotation2d.fromDegrees(getHeading()), getModulePositions());*/
-
     private final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(
-        DriveConstants.kDriveKinematics,
-        Rotation2d.fromDegrees(getHeading()),
-        getModulePositions(),
-        new Pose2d(),
-        VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(18)),
-        VecBuilder.fill(0.9, 0.9, Units.degreesToRadians(162)));
+            DriveConstants.kDriveKinematics,
+            Rotation2d.fromDegrees(getHeading()),
+            getModulePositions(),
+            new Pose2d(),
+            VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(18)),
+            VecBuilder.fill(0.9, 0.9, Units.degreesToRadians(162)));
 
     /**
      * Constructor for the SwerveSubsystem class.
@@ -209,19 +207,6 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param pose The desired pose for resetting odometry.
      */
     public void resetOdometry(Pose2d pose) {
-        // Reset the drive encoder positions on all four swerve modules
-        // TODO: Remove this.
-        //
-        // why?
-        // well, re-enabling a second time resets odometry to (0, 0).
-        // these two lines break odometry testing.
-        //
-        // resetPosition is passed module positions, it already compensates for the reset.
-        /*
-        for (SwerveModule sModule : swerveMods)
-            sModule.driveEncoder.setPosition(0);
-        */
-
         // Reset the odometry system using the current heading, module positions, and specified pose
         odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), pose);
     }
@@ -297,20 +282,20 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /**
      * Run pathfinding to given position.
-     * 
+     *
      * @param position - position to pathfind to.
      * @return - scheduled pathfinding command.
      */
     public Command pathfindToPosition(Pose2d position) {
         Command command = AutoBuilder.pathfindToPose(
-            position,
-            OIConstants.kPathfindingConstraints,
-            0.0, // Goal end velocity in meters/sec
-            0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+                position,
+                OIConstants.kPathfindingConstraints,
+                0.0, // Goal end velocity in meters/sec
+                0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
         command.addRequirements(this);
         command.schedule();
-        
+
         return command;
     }
 

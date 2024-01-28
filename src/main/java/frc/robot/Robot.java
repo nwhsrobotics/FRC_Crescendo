@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import frc.robot.Constants.LoggerConstants;*/
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -18,9 +19,6 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
@@ -89,7 +87,7 @@ public class Robot extends LoggedRobot {
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
 
-        
+
     }
 
     /**
@@ -110,14 +108,10 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
-        //TODO: NO need to resetHeadingAndPose because pathplanner automatically does it with auto commands (this might be whats causing robot to jerk when renable in autonoumous)
-        //robotContainer.swerveSubsystem.resetHeadingAndPose();
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
         if (autonomousCommand != null) {
-            //auto paths can preset pos by default (reset odometry)
-            //TODO: Be careful when calling auto paths it resets odometry and assumes you know where you are starting from if not then use pathFindThenFollowPath
             autonomousCommand.schedule();
         }
     }
