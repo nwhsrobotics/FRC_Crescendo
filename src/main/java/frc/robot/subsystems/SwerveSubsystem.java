@@ -207,7 +207,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param pose The desired pose for resetting odometry.
      */
     public void resetOdometry(Pose2d pose) {
-        // Reset the drive encoder positions on all four swerve modules
+                // Reset the drive encoder positions on all four swerve modules
         // TODO: Remove this.
         //
         // why?
@@ -217,10 +217,9 @@ public class SwerveSubsystem extends SubsystemBase {
         // resetPosition is passed module positions, it already compensates for the reset.
     
         for (SwerveModule sModule : swerveMods)
-            sModule.driveEncoder.setPosition(0); //TODO: REMOVE THIS
+            sModule.driveEncoder.setPosition(0);
     
         // Reset the odometry system using the current heading, module positions, and specified pose
-        // odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), pose); <- TODO: THIS IS THE CURRENT ONE
        odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), new Pose2d());
     }
 

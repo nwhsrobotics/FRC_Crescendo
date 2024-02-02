@@ -29,23 +29,25 @@ public class DriverControls {
      * Process driver inputs.
      */
     public void processCycle() {
-        // calculates the speed coefficient based on the state of the trigger and the joystick axis.
-        //double speedCoefficient = controllerDriver.getTrigger() ? 1 : (controllerDriver.getRawAxis(3));
-        double speedCoefficient = -1;
-        //System.out.println(speedCoefficient);
+        double speedCoefficient = controllerDriver.getTrigger() ? 1 : (-controllerDriver.getRawAxis(3)) * 0.3 + 0.5; 
+
+        double xSpeed = Math.abs(-controllerDriver.getY()) < OIConstants.kXYDeadband ? 0 : -controllerDriver.getY() > 0 ? (-controllerDriver.getY() - OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1/(1-OIConstants.kXYDeadband)) : (-controllerDriver.getY() + OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1/(1-OIConstants.kXYDeadband));
+        double ySpeed = Math.abs(-controllerDriver.getX()) < OIConstants.kXYDeadband ? 0 : -controllerDriver.getX() > 0 ? (-controllerDriver.getX() - OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1/(1-OIConstants.kXYDeadband)) : (-controllerDriver.getX() + OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1/(1-OIConstants.kXYDeadband));
+        double rotatingSpeed = Math.abs(-controllerDriver.getTwist()) < OIConstants.kZDeadband ? 0 : -controllerDriver.getTwist() > 0 ? (-controllerDriver.getTwist() - OIConstants.kZDeadband) * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient: (-controllerDriver.getTwist() + OIConstants.kZDeadband) * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient;
+        /*
         // calculates the xSpeed, ySpeed and rotatingSpeed based on the joystick axis and deadbands
-        xSpeed = Math.abs(controllerDriver.getY()) < OIConstants.kXYDeadband ? 0
-                : controllerDriver.getY() > 0
-                ? (controllerDriver.getY() - OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband))
-                : (controllerDriver.getY() + OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband));
-        ySpeed = Math.abs(controllerDriver.getX()) < OIConstants.kXYDeadband ? 0
-                : controllerDriver.getX() > 0
-                ? (controllerDriver.getX() - OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband))
-                : (controllerDriver.getX() + OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband));
-        rotatingSpeed = Math.abs(-controllerDriver.getTwist()) < OIConstants.kZDeadband ? 0
+        double xSpeed = Math.abs(-controllerDriver.getY()) < OIConstants.kXYDeadband ? 0
+                : -controllerDriver.getY() > 0
+                        ? (-controllerDriver.getY() - OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband))
+                        : (-controllerDriver.getY() + OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband));
+        double ySpeed = Math.abs(-controllerDriver.getX()) < OIConstants.kXYDeadband ? 0
+                : -controllerDriver.getX() > 0
+                        ? (-controllerDriver.getX() - OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband))
+                        : (-controllerDriver.getX() + OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1 / (1 - OIConstants.kXYDeadband));
+        double rotatingSpeed = Math.abs(-controllerDriver.getTwist()) < OIConstants.kZDeadband ? 0
                 : -controllerDriver.getTwist() > 0
-                ? (((OIConstants.isLefty) ? (controllerDriver.getTwist()) : -controllerDriver.getTwist()) - OIConstants.kZDeadband) * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient
-                : (controllerDriver.getTwist() + OIConstants.kZDeadband) * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient;
+                        ? (-controllerDriver.getTwist() - OIConstants.kZDeadband) * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient
+                        : (-controllerDriver.getTwist() + OIConstants.kZDeadband) * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient;*/
 
         // calculates the ChassisSpeeds based on the xSpeed, ySpeed, and rotatingSpeed
         chassisSpeeds = (swerve.isFieldRelative)
