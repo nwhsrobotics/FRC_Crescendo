@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,13 +13,16 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.FavoritePositions;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
 import frc.robot.subsystems.DriverControls;
+import frc.robot.subsystems.DriverXboxControls;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class RobotContainer {
     //intialization of different subsystems and commands
     public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     public final Joystick driver = new Joystick(0);
+    public final XboxController xboxController = new XboxController(1);
     public final DriverControls driverControls = new DriverControls(swerveSubsystem, driver);
+    public final DriverXboxControls driverXboxControls = new DriverXboxControls(swerveSubsystem, xboxController);
 
     //object for presenting selection of options in shuffleboard/ smartdashboard
     SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -30,7 +34,7 @@ public class RobotContainer {
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, driverControls));
+        swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, driverControls, driverXboxControls));
 
         configureButtonBindings();
     }
