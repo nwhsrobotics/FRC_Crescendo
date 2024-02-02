@@ -36,7 +36,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        new JoystickButton(driver, 5).onTrue(new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw()
+        new JoystickButton(driver, 6).onTrue(new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw()
         ));
         new JoystickButton(driver, 3).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.toggle()));
         new JoystickButton(driver, 12).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.AMP)));
