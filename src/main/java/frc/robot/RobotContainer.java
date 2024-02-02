@@ -2,6 +2,8 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -46,6 +48,10 @@ public class RobotContainer {
         new JoystickButton(driver, 12).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.AMP)));
         new JoystickButton(driver, 11).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SOURCE)));
         new JoystickButton(driver, 10).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.STAGE)));
+
+        //new JoystickButton(xboxController, 4).onTrue(new InstantCommand(() -> swerveSubsystem.resetHeadingAndPose()));
+        //new JoystickButton(xboxController, 7).onTrue(new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d())));
+        //new JoystickButton(xboxController, 5).onTrue(new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw()));
     }
 
     public Command getAutonomousCommand() {
