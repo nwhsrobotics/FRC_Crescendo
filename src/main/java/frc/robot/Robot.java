@@ -135,7 +135,7 @@ public class Robot extends LoggedRobot {
         }
 
         // TODO: formalize auto paths to end at same location.
-        robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point"));
+        // robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point"));
     }
 
     /**
