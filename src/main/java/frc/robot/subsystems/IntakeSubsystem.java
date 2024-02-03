@@ -1,16 +1,39 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
-    /**
-     * Creates a new IntakeSubsystem.
-     */
+    private CANSparkMax motor;
+
     public IntakeSubsystem() {
+        this.motor = new CANSparkMax(Constants.IntakeConstants.MOTOR_ID, MotorType.kBrushless);
+    }
+
+    /**
+     * Run the intake forwards.
+     */
+    public void forwards() {
+        motor.set(1);
+    }
+
+    /**
+     * Run the intake reverse.
+     */
+    public void reverse() {
+        motor.set(-1);
+    }
+
+    /**
+     * Stop the intake motor.
+     */
+    public void deactivate() {
+        motor.stopMotor();
     }
 
     @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-    }
+    public void periodic() {}
 }

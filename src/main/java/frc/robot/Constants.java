@@ -83,15 +83,32 @@ public final class Constants {
     }
 
     public static final class ShooterConstants {
-    }
+        public static final int FLYWHEEL_MOTOR_ID = 2;
+        public static final int INDEX_MOTOR_ID = 3;
+        
+        /**
+         * This adds +/- tolerance to the target RPM for the flywheel.
+         * 
+         * If the flywheel spins within the tolerance,
+         * then it is considered up-to-speed for firing. 
+         */
+        public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 10;
 
-    public static final class IndexConstants {
+        public static final double FLYWHEEL_PID_P = 0.5;
+        public static final double INDEX_PID_P = 0.5;
+
+        private static final double INDEX_WHEEL_DIAMETER_INCHES = 4;
+        private static final double NOTE_DIAMETER_INCHES = 12;
+
+        // do not edit manually; change diameter measurements instead.
+        public static final double INDEX_STEP_ROTATIONS = INDEX_WHEEL_DIAMETER_INCHES / NOTE_DIAMETER_INCHES;  // pi cancels out.
     }
 
     public static final class IntakeConstants {
+        public static final int MOTOR_ID = 1;  // change when proper prototype is ready. 
     }
 
-    public static final class SheildConstants {
+    public static final class ShieldConstants {
     }
 
     public static final class AutoConstants {
