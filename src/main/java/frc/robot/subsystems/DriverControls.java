@@ -30,8 +30,9 @@ public class DriverControls {
      */
     public void processCycle() {
         // calculates the speed coefficient based on the state of the trigger and the joystick axis.
-        double speedCoefficient = controllerDriver.getTrigger() ? -1 : (controllerDriver.getRawAxis(3));
-
+        //double speedCoefficient = controllerDriver.getTrigger() ? 1 : (controllerDriver.getRawAxis(3));
+        double speedCoefficient = -1;
+        //System.out.println(speedCoefficient);
         // calculates the xSpeed, ySpeed and rotatingSpeed based on the joystick axis and deadbands
         xSpeed = Math.abs(controllerDriver.getY()) < OIConstants.kXYDeadband ? 0
                 : controllerDriver.getY() > 0

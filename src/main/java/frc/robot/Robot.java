@@ -138,7 +138,7 @@ public class Robot extends LoggedRobot {
         }
 
         // TODO: formalize auto paths to end at same location.
-        robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point"));
+        // robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point"));
     }
 
     /**
@@ -147,6 +147,8 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopPeriodic() {
         robotContainer.driverControls.processCycle();
+        //TODO: ENABLE THIS FOR XBOX CONTROLLER
+        //robotContainer.driverXboxControls.processCycle();
     }
 
     @Override
