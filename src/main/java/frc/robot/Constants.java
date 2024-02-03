@@ -1,5 +1,10 @@
 package frc.robot;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -11,6 +16,77 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 public final class Constants {
+    public static final class CANAssignments {
+        public static final int FRONT_LEFT_DRIVE_MOTOR_ID = 6;
+        public static final int BACK_LEFT_DRIVE_MOTOR_ID = 1;
+        public static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 10;
+        public static final int BACK_RIGHT_DRIVE_MOTOR_ID = 3;
+
+        public static final int FRONT_LEFT_STEER_MOTOR_ID = 8;
+        public static final int BACK_LEFT_STEER_MOTOR_ID = 2;
+        public static final int FRONT_RIGHT_STEER_MOTOR_ID = 11;
+        public static final int BACK_RIGHT_STEER_MOTOR_ID = 4;
+
+        public static final int FRONT_LEFT_STEER_ABSOLUTE_ENCODER_ID = 22;
+        public static final int BACK_LEFT_STEER_ABSOLUTE_ENCODER_ID = 20;
+        public static final int FRONT_RIGHT_STEER_ABSOLUTE_ENCODER_ID = 21;
+        public static final int BACK_RIGHT_STEER_ABSOLUTE_ENCODER_ID = 23;
+
+        // TODO verify all IDs other than drive after hardware assembly.
+        public static final int CLIMB_LEFT_MOTOR_ID = 5;
+        public static final int CLIMB_RIGHT_MOTOR_ID = 7;
+
+        public static final int FLYWHEEL_MOTOR_ID = 9;
+        public static final int INDEX_MOTOR_ID = 12;
+
+        public static final int INTAKE_MOTOR_ID = 13;
+
+        /**
+         * Check for duplicate CAN assignments,
+         * declared under the class this method is defined in.
+         * 
+         * If an assignment cannot be loaded,
+         * or a duplicate assignment is found,
+         * a message will be printed in the console.
+         * 
+         * @return - true if duplicate assignment is found, otherwise false.
+         */
+        public static boolean checkAssignments() {
+            Field[] constants = CANAssignments.class.getFields();
+            HashMap<Integer, String> tracker = new HashMap<>();
+            boolean dupeFound = false;
+
+            for (Field field : constants) {
+                field.setAccessible(true);
+
+                int workingId;
+                try {
+                    workingId = field.getInt(CANAssignments.class);
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    System.out.println("Achtung! Checking CAN assignment for " + field.getName() + " failed!");
+                    continue;
+                }
+                
+                if (tracker.put(workingId, field.getName()) != null) {  // this also adds the field to the tracker.
+                    System.out.println("Fehler! Duplicate CAN assignment on " +
+                        Integer.toString(workingId) +
+                        " for " +
+                        field.getName() +
+                        " already used by " +
+                        tracker.get(workingId) +
+                        "!");
+                    
+                    dupeFound = true;
+                }
+            }
+
+            Logger.recordMetadata("canassignmentsok", !dupeFound ? "yes" : "no");
+
+            return dupeFound;
+        }
+    }
+
+
     public static final class ModuleConstants {
         public static final double kWheelDiameterMeters = 0.10033; // set up for MK4(i)
         public static final double kDriveMotorGearRatio = (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0); // (set up for MK4(i) L2)
@@ -35,16 +111,6 @@ public final class Constants {
                 new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //back left
                 new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //back right
 
-        public static final int kFrontLeftDriveMotorPort = 6;
-        public static final int kBackLeftDriveMotorPort = 1;
-        public static final int kFrontRightDriveMotorPort = 10;
-        public static final int kBackRightDriveMotorPort = 3;
-
-        public static final int kFrontLeftTurningMotorPort = 8;
-        public static final int kBackLeftTurningMotorPort = 2;
-        public static final int kFrontRightTurningMotorPort = 11;
-        public static final int kBackRightTurningMotorPort = 4;
-
         public static final boolean kFrontLeftTurningEncoderReversed = false;
         public static final boolean kBackLeftTurningEncoderReversed = false;
         public static final boolean kFrontRightTurningEncoderReversed = false;
@@ -54,11 +120,6 @@ public final class Constants {
         public static final boolean kBackLeftDriveEncoderReversed = false;
         public static final boolean kFrontRightDriveEncoderReversed = false;
         public static final boolean kBackRightDriveEncoderReversed = false;
-
-        public static final int kFrontLeftDriveAbsoluteEncoderPort = 22;
-        public static final int kBackLeftDriveAbsoluteEncoderPort = 20;
-        public static final int kFrontRightDriveAbsoluteEncoderPort = 21;
-        public static final int kBackRightDriveAbsoluteEncoderPort = 23;
 
         public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
         public static final boolean kBackLeftDriveAbsoluteEncoderReversed = false;
@@ -76,16 +137,11 @@ public final class Constants {
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = kPhysicalMaxSpeedMetersPerSecond / Math.hypot(DriveConstants.kTrackWidth / 2.0, DriveConstants.kWheelBase / 2.0); //adapted from SDS
     }
 
-    public static final class ClimbConstants {
-    }
+    public static final class ClimbConstants {}
 
-    public static final class ArmConstants {
-    }
+    public static final class ArmConstants {}
 
     public static final class ShooterConstants {
-        public static final int FLYWHEEL_MOTOR_ID = 2;
-        public static final int INDEX_MOTOR_ID = 3;
-        
         /**
          * This adds +/- tolerance to the target RPM for the flywheel.
          * 
@@ -104,12 +160,9 @@ public final class Constants {
         public static final double INDEX_STEP_ROTATIONS = INDEX_WHEEL_DIAMETER_INCHES / NOTE_DIAMETER_INCHES;  // pi cancels out.
     }
 
-    public static final class IntakeConstants {
-        public static final int MOTOR_ID = 1;  // change when proper prototype is ready. 
-    }
+    public static final class IntakeConstants {}
 
-    public static final class ShieldConstants {
-    }
+    public static final class ShieldConstants {}
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 2;

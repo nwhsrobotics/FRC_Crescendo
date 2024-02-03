@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import org.littletonrobotics.junction.Logger;
@@ -44,38 +45,38 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // 4 instances of SwerveModule to represent each wheel module with the constants
     public final SwerveModule frontLeft = new SwerveModule(
-            DriveConstants.kFrontLeftDriveMotorPort,
-            DriveConstants.kFrontLeftTurningMotorPort,
+            CANAssignments.FRONT_LEFT_DRIVE_MOTOR_ID,
+            CANAssignments.FRONT_LEFT_STEER_MOTOR_ID,
             DriveConstants.kFrontLeftDriveEncoderReversed,
             DriveConstants.kFrontLeftTurningEncoderReversed,
-            DriveConstants.kFrontLeftDriveAbsoluteEncoderPort,
+            CANAssignments.FRONT_LEFT_STEER_ABSOLUTE_ENCODER_ID,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
 
     public final SwerveModule frontRight = new SwerveModule(
-            DriveConstants.kFrontRightDriveMotorPort,
-            DriveConstants.kFrontRightTurningMotorPort,
+            CANAssignments.FRONT_RIGHT_DRIVE_MOTOR_ID,
+            CANAssignments.FRONT_RIGHT_STEER_MOTOR_ID,
             DriveConstants.kFrontRightDriveEncoderReversed,
             DriveConstants.kFrontRightTurningEncoderReversed,
-            DriveConstants.kFrontRightDriveAbsoluteEncoderPort,
+            CANAssignments.FRONT_RIGHT_STEER_ABSOLUTE_ENCODER_ID,
             DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
 
     public final SwerveModule backLeft = new SwerveModule(
-            DriveConstants.kBackLeftDriveMotorPort,
-            DriveConstants.kBackLeftTurningMotorPort,
+            CANAssignments.BACK_LEFT_DRIVE_MOTOR_ID,
+            CANAssignments.BACK_LEFT_STEER_MOTOR_ID,
             DriveConstants.kBackLeftDriveEncoderReversed,
             DriveConstants.kBackLeftTurningEncoderReversed,
-            DriveConstants.kBackLeftDriveAbsoluteEncoderPort,
+            CANAssignments.BACK_LEFT_STEER_ABSOLUTE_ENCODER_ID,
             DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
 
     public final SwerveModule backRight = new SwerveModule(
-            DriveConstants.kBackRightDriveMotorPort,
-            DriveConstants.kBackRightTurningMotorPort,
+            CANAssignments.BACK_RIGHT_DRIVE_MOTOR_ID,
+            CANAssignments.BACK_RIGHT_STEER_MOTOR_ID,
             DriveConstants.kBackRightDriveEncoderReversed,
             DriveConstants.kBackRightTurningEncoderReversed,
-            DriveConstants.kBackRightDriveAbsoluteEncoderPort,
+            CANAssignments.BACK_RIGHT_STEER_ABSOLUTE_ENCODER_ID,
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
