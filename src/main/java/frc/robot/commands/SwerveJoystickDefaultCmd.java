@@ -1,21 +1,18 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.DriverControls;
-import frc.robot.subsystems.DriverXboxControls;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.oi.ControlManager;
 
 public class SwerveJoystickDefaultCmd extends Command {
     private final SwerveSubsystem swerveSubsystem;
-    private final DriverControls driverControls;
-    private final DriverXboxControls driverXboxControls;
 
     // constructor that initializes SwerveSubsystem, Joystick and adds SwerveSubsystem as a requirement
-    public SwerveJoystickDefaultCmd(SwerveSubsystem swerveSubsystem, DriverControls driverControls, DriverXboxControls driverXboxControls) {
+    public SwerveJoystickDefaultCmd(SwerveSubsystem swerveSubsystem) {
         this.swerveSubsystem = swerveSubsystem;
-        this.driverControls = driverControls;
-        this.driverXboxControls = driverXboxControls;
         addRequirements(swerveSubsystem);
     }
 
@@ -25,9 +22,9 @@ public class SwerveJoystickDefaultCmd extends Command {
 
     @Override
     public void execute() {
-        // sets the module states for each module based on the ChassisSpeeds
-        swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(driverControls.chassisSpeeds));
-        //swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(driverXboxControls.chassisSpeeds));
+        swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates((swerveSubsystem.isFieldRelative)
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(ControlManager.Outputs.xSpeed, ControlManager.Outputs.ySpeed, ControlManager.Outputs.rotatingSpeed, Rotation2d.fromDegrees(swerveSubsystem.getHeading()))
+                : ChassisSpeeds.fromFieldRelativeSpeeds(ControlManager.Outputs.xSpeed, ControlManager.Outputs.ySpeed, ControlManager.Outputs.rotatingSpeed, new Rotation2d(0))));
     }
 
     @Override

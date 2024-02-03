@@ -1,18 +1,12 @@
 package frc.robot;
-/*
-import org.littletonrobotics.junction.LogFileUtil;
-import org.littletonrobotics.junction.LoggedRobot;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-import frc.robot.Constants.LoggerConstants;*/
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.LoggerConstants;
+import frc.robot.subsystems.oi.ControlManager;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -89,8 +83,6 @@ public class Robot extends LoggedRobot {
         // robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
-
-
     }
 
     /**
@@ -146,9 +138,15 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        robotContainer.driverControls.processCycle();
-        //TODO: ENABLE THIS FOR XBOX CONTROLLER
-        //robotContainer.driverXboxControls.processCycle();
+        ControlManager.process();
+        
+        if (robotContainer.swerveSubsystem.autonavigator.isEnabled()) {
+            if (ControlManager.Outputs.xSpeed != 0 || ControlManager.Outputs.ySpeed != 0 || ControlManager.Outputs.rotatingSpeed != 0) {
+                robotContainer.swerveSubsystem.autonavigator.pauseNavigation();
+            } else {
+                robotContainer.swerveSubsystem.autonavigator.resumeNavigation();
+            }
+        }
     }
 
     @Override
