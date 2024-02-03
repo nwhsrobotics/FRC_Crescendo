@@ -49,9 +49,9 @@ public class RobotContainer {
         new JoystickButton(driver, 11).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SOURCE)));
         new JoystickButton(driver, 10).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.STAGE)));
 
-        //new JoystickButton(xboxController, 4).onTrue(new InstantCommand(() -> swerveSubsystem.resetHeadingAndPose()));
-        //new JoystickButton(xboxController, 7).onTrue(new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d())));
-        //new JoystickButton(xboxController, 5).onTrue(new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw()));
+        new JoystickButton(xboxController, 4).onTrue(new InstantCommand(() -> swerveSubsystem.resetHeadingAndPose()));
+        new JoystickButton(xboxController, 7).onTrue(new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d())));
+        new JoystickButton(xboxController, 5).onTrue(new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw()));
     }
 
     public Command getAutonomousCommand() {
