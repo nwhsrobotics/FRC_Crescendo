@@ -2,19 +2,19 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
     private CANSparkMax flywheelMotor;
     private RelativeEncoder flywheelEncoder;
-    private PIDController flywheelPidController;
+    private SparkPIDController flywheelPidController;
     private CANSparkMax indexMotor;
-    private RelativeEncoder indexEncoder;
-    private PIDController indexPidController;
+    private SparkPIDController indexPidController;
     private double targetPosition = 0;
     
     /**
@@ -25,11 +25,12 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem() {
         this.flywheelMotor = new CANSparkMax(Constants.ShooterConstants.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         this.flywheelEncoder = this.flywheelMotor.getEncoder();
-        this.indexMotor = new CANSparkMax(Constants.ShooterConstants.INDEX_MOTOR_ID, MotorType.kBrushless);
-        this.indexEncoder = this.indexMotor.getEncoder();
+        this.flywheelPidController = this.flywheelMotor.getPIDController();
+        this.flywheelPidController.setP(Constants.ShooterConstants.FLYWHEEL_PID_P);
 
-        this.flywheelPidController = new PIDController(Constants.ShooterConstants.FLYWHEEL_PID_P, 0, 0);
-        this.indexPidController = new PIDController(Constants.ShooterConstants.INDEX_PID_P, 0, 0);
+        this.indexMotor = new CANSparkMax(Constants.ShooterConstants.INDEX_MOTOR_ID, MotorType.kBrushless);
+        this.indexPidController = this.indexMotor.getPIDController();
+        this.indexPidController.setP(Constants.ShooterConstants.INDEX_PID_P);
     }
 
     /**
@@ -56,13 +57,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        this.flywheelMotor.set(this.flywheelPidController.calculate(this.flywheelEncoder.getVelocity(), this.flywheelRPM));
+        this.flywheelPidController.setReference(this.flywheelRPM, ControlType.kVelocity);
 
         if (!isFlywheelReady()) {
             this.indexMotor.stopMotor();
         }
         else {
-            this.indexMotor.set(this.indexPidController.calculate(this.indexEncoder.getPosition(), this.targetPosition));
+            this.indexPidController.setReference(this.targetPosition, ControlType.kPosition);
         }
     }
 }
