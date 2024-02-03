@@ -32,9 +32,29 @@ public class RobotContainer {
         DriverXboxController driverXboxController = new DriverXboxController();
         ControlManager.registerController(driverXboxController);
 
-        ControlManager.buildChoosers();
-        SmartDashboard.putData("Driver Controllers", ControlManager.driverControllerChooser);
-        SmartDashboard.putData("Gunner Controllers", ControlManager.gunnerControllerChooser);
+        SendableChooser<Integer> driverControllerChooser = new SendableChooser<>();
+        SendableChooser<Integer> gunnerControllerChooser = new SendableChooser<>();
+        
+        for (String option : ControlManager.getControllerLabels(true)) {
+            driverControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
+        }
+        int defaultDriverControllerPort = ControlManager.getControllerLowest(true);
+        if (defaultDriverControllerPort != -1) {
+            driverControllerChooser.setDefaultOption(ControlManager.getControllerLabel(defaultDriverControllerPort), defaultDriverControllerPort);
+        }
+        driverControllerChooser.onChange((port) -> ControlManager.setDriverPort(port));
+
+        for (String option : ControlManager.getControllerLabels(false)) {
+            gunnerControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
+        }
+        int defaultGunnerControllerPort = ControlManager.getControllerLowest(false);
+        if (defaultGunnerControllerPort != -1) {
+            gunnerControllerChooser.setDefaultOption(ControlManager.getControllerLabel(defaultGunnerControllerPort), defaultGunnerControllerPort);
+        }
+        gunnerControllerChooser.onChange((port) -> ControlManager.setGunnerPort(port));
+
+        SmartDashboard.putData("Driver Controllers", driverControllerChooser);
+        SmartDashboard.putData("Gunner Controllers", gunnerControllerChooser);
 
         autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
         SmartDashboard.putData("Auto Chooser", autoChooser);
