@@ -65,6 +65,15 @@ public class PenguinLogistics {
     }
 
     /**
+     * Returns whether autonavigation is enabled.
+     * 
+     * @return - boolean representing whether autonavigation is enabled.
+     */
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    /**
      * Toggle autonavigation.
      *
      * Calls ".enable()" if currently disabled, and calls ".disable()" if currently enabled.

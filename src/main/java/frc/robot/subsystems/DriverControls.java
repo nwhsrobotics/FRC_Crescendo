@@ -51,10 +51,12 @@ public class DriverControls {
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotatingSpeed, Rotation2d.fromDegrees(swerve.getHeading()))
                 : ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotatingSpeed, new Rotation2d(0));
 
-        if (xSpeed != 0 || ySpeed != 0 || rotatingSpeed != 0) {
-            swerve.autonavigator.pauseNavigation();
-        } else {
-            swerve.autonavigator.resumeNavigation();
+        if (swerve.autonavigator.isEnabled()) {
+            if (xSpeed != 0 || ySpeed != 0 || rotatingSpeed != 0) {
+                swerve.autonavigator.pauseNavigation();
+            } else {
+                swerve.autonavigator.resumeNavigation();
+            }
         }
     }
 }
