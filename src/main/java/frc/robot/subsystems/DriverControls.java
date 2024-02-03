@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
 
 /**
@@ -34,6 +35,11 @@ public class DriverControls {
         double xSpeed = Math.abs(-controllerDriver.getY()) < OIConstants.kXYDeadband ? 0 : -controllerDriver.getY() > 0 ? (-controllerDriver.getY() - OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1/(1-OIConstants.kXYDeadband)) : (-controllerDriver.getY() + OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1/(1-OIConstants.kXYDeadband));
         double ySpeed = Math.abs(-controllerDriver.getX()) < OIConstants.kXYDeadband ? 0 : -controllerDriver.getX() > 0 ? (-controllerDriver.getX() - OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1/(1-OIConstants.kXYDeadband)) : (-controllerDriver.getX() + OIConstants.kXYDeadband) * OIConstants.kTeleDriveMaxSpeedMetersPerSecond * speedCoefficient * (1/(1-OIConstants.kXYDeadband));
         double rotatingSpeed = Math.abs(-controllerDriver.getTwist()) < OIConstants.kZDeadband ? 0 : -controllerDriver.getTwist() > 0 ? (-controllerDriver.getTwist() - OIConstants.kZDeadband) * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient: (-controllerDriver.getTwist() + OIConstants.kZDeadband) * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * speedCoefficient;
+        SmartDashboard.putNumber("xSpeed", xSpeed);
+        SmartDashboard.putNumber("ySpeed", ySpeed);
+        SmartDashboard.putNumber("rotating", rotatingSpeed);
+        SmartDashboard.putNumber("speed coE", speedCoefficient);
+        SmartDashboard.putNumber("gyro heading", swerve.getHeading());
         /*
         // calculates the xSpeed, ySpeed and rotatingSpeed based on the joystick axis and deadbands
         double xSpeed = Math.abs(-controllerDriver.getY()) < OIConstants.kXYDeadband ? 0
