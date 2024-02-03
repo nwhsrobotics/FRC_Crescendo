@@ -1,11 +1,13 @@
 package frc.robot.subsystems.oi;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.stream.Collectors;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -38,22 +40,6 @@ public class ControlManager {
         public static Command autonavigateToSource;
         public static Command autonavigateToStage;
     }
-
-    /**
-     * "SendableChooser" for selecting the active driver controller.
-     * 
-     * Please send this to the dashboard in "RobotContainer,"
-     * after registering all controllers.
-     */
-    public static SendableChooser<Integer> driverControllerChooser = new SendableChooser<>();
-
-    /**
-     * "SendableChooser" for selecting the active gunner controller.
-     *
-     * Please send this to the dashboard in "RobotContainer,"
-     * after registering all controllers.
-     */
-    public static SendableChooser<Integer> gunnerControllerChooser = new SendableChooser<>();
 
     private static HashMap<Integer, Controller> registry = new HashMap<>();
     private static int driverPort = -1;
@@ -108,23 +94,7 @@ public class ControlManager {
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToSourceButton(), DriverButtonCommands.autonavigateToSource, true);
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToStageButton(), DriverButtonCommands.autonavigateToStage, true);
 
-        Logger.recordOutput("controller." + Integer.toString(controller.getPort()) + ".name", controller.getName());
-    }
-
-    /**
-     * Processes available controllers and sorts them into the "SendableChooser" objects for driver and gunner controllers.
-     */
-    public static void buildChoosers() {
-        ControlManager.driverControllerChooser = new SendableChooser<>();
-        ControlManager.gunnerControllerChooser = new SendableChooser<>();
-        
-        for (String option : ControlManager.getControllers(true)) {
-            ControlManager.driverControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
-        }
-
-        for (String option : ControlManager.getControllers(false)) {
-            ControlManager.gunnerControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
-        }
+        Logger.recordOutput("controlmanager.controller." + Integer.toString(controller.getPort()) + ".name", controller.getName());
     }
 
     /**
@@ -187,10 +157,10 @@ public class ControlManager {
      * Get list of available controllers.
      * 
      * @param areDrivers - whether to filter the list for only driver-enabled or gunner-enabled controllers.
-     * @return - labels for controllers.
+     * @return - list of integer IDs for controller ports.
      */
-    public static ArrayList<String> getControllers(boolean areDrivers) {
-        ArrayList<String> options = new ArrayList<>();
+    public static ArrayList<Integer> getControllers(boolean areDrivers) {
+        ArrayList<Integer> controllers = new ArrayList<>();
 
         for (int port : ControlManager.registry.keySet()) {
             Controller controller = ControlManager.registry.get(port);
@@ -198,10 +168,54 @@ public class ControlManager {
                 continue;
             }
 
-            options.add(Integer.toString(port) + " - " + controller.getName());
+            controllers.add(port);
         }
 
-        return options;
+        return controllers;
+    }
+
+    /**
+     * Get available controller with the lowest integer ID for port.
+     * 
+     * If no controllers are available, -1 is returned.
+     * 
+     * @param isDriver - whether the controller is driver-enabled or gunner-enabled.
+     * @return - integer ID for controller port.
+     */
+    public static int getControllerLowest(boolean isDriver) {
+        ArrayList<Integer> controllers = getControllers(false);
+        controllers.sort(Comparator.naturalOrder());
+        return controllers.get(0);
+    }
+
+    /**
+     * Get label for a controller.
+     * 
+     * If the controller does not exist, the string "DNE" will be returned.
+     * 
+     * @param port - integer ID for port.
+     * @return - label.
+     */
+    public static String getControllerLabel(int port) {
+        Controller controller = ControlManager.registry.get(port);
+        if (controller == null) {
+            return "DNE";
+        }
+
+        return Integer.toString(port) + " - " + controller.getName();
+    }
+
+    /**
+     * Get list of labels of available controllers.
+     * 
+     * @param areDrivers - whether to filter the list for only driver-enabled or gunner-enabled controllers.
+     * @return - list of labels for controllers.
+     */
+    public static ArrayList<String> getControllerLabels(boolean areDrivers) {
+        return (ArrayList<String>) ControlManager.getControllers(areDrivers)
+            .stream()
+            .map(port -> ControlManager.getControllerLabel(port))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -215,19 +229,36 @@ public class ControlManager {
     }
 
     /**
-     * Process inputs.
+     * Process inputs for the driver controls.
      * 
      * Should be called repeatedly in a periodic function.
      */
-    public static void process() {
-        ControlManager.driverPort = ControlManager.driverControllerChooser.getSelected();
-        ControlManager.gunnerPort = ControlManager.gunnerControllerChooser.getSelected();
-
+    public static void processDriver() {
+        Logger.recordOutput("controlmanager.driver.port", ControlManager.driverPort);
+        
         Controller driverController = ControlManager.registry.get(ControlManager.driverPort);
-        Controller gunnerController = ControlManager.registry.get(ControlManager.gunnerPort);
-
+        if (driverController == null) {
+            System.out.println("Achtung! Failed to get driver controller!");
+            return;
+        }
+        
         ControlManager.Outputs.xSpeed = driverController.getX() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond;
         ControlManager.Outputs.ySpeed = driverController.getY() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond;
         ControlManager.Outputs.rotatingSpeed = driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+    }
+
+    /**
+     * Process inputs for the gunner controls.
+     * 
+     * Should be called repeatedly in a periodic function.
+     */
+    public static void processGunner() {
+        Logger.recordOutput("controlmanager.gunner.port", ControlManager.gunnerPort);
+
+        Controller gunnerController = ControlManager.registry.get(ControlManager.driverPort);
+        if (gunnerController == null) {
+            System.out.println("Achtung! Failed to get gunner controller!");
+            return;
+        }
     }
 }

@@ -138,7 +138,8 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        ControlManager.process();
+        ControlManager.processDriver();
+        ControlManager.processGunner();
         
         if (robotContainer.swerveSubsystem.autonavigator.isEnabled()) {
             if (ControlManager.Outputs.xSpeed != 0 || ControlManager.Outputs.ySpeed != 0 || ControlManager.Outputs.rotatingSpeed != 0) {
