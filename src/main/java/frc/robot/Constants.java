@@ -80,7 +80,7 @@ public final class Constants {
                 }
             }
 
-            Logger.recordMetadata("canassignmentsok", !dupeFound ? "yes" : "no");
+            Logger.recordOutput("canassignmentsok", dupeFound);
 
             return dupeFound;
         }
