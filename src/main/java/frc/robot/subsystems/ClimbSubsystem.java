@@ -8,18 +8,17 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ClimbSubsystem extends SubsystemBase {
-    private final CANSparkMax rightClimbMotor = new CANSparkMax(1, MotorType.kBrushless); //TODO: replace IDs with constant variables
-    private final CANSparkMax leftClimbMotor = new CANSparkMax(2, MotorType.kBrushless);
+    private final CANSparkMax leftClimbMotor = new CANSparkMax(Constants.CANAssignments.CLIMB_LEFT_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkMax rightClimbMotor = new CANSparkMax(Constants.CANAssignments.CLIMB_RIGHT_MOTOR_ID, MotorType.kBrushless);
 
-    private RelativeEncoder rightClimbEncoder = null;
-    private RelativeEncoder leftClimbEncoder = null;
+    private RelativeEncoder rightClimbEncoder;
+    private RelativeEncoder leftClimbEncoder;
 
-    private SparkPIDController rightClimbPID = null;
-    private SparkPIDController leftClimbPID = null;
-
-    private static boolean enabled = false;
+    private SparkPIDController rightClimbPID;
+    private SparkPIDController leftClimbPID;
 
     private static final double MAX_UP_DOWN = 25.0 * 0.0254; //21 inches converted to meters
     private static final double MIN_UP_DOWN = 0.0 * 0.0254;
@@ -44,17 +43,8 @@ public class ClimbSubsystem extends SubsystemBase {
 
     /**
      * Creates a new ClimbSubsystem.
-     *
-     * @param IdleMode
-     * @param ControlType
      */
     public ClimbSubsystem() {
-        if ((rightClimbMotor != null) && (leftClimbMotor != null)) {
-            enabled = true;
-        }
-        if (!enabled) {
-            return;
-        }
         rightClimbEncoder = rightClimbMotor.getEncoder();
         leftClimbEncoder = leftClimbMotor.getEncoder();
 
@@ -86,9 +76,6 @@ public class ClimbSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!enabled) {
-            return;
-        }
         // Covert the meters to the count
         double upDown_counts = upDown * UP_DOWN_COUNTS_PER_METER;
         // System.out.printf("upDown_counts = %f\n", upDown_counts);

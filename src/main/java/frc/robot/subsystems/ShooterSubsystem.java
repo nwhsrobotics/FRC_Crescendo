@@ -23,12 +23,12 @@ public class ShooterSubsystem extends SubsystemBase {
     public double flywheelRPM = 0;
 
     public ShooterSubsystem() {
-        this.flywheelMotor = new CANSparkMax(Constants.ShooterConstants.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
+        this.flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         this.flywheelEncoder = this.flywheelMotor.getEncoder();
         this.flywheelPidController = this.flywheelMotor.getPIDController();
         this.flywheelPidController.setP(Constants.ShooterConstants.FLYWHEEL_PID_P);
 
-        this.indexMotor = new CANSparkMax(Constants.ShooterConstants.INDEX_MOTOR_ID, MotorType.kBrushless);
+        this.indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
         this.indexPidController = this.indexMotor.getPIDController();
         this.indexPidController.setP(Constants.ShooterConstants.INDEX_PID_P);
     }

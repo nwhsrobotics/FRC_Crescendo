@@ -59,6 +59,9 @@ public class Robot extends LoggedRobot {
 
         Logger.start();
 
+        // if you want to stop the robot, use the boolean returned by this method.
+        Constants.CANAssignments.checkAssignments();
+
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
