@@ -34,6 +34,9 @@ public class DriverXboxControls {
         //speedCoefficient = controllerDriver.getRightBumper() ? 1 : (controllerDriver.getRawAxis(3));
         speedCoefficient = 0.6;
 
+        // Increases the speed if the left joystick button is pressed.
+        speedCoefficient = controllerDriver.getLeftStickButton() ? 1 : (controllerDriver.getRawAxis(3));
+
         // Calculate x, y, and rotation speeds with deadband applied
         xSpeed = calculateSpeedWithDeadband(-controllerDriver.getLeftX(), OIConstants.kXYDeadband) * speedCoefficient;
         ySpeed = calculateSpeedWithDeadband(-controllerDriver.getLeftY(), OIConstants.kXYDeadband) * speedCoefficient;
