@@ -146,9 +146,9 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        robotContainer.driverControls.processCycle();
-        //TODO: ENABLE THIS FOR XBOX CONTROLLER
-        //robotContainer.driverXboxControls.processCycle();
+        // robotContainer.driverControls.processCycle();
+        
+        robotContainer.driverXboxControls.processCycle();
     }
 
     @Override
