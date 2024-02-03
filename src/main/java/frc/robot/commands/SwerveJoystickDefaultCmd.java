@@ -26,8 +26,8 @@ public class SwerveJoystickDefaultCmd extends Command {
     @Override
     public void execute() {
         // sets the module states for each module based on the ChassisSpeeds
-        swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(driverControls.chassisSpeeds));
-        //swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(driverXboxControls.chassisSpeeds));
+        //swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(driverControls.chassisSpeeds));
+        swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(driverXboxControls.chassisSpeeds));
     }
 
     @Override

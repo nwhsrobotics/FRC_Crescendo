@@ -32,11 +32,11 @@ public class DriverXboxControls {
     public void processCycle() {
         // Set a default speed coefficient (can be adjusted later)
         //speedCoefficient = controllerDriver.getRightBumper() ? 1 : (controllerDriver.getRawAxis(3));
-        speedCoefficient = -1;
+        speedCoefficient = 0.6;
 
         // Calculate x, y, and rotation speeds with deadband applied
-        xSpeed = calculateSpeedWithDeadband(controllerDriver.getLeftX(), OIConstants.kXYDeadband) * speedCoefficient;
-        ySpeed = calculateSpeedWithDeadband(controllerDriver.getLeftY(), OIConstants.kXYDeadband) * speedCoefficient;
+        xSpeed = calculateSpeedWithDeadband(-controllerDriver.getLeftX(), OIConstants.kXYDeadband) * speedCoefficient;
+        ySpeed = calculateSpeedWithDeadband(-controllerDriver.getLeftY(), OIConstants.kXYDeadband) * speedCoefficient;
         rotatingSpeed = calculateSpeedWithDeadband(controllerDriver.getRightY(), OIConstants.kZDeadband) * speedCoefficient;
 
         // Calculate ChassisSpeeds based on field-relative or robot-relative mode
