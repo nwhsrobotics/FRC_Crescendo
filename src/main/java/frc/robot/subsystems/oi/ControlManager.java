@@ -238,6 +238,11 @@ public class ControlManager {
         
         Controller driverController = ControlManager.registry.get(ControlManager.driverPort);
         if (driverController == null) {
+            // kill speed if we've lost the driver controller.
+            ControlManager.Outputs.xSpeed = 0;
+            ControlManager.Outputs.ySpeed = 0;
+            ControlManager.Outputs.rotatingSpeed = 0;
+            
             System.out.println("Achtung! Failed to get driver controller!");
             return;
         }
@@ -257,6 +262,8 @@ public class ControlManager {
 
         Controller gunnerController = ControlManager.registry.get(ControlManager.driverPort);
         if (gunnerController == null) {
+            // insert calls here to set outputs that stow the gunner mechanisms safely.
+
             System.out.println("Achtung! Failed to get gunner controller!");
             return;
         }
