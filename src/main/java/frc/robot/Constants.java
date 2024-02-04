@@ -183,10 +183,6 @@ public final class Constants {
     }
 
     public static final class OIConstants {
-        public static final double kXYDeadband = 0.05;
-        public static final double kZDeadband = 0.3;
-        public static final int kJoystickPort = 2;
-        public static final boolean isLefty = true;
         public static final double kTeleDriveMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 0.6;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond * 0.6;
 
