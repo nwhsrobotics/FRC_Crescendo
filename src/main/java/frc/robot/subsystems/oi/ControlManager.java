@@ -41,6 +41,14 @@ public class ControlManager {
         public static Command autonavigateToStage;
     }
 
+    /**
+     * Commands that are to be bound to button presses made by the gunner.
+     * 
+     * These should be overwritten during robot initialization,
+     * replacing the default placeholders.
+     */
+    public static class GunnerButtonCommands {}
+
     private static HashMap<Integer, Controller> registry = new HashMap<>();
     private static int driverPort = -1;
     private static int gunnerPort = -2;
