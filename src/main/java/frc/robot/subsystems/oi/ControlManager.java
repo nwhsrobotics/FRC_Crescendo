@@ -26,6 +26,8 @@ public class ControlManager {
         public static double rotatingSpeed = 0;
     }
     
+    private static final Command emptyButtonCommand = new InstantCommand(() -> System.out.println("Achtung! A button command for ControlManager is undefined!"));
+
     /**
      * Commands that are to be bound to button presses made by the driver.
      * 
@@ -33,12 +35,12 @@ public class ControlManager {
      * replacing the default placeholders.
      */
     public static class DriverButtonCommands {
-        public static Command navXResetCommand;
-        public static Command toggleFieldRelativeCommand;
-        public static Command toggleAutonavigationCommand;
-        public static Command autonavigateToAmp;
-        public static Command autonavigateToSource;
-        public static Command autonavigateToStage;
+        public static Command navXResetCommand = emptyButtonCommand;
+        public static Command toggleFieldRelativeCommand = emptyButtonCommand;
+        public static Command toggleAutonavigationCommand = emptyButtonCommand;
+        public static Command autonavigateToAmp = emptyButtonCommand;
+        public static Command autonavigateToSource = emptyButtonCommand;
+        public static Command autonavigateToStage = emptyButtonCommand;
     }
 
     /**
