@@ -194,6 +194,11 @@ public class ControlManager {
      */
     public static int getControllerLowest(boolean isDriver) {
         ArrayList<Integer> controllers = getControllers(false);
+        
+        if (controllers.size() <= 0) {
+            return -1;
+        }
+        
         controllers.sort(Comparator.naturalOrder());
         return controllers.get(0);
     }
