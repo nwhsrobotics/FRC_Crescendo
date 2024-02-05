@@ -262,8 +262,8 @@ public class ControlManager {
             return;
         }
         
-        ControlManager.Outputs.xSpeed = driverController.getX() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond;
-        ControlManager.Outputs.ySpeed = driverController.getY() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond;
+        ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
+        ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
         ControlManager.Outputs.rotatingSpeed = driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
     }
 
