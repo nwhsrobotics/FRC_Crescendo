@@ -9,6 +9,8 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -189,6 +191,9 @@ public final class Constants {
         public static final PathConstraints kPathfindingConstraints = new PathConstraints(
                 DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 3.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 6.0,
                 AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
+
+        public static final SlewRateLimiter xLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 0.8);
+        public static final SlewRateLimiter yLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 0.8);
     }
 
     public static final class FavoritePositions {

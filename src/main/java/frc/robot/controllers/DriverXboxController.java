@@ -1,10 +1,8 @@
 package frc.robot.controllers;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.oi.Controller;
-import frc.robot.Constants.DriveConstants;;
 
 public class DriverXboxController implements Controller {
     private static final int port = 0;
@@ -12,9 +10,6 @@ public class DriverXboxController implements Controller {
 
     private static final double kXYDeadband = 0.05;
     private static final double kZDeadband = 0.3;
-
-    //SlewRateLimiter xLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-    //SlewRateLimiter yLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
 
     public DriverXboxController() {
         this.xboxController = new XboxController(DriverXboxController.port);
