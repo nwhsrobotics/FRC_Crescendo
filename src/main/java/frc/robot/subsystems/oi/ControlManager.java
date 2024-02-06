@@ -262,8 +262,11 @@ public class ControlManager {
             return;
         }
         
+        //TODO: Is this right the xLimiter/yLimiter is greater than the kTeleDriveMaxSpeedMetersPerSecond???? Recommend it to be lower
         ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
         ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
+        //TODO: Add slewlimiter for the rotation to smoothen it out
+        //ControlManager.Outputs.rotatingSpeed = OIConstants.yLimiter.calculate(driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond);
         ControlManager.Outputs.rotatingSpeed = driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
     }
 
