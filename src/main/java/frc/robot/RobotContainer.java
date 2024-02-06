@@ -42,6 +42,9 @@ public class RobotContainer {
         if (defaultDriverControllerPort != -1) {
             driverControllerChooser.setDefaultOption(ControlManager.getControllerLabel(defaultDriverControllerPort), defaultDriverControllerPort);
         }
+        else {
+            driverControllerChooser.setDefaultOption("None", -1);
+        }
         driverControllerChooser.onChange((port) -> ControlManager.setDriverPort(port));
 
         for (String option : ControlManager.getControllerLabels(false)) {
@@ -50,6 +53,9 @@ public class RobotContainer {
         int defaultGunnerControllerPort = ControlManager.getControllerLowest(false);
         if (defaultGunnerControllerPort != -1) {
             gunnerControllerChooser.setDefaultOption(ControlManager.getControllerLabel(defaultGunnerControllerPort), defaultGunnerControllerPort);
+        }
+        else {
+            gunnerControllerChooser.setDefaultOption("None", -1);
         }
         gunnerControllerChooser.onChange((port) -> ControlManager.setGunnerPort(port));
 
