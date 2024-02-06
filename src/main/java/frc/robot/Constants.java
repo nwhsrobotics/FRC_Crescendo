@@ -192,8 +192,10 @@ public final class Constants {
                 DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 3.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 6.0,
                 AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
 
+        //TODO: These limiters should be reduced more for more smoothness
         public static final SlewRateLimiter xLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 0.8);
         public static final SlewRateLimiter yLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 0.8);
+        public static final SlewRateLimiter zLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond * 0.8);
     }
 
     public static final class FavoritePositions {
