@@ -34,13 +34,11 @@ public class DriverXboxController implements Controller {
     @Override
     public double getX() {
         return Controller.calculateSpeedWithDeadband(-xboxController.getLeftY(), kXYDeadband);
-        //return xLimiter.calculate(Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftY(), kXYDeadband));
     }   
     
     @Override
     public double getY() {
         return Controller.calculateSpeedWithDeadband(-xboxController.getLeftX(), kXYDeadband);
-        //return yLimiter.calculate(Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftX(), kXYDeadband));
     }
     
     @Override
@@ -56,9 +54,9 @@ public class DriverXboxController implements Controller {
     @Override
     public double getSpeedCoefficient(){
         if(xboxController.getLeftTriggerAxis() > xboxController.getRightTriggerAxis()) {
-            return -xboxController.getLeftTriggerAxis() * 0.6 + 0.7;
+            return -xboxController.getLeftTriggerAxis() * 0.8;
         }
-        return -xboxController.getRightTriggerAxis() * 0.6 + 0.7;
+        return -xboxController.getRightTriggerAxis() * 0.8;
     }
 
     @Override
