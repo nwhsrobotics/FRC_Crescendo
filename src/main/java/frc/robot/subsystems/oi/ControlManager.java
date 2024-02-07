@@ -270,9 +270,12 @@ public class ControlManager {
             ControlManager.Outputs.rotatingSpeed = OIConstants.zLimiter.calculate(driverController.getZ() * driverController.getSpeedCoefficient()  * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond);
         } else {
             //TODO: Determine if slew rate limiters should apply if boosters are toggled
-            ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-            ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-            ControlManager.Outputs.rotatingSpeed = OIConstants.zLimiter.calculate(driverController.getZ() * DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond);
+            //ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+            //ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+            //ControlManager.Outputs.rotatingSpeed = OIConstants.zLimiter.calculate(driverController.getZ() * DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond);
+            ControlManager.Outputs.xSpeed = driverController.getX() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
+            ControlManager.Outputs.ySpeed = driverController.getY() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
+            ControlManager.Outputs.rotatingSpeed = driverController.getZ() * DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
         }
     }
 
