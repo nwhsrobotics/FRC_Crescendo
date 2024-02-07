@@ -32,23 +32,45 @@ public class DriverXboxController implements Controller {
 
     @Override
     public double getX() {
-        return Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftY(), kXYDeadband);
+        return Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftY() * getSpeedCoeficient() *getSlowMode(), kXYDeadband);
         //return xLimiter.calculate(Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftY(), kXYDeadband));
     }   
     
     @Override
     public double getY() {
-        return Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftX(), kXYDeadband);
+        return Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftX() * getSpeedCoeficient() *getSlowMode(), kXYDeadband);
         //return yLimiter.calculate(Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftX(), kXYDeadband));
     }
     
     @Override
     public double getZ() {
-        return Controller.calculateSpeedWithDeadband(this.xboxController.getRightX(), kZDeadband);
+        return Controller.calculateSpeedWithDeadband(this.xboxController.getRightX() * getSpeedCoeficient() * getSlowModeRotation(), kZDeadband);
     }
 
+    public double getSpeedCoeficient() {
+        if (this.xboxController.getRightBumper() || this.xboxController.getLeftBumper() ) {
+            return 5.0 / 3.0;
+        }
+        else {
+            return 1.0;
+        }
+    }
+
+    public double getSlowMode(){
+        if(xboxController.getLeftTriggerAxis() > 0.1){
+            return 0.2;
+        }
+        return 1.0;
+    }
+
+        public double getSlowModeRotation(){
+        if(xboxController.getRightTriggerAxis() > 0.1){
+            return 0.5;
+        }
+        return 1.0;
+    }
     @Override
     public int getNavXResetButton() {
-        return 5;
+        return 8;
     }
 }
