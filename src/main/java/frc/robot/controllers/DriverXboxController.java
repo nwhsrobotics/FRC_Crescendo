@@ -2,6 +2,7 @@ package frc.robot.controllers;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.oi.Controller;
 
 public class DriverXboxController implements Controller {
@@ -49,7 +50,8 @@ public class DriverXboxController implements Controller {
 
     public double getSpeedCoeficient() {
         if (this.xboxController.getRightBumper() || this.xboxController.getLeftBumper() ) {
-            return 5.0 / 3.0;
+            return (1.0/OIConstants.rateLimiter);
+            //return 5.0/3.0;
         }
         else {
             return 1.0;
