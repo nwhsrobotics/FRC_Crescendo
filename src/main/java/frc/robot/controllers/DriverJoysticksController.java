@@ -34,58 +34,35 @@ public class DriverJoysticksController implements Controller {
 
     @Override
     public double getX() {
-        return Controller.calculateSpeedWithDeadband(-this.joystickControl.getY() * getSpeedCoeficient() *getSlowMode(), kXYDeadband);
+        return Controller.calculateSpeedWithDeadband(-this.joystickControl.getY(), kXYDeadband);
         //return xLimiter.calculate(Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftY(), kXYDeadband));
     }
 
     @Override
     public double getY() {
-        return Controller.calculateSpeedWithDeadband(-this.joystickControl.getX() * getSpeedCoeficient() *getSlowMode(), kXYDeadband);
+        return Controller.calculateSpeedWithDeadband(-this.joystickControl.getX(), kXYDeadband);
         //return yLimiter.calculate(Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftX(), kXYDeadband));
     }
 
     @Override
     public double getZ() {
-        return Controller.calculateSpeedWithDeadband(this.joystickControl.getTwist() * getSpeedCoeficient() * getSlowModeRotation(), kZDeadband);
+        return Controller.calculateSpeedWithDeadband(this.joystickControl.getTwist(), kZDeadband);
+    }
+
+
+    @Override
+    public double getSpeedCoefficient(){
+        return joystickControl.getRawAxis(3);
     }
 
     @Override
-    public double getBoosterCoefficient(){
-        if (this.joystickControl.getTrigger()) {
-            return (1.0/ Constants.OIConstants.scaleFactor);
-        }
-        else {
-            return 1.0;
-        }
-    }
-
-    public double getSpeedCoeficient() {
-        if (this.joystickControl.getTrigger()) {
-            return (1.0/ Constants.OIConstants.scaleFactor);
-            //return 5.0/3.0;
-        }
-        else {
-            return 1.0;
-        }
-    }
-
-    public double getSlowMode(){
-        if(joystickControl.getLeftTriggerAxis() > 0.1 || joystickControl.getRightTriggerAxis() > 0.1){
-            return 0.2;
-        }
-        return 1.0;
-    }
-
-    public double getSlowModeRotation(){
-        if(joystickControl.getLeftTriggerAxis() > 0.1 || joystickControl.getRightTriggerAxis() > 0.1){
-            return 0.5;
-        }
-        return 1.0;
+    public boolean isBoosterPressed(){
+        return joystickControl.getTrigger();
     }
     @Override
     public int getNavXResetButton() {
-        return 8;
+        return 5;
     }
-}
+
 
 }
