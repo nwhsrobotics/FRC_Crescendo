@@ -8,13 +8,13 @@ import frc.robot.subsystems.oi.Controller;
 
 public class DriverJoysticksController implements Controller {
     private static final int port = 0;
-    private Joystick joystickControl;
+    private final Joystick joystickControl;
 
     private static final double kXYDeadband = 0.05;
     private static final double kZDeadband = 0.3;
 
     public DriverJoysticksController() {
-        this.joystickControl = new Joystick(DriverJoysticksController.port);
+        joystickControl = new Joystick(DriverJoysticksController.port);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class DriverJoysticksController implements Controller {
 
     @Override
     public GenericHID getGenericHID() {
-        return this.joystickControl;
+        return joystickControl;
     }
 
     @Override
@@ -34,19 +34,17 @@ public class DriverJoysticksController implements Controller {
 
     @Override
     public double getX() {
-        return Controller.calculateSpeedWithDeadband(-this.joystickControl.getY(), kXYDeadband);
-        //return xLimiter.calculate(Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftY(), kXYDeadband));
+        return Controller.calculateSpeedWithDeadband(-joystickControl.getY(), kXYDeadband);
     }
 
     @Override
     public double getY() {
-        return Controller.calculateSpeedWithDeadband(-this.joystickControl.getX(), kXYDeadband);
-        //return yLimiter.calculate(Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftX(), kXYDeadband));
+        return Controller.calculateSpeedWithDeadband(-joystickControl.getX(), kXYDeadband);
     }
 
     @Override
     public double getZ() {
-        return Controller.calculateSpeedWithDeadband(this.joystickControl.getTwist(), kZDeadband);
+        return Controller.calculateSpeedWithDeadband(joystickControl.getTwist(), kZDeadband);
     }
 
 

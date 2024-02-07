@@ -16,7 +16,7 @@ public interface Controller {
      * @param deadband - deadband tolerance.
      * @return - new value with deadband applied.
      */
-    public static double calculateSpeedWithDeadband(double value, double deadband) {
+    static double calculateSpeedWithDeadband(double value, double deadband) {
         if (Math.abs(value) < deadband) {
             // If the value is within the deadband, consider it as zero.
             return 0;
@@ -37,7 +37,7 @@ public interface Controller {
      * 
      * @return - name of controller.
      */
-    public default String getName() {
+    default String getName() {
         return "Unnamed Controller";
     }
 
@@ -58,7 +58,7 @@ public interface Controller {
      * 
      * @return - integer; negative indicates driver, positive indicates gunner, zero indicates both.
      */
-    public default int getIntendedUser() {
+    default int getIntendedUser() {
         return 0;
     }
 
@@ -67,14 +67,14 @@ public interface Controller {
      * 
      * @return - port number.
      */
-    public int getPort();
+    int getPort();
 
     /**
      * Get underlying "GenericHID" object.
      * 
      * @return - "GenericHID" object.
      */
-    public GenericHID getGenericHID();
+    GenericHID getGenericHID();
 
     /**
      * Get button binding for resetting the NavX gyroscope. 
@@ -83,7 +83,7 @@ public interface Controller {
      * 
      * @return - button number.
      */
-    public default int getNavXResetButton() {
+    default int getNavXResetButton() {
         return -1;
     }
 
@@ -94,7 +94,7 @@ public interface Controller {
      * 
      * @return - button number.
      */
-    public default int getFieldRelativeButton() {
+    default int getFieldRelativeButton() {
         return -1;
     }
 
@@ -105,7 +105,7 @@ public interface Controller {
      * 
      * @return - button number.
      */
-    public default int getAutonavigationButton() {
+    default int getAutonavigationButton() {
         return -1;
     }
 
@@ -116,7 +116,7 @@ public interface Controller {
      * 
      * @return - button number.
      */
-    public default int getAutonavigateToAmpButton() {
+    default int getAutonavigateToAmpButton() {
         return -1;
     }  
 
@@ -127,7 +127,7 @@ public interface Controller {
      * 
      * @return - button number.
      */
-    public default int getAutonavigateToSourceButton() {
+    default int getAutonavigateToSourceButton() {
         return -1;
     }
 
@@ -138,7 +138,7 @@ public interface Controller {
      * 
      * @return - button number.
      */
-    public default int getAutonavigateToStageButton() {
+    default int getAutonavigateToStageButton() {
         return -1;   
     }
 
@@ -149,7 +149,7 @@ public interface Controller {
      * 
      * @return - input scaled from -1 to 1.
      */
-    public default double getX() {
+    default double getX() {
         return 0;
     }
 
@@ -160,7 +160,7 @@ public interface Controller {
      * 
      * @return - input scaled from -1 to 1.
      */
-    public default double getY() {
+    default double getY() {
         return 0;
     }
 
@@ -171,7 +171,7 @@ public interface Controller {
      * 
      * @return - input scaled from -1 to 1.
      */
-    public default double getZ() {
+    default double getZ() {
         return 0;
     }
 
@@ -185,7 +185,7 @@ public interface Controller {
      * 
      * @return - input scaled from 0 to 1.
      */
-    public default double getSpeedCoefficient() {
+    default double getSpeedCoefficient() {
         return 0;
     }
 
@@ -197,7 +197,7 @@ public interface Controller {
      * 
      * This is a driver-side input.
      * 
-     * @return - boolean for whether the robot should dash.
+     * @return - boolean for whether the booster is pressed for the robot to dash.
      */
     public default boolean isBoosterPressed() {
         return false;
