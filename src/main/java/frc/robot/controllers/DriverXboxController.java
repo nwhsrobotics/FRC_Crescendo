@@ -57,14 +57,14 @@ public class DriverXboxController implements Controller {
     }
 
     public double getSlowMode(){
-        if(xboxController.getLeftTriggerAxis() > 0.1){
+        if(xboxController.getLeftTriggerAxis() > 0.1 || xboxController.getRightTriggerAxis() > 0.1){
             return 0.2;
         }
         return 1.0;
     }
 
         public double getSlowModeRotation(){
-        if(xboxController.getRightTriggerAxis() > 0.1){
+        if(xboxController.getLeftTriggerAxis() > 0.1 || xboxController.getRightTriggerAxis() > 0.1){
             return 0.5;
         }
         return 1.0;
