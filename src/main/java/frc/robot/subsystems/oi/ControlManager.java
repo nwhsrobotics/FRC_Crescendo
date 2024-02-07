@@ -265,9 +265,9 @@ public class ControlManager {
         
         //TODO: Is this right the xLimiter/yLimiter is greater than the kTeleDriveMaxSpeedMetersPerSecond???? Recommend it to be lower
         if(!driverController.isBoosterPressed()) {
-            ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
-            ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
-            ControlManager.Outputs.rotatingSpeed = OIConstants.zLimiter.calculate(driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond);
+            ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * driverController.getSpeedCoefficient() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
+            ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY()) * driverController.getSpeedCoefficient()  * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
+            ControlManager.Outputs.rotatingSpeed = OIConstants.zLimiter.calculate(driverController.getZ()) * driverController.getSpeedCoefficient()  * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond);
         } else {
             //TODO: Determine if slew rate limiters should apply if boosters are toggled
             ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
