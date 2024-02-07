@@ -190,15 +190,28 @@ public interface Controller {
     }
 
     /**
-     * Get whether the operator wishes to dash.
+     * Get Booster Coefficient.
+     *
+     * This should be the reciprocal of constant scale factor of teleop speed to reach the maximum physical speed
+     *
+     * This is a driver-side input.
+     *
+     * @return - default input 1.0 for no booster (1.0/OIConstants.scaleFactor) for boosting
+     */
+    public default double getBoosterCoefficient(){
+        return 1.0;
+    }
+
+    /**
+     * Get whether the operator wishes to boost.
      * 
-     * Dashing will raise the power output of the driver motors to their maximum.
+     * Boosting can raise the power output of the driver motors to their maximum.
      * 
      * This is a driver-side input.
      * 
      * @return - boolean for whether the robot should dash.
      */
-    public default boolean isDashing() {
+    public default boolean isBoosterPressed() {
         return false;
     }
 }

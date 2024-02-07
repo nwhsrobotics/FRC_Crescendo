@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 
 /**
@@ -263,11 +264,16 @@ public class ControlManager {
         }
         
         //TODO: Is this right the xLimiter/yLimiter is greater than the kTeleDriveMaxSpeedMetersPerSecond???? Recommend it to be lower
-        ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
-        ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
-        //TODO: Add slewlimiter for the rotation to smoothen it out
-        ControlManager.Outputs.rotatingSpeed = OIConstants.zLimiter.calculate(driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond);
-        //ControlManager.Outputs.rotatingSpeed = driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+        if(!driverController.isBoosterPressed()) {
+            ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
+            ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
+            ControlManager.Outputs.rotatingSpeed = OIConstants.zLimiter.calculate(driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond);
+        } else {
+            //TODO: Determine if slew rate limiters should apply if boosters are toggled
+            ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+            ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+            ControlManager.Outputs.rotatingSpeed = OIConstants.zLimiter.calculate(driverController.getZ() * DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond);
+        }
     }
 
     /**

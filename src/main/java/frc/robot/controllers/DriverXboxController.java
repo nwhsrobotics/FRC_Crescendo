@@ -33,29 +33,19 @@ public class DriverXboxController implements Controller {
 
     @Override
     public double getX() {
-        return Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftY() * getSpeedCoeficient() *getSlowMode(), kXYDeadband);
+        return Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftY() *getSlowMode(), kXYDeadband);
         //return xLimiter.calculate(Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftY(), kXYDeadband));
     }   
     
     @Override
     public double getY() {
-        return Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftX() * getSpeedCoeficient() *getSlowMode(), kXYDeadband);
+        return Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftX() *getSlowMode(), kXYDeadband);
         //return yLimiter.calculate(Controller.calculateSpeedWithDeadband(-this.xboxController.getLeftX(), kXYDeadband));
     }
     
     @Override
     public double getZ() {
-        return Controller.calculateSpeedWithDeadband(this.xboxController.getRightX() * getSpeedCoeficient() * getSlowModeRotation(), kZDeadband);
-    }
-
-    public double getSpeedCoeficient() {
-        if (this.xboxController.getRightBumper() || this.xboxController.getLeftBumper() ) {
-            return (1.0/OIConstants.rateLimiter);
-            //return 5.0/3.0;
-        }
-        else {
-            return 1.0;
-        }
+        return Controller.calculateSpeedWithDeadband(this.xboxController.getRightX()* getSlowModeRotation(), kZDeadband);
     }
 
     public double getSlowMode(){
@@ -74,5 +64,10 @@ public class DriverXboxController implements Controller {
     @Override
     public int getNavXResetButton() {
         return 8;
+    }
+
+    @Override
+    public boolean isBoosterPressed(){
+        return xboxController.getRightBumper() || xboxController.getLeftBumper();
     }
 }
