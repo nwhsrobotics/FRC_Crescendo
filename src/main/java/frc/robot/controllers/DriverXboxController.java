@@ -68,7 +68,10 @@ public class DriverXboxController implements Controller {
 
     @Override
     public double getSpeedCoefficient(){
-        return -xboxController.getLeftTriggerAxis()*0.6 + 0.7;
+        if(xboxController.getLeftTriggerAxis() > xboxController.getRightTriggerAxis()) {
+            return -xboxController.getLeftTriggerAxis() * 0.6 + 0.7;
+        }
+        return -xboxController.getRightTriggerAxis() * 0.6 + 0.7;
     }
 
     @Override
