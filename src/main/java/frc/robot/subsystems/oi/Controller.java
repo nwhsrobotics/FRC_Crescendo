@@ -185,22 +185,10 @@ public interface Controller {
      * 
      * @return - input scaled from 0 to 1.
      */
-    public default double getThrottle() {
+    public default double getSpeedCoefficient() {
         return 0;
     }
 
-    /**
-     * Get Booster Coefficient.
-     *
-     * This should be the reciprocal of constant scale factor of teleop speed to reach the maximum physical speed
-     *
-     * This is a driver-side input.
-     *
-     * @return - default input 1.0 for no booster (1.0/OIConstants.scaleFactor) for boosting
-     */
-    public default double getBoosterCoefficient(){
-        return 1.0;
-    }
 
     /**
      * Get whether the operator wishes to boost.
