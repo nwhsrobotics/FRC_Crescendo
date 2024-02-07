@@ -266,8 +266,8 @@ public class ControlManager {
         ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
         ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY() * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
         //TODO: Add slewlimiter for the rotation to smoothen it out
-        //ControlManager.Outputs.rotatingSpeed = OIConstants.yLimiter.calculate(driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond);
-        ControlManager.Outputs.rotatingSpeed = driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+        ControlManager.Outputs.rotatingSpeed = OIConstants.zLimiter.calculate(driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond);
+        //ControlManager.Outputs.rotatingSpeed = driverController.getZ() * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
     }
 
     /**
