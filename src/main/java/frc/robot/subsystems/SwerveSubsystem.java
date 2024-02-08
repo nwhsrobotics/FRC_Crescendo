@@ -288,7 +288,8 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return - scheduled pathfinding command.
      */
     public Command pathfindToPosition(Pose2d position) {
-        Command command = AutoBuilder.pathfindToPose(
+        //TODO: Better than pathfindToPose????
+        Command command = AutoBuilder.pathfindToPoseFlipped(
                 position,
                 OIConstants.kPathfindingConstraints,
                 0.0, // Goal end velocity in meters/sec
