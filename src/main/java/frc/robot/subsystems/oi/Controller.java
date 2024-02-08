@@ -179,7 +179,7 @@ public interface Controller {
      * Get throttle.
      * 
      * The output is used as a speed coefficient;
-     * it is directly multiplied with the power output of the drive motors.
+     * it is directly multiplied with the power output of the drive motors (it will be limited by max telep speeds).
      * 
      * This is a driver-side input.
      * 
@@ -193,7 +193,7 @@ public interface Controller {
     /**
      * Get whether the operator wishes to boost.
      * 
-     * Boosting can raise the power output of the driver motors to their maximum.
+     * Boosting can raise the power output of the driver motors to their maximum bypassing teleop speed to the physicalMaximum.
      * 
      * This is a driver-side input.
      * 
