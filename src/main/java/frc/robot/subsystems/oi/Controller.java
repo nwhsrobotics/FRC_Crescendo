@@ -132,13 +132,46 @@ public interface Controller {
     }
 
     /**
-     * Get button binding for navigating to stage.
+     * Get button binding for navigating to speaker.
      * <p>
      * This is a driver-side input.
      *
      * @return - button number.
      */
-    default int getAutonavigateToStageButton() {
+    default int getAutonavigateToSpeakerButton() {
+        return -1;
+    }
+
+    /**
+     * Get button binding for navigating to midstage.
+     * <p>
+     * This is a driver-side input.
+     *
+     * @return - button number.
+     */
+    default int getAutonavigateToMidStageButton() {
+        return -1;
+    }
+
+    /**
+     * Get button binding for navigating to bottomstage.
+     * <p>
+     * This is a driver-side input.
+     *
+     * @return - button number.
+     */
+    default int getAutonavigateToBottomStageButton() {
+        return -1;
+    }
+
+    /**
+     * Get button binding for navigating to topstage.
+     * <p>
+     * This is a driver-side input.
+     *
+     * @return - button number.
+     */
+    default int getAutonavigateToTopStageButton() {
         return -1;
     }
 

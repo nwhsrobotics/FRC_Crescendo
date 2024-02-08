@@ -204,10 +204,15 @@ public final class Constants {
     public static final class FavoritePositions {
         // TODO: confirm robot size; affects location coordinates.
         public static final Pose2d SOURCE = new Pose2d(15.45, 0.87, Rotation2d.fromDegrees(-60.00));
-        public static final Pose2d AMP = new Pose2d(1.97, 7.80, Rotation2d.fromDegrees(90.00));
+        public static final Pose2d AMP = new Pose2d(1.83, 7.77, Rotation2d.fromDegrees(90.00));
+        public static final Pose2d SPEAKER = new Pose2d(1.28, 5.54, Rotation2d.fromDegrees(-180.00));
 
         // TODO: consider other stage locations.
-        public static final Pose2d STAGE = new Pose2d(5.84, 3.99, Rotation2d.fromDegrees(-180.00));
+        public static final Pose2d MIDSTAGE = new Pose2d(5.85, 4.12, Rotation2d.fromDegrees(-180.00));
+        //not near amp
+        public static final Pose2d BOTTOMSTAGE = new Pose2d(4.37, 3.27, Rotation2d.fromDegrees(60.00));
+        //same area as amp
+        public static final Pose2d TOPSTAGE = new Pose2d(4.38, 4.89, Rotation2d.fromDegrees(-60.00));
     }
 
     public enum RuntimeEnvironment {
