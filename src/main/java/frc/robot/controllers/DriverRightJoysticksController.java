@@ -2,8 +2,6 @@ package frc.robot.controllers;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants;
 import frc.robot.subsystems.oi.Controller;
 
 public class DriverRightJoysticksController implements Controller {
@@ -48,35 +46,35 @@ public class DriverRightJoysticksController implements Controller {
     }
 
     @Override
-    public double getSpeedCoefficient(){
+    public double getSpeedCoefficient() {
         return joystickControl.getRawAxis(3);
     }
 
     @Override
-    public boolean isBoosterPressed(){
+    public boolean isBoosterPressed() {
         return joystickControl.getTrigger();
     }
 
     @Override
-    public int getAutonavigationButton(){
+    public int getAutonavigationButton() {
         return 1;
     }
 
     @Override
-    public int getAutonavigateToAmpButton(){
+    public int getAutonavigateToAmpButton() {
         return 2;
     }
 
     @Override
-    public int getAutonavigateToSourceButton(){
+    public int getAutonavigateToSourceButton() {
         return 3;
     }
 
     @Override
-    public int getAutonavigateToStageButton(){
+    public int getAutonavigateToStageButton() {
         return 4;
     }
-    
+
     @Override
     public int getNavXResetButton() {
         return 5;

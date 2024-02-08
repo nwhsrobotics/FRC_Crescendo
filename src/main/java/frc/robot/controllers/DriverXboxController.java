@@ -2,7 +2,6 @@ package frc.robot.controllers;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.oi.Controller;
 
 public class DriverXboxController implements Controller {
@@ -34,20 +33,20 @@ public class DriverXboxController implements Controller {
     @Override
     public double getX() {
         return Controller.calculateSpeedWithDeadband(-xboxController.getLeftY(), kXYDeadband);
-    }   
-    
+    }
+
     @Override
     public double getY() {
         return Controller.calculateSpeedWithDeadband(-xboxController.getLeftX(), kXYDeadband);
     }
-    
+
     @Override
     public double getZ() {
         return Controller.calculateSpeedWithDeadband(xboxController.getRightX(), kZDeadband);
     }
 
     @Override
-    public double getSpeedCoefficient(){
+    public double getSpeedCoefficient() {
         /*if(xboxController.getLeftTriggerAxis() > xboxController.getRightTriggerAxis()) {
             return -xboxController.getLeftTriggerAxis() * 0.8 + 1.0;
         }
@@ -57,31 +56,31 @@ public class DriverXboxController implements Controller {
 
     //TODO: Check people preferences
     @Override
-    public boolean isBoosterPressed(){
+    public boolean isBoosterPressed() {
         //return xboxController.getRightBumper() || xboxController.getLeftBumper();
         return xboxController.getRightTriggerAxis() > 0.1;
     }
 
     @Override
-    public int getAutonavigationButton(){
+    public int getAutonavigationButton() {
         return 1;
     }
 
     @Override
-    public int getAutonavigateToAmpButton(){
+    public int getAutonavigateToAmpButton() {
         return 2;
     }
 
     @Override
-    public int getAutonavigateToSourceButton(){
+    public int getAutonavigateToSourceButton() {
         return 3;
     }
 
     @Override
-    public int getAutonavigateToStageButton(){
+    public int getAutonavigateToStageButton() {
         return 4;
     }
-    
+
     @Override
     public int getNavXResetButton() {
         return 8;

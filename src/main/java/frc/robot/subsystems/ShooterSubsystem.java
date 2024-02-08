@@ -1,22 +1,21 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
-    private CANSparkMax flywheelMotor;
-    private RelativeEncoder flywheelEncoder;
-    private SparkPIDController flywheelPidController;
-    private CANSparkMax indexMotor;
-    private SparkPIDController indexPidController;
+    private final CANSparkMax flywheelMotor;
+    private final RelativeEncoder flywheelEncoder;
+    private final SparkPIDController flywheelPidController;
+    private final CANSparkMax indexMotor;
+    private final SparkPIDController indexPidController;
     private double targetPosition = 0;
-    
+
     /**
      * The target RPM the flywheel motor will spin up to.
      */
@@ -35,7 +34,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * If the target flywheel RPM is within tolerances, the flywheel is considered ready.
-     * 
+     *
      * @return - boolean representing whether the flywheel is ready.
      */
     public boolean isFlywheelReady() {
@@ -48,7 +47,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Step the index motor to push a note into the flywheel.
-     * 
+     * <p>
      * The flywheel must be spinning in order for the periodic to process the action.
      */
     public void stepIndex() {
@@ -61,8 +60,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         if (!isFlywheelReady()) {
             this.indexMotor.stopMotor();
-        }
-        else {
+        } else {
             this.indexPidController.setReference(this.targetPosition, ControlType.kPosition);
         }
     }

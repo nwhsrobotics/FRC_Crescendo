@@ -1,18 +1,17 @@
 package frc.robot.subsystems.oi;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.stream.Collectors;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import org.littletonrobotics.junction.Logger;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 /**
  * Handles multiple control interfaces at the driver station.
@@ -26,12 +25,12 @@ public class ControlManager {
         public static double ySpeed = 0;
         public static double rotatingSpeed = 0;
     }
-    
+
     private static final Command emptyButtonCommand = new InstantCommand(() -> System.out.println("Achtung! A button command for ControlManager is undefined!"));
 
     /**
      * Commands that are to be bound to button presses made by the driver.
-     * 
+     * <p>
      * These should be overwritten during robot initialization,
      * replacing the default placeholders.
      */
@@ -46,27 +45,28 @@ public class ControlManager {
 
     /**
      * Commands that are to be bound to button presses made by the gunner.
-     * 
+     * <p>
      * These should be overwritten during robot initialization,
      * replacing the default placeholders.
      */
-    public static class GunnerButtonCommands {}
+    public static class GunnerButtonCommands {
+    }
 
-    private static HashMap<Integer, Controller> registry = new HashMap<>();
+    private static final HashMap<Integer, Controller> registry = new HashMap<>();
     private static int driverPort = -1;
     private static int gunnerPort = -2;
 
     /**
      * Generates a "Trigger" for a command to be bound to a button (defined in "DriverButtonCommands" and "GunnerButtonCommands").
-     * 
+     * <p>
      * The command will not executed by the Trigger,
      * unless the port of the driver/gunner controller it is associated with is currently selected to be active.
-     * 
+     * <p>
      * Internal use only.
-     * 
-     * @param hid - "GenericHID" of the controller.
-     * @param port - the port of associated controller.
-     * @param command - the command to be executed when the button is pressed.
+     *
+     * @param hid             - "GenericHID" of the controller.
+     * @param port            - the port of associated controller.
+     * @param command         - the command to be executed when the button is pressed.
      * @param isCommandDriver - whether the command is for the driver or gunner.
      */
     private static void makeTriggerForButton(GenericHID hid, int port, int button, Command command, boolean isCommandDriver) {
@@ -79,22 +79,22 @@ public class ControlManager {
                 return;
             }
 
-           command.schedule(); 
+            command.schedule();
         }));
     }
 
     /**
      * Register a controller (which should already be associated with a particular port).
-     * 
+     * <p>
      * You should NEVER register multiple controllers to a single port.
      * If a port is already occupied, a message will be printed in the console,
      * assuming the WPILib framework doesn't immediately crash.
-     * 
+     *
      * @param controller - controller being registered.
      */
     public static void registerController(Controller controller) {
         if (ControlManager.registry.put(controller.getPort(), controller) != null) {
-            System.out.println("Achtung! Handler for OI overwrote controller registered for port " + Integer.toString(controller.getPort()) + ".");
+            System.out.println("Achtung! Handler for OI overwrote controller registered for port " + controller.getPort() + ".");
         }
 
         GenericHID hid = controller.getGenericHID();
@@ -105,25 +105,25 @@ public class ControlManager {
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToSourceButton(), DriverButtonCommands.autonavigateToSource, true);
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToStageButton(), DriverButtonCommands.autonavigateToStage, true);
 
-        Logger.recordOutput("controlmanager.controller." + Integer.toString(controller.getPort()) + ".name", controller.getName());
+        Logger.recordOutput("controlmanager.controller." + controller.getPort() + ".name", controller.getName());
     }
 
     /**
      * Get the current port actively being used for driver inputs.
-     * 
+     *
      * @return - integer ID for port.
      */
     public static int getDriverPort() {
         return ControlManager.driverPort;
     }
-    
+
     /**
      * Set the current port actively being used for driver inputs.
-     * 
+     * <p>
      * This method will be non-fatally unsuccessful,
      * if no controller is registered with the new port,
      * or if the controller is already being used by the gunner.
-     * 
+     *
      * @return - boolean for whether change was successful.
      */
     public static boolean setDriverPort(int port) {
@@ -138,7 +138,7 @@ public class ControlManager {
 
     /**
      * Get the current port actively being used for gunner inputs.
-     * 
+     *
      * @return - integer ID for port.
      */
     public static int getGunnerPort() {
@@ -147,11 +147,11 @@ public class ControlManager {
 
     /**
      * Set the current port actively being used for gunner inputs.
-     * 
+     * <p>
      * This method will be non-fatally unsuccessful,
      * if no controller is registered with the new port,
      * or if the controller is already being used by the driver.
-     * 
+     *
      * @return - boolean for whether change was successful.
      */
     public static boolean setGunnerPort(int port) {
@@ -166,7 +166,7 @@ public class ControlManager {
 
     /**
      * Get list of available controllers.
-     * 
+     *
      * @param areDrivers - whether to filter the list for only driver-enabled or gunner-enabled controllers.
      * @return - list of integer IDs for controller ports.
      */
@@ -187,28 +187,28 @@ public class ControlManager {
 
     /**
      * Get available controller with the lowest integer ID for port.
-     * 
+     * <p>
      * If no controllers are available, -1 is returned.
-     * 
+     *
      * @param isDriver - whether the controller is driver-enabled or gunner-enabled.
      * @return - integer ID for controller port.
      */
     public static int getControllerLowest(boolean isDriver) {
         ArrayList<Integer> controllers = getControllers(false);
-        
+
         if (controllers.size() <= 0) {
             return -1;
         }
-        
+
         controllers.sort(Comparator.naturalOrder());
         return controllers.get(0);
     }
 
     /**
      * Get label for a controller.
-     * 
+     * <p>
      * If the controller does not exist, the string "DNE" will be returned.
-     * 
+     *
      * @param port - integer ID for port.
      * @return - label.
      */
@@ -218,25 +218,25 @@ public class ControlManager {
             return "DNE";
         }
 
-        return Integer.toString(port) + " - " + controller.getName();
+        return port + " - " + controller.getName();
     }
 
     /**
      * Get list of labels of available controllers.
-     * 
+     *
      * @param areDrivers - whether to filter the list for only driver-enabled or gunner-enabled controllers.
      * @return - list of labels for controllers.
      */
     public static ArrayList<String> getControllerLabels(boolean areDrivers) {
         return (ArrayList<String>) ControlManager.getControllers(areDrivers)
-            .stream()
-            .map(port -> ControlManager.getControllerLabel(port))
-            .collect(Collectors.toList());
+                .stream()
+                .map(port -> ControlManager.getControllerLabel(port))
+                .collect(Collectors.toList());
     }
 
     /**
      * Fetches port number for controller, from its label, as produced by "getControllers()."
-     * 
+     *
      * @param label - label for controller.
      * @return - integer ID for port.
      */
@@ -246,25 +246,25 @@ public class ControlManager {
 
     /**
      * Process inputs for the driver controls.
-     * 
+     * <p>
      * Should be called repeatedly in a periodic function.
      */
     public static void processDriver() {
         Logger.recordOutput("controlmanager.driver.port", ControlManager.driverPort);
-        
+
         Controller driverController = ControlManager.registry.get(ControlManager.driverPort);
         if (driverController == null) {
             // kill speed if we've lost the driver controller.
             ControlManager.Outputs.xSpeed = 0;
             ControlManager.Outputs.ySpeed = 0;
             ControlManager.Outputs.rotatingSpeed = 0;
-            
+
             System.out.println("Achtung! Failed to get driver controller!");
             return;
         }
-        
+
         //TODO: Is this right the xLimiter/yLimiter is greater than the kTeleDriveMaxSpeedMetersPerSecond???? Recommend it to be lower
-        if(!driverController.isBoosterPressed()) {
+        if (!driverController.isBoosterPressed()) {
             double val = driverController.getSpeedCoefficient();
             //TODO: DO THIS if rotation is too slow also make sure to tweak rotation slew rate limiter
             //double valRot = (driverController.getSpeedCoefficient() < 0.5) ? 0.5 : driverController.getSpeedCoefficient();
@@ -285,7 +285,7 @@ public class ControlManager {
 
     /**
      * Process inputs for the gunner controls.
-     * 
+     * <p>
      * Should be called repeatedly in a periodic function.
      */
     public static void processGunner() {
@@ -296,7 +296,6 @@ public class ControlManager {
             // insert calls here to set outputs that stow the gunner mechanisms safely.
 
             System.out.println("Achtung! Failed to get gunner controller!");
-            return;
         }
     }
 }
