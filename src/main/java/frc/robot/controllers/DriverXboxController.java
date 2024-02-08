@@ -63,4 +63,24 @@ public class DriverXboxController implements Controller {
     public boolean isBoosterPressed(){
         return xboxController.getRightBumper() || xboxController.getLeftBumper();
     }
+
+    @Override
+    public int getAutonavigationButton(){
+        return 1;
+    }
+
+    @Override
+    public int getAutonavigateToAmpButton(){
+        return 2;
+    }
+
+    @Override
+    public int getAutonavigateToSourceButton(){
+        return 3;
+    }
+
+    @Override
+    public int getAutonavigateToStageButton(){
+        return 4;
+    }
 }
