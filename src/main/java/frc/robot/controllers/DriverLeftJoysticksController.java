@@ -47,7 +47,7 @@ public class DriverLeftJoysticksController implements Controller {
 
     @Override
     public double getSpeedCoefficient() {
-        return joystickControl.getRawAxis(3);
+        return (-joystickControl.getRawAxis(3)) * 0.3 + 0.5;
     }
 
     @Override
