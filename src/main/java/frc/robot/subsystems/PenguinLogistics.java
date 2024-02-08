@@ -15,6 +15,7 @@
  *      LOGISTICS
  */
 
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -66,7 +67,7 @@ public class PenguinLogistics {
 
     /**
      * Returns whether autonavigation is enabled.
-     * 
+     *
      * @return - boolean representing whether autonavigation is enabled.
      */
     public boolean isEnabled() {

@@ -1,21 +1,19 @@
 package frc.robot;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import org.littletonrobotics.junction.Logger;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
 
 public final class Constants {
     public static final class CANAssignments {
@@ -46,11 +44,11 @@ public final class Constants {
         /**
          * Check for duplicate CAN assignments,
          * declared under the class this method is defined in.
-         * 
+         * <p>
          * If an assignment cannot be loaded,
          * or a duplicate assignment is found,
          * a message will be printed in the console.
-         * 
+         *
          * @return - true if duplicate assignment is found, otherwise false.
          */
         public static boolean checkAssignments() {
@@ -68,16 +66,16 @@ public final class Constants {
                     System.out.println("Achtung! Checking CAN assignment for " + field.getName() + " failed!");
                     continue;
                 }
-                
+
                 if (tracker.put(workingId, field.getName()) != null) {  // this also adds the field to the tracker.
                     System.out.println("Fehler! Duplicate CAN assignment on " +
-                        Integer.toString(workingId) +
-                        " for " +
-                        field.getName() +
-                        " already used by " +
-                        tracker.get(workingId) +
-                        "!");
-                    
+                            workingId +
+                            " for " +
+                            field.getName() +
+                            " already used by " +
+                            tracker.get(workingId) +
+                            "!");
+
                     dupeFound = true;
                 }
             }
@@ -139,16 +137,18 @@ public final class Constants {
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = kPhysicalMaxSpeedMetersPerSecond / Math.hypot(DriveConstants.kTrackWidth / 2.0, DriveConstants.kWheelBase / 2.0); //adapted from SDS
     }
 
-    public static final class ClimbConstants {}
+    public static final class ClimbConstants {
+    }
 
-    public static final class ArmConstants {}
+    public static final class ArmConstants {
+    }
 
     public static final class ShooterConstants {
         /**
          * This adds +/- tolerance to the target RPM for the flywheel.
-         * 
+         * <p>
          * If the flywheel spins within the tolerance,
-         * then it is considered up-to-speed for firing. 
+         * then it is considered up-to-speed for firing.
          */
         public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 10;
 
@@ -162,9 +162,11 @@ public final class Constants {
         public static final double INDEX_STEP_ROTATIONS = INDEX_WHEEL_DIAMETER_INCHES / NOTE_DIAMETER_INCHES;  // pi cancels out.
     }
 
-    public static final class IntakeConstants {}
+    public static final class IntakeConstants {
+    }
 
-    public static final class ShieldConstants {}
+    public static final class ShieldConstants {
+    }
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 2;

@@ -14,11 +14,11 @@ public class ClimbSubsystem extends SubsystemBase {
     private final CANSparkMax leftClimbMotor = new CANSparkMax(Constants.CANAssignments.CLIMB_LEFT_MOTOR_ID, MotorType.kBrushless);
     private final CANSparkMax rightClimbMotor = new CANSparkMax(Constants.CANAssignments.CLIMB_RIGHT_MOTOR_ID, MotorType.kBrushless);
 
-    private RelativeEncoder rightClimbEncoder;
-    private RelativeEncoder leftClimbEncoder;
+    private final RelativeEncoder rightClimbEncoder;
+    private final RelativeEncoder leftClimbEncoder;
 
-    private SparkPIDController rightClimbPID;
-    private SparkPIDController leftClimbPID;
+    private final SparkPIDController rightClimbPID;
+    private final SparkPIDController leftClimbPID;
 
     private static final double MAX_UP_DOWN = 25.0 * 0.0254; //21 inches converted to meters
     private static final double MIN_UP_DOWN = 0.0 * 0.0254;

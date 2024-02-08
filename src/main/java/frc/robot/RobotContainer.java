@@ -1,7 +1,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,15 +39,14 @@ public class RobotContainer {
 
         SendableChooser<Integer> driverControllerChooser = new SendableChooser<>();
         SendableChooser<Integer> gunnerControllerChooser = new SendableChooser<>();
-        
+
         for (String option : ControlManager.getControllerLabels(true)) {
             driverControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
         }
         int defaultDriverControllerPort = ControlManager.getControllerLowest(true);
         if (defaultDriverControllerPort != -1) {
             driverControllerChooser.setDefaultOption(ControlManager.getControllerLabel(defaultDriverControllerPort), defaultDriverControllerPort);
-        }
-        else {
+        } else {
             driverControllerChooser.setDefaultOption("None", -1);
         }
         driverControllerChooser.onChange((port) -> ControlManager.setDriverPort(port));
@@ -59,8 +57,7 @@ public class RobotContainer {
         int defaultGunnerControllerPort = ControlManager.getControllerLowest(false);
         if (defaultGunnerControllerPort != -1) {
             gunnerControllerChooser.setDefaultOption(ControlManager.getControllerLabel(defaultGunnerControllerPort), defaultGunnerControllerPort);
-        }
-        else {
+        } else {
             gunnerControllerChooser.setDefaultOption("None", -1);
         }
         gunnerControllerChooser.onChange((port) -> ControlManager.setGunnerPort(port));
