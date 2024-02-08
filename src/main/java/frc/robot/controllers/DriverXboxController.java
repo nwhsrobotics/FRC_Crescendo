@@ -72,14 +72,21 @@ public class DriverXboxController implements Controller {
     }
 
     @Override
-    public int getAutonavigateToSourceButton() {
+    public int getAutonavigateToSpeakerButton() {
         return 3;
     }
 
     @Override
+    public int getAutonavigateToSourceButton() {
+        return 4;
+    }
+
+    /* TODO: Stage naviagte buttons
+        @Override
     public int getAutonavigateToMidStageButton() {
         return 4;
     }
+     */
 
     @Override
     public int getNavXResetButton() {

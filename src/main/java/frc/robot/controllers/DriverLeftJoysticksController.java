@@ -71,7 +71,7 @@ public class DriverLeftJoysticksController implements Controller {
     }
 
     @Override
-    public int getAutonavigateToMidStageButton() {
+    public int getAutonavigateToSpeakerButton() {
         return 4;
     }
 
