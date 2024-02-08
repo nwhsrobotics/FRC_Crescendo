@@ -86,6 +86,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // create an AHRS object for gyro
     public final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
+    //odometry is a system to keep track of robots current position and rotation on the fields based on the coordinate system
     private final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(
             DriveConstants.kDriveKinematics,
             Rotation2d.fromDegrees(getHeading()),
@@ -316,9 +317,8 @@ public class SwerveSubsystem extends SubsystemBase {
             }
         }
         //stddevs should be scaled to improve accuracy https://www.chiefdelphi.com/t/poseestimators-and-limelight-botpose/430334/3
-        //https://tools.limelightvision.io/map-builder
-        //https://www.chiefdelphi.com/t/is-there-a-2024-limelight-release/449411/11
-        //upload the april tag build map to limelight (unofficial) https://www.chiefdelphi.com/uploads/short-url/1j60M9TmbpUb74e8YjAdMxyc2ew.zip (.fmap in it) also have uploaded it in robot directly
+        //TODO: https://docs.limelightvision.io/docs/docs-limelight/software-change-log 
+        //upload the april tag build map to limelight https://downloads.limelightvision.io/models/frc2024.fmap (.fmap in it) also have uploaded it in robot directly
         LimelightHelpers.Results result =
         LimelightHelpers.getLatestResults("limelight").targetingResults;
         if (!(result.botpose[0] == 0 && result.botpose[1] == 0) && alliance.isPresent()) {
