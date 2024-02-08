@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.FavoritePositions;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
+import frc.robot.controllers.DriverLeftJoysticksController;
+import frc.robot.controllers.DriverRightJoysticksController;
 import frc.robot.controllers.DriverXboxController;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.oi.ControlManager;
@@ -31,6 +33,10 @@ public class RobotContainer {
 
         DriverXboxController driverXboxController = new DriverXboxController();
         ControlManager.registerController(driverXboxController);
+        DriverLeftJoysticksController driverLeftJoysticksController = new DriverLeftJoysticksController();
+        ControlManager.registerController(driverLeftJoysticksController);
+        DriverRightJoysticksController driverRightJoysticksController = new DriverRightJoysticksController();
+        ControlManager.registerController(driverRightJoysticksController);
 
         SendableChooser<Integer> driverControllerChooser = new SendableChooser<>();
         SendableChooser<Integer> gunnerControllerChooser = new SendableChooser<>();

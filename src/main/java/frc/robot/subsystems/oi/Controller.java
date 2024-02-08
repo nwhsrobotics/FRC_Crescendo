@@ -180,13 +180,14 @@ public interface Controller {
      * 
      * The output is used as a speed coefficient;
      * it is directly multiplied with the power output of the drive motors (it will be limited by max telep speeds).
+     * Note: Coefficient will not work with booster as of current implementation
      * 
      * This is a driver-side input.
      * 
-     * @return - input scaled from 0 to 1.
+     * @return - input scaled from 0 to 1. Ideally should never return less than 0.1
      */
     default double getSpeedCoefficient() {
-        return 0;
+        return 1.0;
     }
 
 

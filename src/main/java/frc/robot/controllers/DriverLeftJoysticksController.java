@@ -6,20 +6,20 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
 import frc.robot.subsystems.oi.Controller;
 
-public class DriverJoysticksController implements Controller {
-    private static final int port = 0;
+public class DriverLeftJoysticksController implements Controller {
+    private static final int port = 1;
     private final Joystick joystickControl;
 
     private static final double kXYDeadband = 0.05;
     private static final double kZDeadband = 0.3;
 
-    public DriverJoysticksController() {
-        joystickControl = new Joystick(DriverJoysticksController.port);
+    public DriverLeftJoysticksController() {
+        joystickControl = new Joystick(DriverLeftJoysticksController.port);
     }
 
     @Override
     public int getPort() {
-        return DriverJoysticksController.port;
+        return DriverLeftJoysticksController.port;
     }
 
     @Override
@@ -47,7 +47,6 @@ public class DriverJoysticksController implements Controller {
         return Controller.calculateSpeedWithDeadband(joystickControl.getTwist(), kZDeadband);
     }
 
-
     @Override
     public double getSpeedCoefficient(){
         return joystickControl.getRawAxis(3);
@@ -57,10 +56,34 @@ public class DriverJoysticksController implements Controller {
     public boolean isBoosterPressed(){
         return joystickControl.getTrigger();
     }
+
+    @Override
+    public int getAutonavigationButton(){
+        return 1;
+    }
+
+    @Override
+    public int getAutonavigateToAmpButton(){
+        return 2;
+    }
+
+    @Override
+    public int getAutonavigateToSourceButton(){
+        return 3;
+    }
+
+    @Override
+    public int getAutonavigateToStageButton(){
+        return 4;
+    }
+    
     @Override
     public int getNavXResetButton() {
         return 5;
     }
 
-
+    @Override
+    public int getFieldRelativeButton() {
+        return 9;
+    }
 }

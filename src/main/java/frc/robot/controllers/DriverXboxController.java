@@ -47,21 +47,19 @@ public class DriverXboxController implements Controller {
     }
 
     @Override
-    public int getNavXResetButton() {
-        return 8;
-    }
-
-    @Override
     public double getSpeedCoefficient(){
-        if(xboxController.getLeftTriggerAxis() > xboxController.getRightTriggerAxis()) {
+        /*if(xboxController.getLeftTriggerAxis() > xboxController.getRightTriggerAxis()) {
             return -xboxController.getLeftTriggerAxis() * 0.8 + 1.0;
         }
-        return -xboxController.getRightTriggerAxis() * 0.8 + 1.0;
+        return -xboxController.getRightTriggerAxis() * 0.8 + 1.0;*/
+        return -xboxController.getLeftTriggerAxis() * 0.8 + 1.0;
     }
 
+    //TODO: Check people preferences
     @Override
     public boolean isBoosterPressed(){
-        return xboxController.getRightBumper() || xboxController.getLeftBumper();
+        //return xboxController.getRightBumper() || xboxController.getLeftBumper();
+        return xboxController.getRightTriggerAxis() > 0.1;
     }
 
     @Override
@@ -82,5 +80,15 @@ public class DriverXboxController implements Controller {
     @Override
     public int getAutonavigateToStageButton(){
         return 4;
+    }
+    
+    @Override
+    public int getNavXResetButton() {
+        return 8;
+    }
+
+    @Override
+    public int getFieldRelativeButton() {
+        return 9;
     }
 }
