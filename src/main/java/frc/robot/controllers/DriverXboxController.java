@@ -42,7 +42,7 @@ public class DriverXboxController implements Controller {
 
     @Override
     public double getZ() {
-        return Controller.calculateSpeedWithDeadband(xboxController.getRightX(), kZDeadband);
+        return Controller.calculateSpeedWithDeadband(-xboxController.getRightX(), kZDeadband);
     }
 
     @Override
@@ -96,5 +96,10 @@ public class DriverXboxController implements Controller {
     @Override
     public int getFieldRelativeButton() {
         return 9;
+    }
+
+    @Override
+    public String getName() {
+        return "4638 Xbox Controller";
     }
 }
