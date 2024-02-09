@@ -106,7 +106,10 @@ public class ControlManager {
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigationButton(), DriverButtonCommands.toggleAutonavigationCommand, true);
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToAmpButton(), DriverButtonCommands.autonavigateToAmp, true);
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToSourceButton(), DriverButtonCommands.autonavigateToSource, true);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToSpeakerButton(), DriverButtonCommands.autonavigateToSpeaker, true);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToTopStageButton(), DriverButtonCommands.autonavigateToTopStage, true);
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToMidStageButton(), DriverButtonCommands.autonavigateToMidStage, true);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToBottomStageButton(), DriverButtonCommands.autonavigateToBottomStage, true);
 
         Logger.recordOutput("controlmanager.controller." + controller.getPort() + ".name", controller.getName());
     }
