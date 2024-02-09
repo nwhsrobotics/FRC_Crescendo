@@ -169,9 +169,6 @@ public final class Constants {
     public static final class IntakeConstants {
     }
 
-    public static final class ShieldConstants {
-    }
-
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 2;
         public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
@@ -198,8 +195,6 @@ public final class Constants {
         public static final PathConstraints kPathfindingConstraints = new PathConstraints(
                 DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 3.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 6.0,
                 AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
-
-        //TODO: These limiters should be reduced more for more smoothness
         public static final SlewRateLimiter xLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 0.8);
         public static final SlewRateLimiter yLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 0.8);
         public static final SlewRateLimiter zLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond * 0.7);
@@ -211,7 +206,6 @@ public final class Constants {
         public static final Pose2d AMP = new Pose2d(1.83, 7.77, Rotation2d.fromDegrees(90.00));
         public static final Pose2d SPEAKER = new Pose2d(1.28, 5.54, Rotation2d.fromDegrees(-180.00));
 
-        // TODO: consider other stage locations.
         public static final Pose2d MIDSTAGE = new Pose2d(5.85, 4.12, Rotation2d.fromDegrees(-180.00));
         //not near amp
         public static final Pose2d BOTTOMSTAGE = new Pose2d(4.37, 3.27, Rotation2d.fromDegrees(60.00));
