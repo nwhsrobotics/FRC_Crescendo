@@ -55,7 +55,6 @@ public class DriverXboxController implements Controller {
         return -xboxController.getLeftTriggerAxis() * 0.8 + 1.0;
     }
 
-    //TODO: Check people preferences
     @Override
     public boolean isBoosterPressed() {
         //return xboxController.getRightBumper() || xboxController.getLeftBumper();
