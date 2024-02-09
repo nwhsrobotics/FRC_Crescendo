@@ -51,6 +51,7 @@ public class DriverXboxController implements Controller {
             return -xboxController.getLeftTriggerAxis() * 0.8 + 1.0;
         }
         return -xboxController.getRightTriggerAxis() * 0.8 + 1.0;*/
+        //equation range from 0.2 to 1.0
         return -xboxController.getLeftTriggerAxis() * 0.8 + 1.0;
     }
 
