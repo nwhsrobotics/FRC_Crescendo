@@ -48,8 +48,7 @@ public class DriverLeftJoysticksController implements Controller {
     @Override
     public double getSpeedCoefficient() {
         //this equation does not work....
-        //return (-joystickControl.getRawAxis(3)) * 0.5 + 0.5;
-        //TODO: THIS WAS THE BUG FROM WEEKS WE FIXED IT. The return value is from -1 to 1 and not 0 to 1 so therefore our equation changed
+        //return (-joystickControl.getRawAxis(3)) * 0.3 + 0.5;
         //the problem with this working equation below is the range is from 0.2 to 1.2 we want max to be 1.0 to avoid confusion
         //return (((-joystickControl.getRawAxis(3)+1)/2)+.2);
         //so this should work
@@ -59,6 +58,8 @@ public class DriverLeftJoysticksController implements Controller {
         } else {
             return val;
         }
+        //this will also work and do the same thing (assiming 0.2 lower limit)
+        //return (-joystickControl.getRawAxis(3)) * 0.5 + 0.5;
     }
 
     @Override
