@@ -49,7 +49,11 @@ public class RobotContainer {
         } else {
             driverControllerChooser.setDefaultOption("None", -1);
         }
-        driverControllerChooser.onChange((port) -> ControlManager.setDriverPort(port));
+        driverControllerChooser.onChange((port) -> {
+            if (port != null) {
+                ControlManager.setDriverPort(port);
+            }
+        });
 
         for (String option : ControlManager.getControllerLabels(false)) {
             gunnerControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
@@ -60,7 +64,11 @@ public class RobotContainer {
         } else {
             gunnerControllerChooser.setDefaultOption("None", -1);
         }
-        gunnerControllerChooser.onChange((port) -> ControlManager.setGunnerPort(port));
+        gunnerControllerChooser.onChange((port) -> {
+            if (port != null) {
+                ControlManager.setGunnerPort(port);
+            }
+        });
 
         SmartDashboard.putData("Driver Controllers", driverControllerChooser);
         SmartDashboard.putData("Gunner Controllers", gunnerControllerChooser);

@@ -42,12 +42,14 @@ public class DriverLeftJoysticksController implements Controller {
 
     @Override
     public double getZ() {
-        return Controller.calculateSpeedWithDeadband(joystickControl.getTwist(), kZDeadband);
+        return Controller.calculateSpeedWithDeadband(-joystickControl.getTwist(), kZDeadband);
     }
 
     @Override
     public double getSpeedCoefficient() {
-        return (-joystickControl.getRawAxis(3)) * 0.3 + 0.5;
+        //return (-joystickControl.getRawAxis(3)) * 0.5 + 0.5;
+        return (((-joystickControl.getRawAxis(3)+1)/2)+.2 //scale from -1 to 1
+        );
     }
 
     @Override
@@ -57,31 +59,36 @@ public class DriverLeftJoysticksController implements Controller {
 
     @Override
     public int getAutonavigationButton() {
-        return 1;
+        return 7;
     }
 
     @Override
     public int getAutonavigateToAmpButton() {
-        return 2;
+        return 6;
     }
 
     @Override
     public int getAutonavigateToSourceButton() {
-        return 3;
-    }
-
-    @Override
-    public int getAutonavigateToSpeakerButton() {
-        return 4;
-    }
-
-    @Override
-    public int getNavXResetButton() {
         return 5;
     }
 
     @Override
+    public int getAutonavigateToSpeakerButton() {
+        return 8;
+    }
+
+    @Override
+    public int getNavXResetButton() {
+        return 3;
+    }
+
+    @Override
     public int getFieldRelativeButton() {
-        return 9;
+        return 2;
+    }
+
+    @Override
+    public String getName() {
+        return "Dwarakesh's Favorite Stick";
     }
 }
