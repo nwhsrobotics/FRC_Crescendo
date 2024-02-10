@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -9,15 +10,18 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
     private CANSparkMax shoulderMotor;
     private SparkPIDController shoulderPidController;
     private RelativeEncoder shoulderRelativeEncoder;
-    private int ampDegree = 104; //Measured from cad, rounded to the nearest whole number
-    private int sourceDegree = 40; //Measured from cad, rounded to the nearest whole number
-    private int desiredDegree = 0; //set the arms angle at this degree
-    private boolean autoLockEnabled = false;
+    private double ampPosition = 104; //Measured from cad, rounded to the nearest whole number
+    private double sourcePosition = 40; //Measured from cad, rounded to the nearest whole number
+    private double desiredPosition = 0; //set the arms angle at this degree
+    private double currentPosition = this.shoulderRelativeEncoder.getPosition();
+    private boolean autoLockEnabledAmp = false;
+    private boolean autoLockEnabledSource = false;
     
 
 
@@ -35,20 +39,39 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
+    public void convertDegreeToRotations(){
+
+    }
+
+
+
     public void ampPreset(){
-        desiredDegree = ampDegree;
+        
+
+        desiredPosition = (ampPosition/360) * ArmConstants.SHOULDER_GEAR_RATIO;
 
     }
 
     public void sourcePreset(){
-        desiredDegree = sourceDegree;
+        
+
+        desiredPosition = (sourcePosition/360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        
 
     }
 
-    public void adjustAngle(){
-        if(!autoLockEnabled){
-            //TODO: add logic that will let the operater freely adjust the motor position if autoLockEnabled is not true
+    public void adjustAngle(double changeInPosition){
+        if(!autoLockEnabledAmp || !autoLockEnabledSource){
+            desiredPosition += changeInPosition;
+            //TODO: add logic that will let the operater freely adjust the motor position if autoLockEnabled is not tru
         }
+        else if(autoLockEnabledAmp){
+            ampPreset();
+        }
+        else if(autoLockEnabledSource){
+            sourcePreset();
+        }
+        
 
     }
 
@@ -56,7 +79,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        this.shoulderPidController.setReference(this.desiredDegree, ControlType.kPosition);
+        this.shoulderPidController.setReference(this.desiredPosition, ControlType.kPosition);
 
 
 
