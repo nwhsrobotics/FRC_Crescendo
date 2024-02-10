@@ -42,7 +42,8 @@ public class DriverJoysticksController implements Controller {
 
     @Override
     public double getZ() {
-        return Controller.calculateSpeedWithDeadband(-joystickControl.getTwist() * 0.5, kZDeadband);
+        return (joystickControl.getTwist() < 0 ? Controller.calculateSpeedWithDeadband(Math.pow(joystickControl.getTwist(), 2), kZDeadband) :  Controller.calculateSpeedWithDeadband(-Math.pow(joystickControl.getTwist(), 2), kZDeadband) );
+        //return Controller.calculateSpeedWithDeadband(-joystickControl.getTwist() * 0.5, kZDeadband);
     }
 
     @Override

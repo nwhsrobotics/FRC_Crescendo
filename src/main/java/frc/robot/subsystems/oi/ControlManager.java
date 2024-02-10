@@ -269,20 +269,12 @@ public class ControlManager {
             return;
         }
 
-        //TODO: Is this right the xLimiter/yLimiter is greater than the kTeleDriveMaxSpeedMetersPerSecond???? Recommend it to be lower
         if (!driverController.isBoosterPressed()) {
             double val = driverController.getSpeedCoefficient();
-            //TODO: DO THIS if rotation is too slow also make sure to tweak rotation slew rate limiter
-            //double valRot = (driverController.getSpeedCoefficient() < 0.5) ? 0.5 : driverController.getSpeedCoefficient();
             ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * val * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
             ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY() * val * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
             ControlManager.Outputs.rotatingSpeed = OIConstants.zLimiter.calculate(driverController.getZ() * val * OIConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond);
         } else {
-            //TODO: Determine if slew rate limiters should apply if boosters are toggled
-            //TODO: Also determine if speed coefficient should apply with boosters 
-            //ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-            //ControlManager.Outputs.ySpeed = OIConstants.yLimiter.calculate(driverController.getY() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-            //ControlManager.Outputs.rotatingSpeed = OIConstants.zLimiter.calculate(driverController.getZ() * DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond);
             ControlManager.Outputs.xSpeed = driverController.getX() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
             ControlManager.Outputs.ySpeed = driverController.getY() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
             ControlManager.Outputs.rotatingSpeed = driverController.getZ() * DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
