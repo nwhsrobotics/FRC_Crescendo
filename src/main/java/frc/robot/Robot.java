@@ -12,6 +12,8 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
     public RobotContainer robotContainer;
@@ -127,8 +129,7 @@ public class Robot extends LoggedRobot {
             autonomousCommand.cancel();
         }
 
-        // TODO: formalize auto paths to end at same location.
-        // robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point"));
+        new PathPlannerAuto("Starting Point").schedule();
     }
 
     /**

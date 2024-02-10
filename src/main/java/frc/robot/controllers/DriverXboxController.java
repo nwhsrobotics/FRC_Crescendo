@@ -1,5 +1,6 @@
 package frc.robot.controllers;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.oi.Controller;
@@ -10,6 +11,21 @@ public class DriverXboxController implements Controller {
 
     private static final double kXYDeadband = 0.05;
     private static final double kZDeadband = 0.3;
+
+    private static final SlewRateLimiter speedCoefficientSlewRateLimiter = new SlewRateLimiter(0.9);
+
+    private static final double adjustSpeedAfterDeadband(double value, double deadband) {
+        double speed = Controller.calculateSpeedWithDeadband(value, deadband) * 1.5;
+
+        if (speed > 0) {
+            speed = Math.min(speed, 1);
+        }
+        else {
+            speed = Math.max(speed, -1);
+        }
+
+        return speed;
+    }
 
     public DriverXboxController() {
         xboxController = new XboxController(DriverXboxController.port);
@@ -32,12 +48,12 @@ public class DriverXboxController implements Controller {
 
     @Override
     public double getX() {
-        return Controller.calculateSpeedWithDeadband(-xboxController.getLeftY(), kXYDeadband);
+        return DriverXboxController.adjustSpeedAfterDeadband(-xboxController.getLeftY(), kXYDeadband);
     }
 
     @Override
     public double getY() {
-        return Controller.calculateSpeedWithDeadband(-xboxController.getLeftX(), kXYDeadband);
+        return DriverXboxController.adjustSpeedAfterDeadband(-xboxController.getLeftX(), kXYDeadband);
     }
 
     @Override
@@ -52,7 +68,7 @@ public class DriverXboxController implements Controller {
         }
         return -xboxController.getRightTriggerAxis() * 0.8 + 1.0;*/
         //equation range from 0.2 to 1.0
-        return -xboxController.getLeftTriggerAxis() * 0.8 + 1.0;
+        return -speedCoefficientSlewRateLimiter.calculate(xboxController.getLeftTriggerAxis()) * 0.65 + 1.0;
     }
 
     @Override
