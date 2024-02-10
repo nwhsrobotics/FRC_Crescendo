@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.FavoritePositions;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
+import frc.robot.controllers.DriverJoysticksController;
 import frc.robot.controllers.DriverLeftJoysticksController;
 import frc.robot.controllers.DriverXboxController;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -34,6 +35,8 @@ public class RobotContainer {
 
         DriverXboxController driverXboxController = new DriverXboxController();
         ControlManager.registerController(driverXboxController);
+        DriverJoysticksController driverJoysticksController = new DriverJoysticksController();
+        ControlManager.registerController(driverJoysticksController);
         DriverLeftJoysticksController driverLeftJoysticksController = new DriverLeftJoysticksController();
         ControlManager.registerController(driverLeftJoysticksController);
 
@@ -82,6 +85,5 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         //returns what autonomous path is chosen in shuffleboard currently
         return autoChooser.getSelected();
-        //return new PathPlannerAuto("Test Auto");
     }
 }
