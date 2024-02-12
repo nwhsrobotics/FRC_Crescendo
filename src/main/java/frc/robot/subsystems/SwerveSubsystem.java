@@ -312,34 +312,17 @@ public class SwerveSubsystem extends SubsystemBase {
         // Update the robot's odometer
         //odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
         odometer.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(getHeading()), getModulePositions());
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            if(alliance.get() == DriverStation.Alliance.Red){
-                odometer.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), Timer.getFPGATimestamp());
-            } else {
-                odometer.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), Timer.getFPGATimestamp());
-            }
-        }
         //stddevs should be scaled to improve accuracy https://www.chiefdelphi.com/t/poseestimators-and-limelight-botpose/430334/3
         //TODO: https://docs.limelightvision.io/docs/docs-limelight/software-change-log
-        //TODO: For red alliance odometry update, still read the blue alliance botpose but flip it using GeometryUtil.flipFieldPose()
+        //GeometryUtil.flipFieldPose() actually not needed now that i think about it
         //upload the april tag build map to limelight https://downloads.limelightvision.io/models/frc2024.fmap (.fmap in it) also have uploaded it in robot directly
         //https://tools.limelightvision.io/map-builder
         LimelightHelpers.Results result =
         LimelightHelpers.getLatestResults("limelight").targetingResults;
-        if (!(result.botpose[0] == 0 && result.botpose[1] == 0) && alliance.isPresent()) {
-            if (alliance.get() == Alliance.Blue) {
-                //LimelightHelpers.toPose2D(result.botpose_wpiblue)
+        if (!(result.botpose[0] == 0 && result.botpose[1] == 0)) {
             odometer.addVisionMeasurement(
                 result.getBotPose2d_wpiBlue(),
                 Timer.getFPGATimestamp() - (result.latency_capture / 1000.0) - (result.latency_pipeline / 1000.0));
-            } else if (alliance.get() == Alliance.Red) {
-            // double[] botpose = LimelightHelpers.getBotPose_wpiBlue("limelight");
-            //GeometryUtil.flipFieldPose(LimelightHelpers.toPose2D(result.botpose_wpiblue)) this is wrong no need to flip just do blue alliance shouldnt even matter really
-            odometer.addVisionMeasurement(
-                LimelightHelpers.toPose2D(result.botpose_wpiblue),
-                Timer.getFPGATimestamp() - (result.latency_capture / 1000.0) - (result.latency_pipeline / 1000.0));
-            }
         }
 
         // Log position of robot.
