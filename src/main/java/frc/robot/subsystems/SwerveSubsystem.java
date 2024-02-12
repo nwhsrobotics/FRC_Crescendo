@@ -312,10 +312,10 @@ public class SwerveSubsystem extends SubsystemBase {
         // Update the robot's odometer
         //odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
         odometer.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(getHeading()), getModulePositions());
-        /*var alliance = DriverStation.getAlliance();
+        var alliance = DriverStation.getAlliance();
         if (alliance.isPresent()) {
             if(alliance.get() == DriverStation.Alliance.Red){
-                odometer.addVisionMeasurement(GeometryUtil.flipFieldPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight")), Timer.getFPGATimestamp());
+                odometer.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), Timer.getFPGATimestamp());
             } else {
                 odometer.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), Timer.getFPGATimestamp());
             }
@@ -335,11 +335,12 @@ public class SwerveSubsystem extends SubsystemBase {
                 Timer.getFPGATimestamp() - (result.latency_capture / 1000.0) - (result.latency_pipeline / 1000.0));
             } else if (alliance.get() == Alliance.Red) {
             // double[] botpose = LimelightHelpers.getBotPose_wpiBlue("limelight");
+            //GeometryUtil.flipFieldPose(LimelightHelpers.toPose2D(result.botpose_wpiblue)) this is wrong no need to flip just do blue alliance shouldnt even matter really
             odometer.addVisionMeasurement(
-                GeometryUtil.flipFieldPose(LimelightHelpers.toPose2D(result.botpose_wpiblue)),
+                LimelightHelpers.toPose2D(result.botpose_wpiblue),
                 Timer.getFPGATimestamp() - (result.latency_capture / 1000.0) - (result.latency_pipeline / 1000.0));
             }
-        }*/
+        }
 
         // Log position of robot.
         Logger.recordOutput("swerve.pose", getPose());
