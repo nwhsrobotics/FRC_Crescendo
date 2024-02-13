@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,9 +25,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw());
-        ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> {
-            swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative;
-        });
+        ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> {swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative;});
         ControlManager.DriverButtonCommands.toggleAutonavigationCommand = new InstantCommand(() -> swerveSubsystem.autonavigator.toggle());
         ControlManager.DriverButtonCommands.autonavigateToAmp = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.AMP));
         ControlManager.DriverButtonCommands.autonavigateToSource = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SOURCE));
@@ -45,6 +44,7 @@ public class RobotContainer {
         SendableChooser<Integer> driverControllerChooser = new SendableChooser<>();
         SendableChooser<Integer> gunnerControllerChooser = new SendableChooser<>();
 
+        
         for (String option : ControlManager.getControllerLabels(true)) {
             driverControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
         }
@@ -60,7 +60,7 @@ public class RobotContainer {
             }
         });
 
-
+        
         for (String option : ControlManager.getControllerLabels(false)) {
             gunnerControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
         }

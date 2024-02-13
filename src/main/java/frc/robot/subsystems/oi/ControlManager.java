@@ -53,8 +53,8 @@ public class ControlManager {
      * replacing the default placeholders.
      */
     public static class GunnerButtonCommands {
-        public static Command ampPreset = emptyButtonCommand;
-        public static Command sourcePreset = emptyButtonCommand;
+        public static Command ampPresetCommand = emptyButtonCommand;
+        public static Command sourcePresetCommand = emptyButtonCommand;
     }
 
     private static final HashMap<Integer, Controller> registry = new HashMap<>();
@@ -116,6 +116,17 @@ public class ControlManager {
         Logger.recordOutput("controlmanager.controller." + controller.getPort() + ".name", controller.getName());
     }
 
+    public static void registerGunnerController(Controller controller) {
+        if (ControlManager.registry.put(controller.getPort(), controller) != null) {
+            System.out.println("Achtung! Handler for OI overwrote controller registered for port " + controller.getPort() + ".");
+        }
+
+        GenericHID hid = controller.getGenericHID();
+        makeTriggerForButton(hid, controller.getPort(), controller.getAmpPresetButton(), GunnerButtonCommands.ampPresetCommand, false);
+        makeTriggerForButton(hid, controller.getPort(), controller.getSourcePresetButton(), GunnerButtonCommands.sourcePresetCommand, false);
+
+        Logger.recordOutput("controlmanager.gunner." + controller.getPort() + ".name", controller.getName());
+    }
 
     /**
      * Get the current port actively being used for driver inputs.

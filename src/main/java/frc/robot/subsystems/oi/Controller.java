@@ -236,4 +236,16 @@ public interface Controller {
     default boolean isBoosterPressed() {
         return false;
     }
+
+    default int getAmpPresetButton(){
+        return 0;
+    }
+
+    default int getSourcePresetButton(){
+        return 0;
+    }
+
+    default int getGroundIntakeToggleButton(){
+        return 0;
+    }
 }
