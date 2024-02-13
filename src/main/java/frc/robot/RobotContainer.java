@@ -13,12 +13,15 @@ import frc.robot.commands.SwerveJoystickDefaultCmd;
 import frc.robot.controllers.DriverJoysticksController;
 import frc.robot.controllers.DriverLeftJoysticksController;
 import frc.robot.controllers.DriverXboxController;
+import frc.robot.controllers.GunnerXboxController;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.oi.ControlManager;
 
 public class RobotContainer {
     //intialization of different subsystems and commands
     public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    //public final ArmSubsystem armSubsystem = new ArmSubsystem();
 
     //object for presenting selection of options in shuffleboard/ smartdashboard
     SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -44,7 +47,9 @@ public class RobotContainer {
         SendableChooser<Integer> driverControllerChooser = new SendableChooser<>();
         SendableChooser<Integer> gunnerControllerChooser = new SendableChooser<>();
 
-        
+        GunnerXboxController gunnerXboxController = new GunnerXboxController();
+        ControlManager.registerGunnerController(gunnerXboxController);
+        //ControlManager.GunnerButtonCommands.ampPresetCommand = new InstantCommand(() -> armSubsystem.ampPreset());
         for (String option : ControlManager.getControllerLabels(true)) {
             driverControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
         }
