@@ -1,5 +1,9 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -12,7 +16,9 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.util.GeometryUtil;
 
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
@@ -129,7 +135,17 @@ public class Robot extends LoggedRobot {
             autonomousCommand.cancel();
         }
 
+        //this also works for resetting odometry while flipped 
         new PathPlannerAuto("Starting Point").schedule();
+        //but below this is a better option for restting odometry especially with dynamic positions with vision
+
+        //TODO: Pathplanner always sets blue alliance middle as 0, 0 for odometry and always bases odometry origin at that position therefore we need to flip like this for red alliance
+        /*var alliance = DriverStation.getAlliance();
+        if(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red){
+            robotContainer.swerveSubsystem.resetOdometry(GeometryUtil.flipFieldPose(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point")));
+        } else {
+            robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point")); 
+        }*/
     }
 
     /**
