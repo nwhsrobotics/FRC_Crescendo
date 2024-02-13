@@ -4,6 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.GeometryUtil;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,10 +18,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.DriveConstants;
@@ -308,32 +312,18 @@ public class SwerveSubsystem extends SubsystemBase {
         // Update the robot's odometer
         //odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
         odometer.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(getHeading()), getModulePositions());
-        //var alliance = DriverStation.getAlliance();
-        /*if (alliance.isPresent()) {
-            if(alliance.get() == DriverStation.Alliance.Red){
-                odometer.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiRed("Limelight"), Timer.getFPGATimestamp());
-            } else {
-                odometer.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("Limelight"), Timer.getFPGATimestamp());
-            }
-        }
         //stddevs should be scaled to improve accuracy https://www.chiefdelphi.com/t/poseestimators-and-limelight-botpose/430334/3
-        //TODO: https://docs.limelightvision.io/docs/docs-limelight/software-change-log 
+        //TODO: https://docs.limelightvision.io/docs/docs-limelight/software-change-log
+        //GeometryUtil.flipFieldPose() actually not needed now that i think about it
         //upload the april tag build map to limelight https://downloads.limelightvision.io/models/frc2024.fmap (.fmap in it) also have uploaded it in robot directly
+        //https://tools.limelightvision.io/map-builder
         LimelightHelpers.Results result =
         LimelightHelpers.getLatestResults("limelight").targetingResults;
-        if (!(result.botpose[0] == 0 && result.botpose[1] == 0) && alliance.isPresent()) {
-            if (alliance.get() == Alliance.Blue) {
-                //LimelightHelpers.toPose2D(result.botpose_wpiblue)
+        if (!(result.botpose[0] == 0 && result.botpose[1] == 0)) {
             odometer.addVisionMeasurement(
                 result.getBotPose2d_wpiBlue(),
                 Timer.getFPGATimestamp() - (result.latency_capture / 1000.0) - (result.latency_pipeline / 1000.0));
-            } else if (alliance.get() == Alliance.Red) {
-            // double[] botpose = LimelightHelpers.getBotPose_wpiRed("limelight");
-            odometer.addVisionMeasurement(
-                LimelightHelpers.toPose2D(result.botpose_wpired),
-                Timer.getFPGATimestamp() - (result.latency_capture / 1000.0) - (result.latency_pipeline / 1000.0));
-            }
-        }*/
+        }
 
         // Log position of robot.
         Logger.recordOutput("swerve.pose", getPose());
