@@ -14,7 +14,7 @@ public class DriverXboxController implements Controller {
 
     private static final SlewRateLimiter speedCoefficientSlewRateLimiter = new SlewRateLimiter(0.9);
 
-    private static final double adjustSpeedAfterDeadband(double value, double deadband) {
+    private static double adjustSpeedAfterDeadband(double value, double deadband) {
         double speed = Controller.calculateSpeedWithDeadband(value, deadband) * 1.5;
 
         if (speed > 0) {

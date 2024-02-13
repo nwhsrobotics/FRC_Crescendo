@@ -13,11 +13,11 @@ import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
-    private CANSparkMax shoulderMotor;
-    private SparkPIDController shoulderPidController;
-    private RelativeEncoder shoulderRelativeEncoder;
-    private double ampPosition = 104; //Measured from cad, rounded to the nearest whole number
-    private double sourcePosition = 40; //Measured from cad, rounded to the nearest whole number
+    private final CANSparkMax shoulderMotor;
+    private final SparkPIDController shoulderPidController;
+    private final RelativeEncoder shoulderRelativeEncoder;
+    private final double ampPosition = 104; //Measured from cad, rounded to the nearest whole number
+    private final double sourcePosition = 40; //Measured from cad, rounded to the nearest whole number
     private double desiredPosition = 0; //set the arms angle at this degree
     private double currentPosition;
     private boolean autoLockEnabledAmp = false;

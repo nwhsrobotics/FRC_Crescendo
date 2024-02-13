@@ -261,7 +261,7 @@ public class ControlManager {
      * @return - integer ID for port.
      */
     public static int getControllerPortFromLabel(String label) {
-        return Integer.valueOf(label.split(" - ")[0]);
+        return Integer.parseInt(label.split(" - ")[0]);
     }
 
     /**
