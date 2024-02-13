@@ -27,6 +27,7 @@ public class RobotContainer {
     SendableChooser<Command> autoChooser = new SendableChooser<>();
 
     public RobotContainer() {
+        //register all commands for driver controller
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw());
         ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> {swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative;});
         ControlManager.DriverButtonCommands.toggleAutonavigationCommand = new InstantCommand(() -> swerveSubsystem.autonavigator.toggle());
@@ -37,6 +38,7 @@ public class RobotContainer {
         ControlManager.DriverButtonCommands.autonavigateToMidStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.MIDSTAGE));
         ControlManager.DriverButtonCommands.autonavigateToBottomStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.BOTTOMSTAGE));
 
+        //register all potential driver controllers
         DriverXboxController driverXboxController = new DriverXboxController();
         ControlManager.registerController(driverXboxController);
         DriverJoysticksController driverJoysticksController = new DriverJoysticksController();
@@ -47,9 +49,12 @@ public class RobotContainer {
         SendableChooser<Integer> driverControllerChooser = new SendableChooser<>();
         SendableChooser<Integer> gunnerControllerChooser = new SendableChooser<>();
 
+        //register all potential gunner controllers 
         GunnerXboxController gunnerXboxController = new GunnerXboxController();
         ControlManager.registerGunnerController(gunnerXboxController);
+        //register all commands for gunner controller
         //ControlManager.GunnerButtonCommands.ampPresetCommand = new InstantCommand(() -> armSubsystem.ampPreset());
+        //show all options for all driver controllers in shufftleboard
         for (String option : ControlManager.getControllerLabels(true)) {
             driverControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
         }
@@ -65,7 +70,7 @@ public class RobotContainer {
             }
         });
 
-        
+        //show all options for all gunner controllers in shufftleboard
         for (String option : ControlManager.getControllerLabels(false)) {
             gunnerControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
         }
@@ -81,6 +86,7 @@ public class RobotContainer {
             }
         });
 
+        //put all the options
         SmartDashboard.putData("Driver Controllers", driverControllerChooser);
         SmartDashboard.putData("Gunner Controllers", gunnerControllerChooser);
 
