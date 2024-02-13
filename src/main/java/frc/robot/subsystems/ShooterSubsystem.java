@@ -22,14 +22,14 @@ public class ShooterSubsystem extends SubsystemBase {
     public double flywheelRPM = 0;
 
     public ShooterSubsystem() {
-        this.flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
-        this.flywheelEncoder = this.flywheelMotor.getEncoder();
-        this.flywheelPidController = this.flywheelMotor.getPIDController();
-        this.flywheelPidController.setP(Constants.ShooterConstants.FLYWHEEL_PID_P);
+        flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
+        flywheelEncoder = flywheelMotor.getEncoder();
+        flywheelPidController = flywheelMotor.getPIDController();
+        flywheelPidController.setP(Constants.ShooterConstants.FLYWHEEL_PID_P);
 
-        this.indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
-        this.indexPidController = this.indexMotor.getPIDController();
-        this.indexPidController.setP(Constants.ShooterConstants.INDEX_PID_P);
+        indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
+        indexPidController = indexMotor.getPIDController();
+        indexPidController.setP(Constants.ShooterConstants.INDEX_PID_P);
     }
 
     /**
@@ -38,9 +38,9 @@ public class ShooterSubsystem extends SubsystemBase {
      * @return - boolean representing whether the flywheel is ready.
      */
     public boolean isFlywheelReady() {
-        double lower = this.flywheelRPM - Constants.ShooterConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
-        double upper = this.flywheelRPM + Constants.ShooterConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
-        double x = this.flywheelEncoder.getVelocity();
+        double lower = flywheelRPM - Constants.ShooterConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
+        double upper = flywheelRPM + Constants.ShooterConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
+        double x = flywheelEncoder.getVelocity();
 
         return x >= lower && x <= upper;
     }
@@ -51,17 +51,17 @@ public class ShooterSubsystem extends SubsystemBase {
      * The flywheel must be spinning in order for the periodic to process the action.
      */
     public void stepIndex() {
-        this.targetPosition += Constants.ShooterConstants.INDEX_STEP_ROTATIONS;
+        targetPosition += Constants.ShooterConstants.INDEX_STEP_ROTATIONS;
     }
 
     @Override
     public void periodic() {
-        this.flywheelPidController.setReference(this.flywheelRPM, ControlType.kVelocity);
+        flywheelPidController.setReference(flywheelRPM, ControlType.kVelocity);
 
         if (!isFlywheelReady()) {
-            this.indexMotor.stopMotor();
+            indexMotor.stopMotor();
         } else {
-            this.indexPidController.setReference(this.targetPosition, ControlType.kPosition);
+            indexPidController.setReference(targetPosition, ControlType.kPosition);
         }
     }
 }

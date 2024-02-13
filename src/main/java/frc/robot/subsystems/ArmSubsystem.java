@@ -19,7 +19,7 @@ public class ArmSubsystem extends SubsystemBase {
     private double ampPosition = 104; //Measured from cad, rounded to the nearest whole number
     private double sourcePosition = 40; //Measured from cad, rounded to the nearest whole number
     private double desiredPosition = 0; //set the arms angle at this degree
-    private double currentPosition = this.shoulderRelativeEncoder.getPosition();
+    private double currentPosition;
     private boolean autoLockEnabledAmp = false;
     private boolean autoLockEnabledSource = false;
     
@@ -32,10 +32,11 @@ public class ArmSubsystem extends SubsystemBase {
      * Creates a new ArmSubsystem.
      */
     public ArmSubsystem() {
-        this.shoulderMotor = new CANSparkMax(Constants.CANAssignments.SHOULDER_MOTOR_ID, MotorType.kBrushless);
-        this.shoulderRelativeEncoder = this.shoulderMotor.getEncoder();
-        this.shoulderPidController = this.shoulderMotor.getPIDController();
-        this.shoulderPidController.setP(Constants.ArmConstants.SHOULDER_PID_P);
+        shoulderMotor = new CANSparkMax(Constants.CANAssignments.SHOULDER_MOTOR_ID, MotorType.kBrushless);
+        shoulderRelativeEncoder = shoulderMotor.getEncoder();
+        shoulderPidController = shoulderMotor.getPIDController();
+        shoulderPidController.setP(Constants.ArmConstants.SHOULDER_PID_P);
+        currentPosition = shoulderRelativeEncoder.getPosition();
 
     }
 
@@ -48,7 +49,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void ampPreset(){
         
         if(autoLockEnabledAmp){
-        desiredPosition = (ampPosition/360) * ArmConstants.SHOULDER_GEAR_RATIO;
+            desiredPosition = (ampPosition/360) * ArmConstants.SHOULDER_GEAR_RATIO;
         }
 
     }
@@ -56,7 +57,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void sourcePreset(){
         
         if(autoLockEnabledSource){
-           desiredPosition = (sourcePosition/360) * ArmConstants.SHOULDER_GEAR_RATIO; 
+            desiredPosition = (sourcePosition/360) * ArmConstants.SHOULDER_GEAR_RATIO; 
         }
 
         
@@ -75,7 +76,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        this.shoulderPidController.setReference(this.desiredPosition, ControlType.kPosition);
+        shoulderPidController.setReference(desiredPosition, ControlType.kPosition);
 
 
 
