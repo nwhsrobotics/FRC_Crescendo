@@ -100,6 +100,9 @@ public class SwerveSubsystem extends SubsystemBase {
             new Pose2d(),
             VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(18)),
             VecBuilder.fill(0.9, 0.9, Units.degreesToRadians(162)));
+    //The default standard deviations of the module states are 0.1 meters for x, 0.1 meters for y, and 0.1 radians for heading. 
+    //The default standard deviations of the vision measurements are 0.9 meters for x, 0.9 meters for y, and 0.9 radians for heading.
+    //Decrease standard deviations to trust the data more (rn the vision is mostly insignificant compared to module state)
 
     /**
      * Constructor for the SwerveSubsystem class.
@@ -176,6 +179,9 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /**
+     * DON'T USE THIS WILL BREAK PATHPLANNER
+     * <p>
+     *
      * Reset the heading (yaw) and the odometry pose of the robot.
      */
     public void resetHeadingAndPose() {
@@ -210,6 +216,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /**
+     * MAKE SURE TO FLIP POSTION IF NEEDED GeometryUtil.flipFieldPose
+     * <p>
      * Reset the odometry with the specified pose.
      *
      * @param pose The desired pose for resetting odometry.
@@ -295,7 +303,6 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return - scheduled pathfinding command.
      */
     public Command pathfindToPosition(Pose2d position) {
-        //TODO: Better than pathfindToPose????
         Command command = AutoBuilder.pathfindToPoseFlipped(
                 position,
                 OIConstants.kPathfindingConstraints,
