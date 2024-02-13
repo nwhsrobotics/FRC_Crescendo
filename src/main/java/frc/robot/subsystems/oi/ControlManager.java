@@ -46,33 +46,21 @@ public class ControlManager {
         public static Command autonavigateToBottomStage = emptyButtonCommand;
     }
 
-    /**
-     * Commands that are to be bound to button presses made by the gunner.
-     * <p>
-     * These should be overwritten during robot initialization,
-     * replacing the default placeholders.
-     */
-    public static class GunnerButtonCommands {
-        public static Command ampPresetCommand = emptyButtonCommand;
-        public static Command sourcePresetCommand = emptyButtonCommand;
-    }
-
     private static final HashMap<Integer, Controller> registry = new HashMap<>();
     private static int driverPort = -1;
-    private static int gunnerPort = -2;
+    private static int reservedPort = -2;
 
     /**
-     * Generates a "Trigger" for a command to be bound to a button (defined in "DriverButtonCommands" and "GunnerButtonCommands").
+     * Generates a "Trigger" for a command to be bound to a button (defined in "DriverButtonCommands").
      * <p>
      * The command will not executed by the Trigger,
-     * unless the port of the driver/gunner controller it is associated with is currently selected to be active.
+     * unless the port of the driver controller it is associated with is currently selected to be active.
      * <p>
      * Internal use only.
      *
      * @param hid             - "GenericHID" of the controller.
      * @param port            - the port of associated controller.
      * @param command         - the command to be executed when the button is pressed.
-     * @param isCommandDriver - whether the command is for the driver or gunner.
      */
     private static void makeTriggerForButton(GenericHID hid, int port, int button, Command command, boolean isCommandDriver) {
         if (button == -1) {  // -1 means it should not be bound.
@@ -80,12 +68,26 @@ public class ControlManager {
         }
 
         new Trigger(() -> hid.getRawButton(button)).onTrue(new InstantCommand(() -> {
-            if ((isCommandDriver && port != driverPort) || (!isCommandDriver && port != gunnerPort)) {
+            if (port != driverPort) {
                 return;
             }
 
             command.schedule();
         }));
+    }
+
+    /**
+     * Reserve a controller (for the gunner, which is not managed by ControlManager).
+     * <p>
+     * If the port is already registered, this method will silently do nothing.
+     * Be sure to call this method before controller registration.
+     * 
+     * @param port - port of the reserved controller.
+     */
+    public static void reserveController(int port) {
+        if (registry.get(port) != null) {
+            ControlManager.reservedPort = port;
+        }
     }
 
     /**
@@ -98,6 +100,11 @@ public class ControlManager {
      * @param controller - controller being registered.
      */
     public static void registerController(Controller controller) {
+        if (controller.getPort() == ControlManager.reservedPort) {
+            System.out.println("Achtung! Handler for OI dropped controller registered for already reserved port " + controller.getPort() + ".");
+            return;
+        }
+
         if (ControlManager.registry.put(controller.getPort(), controller) != null) {
             System.out.println("Achtung! Handler for OI overwrote controller registered for port " + controller.getPort() + ".");
         }
@@ -116,18 +123,6 @@ public class ControlManager {
         Logger.recordOutput("controlmanager.controller." + controller.getPort() + ".name", controller.getName());
     }
 
-    public static void registerGunnerController(Controller controller) {
-        if (ControlManager.registry.put(controller.getPort(), controller) != null) {
-            System.out.println("Achtung! Handler for OI overwrote controller registered for port " + controller.getPort() + ".");
-        }
-
-        GenericHID hid = controller.getGenericHID();
-        makeTriggerForButton(hid, controller.getPort(), controller.getAmpPresetButton(), GunnerButtonCommands.ampPresetCommand, false);
-        makeTriggerForButton(hid, controller.getPort(), controller.getSourcePresetButton(), GunnerButtonCommands.sourcePresetCommand, false);
-
-        Logger.recordOutput("controlmanager.gunner." + controller.getPort() + ".name", controller.getName());
-    }
-
     /**
      * Get the current port actively being used for driver inputs.
      *
@@ -142,12 +137,12 @@ public class ControlManager {
      * <p>
      * This method will be non-fatally unsuccessful,
      * if no controller is registered with the new port,
-     * or if the controller is already being used by the gunner.
+     * or if the controller is reserved.
      *
      * @return - boolean for whether change was successful.
      */
     public static boolean setDriverPort(int port) {
-        if (ControlManager.registry.get(port) == null || port == ControlManager.gunnerPort) {
+        if (ControlManager.registry.get(port) == null || port == ControlManager.reservedPort) {
             return false;
         }
 
@@ -157,48 +152,14 @@ public class ControlManager {
     }
 
     /**
-     * Get the current port actively being used for gunner inputs.
-     *
-     * @return - integer ID for port.
-     */
-    public static int getGunnerPort() {
-        return ControlManager.gunnerPort;
-    }
-
-    /**
-     * Set the current port actively being used for gunner inputs.
-     * <p>
-     * This method will be non-fatally unsuccessful,
-     * if no controller is registered with the new port,
-     * or if the controller is already being used by the driver.
-     *
-     * @return - boolean for whether change was successful.
-     */
-    public static boolean setGunnerPort(int port) {
-        if (ControlManager.registry.get(port) == null || port == ControlManager.driverPort) {
-            return false;
-        }
-
-        ControlManager.gunnerPort = port;
-
-        return true;
-    }
-
-    /**
      * Get list of available controllers.
      *
-     * @param areDrivers - whether to filter the list for only driver-enabled or gunner-enabled controllers.
      * @return - list of integer IDs for controller ports.
      */
-    public static ArrayList<Integer> getControllers(boolean areDrivers) {
+    public static ArrayList<Integer> getControllers() {
         ArrayList<Integer> controllers = new ArrayList<>();
 
         for (int port : ControlManager.registry.keySet()) {
-            Controller controller = ControlManager.registry.get(port);
-            if (areDrivers && controller.getIntendedUser() > 0 || !areDrivers && controller.getIntendedUser() < 0) {
-                continue;
-            }
-
             controllers.add(port);
         }
 
@@ -210,11 +171,10 @@ public class ControlManager {
      * <p>
      * If no controllers are available, -1 is returned.
      *
-     * @param isDriver - whether the controller is driver-enabled or gunner-enabled.
      * @return - integer ID for controller port.
      */
-    public static int getControllerLowest(boolean isDriver) {
-        ArrayList<Integer> controllers = getControllers(false);
+    public static int getControllerLowest() {
+        ArrayList<Integer> controllers = getControllers();
 
         if (controllers.size() <= 0) {
             return -1;
@@ -244,11 +204,10 @@ public class ControlManager {
     /**
      * Get list of labels of available controllers.
      *
-     * @param areDrivers - whether to filter the list for only driver-enabled or gunner-enabled controllers.
      * @return - list of labels for controllers.
      */
-    public static ArrayList<String> getControllerLabels(boolean areDrivers) {
-        return (ArrayList<String>) ControlManager.getControllers(areDrivers)
+    public static ArrayList<String> getControllerLabels() {
+        return (ArrayList<String>) ControlManager.getControllers()
                 .stream()
                 .map(port -> ControlManager.getControllerLabel(port))
                 .collect(Collectors.toList());
@@ -283,6 +242,10 @@ public class ControlManager {
             return;
         }
 
+        Logger.recordOutput("controlmanager.outputs.xspeed", ControlManager.Outputs.xSpeed);
+        Logger.recordOutput("controlmanager.outputs.yspeed", ControlManager.Outputs.ySpeed);
+        Logger.recordOutput("controlmanager.outputs.rotatingspeed", ControlManager.Outputs.rotatingSpeed);
+
         if (!driverController.isBoosterPressed()) {
             double val = driverController.getSpeedCoefficient();
             ControlManager.Outputs.xSpeed = OIConstants.xLimiter.calculate(driverController.getX() * val * OIConstants.kTeleDriveMaxSpeedMetersPerSecond);
@@ -292,22 +255,6 @@ public class ControlManager {
             ControlManager.Outputs.xSpeed = driverController.getX() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
             ControlManager.Outputs.ySpeed = driverController.getY() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
             ControlManager.Outputs.rotatingSpeed = driverController.getZ() * DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
-        }
-    }
-
-    /**
-     * Process inputs for the gunner controls.
-     * <p>
-     * Should be called repeatedly in a periodic function.
-     */
-    public static void processGunner() {
-        Logger.recordOutput("controlmanager.gunner.port", ControlManager.gunnerPort);
-
-        Controller gunnerController = ControlManager.registry.get(ControlManager.gunnerPort);
-        if (gunnerController == null) {
-            // insert calls here to set outputs that stow the gunner mechanisms safely.
-
-            System.out.println("Achtung! Failed to get gunner controller!");
         }
     }
 }

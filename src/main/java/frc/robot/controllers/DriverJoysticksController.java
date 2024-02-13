@@ -26,11 +26,6 @@ public class DriverJoysticksController implements Controller {
     }
 
     @Override
-    public int getIntendedUser() {
-        return -1;
-    }
-
-    @Override
     public double getX() {
         return Controller.calculateSpeedWithDeadband(-joystickControl.getY(), kXYDeadband);
     }
