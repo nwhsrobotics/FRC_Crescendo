@@ -42,11 +42,6 @@ public class DriverXboxController implements Controller {
     }
 
     @Override
-    public int getIntendedUser() {
-        return -1;
-    }
-
-    @Override
     public double getX() {
         return DriverXboxController.adjustSpeedAfterDeadband(-xboxController.getLeftY(), kXYDeadband);
     }
