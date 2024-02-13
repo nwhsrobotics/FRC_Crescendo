@@ -1,33 +1,35 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.FavoritePositions;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
-import frc.robot.controllers.DriverJoysticksController;
-import frc.robot.controllers.DriverLeftJoysticksController;
-import frc.robot.controllers.DriverXboxController;
-import frc.robot.controllers.GunnerXboxController;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.controllers.*;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.oi.ControlManager;
 
 public class RobotContainer {
-    //intialization of different subsystems and commands
     public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     //public final ArmSubsystem armSubsystem = new ArmSubsystem();
-
     //object for presenting selection of options in shuffleboard/ smartdashboard
-    SendableChooser<Command> autoChooser = new SendableChooser<>();
+    SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
 
     public RobotContainer() {
-        //register all commands for driver controller
+        configureDriverCommands();
+        configureDriverControllers();
+        configureGunnerCommands();
+        configureGunnerControllers();
+        configureControllerChooser(true, "Driver Controllers");
+        configureControllerChooser(false, "Gunner Controllers");
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+        swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
+    }
+
+    private void configureDriverCommands() {
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw());
         ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> {swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative;});
         ControlManager.DriverButtonCommands.toggleAutonavigationCommand = new InstantCommand(() -> swerveSubsystem.autonavigator.toggle());
@@ -37,68 +39,43 @@ public class RobotContainer {
         ControlManager.DriverButtonCommands.autonavigateToTopStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.TOPSTAGE));
         ControlManager.DriverButtonCommands.autonavigateToMidStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.MIDSTAGE));
         ControlManager.DriverButtonCommands.autonavigateToBottomStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.BOTTOMSTAGE));
+    }
 
-        //register all potential driver controllers
-        DriverXboxController driverXboxController = new DriverXboxController();
-        ControlManager.registerController(driverXboxController);
-        DriverJoysticksController driverJoysticksController = new DriverJoysticksController();
-        ControlManager.registerController(driverJoysticksController);
-        DriverLeftJoysticksController driverLeftJoysticksController = new DriverLeftJoysticksController();
-        ControlManager.registerController(driverLeftJoysticksController);
-
-        SendableChooser<Integer> driverControllerChooser = new SendableChooser<>();
-        SendableChooser<Integer> gunnerControllerChooser = new SendableChooser<>();
-
-        //register all potential gunner controllers 
-        GunnerXboxController gunnerXboxController = new GunnerXboxController();
-        ControlManager.registerGunnerController(gunnerXboxController);
-        //register all commands for gunner controller
+    private void configureGunnerCommands(){
         //ControlManager.GunnerButtonCommands.ampPresetCommand = new InstantCommand(() -> armSubsystem.ampPreset());
-        //show all options for all driver controllers in shufftleboard
-        for (String option : ControlManager.getControllerLabels(true)) {
-            driverControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
+    }
+
+    private void configureDriverControllers() {
+        ControlManager.registerController(new DriverXboxController());
+        ControlManager.registerController(new DriverJoysticksController());
+        ControlManager.registerController(new DriverLeftJoysticksController());
+    }
+
+    private void configureGunnerControllers() {
+        ControlManager.registerGunnerController(new GunnerXboxController());
+    }
+
+    private void configureControllerChooser(boolean isDriver, String name) {
+        SendableChooser<Integer> controllerChooser = new SendableChooser<>();
+        for (String option : ControlManager.getControllerLabels(isDriver)) {
+            controllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
         }
-        int defaultDriverControllerPort = ControlManager.getControllerLowest(true);
-        if (defaultDriverControllerPort != -1) {
-            driverControllerChooser.setDefaultOption(ControlManager.getControllerLabel(defaultDriverControllerPort), defaultDriverControllerPort);
+        int defaultPort = ControlManager.getControllerLowest(isDriver);
+        if (defaultPort != -1) {
+            controllerChooser.setDefaultOption(ControlManager.getControllerLabel(defaultPort), defaultPort);
         } else {
-            driverControllerChooser.setDefaultOption("None", -1);
+            controllerChooser.setDefaultOption("None", -1);
         }
-        driverControllerChooser.onChange((port) -> {
+        controllerChooser.onChange((port) -> {
             if (port != null) {
-                ControlManager.setDriverPort(port);
+                if (isDriver) ControlManager.setDriverPort(port);
+                else ControlManager.setGunnerPort(port);
             }
         });
-
-        //show all options for all gunner controllers in shufftleboard
-        for (String option : ControlManager.getControllerLabels(false)) {
-            gunnerControllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
-        }
-        int defaultGunnerControllerPort = ControlManager.getControllerLowest(false);
-        if (defaultGunnerControllerPort != -1) {
-            gunnerControllerChooser.setDefaultOption(ControlManager.getControllerLabel(defaultGunnerControllerPort), defaultGunnerControllerPort);
-        } else {
-            gunnerControllerChooser.setDefaultOption("None", -1);
-        }
-        gunnerControllerChooser.onChange((port) -> {
-            if (port != null) {
-                ControlManager.setGunnerPort(port);
-            }
-        });
-
-        //put all the options
-        SmartDashboard.putData("Driver Controllers", driverControllerChooser);
-        SmartDashboard.putData("Gunner Controllers", gunnerControllerChooser);
-
-        autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
-        SmartDashboard.putData("Auto Chooser", autoChooser);
-        //CameraServer.startAutomaticCapture();
-
-        swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
+        SmartDashboard.putData(name, controllerChooser);
     }
 
     public Command getAutonomousCommand() {
-        //returns what autonomous path is chosen in shuffleboard currently
         return autoChooser.getSelected();
     }
 }
