@@ -1,6 +1,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -78,6 +80,7 @@ public class RobotContainer {
 
         autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
         SmartDashboard.putData("Auto Chooser", autoChooser);
+        //CameraServer.startAutomaticCapture();
 
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
     }

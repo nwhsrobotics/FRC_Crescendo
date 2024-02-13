@@ -28,6 +28,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
+
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -317,6 +319,7 @@ public class SwerveSubsystem extends SubsystemBase {
         //GeometryUtil.flipFieldPose() actually not needed now that i think about it
         //upload the april tag build map to limelight https://downloads.limelightvision.io/models/frc2024.fmap (.fmap in it) also have uploaded it in robot directly
         //https://tools.limelightvision.io/map-builder
+        //LimelightHelpers.setPipelineIndex("limelight", 0);
         LimelightHelpers.Results result =
         LimelightHelpers.getLatestResults("limelight").targetingResults;
         if (!(result.botpose[0] == 0 && result.botpose[1] == 0)) {
