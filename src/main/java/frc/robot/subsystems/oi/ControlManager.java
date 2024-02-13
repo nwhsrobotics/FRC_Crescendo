@@ -53,6 +53,8 @@ public class ControlManager {
      * replacing the default placeholders.
      */
     public static class GunnerButtonCommands {
+        public static Command ampPreset = emptyButtonCommand;
+        public static Command sourcePreset = emptyButtonCommand;
     }
 
     private static final HashMap<Integer, Controller> registry = new HashMap<>();
@@ -113,6 +115,7 @@ public class ControlManager {
 
         Logger.recordOutput("controlmanager.controller." + controller.getPort() + ".name", controller.getName());
     }
+
 
     /**
      * Get the current port actively being used for driver inputs.
@@ -289,7 +292,7 @@ public class ControlManager {
     public static void processGunner() {
         Logger.recordOutput("controlmanager.gunner.port", ControlManager.gunnerPort);
 
-        Controller gunnerController = ControlManager.registry.get(ControlManager.driverPort);
+        Controller gunnerController = ControlManager.registry.get(ControlManager.gunnerPort);
         if (gunnerController == null) {
             // insert calls here to set outputs that stow the gunner mechanisms safely.
 
