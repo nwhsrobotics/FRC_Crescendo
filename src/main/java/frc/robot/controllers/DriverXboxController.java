@@ -58,17 +58,11 @@ public class DriverXboxController implements Controller {
 
     @Override
     public double getSpeedCoefficient() {
-        /*if(xboxController.getLeftTriggerAxis() > xboxController.getRightTriggerAxis()) {
-            return -xboxController.getLeftTriggerAxis() * 0.8 + 1.0;
-        }
-        return -xboxController.getRightTriggerAxis() * 0.8 + 1.0;*/
-        //equation range from 0.2 to 1.0
         return -speedCoefficientSlewRateLimiter.calculate(xboxController.getLeftTriggerAxis()) * 0.65 + 1.0;
     }
 
     @Override
     public boolean isBoosterPressed() {
-        //return xboxController.getRightBumper() || xboxController.getLeftBumper();
         return xboxController.getRightTriggerAxis() > 0.1;
     }
 
