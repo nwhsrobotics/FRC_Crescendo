@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3037929703091549,
-      "y": 5.574208757234479
+      "x": 0.8539035259888702,
+      "y": 4.52444177615628
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 1"
+            "pathName": "[C] [2 Note] 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 2"
+            "pathName": "[C] [2 Note] 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[C] [2 Note] 3"
           }
         }
       ]
