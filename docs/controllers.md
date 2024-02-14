@@ -1,6 +1,10 @@
 # Controllers
 Under `frc.robot.subsystems.oi` is the pseudo-singleton class `ControlManager`, and the interface `Controller`.
 
+> /!\
+>
+> `ControlManager` and the `Controller` abstraction no longer handle gunner inputs.
+
 This document explains the purpose and implementation of `ControlManager`, along with how to utilize the `Controller` interface to implement custom controllers, and also how to extend operator inputs.
 
 ## Primer

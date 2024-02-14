@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 /**
  * Controller usable as an operator interface,
  * that can be registered with the "ControlManager."
- * <p>
- * See "getIntendedUser()" for guidance on specializing in either driver or gunner bindings.
  */
 public interface Controller {
     /**
@@ -33,33 +31,12 @@ public interface Controller {
      * Get name of controller.
      * <p>
      * This determines the label that will appear, in the selectors on the driver station,
-     * for which port is actively being used for the driver or gunner inputs.
+     * for which port is actively being used.
      *
      * @return - name of controller.
      */
     default String getName() {
         return "Unnamed Controller";
-    }
-
-    /**
-     * Get what bindings this controller has,
-     * determining which user it is intended for.
-     * <p>
-     * The selectors on the driver station will hide controllers that lack appropriate bindings,
-     * for driver and gunner inputs respectively.
-     * <p>
-     * If a controller is selected to be actively used for the driver's input,
-     * methods for gunner-side inputs will be ignored.
-     * Vice versa if the controller is selected to be actively used for the gunner's input.
-     * <p>
-     * If you are implementing a controller that only has either driver or gunner inputs,
-     * then leave extraneous methods to use default implementations.
-     * Mandatory methods do not have default implementations.
-     *
-     * @return - integer; negative indicates driver, positive indicates gunner, zero indicates both.
-     */
-    default int getIntendedUser() {
-        return 0;
     }
 
     /**
@@ -222,7 +199,6 @@ public interface Controller {
     default double getSpeedCoefficient() {
         return 1.0;
     }
-
 
     /**
      * Get whether the operator wishes to boost.

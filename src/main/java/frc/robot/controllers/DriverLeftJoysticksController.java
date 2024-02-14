@@ -26,11 +26,6 @@ public class DriverLeftJoysticksController implements Controller {
     }
 
     @Override
-    public int getIntendedUser() {
-        return -1;
-    }
-
-    @Override
     public double getX() {
         return Controller.calculateSpeedWithDeadband(-joystickControl.getY(), kXYDeadband);
     }
@@ -53,11 +48,8 @@ public class DriverLeftJoysticksController implements Controller {
         //return (((-joystickControl.getRawAxis(3)+1)/2)+.2);
         //so this should work
         double val = ((-joystickControl.getRawAxis(3)+1)/2);
-        if(val < 0.2){
-            return 0.2;
-        } else {
-            return val;
-        }
+        //return values >= 0.2
+        return Math.max(val, 0.2);
         //this will also work and do the same thing (assiming 0.2 lower limit)
         //return (-joystickControl.getRawAxis(3)) * 0.5 + 0.5;
     }

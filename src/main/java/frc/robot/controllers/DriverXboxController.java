@@ -14,7 +14,7 @@ public class DriverXboxController implements Controller {
 
     private static final SlewRateLimiter speedCoefficientSlewRateLimiter = new SlewRateLimiter(0.9);
 
-    private static final double adjustSpeedAfterDeadband(double value, double deadband) {
+    private static double adjustSpeedAfterDeadband(double value, double deadband) {
         double speed = Controller.calculateSpeedWithDeadband(value, deadband) * 1.5;
 
         if (speed > 0) {
@@ -42,11 +42,6 @@ public class DriverXboxController implements Controller {
     }
 
     @Override
-    public int getIntendedUser() {
-        return -1;
-    }
-
-    @Override
     public double getX() {
         return DriverXboxController.adjustSpeedAfterDeadband(-xboxController.getLeftY(), kXYDeadband);
     }
@@ -63,17 +58,11 @@ public class DriverXboxController implements Controller {
 
     @Override
     public double getSpeedCoefficient() {
-        /*if(xboxController.getLeftTriggerAxis() > xboxController.getRightTriggerAxis()) {
-            return -xboxController.getLeftTriggerAxis() * 0.8 + 1.0;
-        }
-        return -xboxController.getRightTriggerAxis() * 0.8 + 1.0;*/
-        //equation range from 0.2 to 1.0
         return -speedCoefficientSlewRateLimiter.calculate(xboxController.getLeftTriggerAxis()) * 0.65 + 1.0;
     }
 
     @Override
     public boolean isBoosterPressed() {
-        //return xboxController.getRightBumper() || xboxController.getLeftBumper();
         return xboxController.getRightTriggerAxis() > 0.1;
     }
 
