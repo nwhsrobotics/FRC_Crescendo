@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3037929703091549,
-      "y": 5.574208757234479
+      "x": 1.3,
+      "y": 5.55
     },
     "rotation": 0
   },
@@ -12,15 +12,33 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "shootSpeakerCommand"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "[B] [2 Note] 1"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "groundPickupCommand"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "[B] [2 Note] 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootSpeakerCommand"
           }
         }
       ]
