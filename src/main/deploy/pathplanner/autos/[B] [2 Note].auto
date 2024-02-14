@@ -40,6 +40,18 @@
           "data": {
             "name": "shootSpeakerCommand"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "underStageCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[B] [2 Note] 3"
+          }
         }
       ]
     }
