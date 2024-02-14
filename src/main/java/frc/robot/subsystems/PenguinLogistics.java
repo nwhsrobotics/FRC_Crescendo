@@ -47,9 +47,9 @@ public class PenguinLogistics {
             return;
         }
 
-        this.enabled = true;
+        enabled = true;
 
-        Logger.recordOutput("autonavigator.enabled", this.enabled);
+        Logger.recordOutput("autonavigator.enabled", enabled);
     }
 
     /**
@@ -59,10 +59,10 @@ public class PenguinLogistics {
      */
     public void disable() {
         pauseNavigation();
-        this.navigationCommand = null;
-        this.enabled = false;
+        navigationCommand = null;
+        enabled = false;
 
-        Logger.recordOutput("autonavigator.enabled", this.enabled);
+        Logger.recordOutput("autonavigator.enabled", enabled);
     }
 
     /**
@@ -71,7 +71,7 @@ public class PenguinLogistics {
      * @return - boolean representing whether autonavigation is enabled.
      */
     public boolean isEnabled() {
-        return this.enabled;
+        return enabled;
     }
 
     /**
@@ -80,7 +80,7 @@ public class PenguinLogistics {
      * Calls ".enable()" if currently disabled, and calls ".disable()" if currently enabled.
      */
     public void toggle() {
-        if (this.enabled) {
+        if (enabled) {
             disable();
         } else {
             enable();
@@ -96,11 +96,11 @@ public class PenguinLogistics {
      * It is safe to execute this command if no autonavigation commmand is currently scheduled.
      */
     public void pauseNavigation() {
-        if (this.navigationCommand == null) {
+        if (navigationCommand == null) {
             return;
         }
 
-        this.navigationCommand.cancel();
+        navigationCommand.cancel();
     }
 
     /**
@@ -113,11 +113,11 @@ public class PenguinLogistics {
      * or if the autonavigation command is already scheduled.
      */
     public void resumeNavigation() {
-        if (this.navigationCommand == null || this.navigationCommand.isScheduled()) {
+        if (navigationCommand == null || navigationCommand.isScheduled()) {
             return;
         }
 
-        this.navigationCommand.schedule();
+        navigationCommand.schedule();
     }
 
     /**
@@ -132,15 +132,15 @@ public class PenguinLogistics {
      * @param destination - position to navigate to.
      */
     public void navigateTo(Pose2d destination) {
-        if (!this.enabled || !RobotState.isTeleop()) {
+        if (!enabled || !RobotState.isTeleop()) {
             return;
         }
 
-        if (this.navigationCommand != null && this.navigationCommand.isScheduled()) {
-            this.navigationCommand.cancel();
+        if (navigationCommand != null && navigationCommand.isScheduled()) {
+            navigationCommand.cancel();
         }
 
-        this.navigationCommand = this.swerve.pathfindToPosition(destination);
+        navigationCommand = swerve.pathfindToPosition(destination);
         Logger.recordOutput("autonavigator.destination", destination);
     }
 }

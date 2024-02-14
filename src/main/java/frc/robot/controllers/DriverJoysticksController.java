@@ -26,11 +26,6 @@ public class DriverJoysticksController implements Controller {
     }
 
     @Override
-    public int getIntendedUser() {
-        return -1;
-    }
-
-    @Override
     public double getX() {
         return Controller.calculateSpeedWithDeadband(-joystickControl.getY(), kXYDeadband);
     }
@@ -42,24 +37,16 @@ public class DriverJoysticksController implements Controller {
 
     @Override
     public double getZ() {
-        return Controller.calculateSpeedWithDeadband(-joystickControl.getTwist() * 0.5, kZDeadband);
+        return Controller.calculateSpeedWithDeadband(
+            -Math.signum(joystickControl.getTwist()) * Math.pow(joystickControl.getTwist(), 2),
+            kZDeadband
+        );
     }
 
     @Override
     public double getSpeedCoefficient() {
-        //this equation does not work....
-        //return (-joystickControl.getRawAxis(3)) * 0.3 + 0.5;
-        //the problem with this working equation below is the range is from 0.2 to 1.2 we want max to be 1.0 to avoid confusion
-        //return (((-joystickControl.getRawAxis(3)+1)/2)+.2);
-        //so this should work
         double val = ((-joystickControl.getRawAxis(3)+1)/2);
-        if(val < 0.2){
-            return 0.2;
-        } else {
-            return val;
-        }
-        //this will also work and do the same thing (assiming 0.2 lower limit)
-        //return (-joystickControl.getRawAxis(3)) * 0.5 + 0.5;
+        return Math.max(val, 0.2);
     }
 
     @Override

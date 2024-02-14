@@ -9,7 +9,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final CANSparkMax motor;
 
     public IntakeSubsystem() {
-        this.motor = new CANSparkMax(Constants.CANAssignments.INTAKE_MOTOR_ID, MotorType.kBrushless);
+        motor = new CANSparkMax(Constants.CANAssignments.INTAKE_MOTOR_ID, MotorType.kBrushless);
     }
 
     /**
