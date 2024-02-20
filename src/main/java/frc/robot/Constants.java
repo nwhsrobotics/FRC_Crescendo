@@ -193,6 +193,7 @@ public final class Constants {
         public static final double kTeleDriveMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond * scaleFactor;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond * scaleFactor;
 
+        //TODO: Better constraints 
         public static final PathConstraints kPathfindingConstraints = new PathConstraints(
                 DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 3.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 6.0,
                 AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
