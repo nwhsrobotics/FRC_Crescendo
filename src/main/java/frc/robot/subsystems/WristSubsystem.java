@@ -38,11 +38,11 @@ public class WristSubsystem extends SubsystemBase {
 
   }
 
-  public void adjustAngle(double changeInPosition){
+  public void adjustAngle(double changeInPosition) {
     desiredPosition = changeInPosition;
   }
 
-  public void ampPreset(){
+  public void ampPreset() {
         
 
             desiredPosition = (ampPosition/360) * WristConstants.WRIST_GEAR_RATIO;
@@ -50,7 +50,7 @@ public class WristSubsystem extends SubsystemBase {
 
     }
 
-    public void sourcePreset(){
+    public void sourcePreset() {
         
 
             desiredPosition = (sourcePosition/360) * WristConstants.WRIST_GEAR_RATIO; 

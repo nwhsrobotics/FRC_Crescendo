@@ -40,13 +40,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
-    public void convertDegreeToRotations(){
+    public void convertDegreeToRotations() {
 
     }
 
 
 
-    public void ampPreset(){
+    public void ampPreset() {
         
 
             desiredPosition = (ampPosition/360) * ArmConstants.SHOULDER_GEAR_RATIO;
@@ -54,20 +54,20 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
-    public void sourcePreset(){
+    public void sourcePreset() {
         
         
-            desiredPosition = (sourcePosition/360) * ArmConstants.SHOULDER_GEAR_RATIO; 
+            desiredPosition = (sourcePosition / 360) * ArmConstants.SHOULDER_GEAR_RATIO; 
 
 
         
 
     }
 
-    public void adjustAngle(double changeInPosition){
+    public void adjustAngle(double changeInPosition) {
         
             desiredPosition += changeInPosition;
-            //TODO: add logic that will let the operater freely adjust the motor position if autoLockEnabled is not tru
+            //TODO: add logic that will let the operater freely adjust the motor position if autoLockEnabled is not true
 
 
     }
