@@ -16,21 +16,14 @@ public class ArmSubsystem extends SubsystemBase {
     private final CANSparkMax shoulderMotor;
     private final SparkPIDController shoulderPidController;
     private final RelativeEncoder shoulderRelativeEncoder;
-    private final double ampPosition = 104; //Measured from cad, rounded to the nearest whole number
-    private final double sourcePosition = 40; //Measured from cad, rounded to the nearest whole number
-    private double desiredPosition = 0; //set the arms angle at this degree
+    private final double ampPosition = 104; // Measured from cad, rounded to the nearest whole number
+    private final double sourcePosition = 40; // Measured from cad, rounded to the nearest whole number
+    private double desiredPosition = 0; // Set the arms angle at this degree
     private double currentPosition;
     private boolean autoLockEnabledAmp = false;
     private boolean autoLockEnabledSource = false;
     
-
-
-
-
-
-    /**
-     * Creates a new ArmSubsystem.
-     */
+    // Constructor for ArmSubsystem
     public ArmSubsystem() {
         shoulderMotor = new CANSparkMax(Constants.CANAssignments.SHOULDER_MOTOR_ID, MotorType.kBrushless);
         shoulderRelativeEncoder = shoulderMotor.getEncoder();
@@ -40,12 +33,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
+    // Converts degrees to units
     public void convertDegreeToRotations() {
 
     }
 
 
-
+    // Sets the desired position to a pre-determined angle for the amp
     public void ampPreset() {
         
 
@@ -54,6 +48,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
+    // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
         
         
@@ -64,6 +59,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
+    // Adjusts the current angle by adding a specified amount to the desired position
     public void adjustAngle(double changeInPosition) {
         
             desiredPosition += changeInPosition;
