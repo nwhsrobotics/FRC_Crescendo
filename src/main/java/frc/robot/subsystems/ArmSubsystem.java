@@ -48,27 +48,27 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void ampPreset(){
         
-        if(autoLockEnabledAmp){
+
             desiredPosition = (ampPosition/360) * ArmConstants.SHOULDER_GEAR_RATIO;
-        }
+
 
     }
 
     public void sourcePreset(){
         
-        if(autoLockEnabledSource){
+        
             desiredPosition = (sourcePosition/360) * ArmConstants.SHOULDER_GEAR_RATIO; 
-        }
+
 
         
 
     }
 
     public void adjustAngle(double changeInPosition){
-        if(!autoLockEnabledAmp || !autoLockEnabledSource){
+        
             desiredPosition += changeInPosition;
             //TODO: add logic that will let the operater freely adjust the motor position if autoLockEnabled is not tru
-        }
+
 
     }
 
