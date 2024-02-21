@@ -43,6 +43,8 @@ public final class Constants {
 
         public static final int SHOULDER_MOTOR_ID = 8;
 
+        public static final int WRIST_MOTOR_ID = 14;
+
         /**
          * Check for duplicate CAN assignments,
          * declared under the class this method is defined in.
@@ -146,6 +148,12 @@ public final class Constants {
 
         public static final double SHOULDER_PID_P = 0.5;
         public static final double SHOULDER_GEAR_RATIO = 1; //placeholder number
+    }
+
+    public static final class WristConstants {
+
+        public static final double WRIST_PID_P = 0.5;
+        public static final double WRIST_GEAR_RATIO = 1; //placeholder number
     }
 
     public static final class ShooterConstants {
