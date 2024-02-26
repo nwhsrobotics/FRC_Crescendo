@@ -99,6 +99,11 @@ public class DriverXboxController implements Controller {
     }
 
     @Override
+    public boolean aprilTagAllignButtonIsPressed(){
+        return xboxController.getLeftBumper() || xboxController.getRightBumper();
+    }
+
+    @Override
     public int getFieldRelativeButton() {
         return 9;
     }

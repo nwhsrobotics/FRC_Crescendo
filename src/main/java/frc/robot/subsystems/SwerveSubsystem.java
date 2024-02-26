@@ -327,13 +327,31 @@ public class SwerveSubsystem extends SubsystemBase {
         //upload the april tag build map to limelight https://downloads.limelightvision.io/models/frc2024.fmap (.fmap in it) also have uploaded it in robot directly
         //https://tools.limelightvision.io/map-builder
         //LimelightHelpers.setPipelineIndex("limelight", 0);
-        LimelightHelpers.Results result =
-        LimelightHelpers.getLatestResults("limelight").targetingResults;
-        if (!(result.botpose[0] == 0 && result.botpose[1] == 0)) {
-            odometer.addVisionMeasurement(
-                result.getBotPose2d_wpiBlue(),
-                Timer.getFPGATimestamp() - (result.latency_capture / 1000.0) - (result.latency_pipeline / 1000.0));
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+        double poseDifference = odometer.getEstimatedPosition().getTranslation().getDistance(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").pose.getTranslation());
+        double xyStds = 0.9;
+        double degStds = 0.9;
+        if(limelightMeasurement.tagCount >= 2)
+        {
+          xyStds = 0.5;
+          degStds = 6;
+        } else {
+            if(limelightMeasurement.avgTagArea > 0.8 && poseDifference < 0.5){
+                xyStds = 1.0;
+                degStds = 12;
+            } else if (limelightMeasurement.avgTagArea > 0.1 && poseDifference < 0.3) {
+                // 1 target farther away and estimated pose is close
+                xyStds = 2.0;
+                degStds = 30;
+            }
         }
+        //odometer.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        odometer.setVisionMeasurementStdDevs(
+          VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
+        odometer.addVisionMeasurement(
+            limelightMeasurement.pose,
+            limelightMeasurement.timestampSeconds);
+
 
         // Log position of robot.
         Logger.recordOutput("swerve.pose", getPose());
