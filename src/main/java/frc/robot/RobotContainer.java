@@ -17,9 +17,9 @@ import frc.robot.subsystems.oi.ControlManager;
 
 public class RobotContainer {
     public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    public static XboxController gunner = new XboxController(0);
-    public final ArmSubsystem armSubsystem = new ArmSubsystem();
-    public final WristSubsystem wristSubsystem = new WristSubsystem();
+    //public static XboxController gunner = new XboxController(10);
+    //public final ArmSubsystem armSubsystem = new ArmSubsystem();
+    //public final WristSubsystem wristSubsystem = new WristSubsystem();
     
     //public final ArmSubsystem armSubsystem = new ArmSubsystem();
     //object for presenting selection of options in shuffleboard/ smartdashboard
@@ -28,7 +28,7 @@ public class RobotContainer {
     public RobotContainer() {
         
 
-        InstantCommand armLockAmp = new InstantCommand(() -> {armSubsystem.ampPreset();});
+       /*  InstantCommand armLockAmp = new InstantCommand(() -> {armSubsystem.ampPreset();});
         InstantCommand armLockSource = new InstantCommand(() -> {armSubsystem.sourcePreset();});
         InstantCommand wristLockAmp = new InstantCommand(() -> {wristSubsystem.ampPreset();});
         InstantCommand wristLockSource = new InstantCommand(() -> {wristSubsystem.sourcePreset();});
@@ -64,7 +64,7 @@ public class RobotContainer {
         
         
 
-
+*/
 
 
 

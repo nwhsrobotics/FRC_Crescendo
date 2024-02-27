@@ -12,39 +12,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "shootSpeakerCommand"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "[B] [2 Note] 1"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "groundPickupCommand"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "[B] [2 Note] 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSpeakerCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "underStageCommand"
           }
         },
         {

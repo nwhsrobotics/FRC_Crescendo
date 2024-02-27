@@ -12,33 +12,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "[A] [2 Note] 1"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "pickup"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "[A] [2 Note] 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
           }
         },
         {

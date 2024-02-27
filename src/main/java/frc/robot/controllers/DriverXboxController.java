@@ -86,12 +86,12 @@ public class DriverXboxController implements Controller {
         return 4;
     }
 
-    /* TODO: Stage naviagte buttons
+    // TODO: Stage naviagte buttons
         @Override
     public int getAutonavigateToMidStageButton() {
         return 4;
     }
-     */
+     
 
     @Override
     public int getNavXResetButton() {
