@@ -33,17 +33,17 @@ public final class Constants {
         public static final int BACK_RIGHT_STEER_ABSOLUTE_ENCODER_ID = 23;
 
         // TODO verify all IDs other than drive after hardware assembly.
-        public static final int CLIMB_LEFT_MOTOR_ID = 5;
-        public static final int CLIMB_RIGHT_MOTOR_ID = 7;
+        public static final int CLIMB_LEFT_MOTOR_ID = 120;
+        public static final int CLIMB_RIGHT_MOTOR_ID = 130;
 
-        public static final int FLYWHEEL_MOTOR_ID = 9;
-        public static final int INDEX_MOTOR_ID = 12;
+        public static final int FLYWHEEL_MOTOR_ID = 140;
+        public static final int INDEX_MOTOR_ID = 150;
 
-        public static final int INTAKE_MOTOR_ID = 13;
+        public static final int INTAKE_MOTOR_ID = 160;
 
-        public static final int SHOULDER_MOTOR_ID = 8;
+        public static final int SHOULDER_MOTOR_ID = 80;
 
-        public static final int WRIST_MOTOR_ID = 14;
+        public static final int WRIST_MOTOR_ID = 140;
 
         /**
          * Check for duplicate CAN assignments,

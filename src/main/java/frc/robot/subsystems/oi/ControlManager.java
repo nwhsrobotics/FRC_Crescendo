@@ -242,7 +242,7 @@ public class ControlManager {
             ControlManager.Outputs.ySpeed = 0;
             ControlManager.Outputs.rotatingSpeed = 0;
 
-            System.out.println("Achtung! Failed to get driver controller!");
+            System.out.println("Achtung! Failed to get driver controller! Check smart dashboard");
             return;
         }
 
