@@ -98,8 +98,8 @@ public class SwerveSubsystem extends SubsystemBase {
             Rotation2d.fromDegrees(getHeading()),
             getModulePositions(),
             new Pose2d(),
-            VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(18)),
-            VecBuilder.fill(0.9, 0.9, Units.degreesToRadians(162)));
+            VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+            VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
     //The default standard deviations of the module states are 0.1 meters for x, 0.1 meters for y, and 0.1 radians for heading. 
     //The default standard deviations of the vision measurements are 0.9 meters for x, 0.9 meters for y, and 0.9 radians for heading.
     //Decrease standard deviations to trust the data more (rn the vision is mostly insignificant compared to module state)
@@ -320,7 +320,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void periodic() {
         // Update the robot's odometer
         //odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
-        odometer.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(getHeading()), getModulePositions());
+        odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
         //stddevs should be scaled to improve accuracy https://www.chiefdelphi.com/t/poseestimators-and-limelight-botpose/430334/3
         //TODO: https://docs.limelightvision.io/docs/docs-limelight/software-change-log
         //GeometryUtil.flipFieldPose() actually not needed now that i think about it

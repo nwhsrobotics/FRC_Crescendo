@@ -87,10 +87,11 @@ public class DriverXboxController implements Controller {
     }
 
     // TODO: Stage naviagte buttons
-        @Override
+    /*
+    @Override
     public int getAutonavigateToMidStageButton() {
         return 4;
-    }
+    } */
      
 
     @Override
