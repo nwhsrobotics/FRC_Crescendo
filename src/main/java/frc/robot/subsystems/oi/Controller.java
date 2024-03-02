@@ -152,7 +152,7 @@ public interface Controller {
         return -1;
     }
 
-        /**
+    /**
      * Get button binding for auto alligning to april tag
      * <p>
      * This is a driver-side input.

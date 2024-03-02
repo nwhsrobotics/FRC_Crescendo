@@ -4,8 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.GeometryUtil;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,19 +15,15 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.LimelightHelpers;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
-
+import frc.robot.LimelightHelpers;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -181,7 +175,7 @@ public class SwerveSubsystem extends SubsystemBase {
     /**
      * DON'T USE THIS WILL BREAK PATHPLANNER
      * <p>
-     *
+     * <p>
      * Reset the heading (yaw) and the odometry pose of the robot.
      */
     public void resetHeadingAndPose() {
@@ -331,12 +325,11 @@ public class SwerveSubsystem extends SubsystemBase {
         double poseDifference = odometer.getEstimatedPosition().getTranslation().getDistance(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").pose.getTranslation());
         double xyStds = 0.9;
         double degStds = 0.9;
-        if(limelightMeasurement.tagCount >= 2)
-        {
-          xyStds = 0.5;
-          degStds = 6;
+        if (limelightMeasurement.tagCount >= 2) {
+            xyStds = 0.5;
+            degStds = 6;
         } else {
-            if(limelightMeasurement.avgTagArea > 0.8 && poseDifference < 0.5){
+            if (limelightMeasurement.avgTagArea > 0.8 && poseDifference < 0.5) {
                 xyStds = 1.0;
                 degStds = 12;
             } else if (limelightMeasurement.avgTagArea > 0.1 && poseDifference < 0.3) {
@@ -347,10 +340,10 @@ public class SwerveSubsystem extends SubsystemBase {
         }
         //odometer.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
         odometer.setVisionMeasurementStdDevs(
-          VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
+                VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
         odometer.addVisionMeasurement(
-            limelightMeasurement.pose,
-            limelightMeasurement.timestampSeconds);
+                limelightMeasurement.pose,
+                limelightMeasurement.timestampSeconds);
 
 
         // Log position of robot.

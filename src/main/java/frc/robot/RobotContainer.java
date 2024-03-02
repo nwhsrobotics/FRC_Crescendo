@@ -2,8 +2,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.FavoritePositions;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
-import frc.robot.controllers.*;
+import frc.robot.controllers.DriverJoysticksController;
+import frc.robot.controllers.DriverLeftJoysticksController;
+import frc.robot.controllers.DriverXboxController;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.oi.ControlManager;
 
@@ -31,22 +31,34 @@ public class RobotContainer {
 
     public RobotContainer() {
         //command for setting arm to the amp position
-        InstantCommand armLockAmp = new InstantCommand(() -> {armSubsystem.ampPreset();});
+        InstantCommand armLockAmp = new InstantCommand(() -> {
+            armSubsystem.ampPreset();
+        });
         armLockAmp.addRequirements(armSubsystem);
         //command for setting arm to the source position
-        InstantCommand armLockSource = new InstantCommand(() -> {armSubsystem.sourcePreset();});
+        InstantCommand armLockSource = new InstantCommand(() -> {
+            armSubsystem.sourcePreset();
+        });
         armLockSource.addRequirements(armSubsystem);
         //command for setting wrist to the amp position
-        InstantCommand wristLockAmp = new InstantCommand(() -> {wristSubsystem.ampPreset();});
+        InstantCommand wristLockAmp = new InstantCommand(() -> {
+            wristSubsystem.ampPreset();
+        });
         wristLockAmp.addRequirements(wristSubsystem);
         //command for setting wrist to the source position
-        InstantCommand wristLockSource = new InstantCommand(() -> {wristSubsystem.sourcePreset();});
+        InstantCommand wristLockSource = new InstantCommand(() -> {
+            wristSubsystem.sourcePreset();
+        });
         wristLockSource.addRequirements(wristSubsystem);
         //command for letting the gunner freely adjust the arm position
-        InstantCommand armAdjust = new InstantCommand(() -> {armSubsystem.adjustAngle(gunner.getLeftY());});
+        InstantCommand armAdjust = new InstantCommand(() -> {
+            armSubsystem.adjustAngle(gunner.getLeftY());
+        });
         armAdjust.addRequirements(armSubsystem);
         //command for letting the gunner freely adjust the wrist position
-        InstantCommand wristAdjust = new InstantCommand(() -> {wristSubsystem.adjustAngle(gunner.getRightY());});
+        InstantCommand wristAdjust = new InstantCommand(() -> {
+            wristSubsystem.adjustAngle(gunner.getRightY());
+        });
         wristAdjust.addRequirements(wristSubsystem);
         //command for letting you adjust the wrist and arm together
         ParallelCommandGroup parallel = new ParallelCommandGroup(armAdjust, wristAdjust);
@@ -55,49 +67,71 @@ public class RobotContainer {
         //command group that had built in logic 
         SequentialCommandGroup seq = new SequentialCommandGroup();
         seq.addRequirements(wristSubsystem, armSubsystem);
-            if(gunner.getAButton()){
+        if (gunner.getAButton()) {
 
-                seq.addCommands(
-                  armLockAmp,
-                  wristLockAmp
-              );
-              }
-          
-            if(gunner.getBButton()){
-                seq.addCommands(
-                  armLockSource,
-                  wristLockSource
-              );
-              }
+            seq.addCommands(
+                    armLockAmp,
+                    wristLockAmp
+            );
+        }
 
-            if(!gunner.getAButton() && !gunner.getBButton()){
-                seq.addCommands(
-                  parallel
-                );
-              }
+        if (gunner.getBButton()) {
+            seq.addCommands(
+                    armLockSource,
+                    wristLockSource
+            );
+        }
+
+        if (!gunner.getAButton() && !gunner.getBButton()) {
+            seq.addCommands(
+                    parallel
+            );
+        }
 
 
         armSubsystem.setDefaultCommand(seq);
         wristSubsystem.setDefaultCommand(seq);
-        
+
         // Creates instant commands for the different robot functionalities
-        InstantCommand intakeOn = new InstantCommand(() -> {intakeSubsystem.forwards();});
-        InstantCommand intakeOff = new InstantCommand(() -> {intakeSubsystem.deactivate();});
+        InstantCommand intakeOn = new InstantCommand(() -> {
+            intakeSubsystem.forwards();
+        });
+        InstantCommand intakeOff = new InstantCommand(() -> {
+            intakeSubsystem.deactivate();
+        });
 
-        InstantCommand wristIntakeOn = new InstantCommand(() -> {wristInstakeSubsystem.forwards();});
-        InstantCommand wristIntakeOff = new InstantCommand(() -> {wristInstakeSubsystem.stop();});
+        InstantCommand wristIntakeOn = new InstantCommand(() -> {
+            wristInstakeSubsystem.forwards();
+        });
+        InstantCommand wristIntakeOff = new InstantCommand(() -> {
+            wristInstakeSubsystem.stop();
+        });
 
-        InstantCommand climbUp = new InstantCommand(() -> {climbSubsystem.moveUp();});
-        InstantCommand climbDown = new InstantCommand(() -> {climbSubsystem.moveDown();});
+        InstantCommand climbUp = new InstantCommand(() -> {
+            climbSubsystem.moveUp();
+        });
+        InstantCommand climbDown = new InstantCommand(() -> {
+            climbSubsystem.moveDown();
+        });
 
-        InstantCommand shoot = new InstantCommand(() -> {shooterSubsystem.stepIndex();});
+        InstantCommand shoot = new InstantCommand(() -> {
+            shooterSubsystem.stepIndex();
+        });
 
         // TODO: Make it so you only have to press one button for each preset
-        InstantCommand wristAmpPreset = new InstantCommand(() -> {wristSubsystem.ampPreset();});
-        InstantCommand wristSourcePreset = new InstantCommand(() -> {wristSubsystem.sourcePreset();});
+        InstantCommand wristAmpPreset = new InstantCommand(() -> {
+            wristSubsystem.ampPreset();
+        });
+        InstantCommand wristSourcePreset = new InstantCommand(() -> {
+            wristSubsystem.sourcePreset();
+        });
 
-        InstantCommand armAmpPreset = new InstantCommand(() -> {armSubsystem.ampPreset();});
-        InstantCommand armSourcePreset = new InstantCommand(() -> {armSubsystem.sourcePreset();});
+        InstantCommand armAmpPreset = new InstantCommand(() -> {
+            armSubsystem.ampPreset();
+        });
+        InstantCommand armSourcePreset = new InstantCommand(() -> {
+            armSubsystem.sourcePreset();
+        });
 
         // Registers the instant commands
         NamedCommands.registerCommand("intakeOn", intakeOn);
@@ -119,7 +153,9 @@ public class RobotContainer {
 
         // initialize driver button commands.
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw());
-        ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> {swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative;});
+        ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> {
+            swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative;
+        });
         ControlManager.DriverButtonCommands.toggleAutonavigationCommand = new InstantCommand(() -> swerveSubsystem.autonavigator.toggle());
         ControlManager.DriverButtonCommands.autonavigateToAmp = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.AMP));
         ControlManager.DriverButtonCommands.autonavigateToSource = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SOURCE));
@@ -127,7 +163,7 @@ public class RobotContainer {
         ControlManager.DriverButtonCommands.autonavigateToTopStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.TOPSTAGE));
         ControlManager.DriverButtonCommands.autonavigateToMidStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.MIDSTAGE));
         ControlManager.DriverButtonCommands.autonavigateToBottomStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.BOTTOMSTAGE));
-        
+
         // reserve gunner port.
         ControlManager.reserveController(3);  // THE GUNNER CONTROLLER SHOULD BE ON PORT 3.
 

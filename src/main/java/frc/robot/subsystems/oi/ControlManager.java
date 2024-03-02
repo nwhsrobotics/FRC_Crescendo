@@ -4,11 +4,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.LimelightHelpers;
-
 import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
@@ -62,9 +60,9 @@ public class ControlManager {
      * <p>
      * Internal use only.
      *
-     * @param hid             - "GenericHID" of the controller.
-     * @param port            - the port of associated controller.
-     * @param command         - the command to be executed when the button is pressed.
+     * @param hid     - "GenericHID" of the controller.
+     * @param port    - the port of associated controller.
+     * @param command - the command to be executed when the button is pressed.
      */
     private static void makeTriggerForButton(GenericHID hid, int port, int button, Command command, boolean isCommandDriver) {
         if (button == -1) {  // -1 means it should not be bound.
@@ -85,7 +83,7 @@ public class ControlManager {
      * <p>
      * If the port is already registered, this method will silently do nothing.
      * Be sure to call this method before controller registration.
-     * 
+     *
      * @param port - port of the reserved controller.
      */
     public static void reserveController(int port) {
@@ -251,7 +249,7 @@ public class ControlManager {
         Logger.recordOutput("controlmanager.outputs.rotatingspeed", ControlManager.Outputs.rotatingSpeed);
 
 
-        if(driverController.aprilTagAllignButtonIsPressed()){
+        if (driverController.aprilTagAllignButtonIsPressed()) {
             final var rot_limelight = limelight_aim_proportional();
             ControlManager.Outputs.rotatingSpeed = rot_limelight;
 
@@ -278,8 +276,7 @@ public class ControlManager {
     // "proportional control" is a control algorithm in which the output is proportional to the error.
     // in this case, we are going to return an angular velocity that is proportional to the 
     // "tx" value from the Limelight.
-    private static double limelight_aim_proportional()
-    {    
+    private static double limelight_aim_proportional() {
         // kP (constant of proportionality)
         // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
         // if it is too high, the robot will oscillate around.
@@ -303,8 +300,7 @@ public class ControlManager {
     // simple proportional ranging control with Limelight's "ty" value
     // this works best if your Limelight's mount height and target mount height are different.
     // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
-    private static double limelight_range_proportional()
-    {    
+    private static double limelight_range_proportional() {
         double kP = .1;
         double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
         //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;

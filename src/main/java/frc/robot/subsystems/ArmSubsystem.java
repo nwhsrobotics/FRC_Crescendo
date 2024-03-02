@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -19,10 +16,10 @@ public class ArmSubsystem extends SubsystemBase {
     private final double ampPosition = 104; // Measured from cad, rounded to the nearest whole number
     private final double sourcePosition = 40; // Measured from cad, rounded to the nearest whole number
     private double desiredPosition = 0; // Set the arms angle at this degree
-    private double currentPosition;
-    private boolean autoLockEnabledAmp = false;
-    private boolean autoLockEnabledSource = false;
-    
+    private final double currentPosition;
+    private final boolean autoLockEnabledAmp = false;
+    private final boolean autoLockEnabledSource = false;
+
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
         shoulderMotor = new CANSparkMax(Constants.CANAssignments.SHOULDER_MOTOR_ID, MotorType.kBrushless);
@@ -40,40 +37,31 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Sets the desired position to a pre-determined angle for the amp
     public void ampPreset() {
-        desiredPosition = (ampPosition/360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredPosition = (ampPosition / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
     }
 
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
-        
-        
-            desiredPosition = (sourcePosition / 360) * ArmConstants.SHOULDER_GEAR_RATIO; 
 
 
-        
+        desiredPosition = (sourcePosition / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+
 
     }
 
     // Adjusts the current angle by adding a specified amount to the desired position
     public void adjustAngle(double changeInPosition) {
-        
-            desiredPosition += changeInPosition;
-            //TODO: add logic that will let the operater freely adjust the motor position if autoLockEnabled is not true
+
+        desiredPosition += changeInPosition;
+        //TODO: add logic that will let the operater freely adjust the motor position if autoLockEnabled is not true
 
 
     }
 
 
-
     @Override
     public void periodic() {
         shoulderPidController.setReference(desiredPosition, ControlType.kPosition);
-
-
-
-
-
-
 
 
         // This method will be called once per scheduler run
