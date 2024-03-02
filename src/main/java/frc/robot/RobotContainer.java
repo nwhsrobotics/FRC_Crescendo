@@ -19,7 +19,7 @@ import frc.robot.subsystems.oi.ControlManager;
 
 public class RobotContainer {
     public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    public static XboxController gunner = new XboxController(10);
+    public static XboxController gunner = new XboxController(3);
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
     //object for presenting selection of options in shuffleboard/ smartdashboard
