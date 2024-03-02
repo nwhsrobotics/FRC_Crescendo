@@ -26,6 +26,7 @@ public class RobotContainer {
     SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
     public final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    public final WristIntakeSubsystem wristInstakeSubsystem = new WristIntakeSubsystem();
 
     public RobotContainer() {
         
@@ -93,8 +94,14 @@ public class RobotContainer {
        InstantCommand intakeOn = new InstantCommand(() -> {intakeSubsystem.forwards();});
        InstantCommand intakeOff = new InstantCommand(() -> {intakeSubsystem.deactivate();});
 
+       InstantCommand wristIntakeOn = new InstantCommand(() -> {wristInstakeSubsystem.forwards();});
+       InstantCommand wristIntakeOff = new InstantCommand(() -> {wristInstakeSubsystem.stop();});
+
        NamedCommands.registerCommand("intakeOn", intakeOn);
        NamedCommands.registerCommand("intakeOff", intakeOff);
+
+       NamedCommands.registerCommand("wristIntakeOn", wristIntakeOn);
+       NamedCommands.registerCommand("wristIntakeOff", wristIntakeOff);
 
         
         // initialize driver button commands.
