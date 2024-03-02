@@ -292,8 +292,8 @@ public class ControlManager {
         double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
 
         // convert to radians per second for our drive method
-        targetingAngularVelocity *= Constants.DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
-
+        //targetingAngularVelocity *= Constants.DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
+        targetingAngularVelocity = 0.5;
         //invert since tx is positive when the target is to the right of the crosshair
         targetingAngularVelocity *= -1.0;
 
@@ -307,7 +307,9 @@ public class ControlManager {
     {    
         double kP = .1;
         double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
-        targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
+        //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
+        targetingForwardSpeed = 0.345;
+        //change the signs
         targetingForwardSpeed *= -1.0;
         return targetingForwardSpeed;
     }
