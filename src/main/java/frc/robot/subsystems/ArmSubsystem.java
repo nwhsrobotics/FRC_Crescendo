@@ -38,14 +38,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
-
     // Sets the desired position to a pre-determined angle for the amp
     public void ampPreset() {
-        
-
-            desiredPosition = (ampPosition/360) * ArmConstants.SHOULDER_GEAR_RATIO;
-
-
+        desiredPosition = (ampPosition/360) * ArmConstants.SHOULDER_GEAR_RATIO;
     }
 
     // Sets the desired position to a pre-determined angle for the source
