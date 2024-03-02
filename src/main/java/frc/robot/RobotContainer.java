@@ -1,6 +1,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,6 +24,8 @@ public class RobotContainer {
     public final WristSubsystem wristSubsystem = new WristSubsystem();
     //object for presenting selection of options in shuffleboard/ smartdashboard
     SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
+    public final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+    public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
     public RobotContainer() {
         
@@ -86,7 +90,11 @@ public class RobotContainer {
 
 
 
+       InstantCommand intakeOn = new InstantCommand(() -> {intakeSubsystem.forwards();});
+       InstantCommand intakeOff = new InstantCommand(() -> {intakeSubsystem.deactivate();});
 
+       NamedCommands.registerCommand("intakeOn", intakeOn);
+       NamedCommands.registerCommand("intakeOff", intakeOff);
 
         
         // initialize driver button commands.
