@@ -20,28 +20,22 @@ public class ClimbSubsystem extends SubsystemBase {
     private final SparkPIDController rightClimbPID;
     private final SparkPIDController leftClimbPID;
 
-    private static final double MAX_UP_DOWN = 25.0 * 0.0254; //21 inches converted to meters
-    private static final double MIN_UP_DOWN = 0.0 * 0.0254;
-    private static final double INITIAL_UP_DOWN = 0.0;
+    private static final double MAX_HEIGHT_METERS = 0.0 * 0.0254; // TODO: get actual max
+    private static final double MIN_HEIGHT_METERS = 0.0 * 0.0254; // TODO: get actual min
+    private static final double INITIAL_HEIGHT_METERS = 0.0;
 
     public static final double AUTO_CLIMB_RAISE = 0.1524;
 
-    public static final double SPEED_UP_DOWNps = 0.22;
+    public static final double SPEED_PER_SECOND = 0.22;
     public static final double TICKS_PER_SECOND = 50;
-    private static final double GEAR_RATIO_UP_DOWN = -5.0;
+    private static final double GEAR_RATIO = -5.0; // TODO: Get actual gear ratio
     private static final double LEAD_DISTANCE = (0.5 * 0.0254); // (inches * m/in) half an inch to meters
 
-    // TO DO LIST: FIX REAL SPEED(THE 1.0 VALUES!)
-    private static final double UP_DOWN_COUNTS_PER_METER = (GEAR_RATIO_UP_DOWN / LEAD_DISTANCE); //TO DO LIST: FIGURE OUT REAL VALUE
+    private static final double COUNTS_PER_METER = (GEAR_RATIO / LEAD_DISTANCE);
     private static final double METERS_TO_INCHES = 39.37;
-    private static final double HEIGHT_1 = 8.0 * 0.0254; //3 inches to meters : less than 3 inches sets to 0
-    private static final double HEIGHT_2 = 16.0 * 0.0254;
 
-    private double upDown = INITIAL_UP_DOWN;
+    private double desiredHeight = INITIAL_HEIGHT_METERS;
 
-    /**
-     * Creates a new ClimbSubsystem.
-     */
     public ClimbSubsystem() {
         rightClimbEncoder = rightClimbMotor.getEncoder();
         leftClimbEncoder = leftClimbMotor.getEncoder();
@@ -52,20 +46,12 @@ public class ClimbSubsystem extends SubsystemBase {
         rightClimbEncoder.setPosition(0);
         rightClimbMotor.setIdleMode(IdleMode.kBrake);
         rightClimbPID.setP(1.0);
-        rightClimbPID.setI(0.0);
-        rightClimbPID.setD(0.0);
-        rightClimbPID.setIZone(0.0);
-        rightClimbPID.setFF(0.0);
         rightClimbPID.setOutputRange(-1.0, 1.0);
         rightClimbPID.setReference(0.0, ControlType.kPosition);
 
         leftClimbEncoder.setPosition(0);
         leftClimbMotor.setIdleMode(IdleMode.kBrake);
         leftClimbPID.setP(1.0);
-        leftClimbPID.setI(0.0);
-        leftClimbPID.setD(0.0);
-        leftClimbPID.setIZone(0.0);
-        leftClimbPID.setFF(0.0);
         leftClimbPID.setOutputRange(-1.0, 1.0);
         leftClimbPID.setReference(0.0, ControlType.kPosition);
     }
@@ -73,40 +59,33 @@ public class ClimbSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Covert the meters to the count
-        double upDown_counts = upDown * UP_DOWN_COUNTS_PER_METER;
-        // System.out.printf("upDown_counts = %f\n", upDown_counts);
+        double counts = desiredHeight * COUNTS_PER_METER;
 
-        leftClimbPID.setReference(upDown_counts, ControlType.kPosition);
-        rightClimbPID.setReference(upDown_counts, ControlType.kPosition);
-        SmartDashboard.putNumber("Climb Arm UP DOWN Pos", (upDown * METERS_TO_INCHES));
-    }
-
-    private void enforceLimits() {
+        leftClimbPID.setReference(counts, ControlType.kPosition);
+        rightClimbPID.setReference(counts, ControlType.kPosition);
+        SmartDashboard.putNumber("Climb Position", (desiredHeight * METERS_TO_INCHES));
     }
 
     public void moveUp() {
-        upDown += SPEED_UP_DOWNps / TICKS_PER_SECOND;
-        if (upDown > MAX_UP_DOWN) {
-            upDown = MAX_UP_DOWN;
+        desiredHeight += SPEED_PER_SECOND / TICKS_PER_SECOND;
+        if (desiredHeight > MAX_HEIGHT_METERS) {
+            desiredHeight = MAX_HEIGHT_METERS;
         }
-        enforceLimits();
     }
 
     public void moveDown() {
-        upDown -= SPEED_UP_DOWNps / TICKS_PER_SECOND;
-        if (upDown < MIN_UP_DOWN) {
-            upDown = MIN_UP_DOWN;
+        desiredHeight -= SPEED_PER_SECOND / TICKS_PER_SECOND;
+        if (desiredHeight < MIN_HEIGHT_METERS) {
+            desiredHeight = MIN_HEIGHT_METERS;
         }
-        enforceLimits();
     }
 
     public double getHeight() {
-        return upDown;
+        return desiredHeight;
     }
 
-    public void setHeight(double currentHeight) {
-        upDown = currentHeight;
-        enforceLimits();
+    public void setHeight(double newHeight) {
+        desiredHeight = newHeight;
     }
 
 }

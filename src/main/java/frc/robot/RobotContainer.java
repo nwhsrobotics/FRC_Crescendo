@@ -27,16 +27,10 @@ public class RobotContainer {
     public final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public final WristIntakeSubsystem wristInstakeSubsystem = new WristIntakeSubsystem();
+    public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
 
     public RobotContainer() {
-        
-
-
-        
-       
-       
-       
-       //command for setting arm to the amp position
+        //command for setting arm to the amp position
         InstantCommand armLockAmp = new InstantCommand(() -> {armSubsystem.ampPreset();});
         armLockAmp.addRequirements(armSubsystem);
         //command for setting arm to the source position
@@ -86,24 +80,43 @@ public class RobotContainer {
         armSubsystem.setDefaultCommand(seq);
         wristSubsystem.setDefaultCommand(seq);
         
-        
+        // Creates instant commands for the different robot functionalities
+        InstantCommand intakeOn = new InstantCommand(() -> {intakeSubsystem.forwards();});
+        InstantCommand intakeOff = new InstantCommand(() -> {intakeSubsystem.deactivate();});
 
+        InstantCommand wristIntakeOn = new InstantCommand(() -> {wristInstakeSubsystem.forwards();});
+        InstantCommand wristIntakeOff = new InstantCommand(() -> {wristInstakeSubsystem.stop();});
 
+        InstantCommand climbUp = new InstantCommand(() -> {climbSubsystem.moveUp();});
+        InstantCommand climbDown = new InstantCommand(() -> {climbSubsystem.moveDown();});
 
+        InstantCommand shoot = new InstantCommand(() -> {shooterSubsystem.stepIndex();});
 
-       InstantCommand intakeOn = new InstantCommand(() -> {intakeSubsystem.forwards();});
-       InstantCommand intakeOff = new InstantCommand(() -> {intakeSubsystem.deactivate();});
+        // TODO: Make it so you only have to press one button for each preset
+        InstantCommand wristAmpPreset = new InstantCommand(() -> {wristSubsystem.ampPreset();});
+        InstantCommand wristSourcePreset = new InstantCommand(() -> {wristSubsystem.sourcePreset();});
 
-       InstantCommand wristIntakeOn = new InstantCommand(() -> {wristInstakeSubsystem.forwards();});
-       InstantCommand wristIntakeOff = new InstantCommand(() -> {wristInstakeSubsystem.stop();});
+        InstantCommand armAmpPreset = new InstantCommand(() -> {armSubsystem.ampPreset();});
+        InstantCommand armSourcePreset = new InstantCommand(() -> {armSubsystem.sourcePreset();});
 
-       NamedCommands.registerCommand("intakeOn", intakeOn);
-       NamedCommands.registerCommand("intakeOff", intakeOff);
+        // Registers the instant commands
+        NamedCommands.registerCommand("intakeOn", intakeOn);
+        NamedCommands.registerCommand("intakeOff", intakeOff);
 
-       NamedCommands.registerCommand("wristIntakeOn", wristIntakeOn);
-       NamedCommands.registerCommand("wristIntakeOff", wristIntakeOff);
+        NamedCommands.registerCommand("wristIntakeOn", wristIntakeOn);
+        NamedCommands.registerCommand("wristIntakeOff", wristIntakeOff);
 
-        
+        NamedCommands.registerCommand("climbUp", climbUp);
+        NamedCommands.registerCommand("climbDown", climbDown);
+
+        NamedCommands.registerCommand("shoot", shoot);
+
+        NamedCommands.registerCommand("wristAmpPreset", wristAmpPreset);
+        NamedCommands.registerCommand("wristSourcePreset", wristSourcePreset);
+
+        NamedCommands.registerCommand("armAmpPreset", armAmpPreset);
+        NamedCommands.registerCommand("armSourcePreset", armSourcePreset);
+
         // initialize driver button commands.
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw());
         ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> {swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative;});
