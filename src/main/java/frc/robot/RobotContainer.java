@@ -38,7 +38,7 @@ public class RobotContainer {
     public final IntakeCmd intakeCmdForward = new IntakeCmd(intakeSubsystem, true);
     public final IntakeCmd intakeCmdBackward = new IntakeCmd(intakeSubsystem, false);
 
-    public static XboxController gunner = new XboxController(10);
+    public static XboxController gunner = new XboxController(3);
 
     public final JoystickButton gunner_A = new JoystickButton(gunner, 1); // Button A
     public final JoystickButton gunner_B = new JoystickButton(gunner, 2); // Button B
