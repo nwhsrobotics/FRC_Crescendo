@@ -47,7 +47,7 @@ public class DriverLeftJoysticksController implements Controller {
         //the problem with this working equation below is the range is from 0.2 to 1.2 we want max to be 1.0 to avoid confusion
         //return (((-joystickControl.getRawAxis(3)+1)/2)+.2);
         //so this should work
-        double val = ((-joystickControl.getRawAxis(3)+1)/2);
+        double val = ((-joystickControl.getRawAxis(3) + 1) / 2);
         //return values >= 0.2
         return Math.max(val, 0.2);
         //this will also work and do the same thing (assiming 0.2 lower limit)

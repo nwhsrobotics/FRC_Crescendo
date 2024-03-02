@@ -38,14 +38,14 @@ public class DriverJoysticksController implements Controller {
     @Override
     public double getZ() {
         return Controller.calculateSpeedWithDeadband(
-            -Math.signum(joystickControl.getTwist()) * Math.pow(joystickControl.getTwist(), 2),
-            kZDeadband
+                -Math.signum(joystickControl.getTwist()) * Math.pow(joystickControl.getTwist(), 2),
+                kZDeadband
         );
     }
 
     @Override
     public double getSpeedCoefficient() {
-        double val = ((-joystickControl.getRawAxis(3)+1)/2);
+        double val = ((-joystickControl.getRawAxis(3) + 1) / 2);
         return Math.max(val, 0.2);
     }
 

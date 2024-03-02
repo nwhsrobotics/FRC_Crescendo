@@ -19,8 +19,7 @@ public class DriverXboxController implements Controller {
 
         if (speed > 0) {
             speed = Math.min(speed, 1);
-        }
-        else {
+        } else {
             speed = Math.max(speed, -1);
         }
 
@@ -92,7 +91,7 @@ public class DriverXboxController implements Controller {
     public int getAutonavigateToMidStageButton() {
         return 4;
     } */
-     
+
 
     @Override
     public int getNavXResetButton() {
@@ -100,7 +99,7 @@ public class DriverXboxController implements Controller {
     }
 
     @Override
-    public boolean aprilTagAllignButtonIsPressed(){
+    public boolean aprilTagAllignButtonIsPressed() {
         return xboxController.getLeftBumper() || xboxController.getRightBumper();
     }
 
