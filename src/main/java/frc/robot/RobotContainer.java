@@ -17,27 +17,45 @@ import frc.robot.subsystems.oi.ControlManager;
 
 public class RobotContainer {
     public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    //public static XboxController gunner = new XboxController(10);
-    //public final ArmSubsystem armSubsystem = new ArmSubsystem();
-    //public final WristSubsystem wristSubsystem = new WristSubsystem();
-    
-    //public final ArmSubsystem armSubsystem = new ArmSubsystem();
+    public static XboxController gunner = new XboxController(10);
+    public final ArmSubsystem armSubsystem = new ArmSubsystem();
+    public final WristSubsystem wristSubsystem = new WristSubsystem();
     //object for presenting selection of options in shuffleboard/ smartdashboard
     SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
 
     public RobotContainer() {
         
 
-       /*  InstantCommand armLockAmp = new InstantCommand(() -> {armSubsystem.ampPreset();});
+
+        
+       
+       
+       
+       //command for setting arm to the amp position
+        InstantCommand armLockAmp = new InstantCommand(() -> {armSubsystem.ampPreset();});
+        armLockAmp.addRequirements(armSubsystem);
+        //command for setting arm to the source position
         InstantCommand armLockSource = new InstantCommand(() -> {armSubsystem.sourcePreset();});
+        armLockSource.addRequirements(armSubsystem);
+        //command for setting wrist to the amp position
         InstantCommand wristLockAmp = new InstantCommand(() -> {wristSubsystem.ampPreset();});
+        wristLockAmp.addRequirements(wristSubsystem);
+        //command for setting wrist to the source position
         InstantCommand wristLockSource = new InstantCommand(() -> {wristSubsystem.sourcePreset();});
+        wristLockSource.addRequirements(wristSubsystem);
+        //command for letting the gunner freely adjust the arm position
         InstantCommand armAdjust = new InstantCommand(() -> {armSubsystem.adjustAngle(gunner.getLeftY());});
+        armAdjust.addRequirements(armSubsystem);
+        //command for letting the gunner freely adjust the wrist position
         InstantCommand wristAdjust = new InstantCommand(() -> {wristSubsystem.adjustAngle(gunner.getRightY());});
-
+        wristAdjust.addRequirements(wristSubsystem);
+        //command for letting you adjust the wrist and arm together
         ParallelCommandGroup parallel = new ParallelCommandGroup(armAdjust, wristAdjust);
+        parallel.addRequirements(wristSubsystem, armSubsystem);
 
+        //command group that had built in logic 
         SequentialCommandGroup seq = new SequentialCommandGroup();
+        seq.addRequirements(wristSubsystem, armSubsystem);
             if(gunner.getAButton()){
 
                 seq.addCommands(
@@ -59,12 +77,13 @@ public class RobotContainer {
                 );
               }
 
+
         armSubsystem.setDefaultCommand(seq);
         wristSubsystem.setDefaultCommand(seq);
         
         
 
-*/
+
 
 
 

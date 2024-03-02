@@ -45,6 +45,8 @@ public final class Constants {
 
         public static final int WRIST_MOTOR_ID = 140;
 
+        public static final int WRIST_INTAKE_ID = 160;
+
         /**
          * Check for duplicate CAN assignments,
          * declared under the class this method is defined in.
