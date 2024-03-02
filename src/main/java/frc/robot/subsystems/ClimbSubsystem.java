@@ -31,13 +31,11 @@ public class ClimbSubsystem extends SubsystemBase {
     private static final double GEAR_RATIO_UP_DOWN = -5.0;
     private static final double LEAD_DISTANCE = (0.5 * 0.0254); // (inches * m/in) half an inch to meters
 
-
     // TO DO LIST: FIX REAL SPEED(THE 1.0 VALUES!)
     private static final double UP_DOWN_COUNTS_PER_METER = (GEAR_RATIO_UP_DOWN / LEAD_DISTANCE); //TO DO LIST: FIGURE OUT REAL VALUE
     private static final double METERS_TO_INCHES = 39.37;
     private static final double HEIGHT_1 = 8.0 * 0.0254; //3 inches to meters : less than 3 inches sets to 0
     private static final double HEIGHT_2 = 16.0 * 0.0254;
-
 
     private double upDown = INITIAL_UP_DOWN;
 
@@ -61,7 +59,6 @@ public class ClimbSubsystem extends SubsystemBase {
         rightClimbPID.setOutputRange(-1.0, 1.0);
         rightClimbPID.setReference(0.0, ControlType.kPosition);
 
-
         leftClimbEncoder.setPosition(0);
         leftClimbMotor.setIdleMode(IdleMode.kBrake);
         leftClimbPID.setP(1.0);
@@ -71,7 +68,6 @@ public class ClimbSubsystem extends SubsystemBase {
         leftClimbPID.setFF(0.0);
         leftClimbPID.setOutputRange(-1.0, 1.0);
         leftClimbPID.setReference(0.0, ControlType.kPosition);
-
     }
 
     @Override
