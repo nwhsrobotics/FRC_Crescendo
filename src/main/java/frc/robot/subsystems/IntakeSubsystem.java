@@ -12,28 +12,20 @@ public class IntakeSubsystem extends SubsystemBase {
         motor = new CANSparkMax(Constants.CANAssignments.INTAKE_MOTOR_ID, MotorType.kBrushless);
     }
 
-    /**
-     * Run the intake forwards.
-     */
     public void forwards() {
-        motor.set(1);
+        motor.set(1.0);
     }
 
-    /**
-     * Run the intake reverse.
-     */
-    public void reverse() {
-        motor.set(-1);
+    public void backwards() {
+        motor.set(-1.0);
     }
 
-    /**
-     * Stop the intake motor.
-     */
-    public void deactivate() {
+    public void stop() {
         motor.stopMotor();
     }
 
     @Override
     public void periodic() {
+
     }
 }

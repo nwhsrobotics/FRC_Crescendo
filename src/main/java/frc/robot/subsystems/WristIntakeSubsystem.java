@@ -12,14 +12,8 @@ import frc.robot.Constants;
 public class WristIntakeSubsystem extends SubsystemBase {
     private final CANSparkMax motor;
 
-
-    /**
-     * Creates a new WristIntakeSubsystem.
-     */
     public WristIntakeSubsystem() {
         motor = new CANSparkMax(Constants.CANAssignments.WRIST_INTAKE_ID, MotorType.kBrushless);
-
-
     }
 
     public void forwards() {
@@ -36,7 +30,7 @@ public class WristIntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
+
     }
 
 
