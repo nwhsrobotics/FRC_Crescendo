@@ -12,6 +12,18 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeOn"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "[C] [2 Note] 1"
@@ -21,6 +33,12 @@
           "type": "path",
           "data": {
             "pathName": "[C] [2 Note] 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
