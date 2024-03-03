@@ -302,7 +302,8 @@ public class ControlManager {
     // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
     private static double limelight_range_proportional() {
         double kP = .1;
-        double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
+        //double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
+        double targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace("limelight")[2] * 10 * kP;
         //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
         targetingForwardSpeed = 0.345;
         //change the signs
