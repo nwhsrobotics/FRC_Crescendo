@@ -87,7 +87,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
     //odometry is a system to keep track of robots current position and rotation on the fields based on the coordinate system
-    private final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(
+    public final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(
             DriveConstants.kDriveKinematics,
             Rotation2d.fromDegrees(getHeading()),
             getModulePositions(),
