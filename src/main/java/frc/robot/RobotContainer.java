@@ -58,63 +58,63 @@ public class RobotContainer {
 
 
     public RobotContainer() {
-        //command for setting arm to the amp position
-        InstantCommand armLockAmp = new InstantCommand(() -> {armSubsystem.ampPreset();});
-        armLockAmp.addRequirements(armSubsystem);
-        //command for setting arm to the source position
-        InstantCommand armLockSource = new InstantCommand(() -> {armSubsystem.sourcePreset();});
-        armLockSource.addRequirements(armSubsystem);
-        //command for setting wrist to the amp position
-        InstantCommand wristLockAmp = new InstantCommand(() -> {wristSubsystem.ampPreset();});
-        wristLockAmp.addRequirements(wristSubsystem);
-        //command for setting wrist to the source position
-        InstantCommand wristLockSource = new InstantCommand(() -> {wristSubsystem.sourcePreset();});
-        wristLockSource.addRequirements(wristSubsystem);
-        //command for letting the gunner freely adjust the arm position
-        InstantCommand armAdjust = new InstantCommand(() -> {armSubsystem.adjustAngle(gunner.getLeftY());});
-        armAdjust.addRequirements(armSubsystem);
-        //command for letting the gunner freely adjust the wrist position
-        InstantCommand wristAdjust = new InstantCommand(() -> {wristSubsystem.adjustAngle(gunner.getRightY());});
-        wristAdjust.addRequirements(wristSubsystem);
-        //command for letting you adjust the wrist and arm together
+        // Command for setting arm to the amp position
+        InstantCommand armLockAmp = new InstantCommand(() -> armSubsystem.ampPreset(), armSubsystem);
+
+        // Command for setting arm to the source position
+        InstantCommand armLockSource = new InstantCommand(() -> armSubsystem.sourcePreset(), armSubsystem);
+
+        // Command for setting wrist to the amp position
+        InstantCommand wristLockAmp = new InstantCommand(() -> wristSubsystem.ampPreset(), wristSubsystem);
+
+        // Command for setting wrist to the source position
+        InstantCommand wristLockSource = new InstantCommand(() -> wristSubsystem.sourcePreset(), wristSubsystem);
+
+        // Command for letting the gunner freely adjust the arm position
+        InstantCommand armAdjust = new InstantCommand(() -> armSubsystem.adjustAngle(gunner.getLeftY()), armSubsystem);
+
+        // Command for letting the gunner freely adjust the wrist position
+        InstantCommand wristAdjust = new InstantCommand(() -> wristSubsystem.adjustAngle(gunner.getRightY()), wristSubsystem);
+
+        // Command for letting you adjust the wrist and arm together
         ParallelCommandGroup parallel = new ParallelCommandGroup(armAdjust, wristAdjust);
         parallel.addRequirements(wristSubsystem, armSubsystem);
 
-        //command group that had built in logic 
+        // Command group that has built-in logic 
         SequentialCommandGroup seq = new SequentialCommandGroup();
         seq.addRequirements(wristSubsystem, armSubsystem);
-            if(gunner_V.getAsBoolean()){
-
-                seq.addCommands(
-                  armLockAmp,
-                  wristLockAmp
-              );
-              }
-          
-            if(gunner_M.getAsBoolean()){
-                seq.addCommands(
-                  armLockSource,
-                  wristLockSource
-              );
-              }
-
-            if(!gunner_V.getAsBoolean() && !gunner_M.getAsBoolean()){
-                seq.addCommands(
-                  parallel
-                );
-              }
-
+        if (gunner_V.getAsBoolean()) {
+            seq.addCommands(
+                armLockAmp,
+                wristLockAmp
+            );
+        }
+        if (gunner_M.getAsBoolean()) {
+            seq.addCommands(
+                armLockSource,
+                wristLockSource
+            );
+        }
+        if (!gunner_V.getAsBoolean() && !gunner_M.getAsBoolean()) {
+            seq.addCommands(
+                parallel
+            );
+        }
 
         armSubsystem.setDefaultCommand(seq);
         wristSubsystem.setDefaultCommand(seq);
-        
-        // Creates instant commands for the different robot functionalities
-        InstantCommand climbUp = new InstantCommand(() -> {climbSubsystem.moveUp();});
-        InstantCommand climbDown = new InstantCommand(() -> {climbSubsystem.moveDown();});
 
-        InstantCommand shoot = new InstantCommand(() -> {shooterSubsystem.stepIndex();});
+        // Creates instant commands for the different robot functionalities
+        InstantCommand climbUp = new InstantCommand(() -> climbSubsystem.moveUp(), climbSubsystem);
+        InstantCommand climbDown = new InstantCommand(() -> climbSubsystem.moveDown(), climbSubsystem);
+        InstantCommand shoot = new InstantCommand(() -> shooterSubsystem.stepIndex(), shooterSubsystem);
+        InstantCommand intakeOn = new InstantCommand(() -> intakeSubsystem.forwards(), intakeSubsystem);
+        InstantCommand intakeOff = new InstantCommand(() -> intakeSubsystem.stop(), intakeSubsystem);
 
         // Registers the instant commands
+        NamedCommands.registerCommand("intakeOn", intakeOn);
+        NamedCommands.registerCommand("intakeOff", intakeOff);
+
         NamedCommands.registerCommand("climbUp", climbUp);
         NamedCommands.registerCommand("climbDown", climbDown);
 
