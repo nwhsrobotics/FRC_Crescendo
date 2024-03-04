@@ -70,6 +70,18 @@
           "data": {
             "pathName": "[A] [2 Note] 6"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[A] [2 Note] 7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[A] [2 Note] 8"
+          }
         }
       ]
     }
