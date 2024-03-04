@@ -63,6 +63,11 @@ public class WristSubsystem extends SubsystemBase {
         // Moves the arm towards the desired position with PID
         wristPidController.setReference(desiredPosition, ControlType.kPosition);
 
+        //this makes sure the wrist does not move anymore if the same position preset is pressed away
+        if(currentPosition == desiredPosition){
+            wristMotor.stopMotor();
+        }
+
     }
 
 
