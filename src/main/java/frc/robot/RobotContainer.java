@@ -100,6 +100,20 @@ public class RobotContainer {
             );
         }
 
+        if (gunner_LS.getAsBoolean()){
+            seq.addCommands(
+                armLockAmp,
+                wristAdjust
+            );
+        }
+        if (gunner_RS.getAsBoolean()){
+            seq.addCommands(
+                armLockSource,
+                wristAdjust
+            );
+        
+        }
+
         armSubsystem.setDefaultCommand(seq);
         wristSubsystem.setDefaultCommand(seq);
 
