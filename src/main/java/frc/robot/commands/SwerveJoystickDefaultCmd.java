@@ -22,10 +22,21 @@ public class SwerveJoystickDefaultCmd extends Command {
 
     @Override
     public void execute() {
-        swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates((swerveSubsystem.isFieldRelative) && ControlManager.fieldRelative
+        /*swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates((swerveSubsystem.isFieldRelative) && ControlManager.fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(ControlManager.Outputs.xSpeed, ControlManager.Outputs.ySpeed, ControlManager.Outputs.rotatingSpeed, swerveSubsystem.odometer.getEstimatedPosition().getRotation())
                 : ChassisSpeeds.fromFieldRelativeSpeeds(ControlManager.Outputs.xSpeed, ControlManager.Outputs.ySpeed, ControlManager.Outputs.rotatingSpeed, new Rotation2d(0))));
+        */
+        ChassisSpeeds chassisSpeedsFromRelativeSpeeds;
+        
+        if(swerveSubsystem.isFieldRelative && ControlManager.fieldRelative){
+            chassisSpeedsFromRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ControlManager.Outputs.xSpeed, ControlManager.Outputs.ySpeed, ControlManager.Outputs.rotatingSpeed, swerveSubsystem.odometer.getEstimatedPosition().getRotation());
+        }
 
+        else {
+            chassisSpeedsFromRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ControlManager.Outputs.xSpeed, ControlManager.Outputs.ySpeed, ControlManager.Outputs.rotatingSpeed, new Rotation2d(0));
+        }
+        swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeedsFromRelativeSpeeds));
+        
     }
 
     @Override
