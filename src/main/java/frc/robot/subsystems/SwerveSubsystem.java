@@ -172,16 +172,18 @@ public class SwerveSubsystem extends SubsystemBase {
         setModuleStates(targetStates);
     }
 
+
     /**
-     * DON'T USE THIS WILL BREAK PATHPLANNER
+     * DON'T USE THIS WILL BREAK PATHPLANNER USE resetOdometryWithVision instead
      * <p>
      * <p>
      * Reset the heading (yaw) and the odometry pose of the robot.
      */
+        /* 
     public void resetHeadingAndPose() {
         gyro.zeroYaw(); // Reset the yaw angle
         resetOdometry(new Pose2d()); // Reset the robot's odometry pose
-    }
+    } */
 
     /**
      * Switch between field-relative and robot-relative driving.
@@ -312,39 +314,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // This method is called periodically to update the robot's state and log data
     @Override
     public void periodic() {
-        // Update the robot's odometer
-        //odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
-        odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
-        //stddevs should be scaled to improve accuracy https://www.chiefdelphi.com/t/poseestimators-and-limelight-botpose/430334/3
-        //TODO: https://docs.limelightvision.io/docs/docs-limelight/software-change-log
-        //GeometryUtil.flipFieldPose() actually not needed now that i think about it
-        //upload the april tag build map to limelight https://downloads.limelightvision.io/models/frc2024.fmap (.fmap in it) also have uploaded it in robot directly
-        //https://tools.limelightvision.io/map-builder
-        //LimelightHelpers.setPipelineIndex("limelight", 0);
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-        double poseDifference = odometer.getEstimatedPosition().getTranslation().getDistance(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").pose.getTranslation());
-        double xyStds = 0.9;
-        double degStds = 0.9;
-        if (limelightMeasurement.tagCount >= 2) {
-            xyStds = 0.5;
-            degStds = 6;
-        } else {
-            if (limelightMeasurement.avgTagArea > 0.8 && poseDifference < 0.5) {
-                xyStds = 1.0;
-                degStds = 12;
-            } else if (limelightMeasurement.avgTagArea > 0.1 && poseDifference < 0.3) {
-                // 1 target farther away and estimated pose is close
-                xyStds = 2.0;
-                degStds = 30;
-            }
-        }
-        //odometer.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-        odometer.setVisionMeasurementStdDevs(
-                VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
-        odometer.addVisionMeasurement(
-                limelightMeasurement.pose,
-                limelightMeasurement.timestampSeconds);
-
+        updateOdometry();
 
         // Log position of robot.
         Logger.recordOutput("swerve.pose", getPose());
@@ -418,4 +388,56 @@ public class SwerveSubsystem extends SubsystemBase {
         backLeft.turningMotor.set(backLeft.turningPidController.calculate(backLeft.getTurningPosition(), -Math.PI / 4));
         backRight.turningMotor.set(backRight.turningPidController.calculate(backRight.getTurningPosition(), Math.PI / 4));
     }
+
+    /**
+     * Update odometry periodically with vision and internal measurements
+     */
+    public void updateOdometry(){
+        // Update the robot's odometer
+        //odometer.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(getHeading()), getModulePositions());
+        odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
+        //stddevs should be scaled to improve accuracy https://www.chiefdelphi.com/t/poseestimators-and-limelight-botpose/430334/3
+        //LimelightHelpers.setPipelineIndex("limelight", 0);
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+        double poseDifference = odometer.getEstimatedPosition().getTranslation().getDistance(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").pose.getTranslation());
+        double xyStds = 0.9;
+        double degStds = 0.9;
+        if (limelightMeasurement.tagCount >= 2) {
+            xyStds = 0.5;
+            degStds = 6;
+        } else {
+            if (limelightMeasurement.avgTagArea > 0.8 && poseDifference < 0.5) {
+                xyStds = 1.0;
+                degStds = 12;
+            } else if (limelightMeasurement.avgTagArea > 0.1 && poseDifference < 0.3) {
+                // 1 target farther away and estimated pose is close
+                xyStds = 2.0;
+                degStds = 30;
+            }
+        }
+        //odometer.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        odometer.setVisionMeasurementStdDevs(
+                VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
+        odometer.addVisionMeasurement(
+                limelightMeasurement.pose,
+                limelightMeasurement.timestampSeconds);
+
+    }
+
+    /**
+     * Update odometry using precise vision measurements with high accuracy.
+     * <p>
+     * It is RECOMMENDED to stand still and be close to the April tag when resetting this way as it solely relies on vision
+     */
+    public void resetOdometryWithVision() {
+        //int pipeline = (int) LimelightHelpers.getCurrentPipelineIndex("limelight");
+        //set the pipeline index to the high resolution april tag (less fps but high accuracy)
+        //LimelightHelpers.setPipelineIndex("limelight", 2);
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+        odometer.setVisionMeasurementStdDevs(VecBuilder.fill(0, 0, Units.degreesToRadians(0)));
+        odometer.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
+        //set back to normal april tag pipeline
+        //LimelightHelpers.setPipelineIndex("limelight", pipeline);
+    }
+
 }
