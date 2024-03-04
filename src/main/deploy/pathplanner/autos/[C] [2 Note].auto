@@ -46,6 +46,36 @@
           "data": {
             "pathName": "[C] [2 Note] 3"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[C] [2 Note] 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[C] [2 Note] 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[C] [2 Note] 6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[C] [2 Note] 7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[C] [2 Note] 8"
+          }
         }
       ]
     }
