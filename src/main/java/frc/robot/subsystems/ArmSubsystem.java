@@ -53,8 +53,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void adjustAngle(double changeInPosition) {
 
         desiredPosition += changeInPosition;
-        //TODO: add logic that will let the operater freely adjust the motor position if autoLockEnabled is not true
-
+        
 
     }
 
@@ -62,6 +61,12 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         shoulderPidController.setReference(desiredPosition, ControlType.kPosition);
+
+
+        //this makes sure the wrist does not move anymore if the same position preset is pressed away
+        if(currentPosition == desiredPosition){
+            shoulderMotor.stopMotor();
+        }
 
 
         // This method will be called once per scheduler run
