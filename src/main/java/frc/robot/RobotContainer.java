@@ -2,8 +2,10 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -54,7 +56,6 @@ public class RobotContainer {
     public final POVButton gunner_pov90 = new POVButton(gunner, 90);
     public final POVButton gunner_pov180 = new POVButton(gunner, 180);
     public final POVButton gunner_pov270 = new POVButton(gunner, 270);
-
 
     public RobotContainer() {
         // Command for setting arm to the amp position
