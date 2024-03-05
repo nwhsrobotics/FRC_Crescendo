@@ -322,7 +322,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // This method is called periodically to update the robot's state and log data
     @Override
     public void periodic() {
-        boolean detected = LimelightHelpers.getTX("limelight") > 0.0 ? true : false;
+        boolean detected = LimelightHelpers.getTV("limelight");
         SmartDashboard.putBoolean("Object Detected", detected);
         
         updateOdometry();
