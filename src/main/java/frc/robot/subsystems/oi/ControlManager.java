@@ -305,6 +305,8 @@ public class ControlManager {
         //double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
         //below is TZ because thats more accurate in 3d
         double targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace("limelight")[2] * 10 * kP;
+        //double targetingForwardSpeed = 2 / (LimelightHelpers.getTY("limelight") * 0.1 * kP);
+        //if(Double.isInfinite(targetingForwardSpeed)) return 0;
         //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
         targetingForwardSpeed *= 0.345;
         //TODO: change the signs

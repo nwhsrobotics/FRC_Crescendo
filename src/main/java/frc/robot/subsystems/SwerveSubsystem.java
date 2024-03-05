@@ -15,6 +15,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -37,9 +39,6 @@ public class SwerveSubsystem extends SubsystemBase {
     // holding forwards will move the robot away from the driver station,
     // because that is the forwards direction relative to the field.
     public boolean isFieldRelative = true;
-    public String lastPath;
-    public Pose2d lastPose2d;
-    public String lastPathType;
 
     public PenguinLogistics autonavigator;
 
@@ -130,6 +129,15 @@ public class SwerveSubsystem extends SubsystemBase {
         // Set the yaw of the gyro to 0 afterwards.
         Commands.waitSeconds(0.5)
                 .andThen(new RunCommand(() -> gyro.zeroYaw()));
+
+        SendableChooser<Integer> pipeline = new SendableChooser<>();
+        pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));
+        pipeline.addOption("ColorDetection", Integer.valueOf(1));
+        pipeline.addOption("AprilTagZoom", Integer.valueOf(2));
+        SmartDashboard.putData(pipeline);
+        pipeline.onChange((pipelineNum) -> {
+            LimelightHelpers.setPipelineIndex("limelight", pipelineNum);
+        });
     }
 
     /**
@@ -314,6 +322,9 @@ public class SwerveSubsystem extends SubsystemBase {
     // This method is called periodically to update the robot's state and log data
     @Override
     public void periodic() {
+        boolean detected = LimelightHelpers.getTX("limelight") > 0.0 ? true : false;
+        SmartDashboard.putBoolean("Object Detected", detected);
+        
         updateOdometry();
 
         // Log position of robot.
@@ -367,7 +378,7 @@ public class SwerveSubsystem extends SubsystemBase {
     /**
      * Check if the robot is in a clover state.
      *
-     * @return True if the robot is in a cloverleaf configuration, false otherwise.
+     * @return True if the robot is in a clover brake state, false otherwise.
      */
     public boolean isClover() {
         return frontLeft.getTurningPositionWrapped() > Math.PI / 4 - Math.toRadians(1.0) && frontLeft.getTurningPositionWrapped() < Math.PI / 4 + Math.toRadians(1.0)
@@ -421,7 +432,9 @@ public class SwerveSubsystem extends SubsystemBase {
         odometer.addVisionMeasurement(
                 limelightMeasurement.pose,
                 limelightMeasurement.timestampSeconds);
-
+        SmartDashboard.putNumber("X Coordinate", odometer.getEstimatedPosition().getX());
+        SmartDashboard.putNumber("Y Coordinate", odometer.getEstimatedPosition().getY());
+        SmartDashboard.putNumber("Rotation", odometer.getEstimatedPosition().getRotation().getDegrees());
     }
 
     /**
