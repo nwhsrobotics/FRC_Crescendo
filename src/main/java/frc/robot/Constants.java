@@ -173,6 +173,11 @@ public final class Constants {
         private static final double INDEX_WHEEL_DIAMETER_INCHES = 4;
         private static final double NOTE_DIAMETER_INCHES = 12;
 
+        public static final double FLYWHEELOff = 0;
+        public static final double FLYWHEELSPEEKER = 0;
+        //public static final double FLYWHEELAMP = 0;
+
+
         // do not edit manually; change diameter measurements instead.
         public static final double INDEX_STEP_ROTATIONS = INDEX_WHEEL_DIAMETER_INCHES / NOTE_DIAMETER_INCHES;  // pi cancels out.
     }

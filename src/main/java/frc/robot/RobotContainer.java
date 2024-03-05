@@ -124,6 +124,7 @@ public class RobotContainer {
         InstantCommand shoot = new InstantCommand(() -> shooterSubsystem.stepIndex(), shooterSubsystem);
         InstantCommand intakeOn = new InstantCommand(() -> intakeSubsystem.forwards(), intakeSubsystem);
         InstantCommand intakeOff = new InstantCommand(() -> intakeSubsystem.stop(), intakeSubsystem);
+        InstantCommand toggleFlywheel = new InstantCommand(() -> shooterSubsystem.toggleFlywheel(), shooterSubsystem);
 
         // Registers the instant commands
         NamedCommands.registerCommand("intakeOn", intakeOn);
@@ -133,15 +134,18 @@ public class RobotContainer {
         NamedCommands.registerCommand("climbDown", climbDown);
 
         NamedCommands.registerCommand("shoot", shoot);
+        NamedCommands.registerCommand("toggleFlywheel", toggleFlywheel);
+        
 
         // Binds commands to buttons
         gunner_A.whileTrue(wristIntakeCmdForward);
         gunner_B.whileTrue(wristIntakeCmdBackward);
         gunner_X.whileTrue(intakeCmdForward);
         gunner_X.whileTrue(intakeCmdBackward);
-        gunner_LB.onTrue(shoot);
+        gunner_RB.onTrue(shoot);
         gunner_pov90.onTrue(climbDown);
         gunner_pov270.onTrue(climbUp);
+        gunner_LB.onTrue(toggleFlywheel);
 
         // initialize driver button commands.
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw());
