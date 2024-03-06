@@ -23,6 +23,8 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public double flywheelRPM = 0;
 
+    private boolean isFlywheelOn = false;
+
     public ShooterSubsystem() {
         flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         flywheelEncoder = flywheelMotor.getEncoder();
@@ -56,6 +58,27 @@ public class ShooterSubsystem extends SubsystemBase {
         targetPosition += Constants.ShooterConstants.INDEX_STEP_ROTATIONS;
     }
 
+
+
+    public void toggleFlywheel(){
+        
+
+        if(isFlywheelOn){
+            flywheelRPM = Constants.ShooterConstants.FLYWHEELSPEEKER;
+            isFlywheelOn=false;
+        }
+        else if(isFlywheelOn == false){
+            flywheelRPM = Constants.ShooterConstants.FLYWHEELOff;
+            isFlywheelOn=true;
+        }
+
+        //TODO: test , also prob add more settings somehow 
+
+    }
+
+
+
+
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("isFlywheelReady", isFlywheelReady());
@@ -66,5 +89,8 @@ public class ShooterSubsystem extends SubsystemBase {
         } else {
             indexPidController.setReference(targetPosition, ControlType.kPosition);
         }
+
+        //TODO: idk if this works (may spam objects in smart dashboard) 
+        SmartDashboard.putBoolean("isFlywheelOn",!isFlywheelOn);
     }
 }
