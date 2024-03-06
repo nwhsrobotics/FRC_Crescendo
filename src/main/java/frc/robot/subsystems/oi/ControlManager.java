@@ -305,6 +305,10 @@ public class ControlManager {
         //double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
         //below is TZ because thats more accurate in 3d
         double targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace("limelight")[2] * 10 * kP;
+        //      if(LimelightHelpers.getTV("limelight")){
+       // m_robotDrive.arcadeDrive(limelight_range_proportional(), limelight_aim_proportional()); 
+    //}
+        //targetingForwardSpeed = -distanceFromLimelight(LimelightHelpers.getTY("limelight") * 0.5 * kP);
         //double targetingForwardSpeed = 2 / (LimelightHelpers.getTY("limelight") * 0.1 * kP);
         //if(Double.isInfinite(targetingForwardSpeed)) return 0;
         //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
@@ -316,18 +320,18 @@ public class ControlManager {
 
     private static double distanceFromLimelight(double targetOffsetAngle_Vertical){
         // how many degrees back is your limelight rotated from perfectly vertical?
-        double limelightMountAngleDegrees = 25.0; 
+        double limelightMountAngleDegrees = -10; 
 
         // distance from the center of the Limelight lens to the floor
-        double limelightLensHeightInches = 20.0; 
+        double limelightLensHeightMeters = 1.1; 
 
         // distance from the target to the floor
-        double goalHeightInches = 60.0; 
+        double goalHeightMeters = 0; 
 
         double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
         double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
 
         //calculate distance
-        return (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+        return (goalHeightMeters - limelightLensHeightMeters) / Math.tan(angleToGoalRadians);
     }
 }
