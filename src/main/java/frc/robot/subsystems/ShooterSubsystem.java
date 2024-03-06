@@ -91,6 +91,6 @@ public class ShooterSubsystem extends SubsystemBase {
         }
 
         //TODO: idk if this works (may spam objects in smart dashboard) 
-        SmartDashboard.putBoolean("isFlywheelOn",isFlywheelOn);
+        SmartDashboard.putBoolean("isFlywheelOn",!isFlywheelOn);
     }
 }
