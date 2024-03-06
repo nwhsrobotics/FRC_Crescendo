@@ -58,6 +58,8 @@ public class ShooterSubsystem extends SubsystemBase {
         targetPosition += Constants.ShooterConstants.INDEX_STEP_ROTATIONS;
     }
 
+
+
     public void toggleFlywheel(){
         
 
@@ -87,5 +89,8 @@ public class ShooterSubsystem extends SubsystemBase {
         } else {
             indexPidController.setReference(targetPosition, ControlType.kPosition);
         }
+
+        //TODO: idk if this works (may spam objects in smart dashboard) 
+        SmartDashboard.putBoolean("isFlywheelOn",isFlywheelOn);
     }
 }
