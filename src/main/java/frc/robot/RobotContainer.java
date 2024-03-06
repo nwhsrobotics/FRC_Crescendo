@@ -77,13 +77,19 @@ public class RobotContainer {
         InstantCommand wristAdjust = new InstantCommand(() -> wristSubsystem.adjustAngle(gunner.getRightY()), wristSubsystem);
 
         // Command for letting you adjust the wrist and arm together
-        ParallelCommandGroup parallel = new ParallelCommandGroup(armAdjust, wristAdjust);
-        parallel.addRequirements(wristSubsystem, armSubsystem);
-
+        ParallelCommandGroup adjust = new ParallelCommandGroup(armAdjust, wristAdjust);
+        adjust.addRequirements(wristSubsystem, armSubsystem);
         // Command group that has built-in logic 
-        SequentialCommandGroup seq = new SequentialCommandGroup();
-        seq.addRequirements(wristSubsystem, armSubsystem);
-        if (gunner_V.getAsBoolean()) {
+        SequentialCommandGroup toAmp = new SequentialCommandGroup(armLockAmp, wristLockAmp);
+        toAmp.addRequirements(wristSubsystem, armSubsystem);
+        SequentialCommandGroup toSource = new SequentialCommandGroup(armLockSource, wristLockSource);
+        toSource.addRequirements(wristSubsystem, armSubsystem);
+        SequentialCommandGroup semiWristAdjustAmp = new SequentialCommandGroup(armLockAmp, wristAdjust);
+        semiWristAdjustAmp.addRequirements(wristSubsystem, armSubsystem);
+        SequentialCommandGroup semiWristAdjustSource = new SequentialCommandGroup(armLockSource, wristAdjust);
+        semiWristAdjustSource.addRequirements(wristSubsystem, armSubsystem);
+        
+        /* if (gunner_V.getAsBoolean()) {
             seq.addCommands(
                 armLockAmp,
                 wristLockAmp
@@ -114,9 +120,10 @@ public class RobotContainer {
             );
         
         }
-
-        armSubsystem.setDefaultCommand(seq);
-        wristSubsystem.setDefaultCommand(seq);
+        */
+        
+        //armSubsystem.setDefaultCommand(seq);
+        //wristSubsystem.setDefaultCommand(seq);
 
         // Creates instant commands for the different robot functionalities
         InstantCommand climbUp = new InstantCommand(() -> climbSubsystem.moveUp(), climbSubsystem);
@@ -146,6 +153,11 @@ public class RobotContainer {
         gunner_pov90.onTrue(climbDown);
         gunner_pov270.onTrue(climbUp);
         gunner_LB.onTrue(toggleFlywheel);
+        gunner_V.whileTrue(toAmp);
+        gunner_M.whileTrue(toSource);
+        gunner_RS.whileTrue(adjust);
+        gunner_LS.whileTrue(semiWristAdjustAmp);
+        gunner_pov270.whileTrue(semiWristAdjustSource);
 
         // initialize driver button commands.
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw());
