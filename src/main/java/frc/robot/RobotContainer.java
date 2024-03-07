@@ -1,9 +1,12 @@
 package frc.robot;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,6 +23,8 @@ import frc.robot.commands.WristIntakeCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.controllers.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.limelight.LimelightHelpers;
+import frc.robot.subsystems.limelight.LimelightImplementation;
 import frc.robot.subsystems.oi.ControlManager;
 
 public class RobotContainer {
@@ -56,6 +61,7 @@ public class RobotContainer {
     public final POVButton gunner_pov90 = new POVButton(gunner, 90);
     public final POVButton gunner_pov180 = new POVButton(gunner, 180);
     public final POVButton gunner_pov270 = new POVButton(gunner, 270);
+    public Pose2d objectLocation = new Pose2d();
 
     public RobotContainer() {
         // Command for setting arm to the amp position
@@ -160,6 +166,7 @@ public class RobotContainer {
         gunner_pov270.whileTrue(semiWristAdjustSource);
 
         // initialize driver button commands.
+        // TODO: For navx reset reaplce with swerveSubsystem.resetOdometryWithVision(); instead of zeroing yaw
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw());
         ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> {swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative;});
         ControlManager.DriverButtonCommands.toggleAutonavigationCommand = new InstantCommand(() -> swerveSubsystem.autonavigator.toggle());
@@ -169,6 +176,7 @@ public class RobotContainer {
         ControlManager.DriverButtonCommands.autonavigateToTopStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.TOPSTAGE));
         ControlManager.DriverButtonCommands.autonavigateToMidStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.MIDSTAGE));
         ControlManager.DriverButtonCommands.autonavigateToBottomStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.BOTTOMSTAGE));
+        ControlManager.DriverButtonCommands.autonavigateToObject = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(objectLocation));
         
         // reserve gunner port.
         ControlManager.reserveController(3);  // THE GUNNER CONTROLLER SHOULD BE ON PORT 3.
@@ -197,7 +205,20 @@ public class RobotContainer {
         SmartDashboard.putData("Driver Controllers", controllerChooser);
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
+
+        SmartDashboard.putNumber("Limelight Pipeline Index", LimelightHelpers.getCurrentPipelineIndex("limelight"));
+        SmartDashboard.putString("Limelight Pipeline Name", LimelightImplementation.getPipelineName());
+        SendableChooser<Integer> pipeline = new SendableChooser<>();
+        pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));
+        pipeline.addOption("Note", Integer.valueOf(1));
+        pipeline.addOption("AprilTagZoom", Integer.valueOf(2));
+        pipeline.addOption("NoteZoom", Integer.valueOf(3));
+        SmartDashboard.putData(pipeline);
+        pipeline.onChange((pipelineNum) -> {
+            LimelightHelpers.setPipelineIndex("limelight", pipelineNum);
+        });
 
     }
 

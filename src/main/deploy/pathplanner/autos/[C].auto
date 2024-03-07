@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3,
-      "y": 5.55
+      "x": 0.8539035259888702,
+      "y": 4.52444177615628
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -26,37 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 1"
+            "pathName": "[C] [Back] [Right] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[B] [2 Note] 4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[B] [2 Note] 5"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[2 Note] 6"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[2 Note] 7"
+            "pathName": "[C] [Back] [Right] Return"
           }
         },
         {
@@ -68,30 +44,42 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 3"
+            "pathName": "[C] [Front] [RightMost] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 8"
+            "pathName": "[C] [Front] [RightMost] Return"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 9"
+            "pathName": "[C] [Front] [Right] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 10"
+            "pathName": "[C] [Front] [Right] Return"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[C] [Front] [Center] Exit"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[C] [Front] [Center] Return"
           }
         }
       ]
     }
   },
-  "folder": "Starting Point B",
+  "folder": "Starting Point C",
   "choreoAuto": false
 }
