@@ -38,25 +38,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 4"
+            "pathName": "[B] [Back] [Right] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 5"
+            "pathName": "[B] [Back] [Right] Return"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[2 Note] 6"
+            "pathName": "[B] [Back] [Left] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[2 Note] 7"
+            "pathName": "[B] [Back] [Left] Return"
           }
         },
         {
@@ -68,25 +68,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 3"
+            "pathName": "[B] [Front] [Center] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 8"
+            "pathName": "[B] [Front] [Center] Return"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 9"
+            "pathName": "[B] [Front] [Left] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[B] [2 Note] 10"
+            "pathName": "[B] [Front] [Left] Return"
           }
         }
       ]
