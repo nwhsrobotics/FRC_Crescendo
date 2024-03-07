@@ -127,6 +127,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         // Pause for 500 milliseconds to allow the gyro to stabilize.
         // Set the yaw of the gyro to 0 afterwards.
+        // TODO: Do we need this anymore? Might cause conflicts with path planner
         Commands.waitSeconds(0.5)
                 .andThen(new RunCommand(() -> gyro.zeroYaw()));
 
