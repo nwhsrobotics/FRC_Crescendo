@@ -156,5 +156,28 @@ public class LimelightImplementation {
         return pos;
     }
 
+    public static void nextPipeline(){
+        double currentIndex = LimelightHelpers.getCurrentPipelineIndex("limelight");
+        if(currentIndex < 3.0){
+            LimelightHelpers.setPipelineIndex("limelight", (int)(currentIndex+1));
+        } else {
+            LimelightHelpers.setPipelineIndex("limelight", 0);
+        }
+    }
 
+    public static String getPipelineName(){
+        double currentIndex = LimelightHelpers.getCurrentPipelineIndex("limelight");
+        switch((int)currentIndex){
+            case 1:
+                return "Note";
+            break;
+            case: 0
+            return "AprilTag";
+            default:
+                return "None";
+        }
+
+    }
+
+    //TODO: Remove a lot of redudant methods like getting sin of distance vs getting tan of a leg is same thing but its being repeated5
 }
