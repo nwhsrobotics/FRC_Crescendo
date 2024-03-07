@@ -1,5 +1,7 @@
 package frc.robot;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -202,8 +204,10 @@ public class RobotContainer {
         SmartDashboard.putData("Driver Controllers", controllerChooser);
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
 
+        SmartDashboard.putNumber("Limelight Pipeline Index", LimelightHelpers.getCurrentPipelineIndex("limelight"));
         SendableChooser<Integer> pipeline = new SendableChooser<>();
         pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));
         pipeline.addOption("Note", Integer.valueOf(1));
