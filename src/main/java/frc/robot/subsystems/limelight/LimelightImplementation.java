@@ -22,6 +22,7 @@ public class LimelightImplementation {
             double kP = .035;
 
             // Calculate targeting angular velocity based on horizontal angle error (tx) from Limelight.
+            // TODO: For proper angle offset adding something to tx and then multiply
             double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
 
             //targetingAngularVelocity *= Constants.DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
