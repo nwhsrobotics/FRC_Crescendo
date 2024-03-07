@@ -136,7 +136,23 @@ public class LimelightImplementation {
             double distance = distanceFromLimelight();
             Translation2d translation = pos.getTranslation().plus(new Translation2d(horizontalDistance, distance));
 
-            return new Pose2d(translation, Rotation2d.fromDegrees(LimelightHelpers.getTX("limelight")));
+            // Calculate the rotation of the target based on Limelight's horizontal angle (tx).
+            // Note: We add the rotation of the Limelight to the target's existing rotation.
+            Rotation2d targetRotation = pos.getRotation().plus(Rotation2d.fromDegrees(LimelightHelpers.getTX("limelight")));
+
+            return new Pose2d(translation, targetRotation);
+
+            /*
+             * double original_x = 10.0; // Original x-coordinate
+                double original_y = 0.0;  // Original y-coordinate (since it's on the x-axis)
+
+                double angle = Math.toRadians(30); // Convert angle from degrees to radians
+
+                // Calculate new x and y coordinates after rotation
+                double new_x = original_x * Math.cos(angle) - original_y * Math.sin(angle);
+                double new_y = original_x * Math.sin(angle) + original_y * Math.cos(angle);
+
+             */
         }
 
         return pos;
