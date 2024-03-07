@@ -230,6 +230,10 @@ public final class Constants {
         public static final Pose2d TOPSTAGE = new Pose2d(4.38, 4.89, Rotation2d.fromDegrees(-60.00));
     }
 
+    public static final class LimelightConstants {
+        //TODO: Move everything here finish this
+    }
+
     public enum RuntimeEnvironment {
         /**
          * Running on physical robot.
