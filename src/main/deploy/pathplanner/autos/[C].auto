@@ -26,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 1"
+            "pathName": "[C] [Back] [Right] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 2"
+            "pathName": "[C] [Back] [Right] Return"
           }
         },
         {
@@ -44,37 +44,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 3"
+            "pathName": "[C] [Front] [RightMost] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 4"
+            "pathName": "[C] [Front] [RightMost] Return"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 5"
+            "pathName": "[C] [Front] [Right] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 6"
+            "pathName": "[C] [Front] [Right] Return"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 7"
+            "pathName": "[C] [Front] [Center] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 8"
+            "pathName": "[C] [Front] [Center] Return"
           }
         }
       ]
