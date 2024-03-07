@@ -1,118 +1,123 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
+// This class provides implementations for utilizing a Limelight camera for various robot control tasks.
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
-/** Add your docs here. */
+/**
+ * This class contains implementations for using Limelight camera for aiming, ranging, and transforming target location.
+ */
 public class LimelightImplementation {
-    
-    // simple proportional turning control with Limelight.
-    // "proportional control" is a control algorithm in which the output is proportional to the error.
-    // in this case, we are going to return an angular velocity that is proportional to the 
-    // "tx" value from the Limelight.
+
+    /**
+     * Implements simple proportional turning control with the Limelight.
+     * Proportional control adjusts output based on error, here the difference between target's angle and camera's angle.
+     * @return The angular velocity proportional to the horizontal angle error (tx) detected by the Limelight.
+     */
     public static double limelight_aim_proportional() {
         if(LimelightHelpers.getTV("limelight")){
-            // kP (constant of proportionality)
-            // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
-            // if it is too high, the robot will oscillate around.
-            // if it is too low, the robot will never reach its target
-            // if the robot never turns in the correct direction, kP should be inverted.
+            // Proportional constant determining the aggressiveness of turning.
             double kP = .035;
 
-            // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the rightmost edge of 
-            // your limelight 3 feed, tx should return roughly 31 degrees.
+            // Calculate targeting angular velocity based on horizontal angle error (tx) from Limelight.
             double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
 
-            // convert to radians per second for our drive method
             //targetingAngularVelocity *= Constants.DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
+            // Convert angular velocity to radians per second.
             targetingAngularVelocity *= 0.5;
-            //invert since tx is positive when the target is to the right of the crosshair
+            // Invert the velocity since Limelight's tx is positive when the target is to the right of the crosshair.
             targetingAngularVelocity *= -1.0;
 
             return targetingAngularVelocity;
-        } 
+        }
         return 0.0;
     }
 
-    // simple proportional ranging control with Limelight's "ty" value
-    // this works best if your Limelight's mount height and target mount height are different.
-    // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
+    /**
+     * Implements simple proportional ranging control using Limelight's "ty" value.
+     * Adjusts the robot's forward speed based on the vertical angle (ty) detected by the Limelight.
+     * @return The forward speed proportional to the vertical angle error (ty) from Limelight.
+     */
     public static double limelight_range_proportional() {
         if(LimelightHelpers.getTV("limelight")){
             double targetingForwardSpeed = 0.0;
             if(isAprilTagPipeline()){
-                double kP = .1;
-                
-                //below is TZ because thats more accurate in 3d
-                targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace("limelight")[2] * 10 * kP;
+                // Calculate targeting forward speed based on target's distance (TZ) in 3D space.
+                targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace("limelight")[2];
                 //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
                 targetingForwardSpeed *= 0.345;
                 //TODO: change the signs
                 targetingForwardSpeed *= -1.0;
-
             } else {
                 double kP = .1;
                 //double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
                 //double targetingForwardSpeed = 2 / (LimelightHelpers.getTY("limelight") * 0.1 * kP);
+
                 //if(Double.isInfinite(targetingForwardSpeed)) return 0;
+
                 //targetingForwardSpeed = -distanceFromLimelight(LimelightHelpers.getTY("limelight") * 0.5 * kP);
-                targetingForwardSpeed = Math.min((-hypotenuseLength() * kP), Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+                // Calculate targeting forward speed based on vertical angle error (ty) from Limelight.
+                targetingForwardSpeed = -hypotenuseLength() * kP;
             }
             return targetingForwardSpeed;
         }
         return 0.0;
     }
 
+    /**
+     * Calculates the distance from the Limelight to the target.
+     * @return The calculated distance from the Limelight to the target.
+     */
     public static double distanceFromLimelight(){
         if(LimelightHelpers.getTV("limelight")){
-            // how many degrees back is your limelight rotated from perfectly vertical?
-            double limelightMountAngleDegrees = -10; 
+            // Angle at which the Limelight is mounted (degrees).
+            double limelightMountAngleDegrees = -10;
+            // Height of Limelight lens above the floor (meters).
+            double limelightLensHeightMeters = 1.1;
+            // Height of target above the floor (meters).
+            double goalHeightMeters = 0.0;
 
-            // distance from the center of the Limelight lens to the floor
-            double limelightLensHeightMeters = 1.1; 
-
-            // distance from the target to the floor
-            double goalHeightMeters = 0.0; 
-
+            // Calculate angle to the target.
             double angleToGoalDegrees = limelightMountAngleDegrees + LimelightHelpers.getTY("limelight");
-            double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+            double angleToGoalRadians = angleToGoalDegrees * (Math.PI / 180.0);
 
-            //calculate distance
+            // Calculate distance to the target.
             return (goalHeightMeters - limelightLensHeightMeters) / Math.tan(angleToGoalRadians);
         }
         return 0.0;
     }
 
     /**
-     * Hypotenuse length the the game piece (same height) 2d / actual DISTANCE
+     * Calculates the hypotenuse length between the Limelight and the target.
+     * @return The calculated hypotenuse length (aka actual length to object) between the Limelight and the target.
      */
     public static double hypotenuseLength(){
         if(LimelightHelpers.getTV("limelight")){
             double legLength = distanceFromLimelight();
-            double cosTheta = Math.cos(LimelightHelpers.getTX("limelight") / 180 * 3.14159);
+            double cosTheta = Math.cos(LimelightHelpers.getTX("limelight") / 180 * Math.PI);
             return legLength / cosTheta;
         }
         return 0.0;
     }
 
     /**
-     * Horizontally how far left or right from the middle of the crosshair
+     * Calculates the horizontal offset distance from the target.
+     * @return The calculated horizontal offset distance from the target.
      */
     public static double horizontalOffestDistance(){
         if(LimelightHelpers.getTV("limelight")){
             double legLength = distanceFromLimelight();
-            double tanTheta = Math.tan(LimelightHelpers.getTX("limelight") / 180 * 3.14159);
+            double tanTheta = Math.tan(LimelightHelpers.getTX("limelight") / 180 * Math.PI);
             return legLength * tanTheta;
         }
         return 0.0;
     }
 
+    /**
+     * Checks if the AprilTag pipeline is being used.
+     * @return True if the AprilTag pipeline is being used, false otherwise.
+     */
     private static boolean isAprilTagPipeline(){
         if(LimelightHelpers.getCurrentPipelineIndex("limelight") == 0.0){
             return true;
@@ -120,16 +125,20 @@ public class LimelightImplementation {
         return false;
     }
 
-public static Pose2d transformTargetLocation(Pose2d pos) {
-    if (LimelightHelpers.getTV("limelight")) {
-        double horizontalDistance = horizontalOffestDistance();
-        double distance = distanceFromLimelight();
-        Translation2d translation = pos.getTranslation().plus(new Translation2d(horizontalDistance, distance));
+    /**
+     * Transforms the target's location based on Limelight's data.
+     * @param pos The current position of the target.
+     * @return The transformed position of the target.
+     */
+    public static Pose2d transformTargetLocation(Pose2d pos) {
+        if (LimelightHelpers.getTV("limelight")) {
+            double horizontalDistance = horizontalOffestDistance();
+            double distance = distanceFromLimelight();
+            Translation2d translation = pos.getTranslation().plus(new Translation2d(horizontalDistance, distance));
 
-        return new Pose2d(translation, pos.getRotation());
+            return new Pose2d(translation, Rotation2d.fromDegrees(LimelightHelpers.getTX("limelight")));
+        }
+
+        return pos;
     }
-
-    return pos;
-}
-
 }
