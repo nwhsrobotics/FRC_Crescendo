@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.LimelightHelpers;
 import frc.robot.LimelightImplementation;
 
 import org.littletonrobotics.junction.Logger;
@@ -47,6 +46,7 @@ public class ControlManager {
         public static Command autonavigateToTopStage = emptyButtonCommand;
         public static Command autonavigateToMidStage = emptyButtonCommand;
         public static Command autonavigateToBottomStage = emptyButtonCommand;
+        public static Command autonavigateToObject = emptyButtonCommand;
     }
 
     private static final HashMap<Integer, Controller> registry = new HashMap<>();
@@ -66,7 +66,7 @@ public class ControlManager {
      * @param port    - the port of associated controller.
      * @param command - the command to be executed when the button is pressed.
      */
-    private static void makeTriggerForButton(GenericHID hid, int port, int button, Command command, boolean isCommandDriver) {
+    private static void makeTriggerForButton(GenericHID hid, int port, int button, Command command) {
         if (button == -1) {  // -1 means it should not be bound.
             return;
         }
@@ -114,15 +114,16 @@ public class ControlManager {
         }
 
         GenericHID hid = controller.getGenericHID();
-        makeTriggerForButton(hid, controller.getPort(), controller.getNavXResetButton(), DriverButtonCommands.navXResetCommand, true);
-        makeTriggerForButton(hid, controller.getPort(), controller.getFieldRelativeButton(), DriverButtonCommands.toggleFieldRelativeCommand, true);
-        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigationButton(), DriverButtonCommands.toggleAutonavigationCommand, true);
-        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToAmpButton(), DriverButtonCommands.autonavigateToAmp, true);
-        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToSourceButton(), DriverButtonCommands.autonavigateToSource, true);
-        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToSpeakerButton(), DriverButtonCommands.autonavigateToSpeaker, true);
-        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToTopStageButton(), DriverButtonCommands.autonavigateToTopStage, true);
-        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToMidStageButton(), DriverButtonCommands.autonavigateToMidStage, true);
-        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToBottomStageButton(), DriverButtonCommands.autonavigateToBottomStage, true);
+        makeTriggerForButton(hid, controller.getPort(), controller.getNavXResetButton(), DriverButtonCommands.navXResetCommand);
+        makeTriggerForButton(hid, controller.getPort(), controller.getFieldRelativeButton(), DriverButtonCommands.toggleFieldRelativeCommand);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigationButton(), DriverButtonCommands.toggleAutonavigationCommand);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToAmpButton(), DriverButtonCommands.autonavigateToAmp);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToSourceButton(), DriverButtonCommands.autonavigateToSource);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToSpeakerButton(), DriverButtonCommands.autonavigateToSpeaker);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToTopStageButton(), DriverButtonCommands.autonavigateToTopStage);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToMidStageButton(), DriverButtonCommands.autonavigateToMidStage);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToBottomStageButton(), DriverButtonCommands.autonavigateToBottomStage);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToObject(), DriverButtonCommands.autonavigateToObject);
 
         Logger.recordOutput("controlmanager.controller." + controller.getPort() + ".name", controller.getName());
     }
@@ -252,11 +253,9 @@ public class ControlManager {
 
 
         if (driverController.aprilTagAllignButtonIsPressed()) {
-            final var rot_limelight = LimelightImplementation.limelight_aim_proportional();
-            ControlManager.Outputs.rotatingSpeed = rot_limelight;
+            ControlManager.Outputs.rotatingSpeed = LimelightImplementation.limelight_aim_proportional();
 
-            final var forward_limelight = LimelightImplementation.limelight_range_proportional();
-            ControlManager.Outputs.xSpeed = forward_limelight;
+            ControlManager.Outputs.xSpeed = LimelightImplementation.limelight_range_proportional();
 
             //while using Limelight, turn off field-relative driving.
             fieldRelative = false;
