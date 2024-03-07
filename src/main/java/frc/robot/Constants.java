@@ -108,9 +108,9 @@ public final class Constants {
 
     public static final class DriveConstants {
         // left-to-right distance between the drivetrain wheels, should be measured from center to center AND IN METERS
-        public static final double kTrackWidth = 0.52;
+        public static final double kTrackWidth = 0.597;
         // front-back distance between drivetrain wheels, should be measured from center to center AND IN METERS 
-        public static final double kWheelBase = 0.655;
+        public static final double kWheelBase = 0.546;
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
                 new Translation2d(kWheelBase / 2, kTrackWidth / 2), //front left
                 new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //front right
