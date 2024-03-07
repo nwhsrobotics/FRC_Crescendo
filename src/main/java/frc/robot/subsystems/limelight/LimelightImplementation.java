@@ -142,10 +142,10 @@ public class LimelightImplementation {
             Rotation2d targetRotation = pos.getRotation().plus(Rotation2d.fromDegrees(LimelightHelpers.getTX("limelight")));
             
             // Calculate the actual X-coordinate after rotation
-            double actualX = translation.getX() + (distance * Math.cos(targetRotation.getRadians()));
+            double actualX = translation.getX() + (distance * Math.cos(targetRotation.getRadians()) - (LimelightConstants.horizontalOffset * Math.sin(targetRotation.getRadians())));
 
             // Calculate the actual Y-coordinate after rotation
-            double actualY = translation.getY() + ((distance * Math.sin(targetRotation.getRadians())) - LimelightConstants.horizontalOffset);
+            double actualY = translation.getY() + ((distance * Math.sin(targetRotation.getRadians())) - (LimelightConstants.horizontalOffset * Math.cos(targetRotation.getRadians())));
             
             Translation2d actualTranslation = new Translation2d(actualX, actualY);
 
@@ -157,27 +157,30 @@ public class LimelightImplementation {
     }
 
     public static void nextPipeline(){
-        double currentIndex = LimelightHelpers.getCurrentPipelineIndex("limelight");
+        int currentIndex = (int)LimelightHelpers.getCurrentPipelineIndex("limelight");
         if(currentIndex < 3.0){
-            LimelightHelpers.setPipelineIndex("limelight", (int)(currentIndex+1));
+            LimelightHelpers.setPipelineIndex("limelight", currentIndex+1);
         } else {
             LimelightHelpers.setPipelineIndex("limelight", 0);
         }
     }
 
     public static String getPipelineName(){
-        double currentIndex = LimelightHelpers.getCurrentPipelineIndex("limelight");
-        switch((int)currentIndex){
+        int currentIndex = (int)LimelightHelpers.getCurrentPipelineIndex("limelight");
+        switch(currentIndex){
+            case 0:
+                return "AprilTag";
             case 1:
                 return "Note";
-            break;
-            case: 0
-            return "AprilTag";
+            case 2:
+                return "AprilTagZoom";
+            case 3:
+                return "NoteZoom";
             default:
                 return "None";
         }
 
     }
 
-    //TODO: Remove a lot of redudant methods like getting sin of distance vs getting tan of a leg is same thing but its being repeated5
+    //TODO: Remove a lot of redudant methods like getting sin of distance vs getting tan of a leg is same thing but its being repeated
 }
