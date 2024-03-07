@@ -153,6 +153,17 @@ public interface Controller {
     }
 
     /**
+     * Get button binding for navigating to object detected by limelight.
+     * <p>
+     * This is a driver-side input.
+     *
+     * @return - button number.
+     */
+    default int getAutonavigateToObject() {
+        return -1;
+    }
+
+    /**
      * Get button binding for auto alligning to april tag
      * <p>
      * This is a driver-side input.

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8539035259888702,
-      "y": 4.52444177615628
+      "x": 0.98,
+      "y": 6.5
     },
-    "rotation": -60.0
+    "rotation": 61.52180505415579
   },
   "command": {
     "type": "sequential",
@@ -18,6 +18,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "intakeOn"
@@ -26,13 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 1"
+            "pathName": "[A] [Back] [Left] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 2"
+            "pathName": "[A] [Back] [Left] Return"
           }
         },
         {
@@ -44,42 +50,42 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 3"
+            "pathName": "[A] [Front] [LeftMost] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 4"
+            "pathName": "[A] [Front] [LeftMost] Return"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 5"
+            "pathName": "[A] [Front] [Left] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 6"
+            "pathName": "[A] [Front] [Left] Return"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 7"
+            "pathName": "[A] [Front] [LeftMost] [Bypass] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [2 Note] 8"
+            "pathName": "[A] [Front] [LeftMost] [Bypass] Return"
           }
         }
       ]
     }
   },
-  "folder": "Starting Point C",
+  "folder": "Starting Point A",
   "choreoAuto": false
 }

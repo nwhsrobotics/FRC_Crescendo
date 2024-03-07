@@ -25,7 +25,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.LimelightHelpers;
+import frc.robot.subsystems.limelight.LimelightHelpers;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -127,17 +127,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
         // Pause for 500 milliseconds to allow the gyro to stabilize.
         // Set the yaw of the gyro to 0 afterwards.
+        // TODO: Do we need this anymore? Might cause conflicts with path planner
         Commands.waitSeconds(0.5)
                 .andThen(new RunCommand(() -> gyro.zeroYaw()));
-
-        SendableChooser<Integer> pipeline = new SendableChooser<>();
-        pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));
-        pipeline.addOption("ColorDetection", Integer.valueOf(1));
-        pipeline.addOption("AprilTagZoom", Integer.valueOf(2));
-        SmartDashboard.putData(pipeline);
-        pipeline.onChange((pipelineNum) -> {
-            LimelightHelpers.setPipelineIndex("limelight", pipelineNum);
-        });
     }
 
     /**

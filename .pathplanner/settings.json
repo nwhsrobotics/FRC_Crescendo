@@ -4,9 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "Square",
-    "[A] [2 Note]",
-    "[B] [2 Note]",
-    "[C] [2 Note]"
+    "[A]",
+    "[B]",
+    "[C]"
   ],
   "autoFolders": [
     "Starting Point C",
