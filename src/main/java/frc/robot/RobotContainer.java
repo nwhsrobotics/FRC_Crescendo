@@ -162,6 +162,7 @@ public class RobotContainer {
         gunner_pov270.whileTrue(semiWristAdjustSource);
 
         // initialize driver button commands.
+        // TODO: For navx reset reaplce with swerveSubsystem.resetOdometryWithVision(); instead of zeroing yaw
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw());
         ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> {swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative;});
         ControlManager.DriverButtonCommands.toggleAutonavigationCommand = new InstantCommand(() -> swerveSubsystem.autonavigator.toggle());
