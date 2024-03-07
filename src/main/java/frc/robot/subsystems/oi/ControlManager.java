@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.LimelightImplementation;
+
 import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
@@ -250,10 +252,10 @@ public class ControlManager {
 
 
         if (driverController.aprilTagAllignButtonIsPressed()) {
-            final var rot_limelight = limelight_aim_proportional();
+            final var rot_limelight = LimelightImplementation.limelight_aim_proportional();
             ControlManager.Outputs.rotatingSpeed = rot_limelight;
 
-            final var forward_limelight = limelight_range_proportional();
+            final var forward_limelight = LimelightImplementation.limelight_range_proportional();
             ControlManager.Outputs.xSpeed = forward_limelight;
 
             //while using Limelight, turn off field-relative driving.
@@ -270,68 +272,5 @@ public class ControlManager {
             ControlManager.Outputs.ySpeed = driverController.getY() * DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
             ControlManager.Outputs.rotatingSpeed = driverController.getZ() * DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
         }
-    }
-
-    // simple proportional turning control with Limelight.
-    // "proportional control" is a control algorithm in which the output is proportional to the error.
-    // in this case, we are going to return an angular velocity that is proportional to the 
-    // "tx" value from the Limelight.
-    private static double limelight_aim_proportional() {
-        // kP (constant of proportionality)
-        // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
-        // if it is too high, the robot will oscillate around.
-        // if it is too low, the robot will never reach its target
-        // if the robot never turns in the correct direction, kP should be inverted.
-        double kP = .035;
-
-        // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the rightmost edge of 
-        // your limelight 3 feed, tx should return roughly 31 degrees.
-        double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
-
-        // convert to radians per second for our drive method
-        //targetingAngularVelocity *= Constants.DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
-        targetingAngularVelocity *= 0.5;
-        //invert since tx is positive when the target is to the right of the crosshair
-        targetingAngularVelocity *= -1.0;
-
-        return targetingAngularVelocity;
-    }
-
-    // simple proportional ranging control with Limelight's "ty" value
-    // this works best if your Limelight's mount height and target mount height are different.
-    // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
-    private static double limelight_range_proportional() {
-        double kP = .1;
-        //double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
-        //below is TZ because thats more accurate in 3d
-        double targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace("limelight")[2] * 10 * kP;
-        //      if(LimelightHelpers.getTV("limelight")){
-       // m_robotDrive.arcadeDrive(limelight_range_proportional(), limelight_aim_proportional()); 
-    //}
-        //targetingForwardSpeed = -distanceFromLimelight(LimelightHelpers.getTY("limelight") * 0.5 * kP);
-        //double targetingForwardSpeed = 2 / (LimelightHelpers.getTY("limelight") * 0.1 * kP);
-        //if(Double.isInfinite(targetingForwardSpeed)) return 0;
-        //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
-        targetingForwardSpeed *= 0.345;
-        //TODO: change the signs
-        targetingForwardSpeed *= -1.0;
-        return targetingForwardSpeed;
-    }
-
-    private static double distanceFromLimelight(double targetOffsetAngle_Vertical){
-        // how many degrees back is your limelight rotated from perfectly vertical?
-        double limelightMountAngleDegrees = -10; 
-
-        // distance from the center of the Limelight lens to the floor
-        double limelightLensHeightMeters = 1.1; 
-
-        // distance from the target to the floor
-        double goalHeightMeters = 0; 
-
-        double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
-        double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-
-        //calculate distance
-        return (goalHeightMeters - limelightLensHeightMeters) / Math.tan(angleToGoalRadians);
     }
 }
