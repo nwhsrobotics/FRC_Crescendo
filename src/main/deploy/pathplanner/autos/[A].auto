@@ -32,13 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[A] [2 Note] 1"
+            "pathName": "[A] [BackLeft] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[A] [2 Note] 2"
+            "pathName": "[A] [BackLeft] Return"
           }
         },
         {
