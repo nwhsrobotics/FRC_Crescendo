@@ -4,6 +4,7 @@ package frc.robot.subsystems.limelight;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.Constants.LimelightConstants;
 
 /**
  * This class contains implementations for using Limelight camera for aiming, ranging, and transforming target location.
@@ -72,9 +73,9 @@ public class LimelightImplementation {
     public static double distanceFromLimelight(){
         if(LimelightHelpers.getTV("limelight")){
             // Angle at which the Limelight is mounted (degrees).
-            double limelightMountAngleDegrees = -10;
+            double limelightMountAngleDegrees = LimelightConstants.mountAngle;
             // Height of Limelight lens above the floor (meters).
-            double limelightLensHeightMeters = 1.1;
+            double limelightLensHeightMeters = LimelightConstants.mountHeight;
             // Height of target above the floor (meters).
             double goalHeightMeters = 0.0;
 
@@ -144,7 +145,7 @@ public class LimelightImplementation {
             double actualX = translation.getX() + (distance * Math.cos(targetRotation.getRadians()));
 
             // Calculate the actual Y-coordinate after rotation
-            double actualY = translation.getY() + (distance * Math.sin(targetRotation.getRadians()));
+            double actualY = translation.getY() + ((distance * Math.sin(targetRotation.getRadians())) - LimelightConstants.horizontalOffset);
             
             Translation2d actualTranslation = new Translation2d(actualX, actualY);
 
