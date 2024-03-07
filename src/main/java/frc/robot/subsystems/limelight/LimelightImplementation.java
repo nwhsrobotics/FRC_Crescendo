@@ -133,7 +133,8 @@ public class LimelightImplementation {
     public static Pose2d transformTargetLocation(Pose2d pos) {
         if (LimelightHelpers.getTV("limelight")) {
             double horizontalDistance = horizontalOffestDistance();
-            double distance = distanceFromLimelight();
+            double distance = Math.abs(distanceFromLimelight()); // Ensure distance is always positive
+
             Translation2d translation = pos.getTranslation().plus(new Translation2d(horizontalDistance, distance));
             
             // Calculate the actual X-coordinate after rotation
@@ -153,5 +154,6 @@ public class LimelightImplementation {
 
         return pos;
     }
+
 
 }
