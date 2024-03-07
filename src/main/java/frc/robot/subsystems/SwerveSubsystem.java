@@ -25,7 +25,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.LimelightHelpers;
+import frc.robot.subsystems.limelight.LimelightHelpers;
 import org.littletonrobotics.junction.Logger;
 
 /**

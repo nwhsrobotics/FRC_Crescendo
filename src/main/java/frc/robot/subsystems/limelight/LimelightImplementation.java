@@ -1,5 +1,5 @@
 // This class provides implementations for utilizing a Limelight camera for various robot control tasks.
-package frc.robot;
+package frc.robot.subsystems.limelight;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
