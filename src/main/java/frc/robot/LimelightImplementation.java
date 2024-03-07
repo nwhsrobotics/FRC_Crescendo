@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+
 /** Add your docs here. */
 public class LimelightImplementation {
     
@@ -40,22 +45,26 @@ public class LimelightImplementation {
     // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
     public static double limelight_range_proportional() {
         if(LimelightHelpers.getTV("limelight")){
+            double targetingForwardSpeed = 0.0;
             if(isAprilTagPipeline()){
                 double kP = .1;
                 
                 //below is TZ because thats more accurate in 3d
-                double targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace("limelight")[2] * 10 * kP;
+                targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace("limelight")[2] * 10 * kP;
                 //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
                 targetingForwardSpeed *= 0.345;
                 //TODO: change the signs
                 targetingForwardSpeed *= -1.0;
-                return targetingForwardSpeed;
+
             } else {
+                double kP = .1;
                 //double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
                 //double targetingForwardSpeed = 2 / (LimelightHelpers.getTY("limelight") * 0.1 * kP);
                 //if(Double.isInfinite(targetingForwardSpeed)) return 0;
                 //targetingForwardSpeed = -distanceFromLimelight(LimelightHelpers.getTY("limelight") * 0.5 * kP);
+                targetingForwardSpeed = Math.min((-hypotenuseLength() * kP), Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
             }
+            return targetingForwardSpeed;
         }
         return 0.0;
     }
@@ -110,4 +119,17 @@ public class LimelightImplementation {
         }
         return false;
     }
+
+public static Pose2d transformTargetLocation(Pose2d pos) {
+    if (LimelightHelpers.getTV("limelight")) {
+        double horizontalDistance = horizontalOffestDistance();
+        double distance = distanceFromLimelight();
+        Translation2d translation = pos.getTranslation().plus(new Translation2d(horizontalDistance, distance));
+
+        return new Pose2d(translation, pos.getRotation());
+    }
+
+    return pos;
+}
+
 }

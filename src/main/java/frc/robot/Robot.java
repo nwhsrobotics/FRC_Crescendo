@@ -157,6 +157,7 @@ public class Robot extends LoggedRobot {
                 robotContainer.swerveSubsystem.autonavigator.resumeNavigation();
             }
         }
+        robotContainer.objectLocation = LimelightImplementation.transformTargetLocation(robotContainer.objectLocation);
     }
 
     @Override
