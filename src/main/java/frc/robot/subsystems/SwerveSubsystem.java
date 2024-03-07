@@ -130,15 +130,6 @@ public class SwerveSubsystem extends SubsystemBase {
         // TODO: Do we need this anymore? Might cause conflicts with path planner
         Commands.waitSeconds(0.5)
                 .andThen(new RunCommand(() -> gyro.zeroYaw()));
-
-        SendableChooser<Integer> pipeline = new SendableChooser<>();
-        pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));
-        pipeline.addOption("ColorDetection", Integer.valueOf(1));
-        pipeline.addOption("AprilTagZoom", Integer.valueOf(2));
-        SmartDashboard.putData(pipeline);
-        pipeline.onChange((pipelineNum) -> {
-            LimelightHelpers.setPipelineIndex("limelight", pipelineNum);
-        });
     }
 
     /**

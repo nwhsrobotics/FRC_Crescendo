@@ -21,6 +21,7 @@ import frc.robot.commands.WristIntakeCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.controllers.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.limelight.LimelightHelpers;
 import frc.robot.subsystems.oi.ControlManager;
 
 public class RobotContainer {
@@ -202,6 +203,16 @@ public class RobotContainer {
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
+
+        SendableChooser<Integer> pipeline = new SendableChooser<>();
+        pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));
+        pipeline.addOption("Note", Integer.valueOf(1));
+        pipeline.addOption("AprilTagZoom", Integer.valueOf(2));
+        pipeline.addOption("NoteZoom", Integer.valueOf(3));
+        SmartDashboard.putData(pipeline);
+        pipeline.onChange((pipelineNum) -> {
+            LimelightHelpers.setPipelineIndex("limelight", pipelineNum);
+        });
 
     }
 
