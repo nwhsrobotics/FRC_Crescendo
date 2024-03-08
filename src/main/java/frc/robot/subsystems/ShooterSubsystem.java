@@ -15,7 +15,6 @@ public class ShooterSubsystem extends SubsystemBase {
     private final SparkPIDController flyWheelPIDController;
     private final CANSparkMax indexMotor;
     private final SparkPIDController indexPIDController;
-    private double lastFlyWheelRPM = Constants.ShooterConstants.FLYWHEEL_SPEAKER_RPM;
     private double targetPosition = 0.0;
 
     /**
@@ -28,7 +27,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem() {
         flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         flywheelEncoder = flywheelMotor.getEncoder();
-
         flyWheelPIDController = flywheelMotor.getPIDController();
         flyWheelPIDController.setP(Constants.ShooterConstants.FLYWHEEL_PID_P);
 
@@ -55,36 +53,33 @@ public class ShooterSubsystem extends SubsystemBase {
         targetPosition += Constants.ShooterConstants.INDEX_STEP_ROTATIONS;
     }
 
-
-
-    public void toggleFlywheel(){
-        if(isFlywheelOn) {
-            lastFlyWheelRPM = flywheelRPM;
+    public void toggleAmp() {
+        if (isFlywheelOn && flywheelRPM != Constants.ShooterConstants.FLYWHEEL_AMP_RPM) {
+            flywheelRPM = Constants.ShooterConstants.FLYWHEEL_AMP_RPM;
+        } 
+        else if (isFlywheelOn) {
             flywheelRPM = 0.0;
             isFlywheelOn = false;
         }
         else {
-            flywheelRPM = lastFlyWheelRPM;
+            flywheelRPM = Constants.ShooterConstants.FLYWHEEL_AMP_RPM;
             isFlywheelOn = true;
         }
     }
 
-    public void toggleAmp() {
-        if (isFlywheelOn) {
-            flywheelRPM = Constants.ShooterConstants.FLYWHEEL_AMP_RPM;
-        }
-    }
-
     public void toggleSpeaker(){
-        if (isFlywheelOn) {
+         if (isFlywheelOn && flywheelRPM != Constants.ShooterConstants.FLYWHEEL_SPEAKER_RPM) {
             flywheelRPM = Constants.ShooterConstants.FLYWHEEL_SPEAKER_RPM;
+        } 
+        else if (isFlywheelOn) {
+            flywheelRPM = 0.0;
+            isFlywheelOn = false;
+        }
+        else {
+            flywheelRPM = Constants.ShooterConstants.FLYWHEEL_SPEAKER_RPM;
+            isFlywheelOn = true;
         }
     }
-
-
-
-
-
 
     @Override
     public void periodic() {

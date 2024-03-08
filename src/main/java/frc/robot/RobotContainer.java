@@ -139,7 +139,7 @@ public class RobotContainer {
         InstantCommand shoot = new InstantCommand(() -> shooterSubsystem.stepIndex(), shooterSubsystem);
         InstantCommand intakeOn = new InstantCommand(() -> intakeSubsystem.forwards(), intakeSubsystem);
         InstantCommand intakeOff = new InstantCommand(() -> intakeSubsystem.stop(), intakeSubsystem);
-        InstantCommand toggleFlywheel = new InstantCommand(() -> shooterSubsystem.toggleFlywheel(), shooterSubsystem);
+        //InstantCommand toggleFlywheel = new InstantCommand(() -> shooterSubsystem.toggleFlywheel(), shooterSubsystem);
         InstantCommand toggleAmp = new InstantCommand(() -> shooterSubsystem.toggleAmp(), shooterSubsystem);
         InstantCommand toggleSpeaker = new InstantCommand(() -> shooterSubsystem.toggleSpeaker(), shooterSubsystem);
 
@@ -151,7 +151,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("climbDown", climbDown);
 
         NamedCommands.registerCommand("shoot", shoot);
-        NamedCommands.registerCommand("toggleFlywheel", toggleFlywheel);
+        NamedCommands.registerCommand("toggleSpeaker", toggleSpeaker);
+        NamedCommands.registerCommand("toggleAmp", toggleAmp);
+        //NamedCommands.registerCommand("toggleFlywheel", toggleFlywheel);
         
 
         // Binds commands to buttons
@@ -163,7 +165,7 @@ public class RobotContainer {
         gunner_pov90.onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
         gunner_pov180.onTrue(toggleSpeaker);
         gunner_pov0.onTrue(toggleAmp);
-        gunner_LB.onTrue(toggleFlywheel);
+        //gunner_LB.onTrue(toggleFlywheel);
         gunner_V.whileTrue(toAmp);
         gunner_M.whileTrue(toSource);
         gunner_RS.whileTrue(adjust);
