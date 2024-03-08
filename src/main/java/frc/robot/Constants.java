@@ -165,7 +165,7 @@ public final class Constants {
          * If the flywheel spins within the tolerance,
          * then it is considered up-to-speed for firing.
          */
-        public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 10;
+        public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 10.0;
 
         public static final double FLYWHEEL_PID_P = 0.5;
         public static final double INDEX_PID_P = 0.5;
@@ -173,9 +173,8 @@ public final class Constants {
         private static final double INDEX_WHEEL_DIAMETER_INCHES = 4;
         private static final double NOTE_DIAMETER_INCHES = 12;
 
-        public static final double FLYWHEELOff = 0;
-        public static final double FLYWHEELSPEEKER = 0;
-        //public static final double FLYWHEELAMP = 0;
+        public static final double FLYWHEEL_SPEAKER_RPM = 50.0; //TODO FIX THIS
+        public static final double FLYWHEEL_AMP_RPM = 25.0; //TODO FIX THIS
 
 
         // do not edit manually; change diameter measurements instead.
