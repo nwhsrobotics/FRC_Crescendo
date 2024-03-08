@@ -22,21 +22,7 @@ public class ClimbSubsystem extends SubsystemBase {
     private final SparkPIDController rightClimbPID;
     private final SparkPIDController leftClimbPID;
 
-    private static final double MAX_HEIGHT_METERS = 0.0 * 0.0254; // TODO: get actual max
-    private static final double MIN_HEIGHT_METERS = 0.0 * 0.0254; // TODO: get actual min
-    private static final double INITIAL_HEIGHT_METERS = 0.0;
-
-    public static final double AUTO_CLIMB_RAISE = 0.1524;
-
-    public static final double SPEED_PER_SECOND = 0.22;
-    public static final double TICKS_PER_SECOND = 50;
-    private static final double GEAR_RATIO = -5.0; // TODO: Get actual gear ratio
-    private static final double LEAD_DISTANCE = (0.5 * 0.0254); // (inches * m/in) half an inch to meters
-
-    private static final double COUNTS_PER_METER = (GEAR_RATIO / LEAD_DISTANCE);
-    private static final double METERS_TO_INCHES = 39.37;
-
-    private double desiredHeight = INITIAL_HEIGHT_METERS;
+    private double desiredHeight = Constants.ClimbConstants.INITIAL_HEIGHT_METERS;
 
     public ClimbSubsystem() {
         rightClimbEncoder = rightClimbMotor.getEncoder();
@@ -61,24 +47,24 @@ public class ClimbSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Covert the meters to the count
-        double counts = desiredHeight * COUNTS_PER_METER;
+        double counts = desiredHeight * Constants.ClimbConstants.COUNTS_PER_METER;
 
         leftClimbPID.setReference(counts, ControlType.kPosition);
         rightClimbPID.setReference(counts, ControlType.kPosition);
-        Logger.recordOutput("Climb Position", desiredHeight * METERS_TO_INCHES);
+        Logger.recordOutput("Climb Position", desiredHeight * Constants.ClimbConstants.METERS_TO_INCHES);
     }
 
     public void moveUp() {
-        desiredHeight += SPEED_PER_SECOND / TICKS_PER_SECOND;
-        if (desiredHeight > MAX_HEIGHT_METERS) {
-            desiredHeight = MAX_HEIGHT_METERS;
+        desiredHeight += Constants.ClimbConstants.SPEED_PER_SECOND / Constants.ClimbConstants.TICKS_PER_SECOND;
+        if (desiredHeight > Constants.ClimbConstants.MAX_HEIGHT_METERS) {
+            desiredHeight = Constants.ClimbConstants.MAX_HEIGHT_METERS;
         }
     }
 
     public void moveDown() {
-        desiredHeight -= SPEED_PER_SECOND / TICKS_PER_SECOND;
-        if (desiredHeight < MIN_HEIGHT_METERS) {
-            desiredHeight = MIN_HEIGHT_METERS;
+        desiredHeight -= Constants.ClimbConstants.SPEED_PER_SECOND / Constants.ClimbConstants.TICKS_PER_SECOND;
+        if (desiredHeight < Constants.ClimbConstants.MIN_HEIGHT_METERS) {
+            desiredHeight = Constants.ClimbConstants.MIN_HEIGHT_METERS;
         }
     }
 
