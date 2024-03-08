@@ -140,6 +140,8 @@ public class RobotContainer {
         InstantCommand intakeOn = new InstantCommand(() -> intakeSubsystem.forwards(), intakeSubsystem);
         InstantCommand intakeOff = new InstantCommand(() -> intakeSubsystem.stop(), intakeSubsystem);
         InstantCommand toggleFlywheel = new InstantCommand(() -> shooterSubsystem.toggleFlywheel(), shooterSubsystem);
+        InstantCommand toggleAmp = new InstantCommand(() -> shooterSubsystem.toggleAmp(), shooterSubsystem);
+        InstantCommand toggleSpeaker = new InstantCommand(() -> shooterSubsystem.toggleSpeaker(), shooterSubsystem);
 
         // Registers the instant commands
         NamedCommands.registerCommand("intakeOn", intakeOn);
@@ -159,12 +161,14 @@ public class RobotContainer {
         gunner_X.whileTrue(intakeCmdBackward);
         gunner_RB.onTrue(shoot);
         gunner_pov90.onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
+        gunner_pov180.onTrue(toggleSpeaker);
+        gunner_pov0.onTrue(toggleAmp);
         gunner_LB.onTrue(toggleFlywheel);
         gunner_V.whileTrue(toAmp);
         gunner_M.whileTrue(toSource);
         gunner_RS.whileTrue(adjust);
         gunner_LS.whileTrue(semiWristAdjustAmp);
-        gunner_pov270.whileTrue(semiWristAdjustSource);
+        gunner_pov270.whileTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
 
         // initialize driver button commands.
         // TODO: For navx reset reaplce with swerveSubsystem.resetOdometryWithVision(); instead of zeroing yaw
