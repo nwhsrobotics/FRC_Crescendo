@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -13,10 +12,11 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax flywheelMotor;
     private final RelativeEncoder flywheelEncoder;
-    private final SparkPIDController flywheelPidController;
+    private final SparkPIDController flyWheelPIDController;
     private final CANSparkMax indexMotor;
-    private final SparkPIDController indexPidController;
-    private double targetPosition = 0;
+    private final SparkPIDController indexPIDController;
+    private double lastFlyWheelRPM = Constants.ShooterConstants.FLYWHEEL_SPEAKER_RPM;
+    private double targetPosition = 0.0;
 
     /**
      * The target RPM the flywheel motor will spin up to.
@@ -28,12 +28,13 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem() {
         flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         flywheelEncoder = flywheelMotor.getEncoder();
-        flywheelPidController = flywheelMotor.getPIDController();
-        flywheelPidController.setP(Constants.ShooterConstants.FLYWHEEL_PID_P);
+
+        flyWheelPIDController = flywheelMotor.getPIDController();
+        flyWheelPIDController.setP(Constants.ShooterConstants.FLYWHEEL_PID_P);
 
         indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
-        indexPidController = indexMotor.getPIDController();
-        indexPidController.setP(Constants.ShooterConstants.INDEX_PID_P);
+        indexPIDController = indexMotor.getPIDController();
+        indexPIDController.setP(Constants.ShooterConstants.INDEX_PID_P);
     }
 
     /**
@@ -42,11 +43,7 @@ public class ShooterSubsystem extends SubsystemBase {
      * @return - boolean representing whether the flywheel is ready.
      */
     public boolean isFlywheelReady() {
-        double lower = flywheelRPM - Constants.ShooterConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
-        double upper = flywheelRPM + Constants.ShooterConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
-        double x = flywheelEncoder.getVelocity();
-
-        return x >= lower && x <= upper;
+        return flywheelEncoder.getVelocity() >= flywheelRPM - Constants.ShooterConstants.FLYWHEEL_TARGET_RPM_TOLERANCE && flywheelEncoder.getVelocity() <= flywheelRPM + Constants.ShooterConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
     }
 
     /**
@@ -61,20 +58,30 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     public void toggleFlywheel(){
-        
-
-        if(isFlywheelOn){
-            flywheelRPM = Constants.ShooterConstants.FLYWHEELSPEEKER;
-            isFlywheelOn=false;
+        if(isFlywheelOn) {
+            lastFlyWheelRPM = flywheelRPM;
+            flywheelRPM = 0.0;
+            isFlywheelOn = false;
         }
-        else if(isFlywheelOn == false){
-            flywheelRPM = Constants.ShooterConstants.FLYWHEELOff;
-            isFlywheelOn=true;
+        else {
+            flywheelRPM = lastFlyWheelRPM;
+            isFlywheelOn = true;
         }
-
-        //TODO: test , also prob add more settings somehow 
-
     }
+
+    public void toggleAmp() {
+        if (isFlywheelOn) {
+            flywheelRPM = Constants.ShooterConstants.FLYWHEEL_AMP_RPM;
+        }
+    }
+
+    public void toggleSpeaker(){
+        if (isFlywheelOn) {
+            flywheelRPM = Constants.ShooterConstants.FLYWHEEL_SPEAKER_RPM;
+        }
+    }
+
+
 
 
 
@@ -82,15 +89,14 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("isFlywheelReady", isFlywheelReady());
-        flywheelPidController.setReference(flywheelRPM, ControlType.kVelocity);
+        flyWheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
 
         if (!isFlywheelReady()) {
             indexMotor.stopMotor();
         } else {
-            indexPidController.setReference(targetPosition, ControlType.kPosition);
+            indexPIDController.setReference(targetPosition, ControlType.kPosition);
         }
 
-        //TODO: idk if this works (may spam objects in smart dashboard) 
-        SmartDashboard.putBoolean("isFlywheelOn",!isFlywheelOn);
+        //SmartDashboard.putBoolean("isFlywheelOn",isFlywheelOn);
     }
 }
