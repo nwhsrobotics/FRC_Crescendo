@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -22,6 +24,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
+        
         shoulderMotor = new CANSparkMax(Constants.CANAssignments.SHOULDER_MOTOR_ID, MotorType.kBrushless);
         shoulderRelativeEncoder = shoulderMotor.getEncoder();
         shoulderPidController = shoulderMotor.getPIDController();
@@ -43,9 +46,7 @@ public class ArmSubsystem extends SubsystemBase {
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
 
-
         desiredPosition = (sourcePosition / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
-
 
     }
 
@@ -54,20 +55,22 @@ public class ArmSubsystem extends SubsystemBase {
 
         desiredPosition += changeInPosition;
         
-
     }
 
 
     @Override
     public void periodic() {
         shoulderPidController.setReference(desiredPosition, ControlType.kPosition);
-
-
+        
         //this makes sure the wrist does not move anymore if the same position preset is pressed away
         if(currentPosition == desiredPosition){
             shoulderMotor.stopMotor();
         }
 
+        Logger.recordOutput("Arm Desired Position", desiredPosition);
+        Logger.recordOutput("Arm Current Position", currentPosition);
+        Logger.recordOutput("Arm Auto Lock Enabled Amp", autoLockEnabledAmp);
+        Logger.recordOutput("Arm Auto Lock Enabled Source", autoLockEnabledSource);
 
         // This method will be called once per scheduler run
     }
