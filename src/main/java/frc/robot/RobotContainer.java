@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.FavoritePositions;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
 import frc.robot.commands.WristIntakeCmd;
+import frc.robot.commands.ClimbCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.controllers.*;
 import frc.robot.subsystems.*;
@@ -39,12 +40,13 @@ public class RobotContainer {
     public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
 
+    public static XboxController gunner = new XboxController(3);
+
     public final WristIntakeCmd wristIntakeCmdForward = new WristIntakeCmd(wristIntakeSubsystem, true);
     public final WristIntakeCmd wristIntakeCmdBackward = new WristIntakeCmd(wristIntakeSubsystem, false);
     public final IntakeCmd intakeCmdForward = new IntakeCmd(intakeSubsystem, true);
     public final IntakeCmd intakeCmdBackward = new IntakeCmd(intakeSubsystem, false);
-
-    public static XboxController gunner = new XboxController(3);
+    public final ClimbCmd climbCmd = new ClimbCmd(climbSubsystem, gunner);
 
     public final JoystickButton gunner_A = new JoystickButton(gunner, 1); // Button A
     public final JoystickButton gunner_B = new JoystickButton(gunner, 2); // Button B
@@ -157,7 +159,6 @@ public class RobotContainer {
         gunner_X.whileTrue(intakeCmdBackward);
         gunner_RB.onTrue(shoot);
         gunner_pov90.onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
-        gunner_pov270.onTrue(climbUp);
         gunner_LB.onTrue(toggleFlywheel);
         gunner_V.whileTrue(toAmp);
         gunner_M.whileTrue(toSource);
