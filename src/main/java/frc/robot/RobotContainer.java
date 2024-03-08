@@ -156,7 +156,7 @@ public class RobotContainer {
         gunner_X.whileTrue(intakeCmdForward);
         gunner_X.whileTrue(intakeCmdBackward);
         gunner_RB.onTrue(shoot);
-        gunner_pov90.onTrue(climbDown);
+        gunner_pov90.onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
         gunner_pov270.onTrue(climbUp);
         gunner_LB.onTrue(toggleFlywheel);
         gunner_V.whileTrue(toAmp);
