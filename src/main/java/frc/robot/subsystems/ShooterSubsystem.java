@@ -79,6 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
             flywheelRPM = Constants.ShooterConstants.FLYWHEEL_SPEAKER_RPM;
             isFlywheelOn = true;
         }
+
     }
 
     @Override
@@ -93,5 +94,6 @@ public class ShooterSubsystem extends SubsystemBase {
         }
 
         //SmartDashboard.putBoolean("isFlywheelOn",isFlywheelOn);
+        SmartDashboard.putBoolean("Is Flywheel on", isFlywheelOn);
     }
 }
