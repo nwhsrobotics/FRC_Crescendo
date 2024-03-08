@@ -223,6 +223,8 @@ public class RobotContainer {
         SmartDashboard.putData(pipeline);
         pipeline.onChange((pipelineNum) -> {
             LimelightHelpers.setPipelineIndex("limelight", pipelineNum);
+            Logger.recordOutput("limelight.pipelineIndex", pipelineNum);
+            Logger.recordOutput("limelight.pipelineName", LimelightImplementation.getPipelineName());
         });
 
     }
