@@ -144,7 +144,20 @@ public final class Constants {
     }
 
     public static final class ClimbConstants {
-    }
+        public static final double MAX_HEIGHT_METERS = 0.0 * 0.0254; // TODO: get actual max
+        public static final double MIN_HEIGHT_METERS = 0.0 * 0.0254; // TODO: get actual min
+        public static final double INITIAL_HEIGHT_METERS = 0.0;
+    
+        public static final double AUTO_CLIMB_RAISE = 0.1524;
+    
+        public static final double SPEED_PER_SECOND = 0.22;
+        public static final double TICKS_PER_SECOND = 50;
+        public static final double GEAR_RATIO = -5.0; // TODO: Get actual gear ratio
+        public static final double LEAD_DISTANCE = (0.5 * 0.0254); // (inches * m/in) half an inch to meters
+    
+        public static final double COUNTS_PER_METER = (GEAR_RATIO / LEAD_DISTANCE);
+        public static final double METERS_TO_INCHES = 39.37;
+        }
 
     public static final class ArmConstants {
 
