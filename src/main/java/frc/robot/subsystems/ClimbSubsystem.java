@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -63,7 +65,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
         leftClimbPID.setReference(counts, ControlType.kPosition);
         rightClimbPID.setReference(counts, ControlType.kPosition);
-        SmartDashboard.putNumber("Climb Position", (desiredHeight * METERS_TO_INCHES));
+        Logger.recordOutput("Climb Position", desiredHeight * METERS_TO_INCHES);
     }
 
     public void moveUp() {
