@@ -153,8 +153,9 @@ public class LimelightImplementation {
             
             Translation2d actualTranslation = new Translation2d(actualX, actualY);
 
-
-            return new Pose2d(actualTranslation, targetRotation);
+            Pose2d targetPose2d = new Pose2d(actualTranslation, targetRotation);
+            Logger.recordOutput("limelight.objectPos", targetPose2d);
+            return targetPose2d;
         }
 
         return pos;
