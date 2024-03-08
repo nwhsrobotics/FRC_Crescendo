@@ -1,6 +1,8 @@
 // This class provides implementations for utilizing a Limelight camera for various robot control tasks.
 package frc.robot.subsystems.limelight;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
