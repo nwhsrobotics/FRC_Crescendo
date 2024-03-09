@@ -26,6 +26,9 @@ public class IntakeCmd extends Command {
     else if (BButtonState) {
       intakeSubsystem.backwards();
     }
+    else {
+      intakeSubsystem.stop();
+    }
   }
 
   @Override

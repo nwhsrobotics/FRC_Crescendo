@@ -56,36 +56,48 @@ public class DriverJoysticksController implements Controller {
 
     @Override
     public int getAutonavigationButton() {
-        return -1;
+        return 6;
     }
 
     @Override
     public int getAutonavigateToAmpButton() {
-        return -1;
+        return 4;
     }
 
     @Override
     public int getAutonavigateToSourceButton() {
-        return -1;
+        return 2;
     }
 
     @Override
     public int getAutonavigateToSpeakerButton() {
-        return -1;
-    }
-
-    @Override
-    public int getNavXResetButton() {
         return 3;
     }
 
     @Override
+    public int getNavXResetButton() {
+        return 8;
+    }
+
+    @Override
     public int getFieldRelativeButton() {
-        return 4;
+        return 7;
+    }
+
+    @Override
+    public int getAutonavigateToObject() {
+        return 12;
+    }
+
+    @Override
+    public boolean aprilTagAllignButtonIsPressed() {
+        return joystickControl.getRawButtonPressed(10);
     }
 
     @Override
     public String getName() {
         return "4638 Joystick";
     }
+
+    //9 for vision odmetry
 }

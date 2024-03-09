@@ -30,14 +30,14 @@ import frc.robot.subsystems.oi.ControlManager;
 
 public class RobotContainer {
     public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    public final ArmSubsystem armSubsystem = new ArmSubsystem();
-    public final WristSubsystem wristSubsystem = new WristSubsystem();
+    // public final ArmSubsystem armSubsystem = new ArmSubsystem();
+    // public final WristSubsystem wristSubsystem = new WristSubsystem();
 
     //object for presenting selection of options in shuffleboard/ smartdashboard
     SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
     public final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-    public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
+    // public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
 
     public static XboxController gunner = new XboxController(3);
@@ -60,6 +60,7 @@ public class RobotContainer {
     public Pose2d objectLocation = new Pose2d();
 
     public RobotContainer() {
+        /*
         // Command for setting arm to the amp position
         InstantCommand armLockAmp = new InstantCommand(() -> armSubsystem.ampPreset(), armSubsystem);
 
@@ -90,7 +91,8 @@ public class RobotContainer {
         semiWristAdjustAmp.addRequirements(wristSubsystem, armSubsystem);
         SequentialCommandGroup semiWristAdjustSource = new SequentialCommandGroup(armLockSource, wristAdjust);
         semiWristAdjustSource.addRequirements(wristSubsystem, armSubsystem);
-        
+        */
+
         /* if (gunner_V.getAsBoolean()) {
             seq.addCommands(
                 armLockAmp,
@@ -129,14 +131,13 @@ public class RobotContainer {
 
         // Creates instant commands for the different robot functionalities
         InstantCommand shoot = new InstantCommand(() -> shooterSubsystem.stepIndex(), shooterSubsystem);
-        InstantCommand toggleFlywheel = new InstantCommand(() -> shooterSubsystem.toggleFlywheel(), shooterSubsystem);
         InstantCommand toggleAmp = new InstantCommand(() -> shooterSubsystem.toggleAmp(), shooterSubsystem);
         InstantCommand toggleSpeaker = new InstantCommand(() -> shooterSubsystem.toggleSpeaker(), shooterSubsystem);
 
         // Registers the instant commands
-        NamedCommands.registerCommand("shoot", shoot);
-        NamedCommands.registerCommand("toggleSpeaker", toggleSpeaker);
-        NamedCommands.registerCommand("toggleAmp", toggleAmp);
+        // NamedCommands.registerCommand("shoot", shoot);
+        // NamedCommands.registerCommand("toggleSpeaker", toggleSpeaker);
+        // NamedCommands.registerCommand("toggleAmp", toggleAmp);
         //NamedCommands.registerCommand("toggleFlywheel", toggleFlywheel);
         
 
@@ -146,10 +147,12 @@ public class RobotContainer {
         gunner_pov180.onTrue(toggleSpeaker);
         gunner_pov0.onTrue(toggleAmp);
         //gunner_LB.onTrue(toggleFlywheel);
+        /*
         gunner_V.whileTrue(toAmp);
         gunner_M.whileTrue(toSource);
         gunner_RS.whileTrue(adjust);
         gunner_LS.whileTrue(semiWristAdjustAmp);
+        */
         gunner_pov270.whileTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
 
         // initialize driver button commands.
@@ -196,7 +199,9 @@ public class RobotContainer {
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner.getLeftTriggerAxis(), gunner.getRightTriggerAxis()));
         intakeSubsystem.setDefaultCommand(new IntakeCmd(intakeSubsystem, gunner.getAButton(), gunner.getBButton()));
-        intakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
+        
+        // FIXME: should be wrist intake, not intake.
+        // intakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
 
         Logger.recordOutput("limelight.pipelineIndex", LimelightHelpers.getCurrentPipelineIndex("limelight"));
         Logger.recordOutput("limelight.pipelineName", LimelightImplementation.getPipelineName());
