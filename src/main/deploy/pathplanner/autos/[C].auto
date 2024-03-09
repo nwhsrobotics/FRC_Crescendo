@@ -12,18 +12,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeOn"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "[C] [Back] [Right] Exit"
@@ -33,12 +21,6 @@
           "type": "path",
           "data": {
             "pathName": "[C] [Back] [Right] Return"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
           }
         },
         {

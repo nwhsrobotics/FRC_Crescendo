@@ -33,19 +33,19 @@ public final class Constants {
         public static final int BACK_RIGHT_STEER_ABSOLUTE_ENCODER_ID = 23;
 
         // TODO verify all IDs other than drive after hardware assembly.
-        public static final int CLIMB_LEFT_MOTOR_ID = 120;
-        public static final int CLIMB_RIGHT_MOTOR_ID = 130;
+        public static final int CLIMB_LEFT_MOTOR_ID = 14;
+        public static final int CLIMB_RIGHT_MOTOR_ID = 30;
 
-        public static final int FLYWHEEL_MOTOR_ID = 140;
-        public static final int INDEX_MOTOR_ID = 150;
+        public static final int FLYWHEEL_MOTOR_ID = 9;
+        public static final int INDEX_MOTOR_ID = 33;
 
-        public static final int INTAKE_MOTOR_ID = 160;
+        public static final int INTAKE_MOTOR_ID = 15;
 
-        public static final int SHOULDER_MOTOR_ID = 80;
+        public static final int SHOULDER_MOTOR_ID = 58;
 
-        public static final int WRIST_MOTOR_ID = 140;
+        public static final int WRIST_MOTOR_ID = 59;
 
-        public static final int WRIST_INTAKE_ID = 160;
+        public static final int WRIST_INTAKE_ID = 60; //TODO CHANGE THIS
 
         /**
          * Check for duplicate CAN assignments,
@@ -134,10 +134,10 @@ public final class Constants {
 
         //FOR ALL OFFSETS: turn wheels until they become straight, replace with the value of encoders
         //THE BLACK GEAR SHOULD BE ON THE OUTSIDE FOR ALL WHEELS, regardless of side
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 0.523087448669004 + Math.PI / 2;//2.66 + Math.PI;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 3.733709237713651 + Math.PI / 2;//5.24 - Math.PI;
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 3.637068448076855 + Math.PI / 2;//0.61 + Math.PI;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 5.781573589540982 + Math.PI / 2;//5.20 - Math.PI;
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = -1.064582666792635;//2.66 + Math.PI;
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 2.202796411403781;//5.24 - Math.PI;
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 2.064738140494073;//0.61 + Math.PI;
+        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = -2.066272121281959;//5.20 - Math.PI;
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 6380.0 / 60.0 * (ModuleConstants.kDriveMotorGearRatio) * ModuleConstants.kWheelDiameterMeters * Math.PI; // set up for NEOs to drive
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = kPhysicalMaxSpeedMetersPerSecond / Math.hypot(DriveConstants.kTrackWidth / 2.0, DriveConstants.kWheelBase / 2.0); //adapted from SDS
