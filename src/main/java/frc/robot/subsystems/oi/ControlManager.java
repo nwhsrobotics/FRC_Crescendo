@@ -252,7 +252,7 @@ public class ControlManager {
         Logger.recordOutput("controlmanager.outputs.rotatingspeed", ControlManager.Outputs.rotatingSpeed);
 
 
-        if (driverController.aprilTagAllignButtonIsPressed()) {
+        if (driverController.aprilTagAlignButtonIsPressed()) {
             ControlManager.Outputs.rotatingSpeed = LimelightImplementation.limelight_aim_proportional();
 
             ControlManager.Outputs.xSpeed = LimelightImplementation.limelight_range_proportional();

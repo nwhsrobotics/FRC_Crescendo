@@ -90,7 +90,7 @@ public class DriverJoysticksController implements Controller {
     }
 
     @Override
-    public boolean aprilTagAllignButtonIsPressed() {
+    public boolean aprilTagAlignButtonIsPressed() {
         return joystickControl.getRawButtonPressed(10);
     }
 

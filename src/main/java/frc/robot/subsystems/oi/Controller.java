@@ -164,13 +164,13 @@ public interface Controller {
     }
 
     /**
-     * Get button binding for auto alligning to april tag
+     * Get button binding for auto aligning to april tag
      * <p>
      * This is a driver-side input.
      *
      * @return - button number.
      */
-    default boolean aprilTagAllignButtonIsPressed() {
+    default boolean aprilTagAlignButtonIsPressed() {
         return false;
     }
 
