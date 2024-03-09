@@ -67,7 +67,7 @@ public class DriverXboxController implements Controller {
 
     @Override
     public int getAutonavigationButton() {
-        return 1;
+        return 10;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class DriverXboxController implements Controller {
 
     @Override
     public int getAutonavigateToSpeakerButton() {
-        return 3;
+        return 1;
     }
 
     @Override
@@ -87,14 +87,8 @@ public class DriverXboxController implements Controller {
 
     @Override
     public int getAutonavigateToObject() {
-        return 8;
+        return 3;
     }
-    // TODO: Stage naviagte buttons
-    /*
-    @Override
-    public int getAutonavigateToMidStageButton() {
-        return 4;
-    } */
 
 
     @Override
@@ -104,12 +98,12 @@ public class DriverXboxController implements Controller {
 
     @Override
     public boolean aprilTagAllignButtonIsPressed() {
-        return xboxController.getLeftBumper() || xboxController.getRightBumper();
+        return xboxController.getPOV() == 270;
     }
 
     @Override
     public int getFieldRelativeButton() {
-        return 9;
+        return 7;
     }
 
     @Override
