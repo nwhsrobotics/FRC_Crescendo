@@ -5,11 +5,13 @@ import frc.robot.subsystems.WristIntakeSubsystem;
 
 public class WristIntakeCmd extends Command {
   WristIntakeSubsystem wristIntakeSubsystem;
-  private boolean isForward;
+  private boolean XButtonState;
+  private boolean YButtonState;
 
-  public WristIntakeCmd(WristIntakeSubsystem wristIntakeSubsystem, boolean isForward) {
+  public WristIntakeCmd(WristIntakeSubsystem wristIntakeSubsystem, boolean XButtonState, boolean YButtonState) {
     this.wristIntakeSubsystem = wristIntakeSubsystem;
-    this.isForward = isForward;
+    this.XButtonState = XButtonState;
+    this.YButtonState = YButtonState;
     addRequirements(wristIntakeSubsystem);
   }
 
@@ -18,10 +20,10 @@ public class WristIntakeCmd extends Command {
 
   @Override
   public void execute() {
-    if (isForward) {
+    if (XButtonState) {
       wristIntakeSubsystem.forwards();
     }
-    else {
+    else if (YButtonState) {
       wristIntakeSubsystem.backwards();
     }
   }

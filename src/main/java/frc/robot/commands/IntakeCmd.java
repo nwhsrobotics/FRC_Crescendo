@@ -5,11 +5,13 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeCmd extends Command {
   IntakeSubsystem intakeSubsystem;
-  private boolean isForward;
+  private boolean AButtonState;
+  private boolean BButtonState;
 
-  public IntakeCmd(IntakeSubsystem intakeSubsystem, boolean isForward) {
+  public IntakeCmd(IntakeSubsystem intakeSubsystem, boolean AButtonState, boolean BButtonState) {
     this.intakeSubsystem = intakeSubsystem;
-    this.isForward = isForward;
+    this.AButtonState = AButtonState;
+    this.BButtonState = BButtonState;
     addRequirements(intakeSubsystem);
   }
 
@@ -18,10 +20,10 @@ public class IntakeCmd extends Command {
 
   @Override
   public void execute() {
-    if (isForward) {
+    if (AButtonState) {
       intakeSubsystem.forwards();
     }
-    else {
+    else if (BButtonState) {
       intakeSubsystem.backwards();
     }
   }

@@ -188,7 +188,7 @@ public final class Constants {
 
         public static final double FLYWHEEL_SPEAKER_RPM = 50.0; //TODO FIX THIS
         public static final double FLYWHEEL_AMP_RPM = 25.0; //TODO FIX THIS
-
+        public static final double FLYWHEEL_IDLE_RPM = 0;
 
         // do not edit manually; change diameter measurements instead.
         public static final double INDEX_STEP_ROTATIONS = INDEX_WHEEL_DIAMETER_INCHES / NOTE_DIAMETER_INCHES;  // pi cancels out.
