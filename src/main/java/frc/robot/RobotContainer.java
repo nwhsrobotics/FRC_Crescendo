@@ -198,8 +198,9 @@ public class RobotContainer {
         intakeSubsystem.setDefaultCommand(new IntakeCmd(intakeSubsystem, gunner.getAButton(), gunner.getBButton()));
         intakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
 
-        SmartDashboard.putNumber("Limelight Pipeline Index", LimelightHelpers.getCurrentPipelineIndex("limelight"));
-        SmartDashboard.putString("Limelight Pipeline Name", LimelightImplementation.getPipelineName());
+        Logger.recordOutput("Limelight Pipeline Index", LimelightHelpers.getCurrentPipelineIndex("limelight"));
+        Logger.recordOutput("Limelight Pipeline Name", LimelightImplementation.getPipelineName());
+        
         SendableChooser<Integer> pipeline = new SendableChooser<>();
         pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));
         pipeline.addOption("Note", Integer.valueOf(1));
