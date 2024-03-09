@@ -2,10 +2,10 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import org.littletonrobotics.junction.Logger;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -21,8 +21,6 @@ public class ShooterSubsystem extends SubsystemBase {
      * The target RPM the flywheel motor will spin up to.
      */
     public double flywheelRPM = 0;
-
-    private boolean isFlywheelOn = false;
 
     public ShooterSubsystem() {
         flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
@@ -53,47 +51,48 @@ public class ShooterSubsystem extends SubsystemBase {
         targetPosition += Constants.ShooterConstants.INDEX_STEP_ROTATIONS;
     }
 
-    public void toggleAmp() {
-        if (isFlywheelOn && flywheelRPM != Constants.ShooterConstants.FLYWHEEL_AMP_RPM) {
-            flywheelRPM = Constants.ShooterConstants.FLYWHEEL_AMP_RPM;
-        } 
-        else if (isFlywheelOn) {
-            flywheelRPM = 0.0;
-            isFlywheelOn = false;
-        }
-        else {
-            flywheelRPM = Constants.ShooterConstants.FLYWHEEL_AMP_RPM;
-            isFlywheelOn = true;
-        }
+    /**
+     * Set flywheel to a target RPM.
+     * 
+     * @param rpm - speed in rotations per minute.
+     */
+    public void setFlywheel(double rpm) {
+        flywheelRPM = rpm;
     }
 
-    public void toggleSpeaker(){
-         if (isFlywheelOn && flywheelRPM != Constants.ShooterConstants.FLYWHEEL_SPEAKER_RPM) {
-            flywheelRPM = Constants.ShooterConstants.FLYWHEEL_SPEAKER_RPM;
-        } 
-        else if (isFlywheelOn) {
-            flywheelRPM = 0.0;
-            isFlywheelOn = false;
-        }
-        else {
-            flywheelRPM = Constants.ShooterConstants.FLYWHEEL_SPEAKER_RPM;
-            isFlywheelOn = true;
+    /**
+     * Set flywheel to a target RPM, and set RPM to idle speed if RPM is already at target.
+     * 
+     * @param rpm - speed in rotations per minute.
+     */
+    public void toggleFlywheel(double rpm) {
+        if (flywheelRPM == rpm) {
+            flywheelRPM = Constants.ShooterConstants.FLYWHEEL_IDLE_RPM;
+            return;
         }
 
+        setFlywheel(rpm);
+    }
+
+    public void toggleAmp() {
+        toggleFlywheel(Constants.ShooterConstants.FLYWHEEL_AMP_RPM);
+    }
+
+    public void toggleSpeaker() {
+        toggleFlywheel(Constants.ShooterConstants.FLYWHEEL_SPEAKER_RPM);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("isFlywheelReady", isFlywheelReady());
         flyWheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
-
-        if (!isFlywheelReady()) {
+        
+        if (!isFlywheelReady() || flywheelEncoder.getVelocity() == Constants.ShooterConstants.FLYWHEEL_IDLE_RPM) {
             indexMotor.stopMotor();
         } else {
             indexPIDController.setReference(targetPosition, ControlType.kPosition);
         }
 
-        //SmartDashboard.putBoolean("isFlywheelOn",isFlywheelOn);
-        SmartDashboard.putBoolean("Is Flywheel on", isFlywheelOn);
+        Logger.recordOutput("shooter.isready", isFlywheelReady());
+        Logger.recordOutput("shooter.rpm", flywheelRPM);
     }
 }
