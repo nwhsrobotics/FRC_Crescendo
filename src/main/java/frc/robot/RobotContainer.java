@@ -42,19 +42,13 @@ public class RobotContainer {
 
     public static XboxController gunner = new XboxController(3);
 
-    public final WristIntakeCmd wristIntakeCmdForward = new WristIntakeCmd(wristIntakeSubsystem, true);
-    public final WristIntakeCmd wristIntakeCmdBackward = new WristIntakeCmd(wristIntakeSubsystem, false);
-    public final IntakeCmd intakeCmdForward = new IntakeCmd(intakeSubsystem, true);
-    public final IntakeCmd intakeCmdBackward = new IntakeCmd(intakeSubsystem, false);
-    public final ClimbCmd climbCmd = new ClimbCmd(climbSubsystem, gunner);
-
     public final JoystickButton gunner_A = new JoystickButton(gunner, 1); // Button A
     public final JoystickButton gunner_B = new JoystickButton(gunner, 2); // Button B
     public final JoystickButton gunner_X = new JoystickButton(gunner, 3); // Button X
     public final JoystickButton gunner_Y = new JoystickButton(gunner,4); // Button Y
     public final JoystickButton gunner_LB = new JoystickButton(gunner, 5); // Left bumper
     public final JoystickButton gunner_RB = new JoystickButton(gunner, 6); // Right bumper
-    public final JoystickButton gunner_V = new JoystickButton(gunner, 7); // View button
+    public final JoystickButton gunner_V = new JoystickButton(gunner, 7); // View button                    
     public final JoystickButton gunner_M = new JoystickButton(gunner, 8); // Menu button
     public final JoystickButton gunner_LS = new JoystickButton(gunner, 9); // Left Stick Button
     public final JoystickButton gunner_RS = new JoystickButton(gunner, 10); // Right Stick Button
@@ -134,22 +128,12 @@ public class RobotContainer {
         //wristSubsystem.setDefaultCommand(seq);
 
         // Creates instant commands for the different robot functionalities
-        InstantCommand climbUp = new InstantCommand(() -> climbSubsystem.moveUp(), climbSubsystem);
-        InstantCommand climbDown = new InstantCommand(() -> climbSubsystem.moveDown(), climbSubsystem);
         InstantCommand shoot = new InstantCommand(() -> shooterSubsystem.stepIndex(), shooterSubsystem);
-        InstantCommand intakeOn = new InstantCommand(() -> intakeSubsystem.forwards(), intakeSubsystem);
-        InstantCommand intakeOff = new InstantCommand(() -> intakeSubsystem.stop(), intakeSubsystem);
-        //InstantCommand toggleFlywheel = new InstantCommand(() -> shooterSubsystem.toggleFlywheel(), shooterSubsystem);
+        InstantCommand toggleFlywheel = new InstantCommand(() -> shooterSubsystem.toggleFlywheel(), shooterSubsystem);
         InstantCommand toggleAmp = new InstantCommand(() -> shooterSubsystem.toggleAmp(), shooterSubsystem);
         InstantCommand toggleSpeaker = new InstantCommand(() -> shooterSubsystem.toggleSpeaker(), shooterSubsystem);
 
         // Registers the instant commands
-        NamedCommands.registerCommand("intakeOn", intakeOn);
-        NamedCommands.registerCommand("intakeOff", intakeOff);
-
-        NamedCommands.registerCommand("climbUp", climbUp);
-        NamedCommands.registerCommand("climbDown", climbDown);
-
         NamedCommands.registerCommand("shoot", shoot);
         NamedCommands.registerCommand("toggleSpeaker", toggleSpeaker);
         NamedCommands.registerCommand("toggleAmp", toggleAmp);
@@ -157,10 +141,6 @@ public class RobotContainer {
         
 
         // Binds commands to buttons
-        gunner_A.whileTrue(wristIntakeCmdForward);
-        gunner_B.whileTrue(wristIntakeCmdBackward);
-        gunner_X.whileTrue(intakeCmdForward);
-        gunner_X.whileTrue(intakeCmdBackward);
         gunner_RB.onTrue(shoot);
         gunner_pov90.onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
         gunner_pov180.onTrue(toggleSpeaker);
@@ -214,6 +194,9 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
+        climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner.getLeftTriggerAxis(), gunner.getRightTriggerAxis()));
+        intakeSubsystem.setDefaultCommand(new IntakeCmd(intakeSubsystem, gunner.getAButton(), gunner.getBButton()));
+        intakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
 
         SmartDashboard.putNumber("Limelight Pipeline Index", LimelightHelpers.getCurrentPipelineIndex("limelight"));
         SmartDashboard.putString("Limelight Pipeline Name", LimelightImplementation.getPipelineName());
