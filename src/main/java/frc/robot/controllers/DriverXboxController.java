@@ -97,7 +97,7 @@ public class DriverXboxController implements Controller {
     }
 
     @Override
-    public boolean aprilTagAllignButtonIsPressed() {
+    public boolean aprilTagAlignButtonIsPressed() {
         return xboxController.getPOV() == 270;
     }
 
