@@ -10,7 +10,6 @@ import frc.robot.subsystems.ClimbSubsystem;
 
 public class ClimbCmd extends Command {
   private ClimbSubsystem climb;
-  private XboxController xbox;
   private double leftTriggerAxis;
   private double rightTriggerAxis;
   /** Creates a new ClimbCmd. */
