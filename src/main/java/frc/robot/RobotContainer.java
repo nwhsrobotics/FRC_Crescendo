@@ -141,7 +141,7 @@ public class RobotContainer {
 
         // Binds commands to buttons
         gunner_RB.onTrue(shoot);
-        gunner_pov90.onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
+        //gunner_pov90.onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
         gunner_pov180.onTrue(toggleSpeaker);
         gunner_pov0.onTrue(toggleAmp);
         //gunner_LB.onTrue(toggleFlywheel);
@@ -151,7 +151,7 @@ public class RobotContainer {
         gunner_RS.whileTrue(adjust);
         gunner_LS.whileTrue(semiWristAdjustAmp);
         */
-        gunner_pov270.whileTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
+        //gunner_pov270.whileTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
 
         // initialize driver button commands.
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw(), swerveSubsystem);
