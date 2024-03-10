@@ -3,6 +3,7 @@ package frc.robot.controllers;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants;
 import frc.robot.subsystems.oi.Controller;
 
 public class DriverXboxController implements Controller {
@@ -86,10 +87,9 @@ public class DriverXboxController implements Controller {
     }
 
     @Override
-    public int getAutonavigateToObject() {
+    public int getAutonavigateToVisionTarget() {
         return 3;
     }
-
 
     @Override
     public int getNavXResetButton() {
@@ -97,8 +97,18 @@ public class DriverXboxController implements Controller {
     }
 
     @Override
-    public boolean aprilTagAlignButtonIsPressed() {
-        return xboxController.getPOV() == 270;
+    public int getOdometryVisionResetButton() {
+        return 180 + Constants.OIConstants.kPOV;
+    }
+
+    @Override
+    public int getNextPipelineButton() {
+        return 0 + Constants.OIConstants.kPOV;
+    }
+
+    @Override
+    public boolean visionTargetAlignButtonIsPressed() {
+        return xboxController.getLeftBumper() || xboxController.getRightBumper();
     }
 
     @Override
