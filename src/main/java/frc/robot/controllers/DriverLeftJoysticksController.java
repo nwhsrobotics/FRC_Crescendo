@@ -2,6 +2,7 @@ package frc.robot.controllers;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Constants;
 import frc.robot.subsystems.oi.Controller;
 
 public class DriverLeftJoysticksController implements Controller {
@@ -82,6 +83,16 @@ public class DriverLeftJoysticksController implements Controller {
     @Override
     public int getNavXResetButton() {
         return 3;
+    }
+
+    @Override
+    public int getOdometryVisionResetButton() {
+        return -1;
+    }
+
+    @Override
+    public int getNextPipelineButton() {
+        return -1;
     }
 
     @Override

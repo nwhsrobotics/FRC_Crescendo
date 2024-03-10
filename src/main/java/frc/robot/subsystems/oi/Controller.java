@@ -159,7 +159,29 @@ public interface Controller {
      *
      * @return - button number.
      */
-    default int getAutonavigateToObject() {
+    default int getAutonavigateToVisionTarget() {
+        return -1;
+    }
+
+    /**
+     * Get button binding for going to next pipeline in limelight.
+     * <p>
+     * This is a driver-side input.
+     *
+     * @return - button number.
+     */
+    default int getNextPipelineButton() {
+        return -1;
+    }
+
+    /**
+     * Get button binding for resetting odometer with vision.
+     * <p>
+     * This is a driver-side input.
+     *
+     * @return - button number.
+     */
+    default int getOdometryVisionResetButton() {
         return -1;
     }
 
@@ -170,7 +192,7 @@ public interface Controller {
      *
      * @return - button number.
      */
-    default boolean aprilTagAlignButtonIsPressed() {
+    default boolean visionTargetAlignButtonIsPressed() {
         return false;
     }
 

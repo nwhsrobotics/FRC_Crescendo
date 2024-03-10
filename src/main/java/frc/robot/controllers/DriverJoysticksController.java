@@ -85,12 +85,12 @@ public class DriverJoysticksController implements Controller {
     }
 
     @Override
-    public int getAutonavigateToObject() {
+    public int getAutonavigateToVisionTarget() {
         return 12;
     }
 
     @Override
-    public boolean aprilTagAlignButtonIsPressed() {
+    public boolean visionTargetAlignButtonIsPressed() {
         return joystickControl.getRawButtonPressed(10);
     }
 

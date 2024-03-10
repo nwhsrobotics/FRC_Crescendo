@@ -46,13 +46,15 @@ public class ControlManager {
         public static Command autonavigateToTopStage = emptyButtonCommand;
         public static Command autonavigateToMidStage = emptyButtonCommand;
         public static Command autonavigateToBottomStage = emptyButtonCommand;
-        public static Command autonavigateToObject = emptyButtonCommand;
+        public static Command autonavigateToVisionTarget = emptyButtonCommand;
+        public static Command odometryVisionReset = emptyButtonCommand;
+        public static Command nextPipeline = emptyButtonCommand;
     }
 
     private static final HashMap<Integer, Controller> registry = new HashMap<>();
     private static int driverPort = -1;
     private static int reservedPort = -2;
-    public static boolean fieldRelative = false;
+    public static boolean fieldRelative = true;
 
     /**
      * Generates a "Trigger" for a command to be bound to a button (defined in "DriverButtonCommands").
@@ -70,14 +72,22 @@ public class ControlManager {
         if (button == -1) {  // -1 means it should not be bound.
             return;
         }
+        if (button < OIConstants.kPOV) {
+            new Trigger(() -> hid.getRawButton(button)).onTrue(new InstantCommand(() -> {
+                if (port != driverPort) {
+                    return;
+                }
 
-        new Trigger(() -> hid.getRawButton(button)).onTrue(new InstantCommand(() -> {
-            if (port != driverPort) {
-                return;
-            }
-
-            command.schedule();
-        }));
+                command.schedule();
+            }));
+        } else {
+            new Trigger(() -> hid.getPOV() == (button - OIConstants.kPOV)).onTrue(new InstantCommand(() -> {
+                if (port != driverPort) {
+                    return;
+                }
+                command.schedule();
+            }));
+        }
     }
 
     /**
@@ -123,7 +133,9 @@ public class ControlManager {
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToTopStageButton(), DriverButtonCommands.autonavigateToTopStage);
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToMidStageButton(), DriverButtonCommands.autonavigateToMidStage);
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToBottomStageButton(), DriverButtonCommands.autonavigateToBottomStage);
-        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToObject(), DriverButtonCommands.autonavigateToObject);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToVisionTarget(), DriverButtonCommands.autonavigateToVisionTarget);
+        makeTriggerForButton(hid, controller.getPort(), controller.getOdometryVisionResetButton(), DriverButtonCommands.odometryVisionReset);
+        makeTriggerForButton(hid, controller.getPort(), controller.getNextPipelineButton(), DriverButtonCommands.nextPipeline);
 
         Logger.recordOutput("controlmanager.controller." + controller.getPort() + ".name", controller.getName());
     }
@@ -252,13 +264,13 @@ public class ControlManager {
         Logger.recordOutput("controlmanager.outputs.rotatingspeed", ControlManager.Outputs.rotatingSpeed);
 
 
-        if (driverController.aprilTagAlignButtonIsPressed()) {
-            ControlManager.Outputs.rotatingSpeed = LimelightImplementation.limelight_aim_proportional();
-
-            ControlManager.Outputs.xSpeed = LimelightImplementation.limelight_range_proportional();
-
+        if (driverController.visionTargetAlignButtonIsPressed()) {
             //while using Limelight, turn off field-relative driving.
             fieldRelative = false;
+
+            ControlManager.Outputs.rotatingSpeed = LimelightImplementation.limelight_aim_proportional();
+            ControlManager.Outputs.xSpeed = LimelightImplementation.limelight_range_proportional();
+
         } else if (!driverController.isBoosterPressed()) {
             fieldRelative = true;
             double val = driverController.getSpeedCoefficient();

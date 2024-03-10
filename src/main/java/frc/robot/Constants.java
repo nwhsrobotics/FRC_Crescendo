@@ -227,6 +227,7 @@ public final class Constants {
         public static final SlewRateLimiter xLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 1.2);
         public static final SlewRateLimiter yLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 1.2);
         public static final SlewRateLimiter zLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond * 0.85);
+        public static final int kPOV = 100;
     }
 
     public static final class FavoritePositions {
