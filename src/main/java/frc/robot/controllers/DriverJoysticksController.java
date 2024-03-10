@@ -99,5 +99,13 @@ public class DriverJoysticksController implements Controller {
         return "4638 Joystick";
     }
 
-    //9 for vision odmetry
+    @Override
+    public int getOdometryVisionResetButton() {
+        return -1;
+    }
+
+    @Override
+    public int getNextPipelineButton() {
+        return -1;
+    }
 }
