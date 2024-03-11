@@ -12,9 +12,27 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "intakeOn"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "toggleSpeaker"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "[B] [Back] [Center] Exit"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
@@ -30,6 +48,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "[B] [Back] [Right] Return"
@@ -39,6 +63,12 @@
           "type": "path",
           "data": {
             "pathName": "[B] [Back] [Left] Exit"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
@@ -54,6 +84,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "[B] [Front] [Center] Return"
@@ -63,6 +99,12 @@
           "type": "path",
           "data": {
             "pathName": "[B] [Front] [Left] Exit"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
