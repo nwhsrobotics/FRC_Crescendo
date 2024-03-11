@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import org.littletonrobotics.junction.Logger;
 import com.revrobotics.CANSparkMax;
@@ -24,11 +25,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public ShooterSubsystem() {
         flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
+        flywheelMotor.setIdleMode(IdleMode.kCoast);
         flywheelEncoder = flywheelMotor.getEncoder();
         flyWheelPIDController = flywheelMotor.getPIDController();
         flyWheelPIDController.setP(Constants.ShooterConstants.FLYWHEEL_PID_P);
 
         indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
+        indexMotor.setIdleMode(IdleMode.kCoast);
         indexPIDController = indexMotor.getPIDController();
         indexPIDController.setP(Constants.ShooterConstants.INDEX_PID_P);
     }
