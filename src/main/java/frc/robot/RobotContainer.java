@@ -88,38 +88,8 @@ public class RobotContainer {
         semiWristAdjustSource.addRequirements(wristSubsystem, armSubsystem);
         */
 
-        /* if (gunner_V.getAsBoolean()) {
-            seq.addCommands(
-                armLockAmp,
-                wristLockAmp
-            );
-        }
-        if (gunner_M.getAsBoolean()) {
-            seq.addCommands(
-                armLockSource,
-                wristLockSource
-            );
-        }
-        if (!gunner_V.getAsBoolean() && !gunner_M.getAsBoolean()) {
-            seq.addCommands(
-                parallel
-            );
-        }
-
-        if (gunner_LS.getAsBoolean()){
-            seq.addCommands(
-                armLockAmp,
-                wristAdjust
-            );
-        }
-        if (gunner_RS.getAsBoolean()){
-            seq.addCommands(
-                armLockSource,
-                wristAdjust
-            );
         
-        }
-        */
+        
         
         
 
