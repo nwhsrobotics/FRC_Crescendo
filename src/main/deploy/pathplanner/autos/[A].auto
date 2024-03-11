@@ -14,25 +14,25 @@
         {
           "type": "named",
           "data": {
-            "name": "toggleSpeaker"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
+            "name": "intakeOn"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shoot"
+            "name": "toggleSpeaker"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "[A] [Back] [Left] Exit"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
@@ -48,6 +48,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "[A] [Front] [LeftMost] Return"
@@ -60,6 +66,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "[A] [Front] [Left] Return"
@@ -69,6 +81,12 @@
           "type": "path",
           "data": {
             "pathName": "[A] [Front] [LeftMost] [Bypass] Exit"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
