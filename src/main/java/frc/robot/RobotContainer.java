@@ -121,8 +121,7 @@ public class RobotContainer {
         }
         */
         
-        //armSubsystem.setDefaultCommand(seq);
-        //wristSubsystem.setDefaultCommand(seq);
+        
 
         // Creates instant commands for the different robot functionalities
         InstantCommand shoot = new InstantCommand(() -> shooterSubsystem.stepIndex(), shooterSubsystem);
