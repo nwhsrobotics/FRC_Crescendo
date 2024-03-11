@@ -24,8 +24,7 @@ public class LimelightImplementation {
             double kP = .035;
 
             // Calculate targeting angular velocity based on horizontal angle error (tx) from Limelight.
-            // TODO: For proper angle offset adding something to tx and then multiply
-            // like maybe thethaFromCenter
+            // like maybe thethaFromCenter add to offset
             double targetingAngularVelocity = (LimelightHelpers.getTX("limelight")+LimelightConstants.thethaFromCenter) * kP;
 
             //targetingAngularVelocity *= Constants.DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
@@ -177,15 +176,11 @@ public class LimelightImplementation {
                 return "AprilTag";
             case 1:
                 return "Note";
-            case 2:
-                return "AprilTagZoom";
-            case 3:
-                return "NoteZoom";
             default:
                 return "None";
         }
 
     }
 
-    //TODO: Remove a lot of redudant methods like getting sin of distance vs getting tan of a leg is same thing but its being repeated
+    //Remove a lot of redudant methods like getting sin of distance vs getting tan of a leg is same thing but its being repeated
 }
