@@ -158,7 +158,7 @@ public class Robot extends LoggedRobot {
                 robotContainer.swerveSubsystem.autonavigator.resumeNavigation();
             }
         }
-        robotContainer.objectLocation = LimelightImplementation.transformTargetLocation(robotContainer.objectLocation);
+        robotContainer.objectLocation = LimelightImplementation.transformTargetLocation(robotContainer.swerveSubsystem.odometer.getEstimatedPosition());
         Logger.recordOutput("limelight.pipelineIndex", LimelightHelpers.getCurrentPipelineIndex("limelight"));
         Logger.recordOutput("limelight.pipelineName", LimelightImplementation.getPipelineName());
         Logger.recordOutput("limelight.objectDetected", LimelightHelpers.getTV("limelight"));

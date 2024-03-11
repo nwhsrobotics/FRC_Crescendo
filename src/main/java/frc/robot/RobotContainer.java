@@ -129,7 +129,7 @@ public class RobotContainer {
         InstantCommand toggleAmp = new InstantCommand(() -> shooterSubsystem.toggleAmp(), shooterSubsystem);
         InstantCommand toggleSpeaker = new InstantCommand(() -> shooterSubsystem.toggleSpeaker(), shooterSubsystem);
         InstantCommand intakeOn = new InstantCommand(() -> intakeSubsystem.forwards(), intakeSubsystem);
-        InstantCommand intakeOf = new InstantCommand(() -> intakeSubsystem.forwards(), intakeSubsystem);
+        InstantCommand intakeOf = new InstantCommand(() -> intakeSubsystem.stop(), intakeSubsystem);
 
         // Registers the instant commands
          NamedCommands.registerCommand("shoot", shoot);
