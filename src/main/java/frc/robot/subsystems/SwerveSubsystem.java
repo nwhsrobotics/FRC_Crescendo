@@ -438,14 +438,14 @@ public class SwerveSubsystem extends SubsystemBase {
      * It is RECOMMENDED to stand still and be close to the April tag when resetting this way as it solely relies on vision
      */
     public void resetOdometryWithVision() {
-        //int pipeline = (int) LimelightHelpers.getCurrentPipelineIndex("limelight");
+        int pipeline = (int) LimelightHelpers.getCurrentPipelineIndex("limelight");
         //set the pipeline index to the high resolution april tag (less fps but high accuracy)
-        //LimelightHelpers.setPipelineIndex("limelight", 2);
+        LimelightHelpers.setPipelineIndex("limelight", 0);
         LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
         odometer.setVisionMeasurementStdDevs(VecBuilder.fill(0, 0, Units.degreesToRadians(0)));
         odometer.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
         //set back to normal april tag pipeline
-        //LimelightHelpers.setPipelineIndex("limelight", pipeline);
+        LimelightHelpers.setPipelineIndex("limelight", pipeline);
     }
 
 }

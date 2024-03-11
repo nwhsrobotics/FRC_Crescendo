@@ -101,7 +101,7 @@ public class DriverJoysticksController implements Controller {
 
     @Override
     public int getOdometryVisionResetButton() {
-        return -1;
+        return 9;
     }
 
     @Override
