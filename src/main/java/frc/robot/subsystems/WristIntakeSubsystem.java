@@ -32,7 +32,7 @@ public class WristIntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Logger.recordOutput("Wrist Intake Power", motor.get());
+        Logger.recordOutput("wrist.intakePower", motor.get());
     }
 
 
