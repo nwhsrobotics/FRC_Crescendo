@@ -53,22 +53,22 @@ public class DriverLeftJoysticksController implements Controller {
 
     @Override
     public int getAutonavigationButton() {
-        return 7;
+        return 11;
     }
 
     @Override
     public int getAutonavigateToAmpButton() {
-        return 6;
+        return 16;
     }
 
     @Override
     public int getAutonavigateToSourceButton() {
-        return 5;
+        return 12;
     }
 
     @Override
     public int getAutonavigateToSpeakerButton() {
-        return 8;
+        return 15;
     }
 
     @Override
@@ -78,32 +78,32 @@ public class DriverLeftJoysticksController implements Controller {
 
     @Override
     public int getOdometryVisionResetButton() {
-        return -1;
+        return 5;
     }
 
     @Override
     public int getNextPipelineButton() {
-        return -1;
+        return 7;
     }
 
     @Override
     public int getFieldRelativeButton() {
-        return 2;
+        return  8;
     }
 
     @Override
     public boolean visionTargetAlignButtonIsPressed() {
-        return joystickControl.getRawButtonPressed(10);
+        return joystickControl.getRawButtonPressed(2);
     }
 
     @Override
     public int getAutonavigateToVisionTarget() {
-        return -1;
+        return 9;
     }
 
 
     @Override
     public String getName() {
-        return "Dwarakesh's Favorite Stick";
+        return "Ultimate Method of Controlling the Robot";
     }
 }
