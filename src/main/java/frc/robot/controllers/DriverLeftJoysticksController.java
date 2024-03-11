@@ -83,7 +83,7 @@ public class DriverLeftJoysticksController implements Controller {
 
     @Override
     public int getNextPipelineButton() {
-        return 7;
+        return -1;
     }
 
     @Override

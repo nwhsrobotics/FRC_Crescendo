@@ -103,7 +103,7 @@ public class DriverXboxController implements Controller {
 
     @Override
     public int getNextPipelineButton() {
-        return 0 + Constants.OIConstants.kPOV;
+        return -1;
     }
 
     @Override
