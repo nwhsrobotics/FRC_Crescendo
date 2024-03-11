@@ -250,7 +250,7 @@ public final class Constants {
         //this might not be needed but doesn't hurt us
         public static final double distanceFromCenter = 0.3; //in meters, straight distance to the camera from middle
         public static final double hypotenuseDistance = Math.hypot(horizontalOffset, distanceFromCenter); // actual distance in 2d from middle
-        public static final double thethaFromCenter = -25.0; //this might be needed for angle offset
+        public static final double thethaFromCenter = -5.0; //this might be needed for angle offset
 
         //TODO: Move everything here finish this
     }

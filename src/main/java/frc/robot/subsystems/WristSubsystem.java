@@ -66,10 +66,10 @@ public class WristSubsystem extends SubsystemBase {
             wristMotor.stopMotor();
         }
 
-        Logger.recordOutput("Wrist Desired Position", desiredPosition);
-        Logger.recordOutput("Wrist Current Position", currentPosition);
-        Logger.recordOutput("Wrist Auto Lock Enabled Amp", autoLockEnabledAmp);
-        Logger.recordOutput("Wrist Auto Lock Enabled Source", autoLockEnabledSource);
+        Logger.recordOutput("wrist.desiredPosition", desiredPosition);
+        Logger.recordOutput("wrist.currentPosition", currentPosition);
+        Logger.recordOutput("wrist.autoLockEnabledAmp", autoLockEnabledAmp);
+        Logger.recordOutput("wrist.autoLockEnabledSource", autoLockEnabledSource);
 
     }
 
