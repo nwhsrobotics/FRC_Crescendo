@@ -154,6 +154,7 @@ public class RobotContainer {
         //gunner_pov270.whileTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
 
         // initialize driver button commands.
+        // TODO: No need to set requirements here??
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw(), swerveSubsystem);
         ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative, swerveSubsystem);
         ControlManager.DriverButtonCommands.toggleAutonavigationCommand = new InstantCommand(() -> swerveSubsystem.autonavigator.toggle(), swerveSubsystem);
@@ -202,10 +203,9 @@ public class RobotContainer {
         // FIXME: should be wrist intake, not intake.
         // intakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
 
-        Logger.recordOutput("limelight.pipelineIndex", LimelightHelpers.getCurrentPipelineIndex("limelight"));
-        Logger.recordOutput("limelight.pipelineName", LimelightImplementation.getPipelineName());
+
         
-        SendableChooser<Integer> pipeline = new SendableChooser<>();
+        /*SendableChooser<Integer> pipeline = new SendableChooser<>();
         pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));
         pipeline.addOption("Note", Integer.valueOf(1));
         pipeline.addOption("AprilTagZoom", Integer.valueOf(2));
@@ -215,7 +215,7 @@ public class RobotContainer {
             LimelightHelpers.setPipelineIndex("limelight", pipelineNum);
             Logger.recordOutput("limelight.pipelineIndex", pipelineNum);
             Logger.recordOutput("limelight.pipelineName", LimelightImplementation.getPipelineName());
-        });
+        });*/
 
     }
 

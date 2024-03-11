@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.LoggerConstants;
+import frc.robot.subsystems.limelight.LimelightHelpers;
 import frc.robot.subsystems.limelight.LimelightImplementation;
 import frc.robot.subsystems.oi.ControlManager;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -158,6 +159,9 @@ public class Robot extends LoggedRobot {
             }
         }
         robotContainer.objectLocation = LimelightImplementation.transformTargetLocation(robotContainer.objectLocation);
+        Logger.recordOutput("limelight.pipelineIndex", LimelightHelpers.getCurrentPipelineIndex("limelight"));
+        Logger.recordOutput("limelight.pipelineName", LimelightImplementation.getPipelineName());
+        Logger.recordOutput("limelight.objectDetected", LimelightHelpers.getTV("limelight"));
     }
 
     @Override

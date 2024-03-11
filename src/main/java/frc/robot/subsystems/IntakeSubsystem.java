@@ -28,6 +28,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Logger.recordOutput("Ground Intake Power", motor.get());
+        Logger.recordOutput("intake.groundIntakePower", motor.get());
     }
 }

@@ -311,9 +311,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // This method is called periodically to update the robot's state and log data
     @Override
-    public void periodic() {  
-        Logger.recordOutput("limelight.objectDetected", LimelightHelpers.getTV("limelight"));
-        
+    public void periodic() {       
         updateOdometry();
 
         // Log position of robot.
