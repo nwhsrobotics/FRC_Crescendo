@@ -123,7 +123,6 @@ public class RobotContainer {
         gunner_pov270.whileTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
 
         // initialize driver button commands.
-        // TODO: No need to set requirements here??
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw(), swerveSubsystem);
         ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative, swerveSubsystem);
         ControlManager.DriverButtonCommands.toggleAutonavigationCommand = new InstantCommand(() -> swerveSubsystem.autonavigator.toggle(), swerveSubsystem);
@@ -168,9 +167,8 @@ public class RobotContainer {
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner.getLeftTriggerAxis(), gunner.getRightTriggerAxis()));
         intakeSubsystem.setDefaultCommand(new IntakeCmd(intakeSubsystem, gunner.getAButton(), gunner.getBButton()));
-        
-        // FIXME: should be wrist intake, not intake.
-        // intakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
+    
+        // wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
 
 
         
