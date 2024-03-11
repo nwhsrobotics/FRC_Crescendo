@@ -67,10 +67,10 @@ public class ArmSubsystem extends SubsystemBase {
             shoulderMotor.stopMotor();
         }
 
-        Logger.recordOutput("Arm Desired Position", desiredPosition);
-        Logger.recordOutput("Arm Current Position", currentPosition);
-        Logger.recordOutput("Arm Auto Lock Enabled Amp", autoLockEnabledAmp);
-        Logger.recordOutput("Arm Auto Lock Enabled Source", autoLockEnabledSource);
+        Logger.recordOutput("arm.desiredPosition", desiredPosition);
+        Logger.recordOutput("arm.currentPosition", currentPosition);
+        Logger.recordOutput("arm.autoLockEnabledAmp", autoLockEnabledAmp);
+        Logger.recordOutput("arm.autoLockEnabledSource", autoLockEnabledSource);
 
         // This method will be called once per scheduler run
     }

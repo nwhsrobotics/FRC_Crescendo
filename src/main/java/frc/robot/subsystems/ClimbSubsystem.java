@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -51,7 +50,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
         leftClimbPID.setReference(counts, ControlType.kPosition);
         rightClimbPID.setReference(counts, ControlType.kPosition);
-        Logger.recordOutput("Climb Position", desiredHeight * Constants.ClimbConstants.METERS_TO_INCHES);
+        Logger.recordOutput("climb.position", desiredHeight * Constants.ClimbConstants.METERS_TO_INCHES);
     }
 
     public void moveUp() {
