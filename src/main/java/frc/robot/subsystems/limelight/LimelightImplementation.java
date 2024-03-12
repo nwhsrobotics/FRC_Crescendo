@@ -162,7 +162,7 @@ public class LimelightImplementation {
 
     public static void nextPipeline(){
         int currentIndex = (int)LimelightHelpers.getCurrentPipelineIndex("limelight");
-        if(currentIndex < 3.0){
+        if(currentIndex < 1.0){
             LimelightHelpers.setPipelineIndex("limelight", currentIndex+1);
         } else {
             LimelightHelpers.setPipelineIndex("limelight", 0);
