@@ -10,13 +10,11 @@ import frc.robot.subsystems.ClimbSubsystem;
 
 public class ClimbCmd extends Command {
   private ClimbSubsystem climb;
-  private double leftTriggerAxis;
-  private double rightTriggerAxis;
+  public XboxController gunner;
   /** Creates a new ClimbCmd. */
-  public ClimbCmd(ClimbSubsystem climb, double leftTriggerAxis, double rightTriggerAxis) {
+  public ClimbCmd(ClimbSubsystem climb, XboxController gunner) {
     this.climb = climb;
-    this.leftTriggerAxis = leftTriggerAxis;
-    this.rightTriggerAxis = rightTriggerAxis;
+    this.gunner = gunner;
     addRequirements(climb);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -28,9 +26,9 @@ public class ClimbCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (leftTriggerAxis > 0.1){
+    if (gunner.getLeftTriggerAxis() > 0.1){
       climb.moveDown();
-    } else if (rightTriggerAxis > 0.1) {
+    } else if (gunner.getRightTriggerAxis() > 0.1) {
       climb.moveUp();
     }
   }

@@ -35,9 +35,9 @@ public final class Constants {
         // TODO verify all IDs other than drive after hardware assembly.
         public static final int CLIMB_LEFT_MOTOR_ID = 14;
         public static final int CLIMB_RIGHT_MOTOR_ID = 30;
-
-        public static final int FLYWHEEL_MOTOR_ID = 9;
-        public static final int INDEX_MOTOR_ID = 33;
+ 
+        public static final int FLYWHEEL_MOTOR_ID = 7;
+        public static final int INDEX_MOTOR_ID = 13;
 
         public static final int INTAKE_MOTOR_ID = 15;
 
@@ -122,10 +122,10 @@ public final class Constants {
         public static final boolean kFrontRightTurningEncoderReversed = false;
         public static final boolean kBackRightTurningEncoderReversed = false;
 
-        public static final boolean kFrontLeftDriveEncoderReversed = false;
-        public static final boolean kBackLeftDriveEncoderReversed = false;
-        public static final boolean kFrontRightDriveEncoderReversed = false;
-        public static final boolean kBackRightDriveEncoderReversed = false;
+        public static final boolean kFrontLeftDriveEncoderReversed = true;
+        public static final boolean kBackLeftDriveEncoderReversed = true;
+        public static final boolean kFrontRightDriveEncoderReversed = true;
+        public static final boolean kBackRightDriveEncoderReversed = true;
 
         public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
         public static final boolean kBackLeftDriveAbsoluteEncoderReversed = false;
@@ -180,14 +180,14 @@ public final class Constants {
          */
         public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 10.0;
 
-        public static final double FLYWHEEL_PID_P = 0.5;
-        public static final double INDEX_PID_P = 0.5;
+        public static final double FLYWHEEL_PID_P = 0.005;
+        public static final double INDEX_PID_P = 0.009;
 
         private static final double INDEX_WHEEL_DIAMETER_INCHES = 4;
         private static final double NOTE_DIAMETER_INCHES = 12;
 
-        public static final double FLYWHEEL_SPEAKER_RPM = 50.0; //TODO FIX THIS
-        public static final double FLYWHEEL_AMP_RPM = 25.0; //TODO FIX THIS
+        public static final double FLYWHEEL_SPEAKER_RPM = 200.0; //TODO FIX THIS
+        public static final double FLYWHEEL_AMP_RPM = 200.0; //TODO FIX THIS
         public static final double FLYWHEEL_IDLE_RPM = 0;
 
         // do not edit manually; change diameter measurements instead.

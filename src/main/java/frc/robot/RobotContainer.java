@@ -165,10 +165,11 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
-        climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner.getLeftTriggerAxis(), gunner.getRightTriggerAxis()));
-        intakeSubsystem.setDefaultCommand(new IntakeCmd(intakeSubsystem, gunner.getAButton(), gunner.getBButton()));
-    
-        // wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
+        climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner));
+        intakeSubsystem.setDefaultCommand(new IntakeCmd(intakeSubsystem, gunner));
+        
+        // FIXME: should be wrist intake, not intake.
+        // intakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
 
 
         
