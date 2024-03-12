@@ -13,10 +13,12 @@ public class SetScoringStateCommand extends Command {
     ScoringSubsystem subsystem;
     ScoringState state;
     double duration;
+    ScoringState endState;
 
-    public SetScoringStateCommand(ScoringSubsystem subsystem, ScoringState state, double duration) {
+    public SetScoringStateCommand(ScoringSubsystem subsystem, ScoringState state, ScoringState endState, double duration) {
         this.subsystem = subsystem;
         this.state = state;
+        this.endState = endState;
         this.duration = duration;
         timer = new Timer();
         addRequirements(subsystem);
@@ -31,7 +33,7 @@ public class SetScoringStateCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        subsystem.state = ScoringState.IDLE;
+        subsystem.state = endState;
     }
 
     @Override
