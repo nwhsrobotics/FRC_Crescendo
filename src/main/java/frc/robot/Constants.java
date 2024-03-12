@@ -32,7 +32,6 @@ public final class Constants {
         public static final int FRONT_RIGHT_STEER_ABSOLUTE_ENCODER_ID = 21;
         public static final int BACK_RIGHT_STEER_ABSOLUTE_ENCODER_ID = 23;
 
-        // TODO verify all IDs other than drive after hardware assembly.
         public static final int CLIMB_LEFT_MOTOR_ID = 14;
         public static final int CLIMB_RIGHT_MOTOR_ID = 30;
  
@@ -41,11 +40,11 @@ public final class Constants {
 
         public static final int INTAKE_MOTOR_ID = 15;
 
+        // shoulder/wrist not used.
+        // DO NOT INITIALIZE THEIR SUBSYSTEMS.
         public static final int SHOULDER_MOTOR_ID = 58;
-
         public static final int WRIST_MOTOR_ID = 59;
-
-        public static final int WRIST_INTAKE_ID = 60; //TODO CHANGE THIS
+        public static final int WRIST_INTAKE_ID = 60;
 
         /**
          * Check for duplicate CAN assignments,
@@ -171,7 +170,7 @@ public final class Constants {
         public static final double WRIST_GEAR_RATIO = 1; //placeholder number
     }
 
-    public static final class ShooterConstants {
+    public static final class ScoringConstants {
         /**
          * This adds +/- tolerance to the target RPM for the flywheel.
          * <p>
@@ -181,20 +180,43 @@ public final class Constants {
         public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 10.0;
 
         public static final double FLYWHEEL_PID_P = 0.005;
-        public static final double INDEX_PID_P = 0.009;
+        public static final double INDEX_PID_P = 0.009;  // TODO requires tuning.
+        public static final double INTAKE_PID_P = 0.009;  // TODO requires tuning.
 
-        private static final double INDEX_WHEEL_DIAMETER_INCHES = 4;
-        private static final double NOTE_DIAMETER_INCHES = 12;
+        /**
+         * This controls the intake RPM when it is activated.
+         * 
+         * <p>
+         * 
+         * If the intake is told to be driven backwards,
+         * this value still is applied, and simply made negative.
+         */
+        public static final double INTAKE_RPM = 1000;  // TODO requires tuning.
+        /**
+         * This controls the indexer RPM when the intake is activated in the forwards direction.
+         * 
+         * <p>
+         * 
+         * The indexer aids in ingesting the game piece,
+         * elastically deforming it to be pressed firmly against the flywheel.
+         */
+        public static final double INDEX_INTAKE_COOP_RPM = 500; // TODO requires tuning.
+        /**
+         * This controls the indexer RPM when the intake is activated in the reverse direction.
+         * 
+         * <p>
+         * 
+         * The indexer is responsible for initially dislodging the game piece
+         * from its resting position against the flywheel.
+         * Once displaced far enough, the intake wheels can engage with the game piece
+         * and eject it completely out of the scoring assembly.
+         */
+        public static final double INDEX_INTAKE_UNLOAD_RPM = 1000; // TODO requires tuning.
 
         public static final double FLYWHEEL_SPEAKER_RPM = 200.0; //TODO FIX THIS
         public static final double FLYWHEEL_AMP_RPM = 200.0; //TODO FIX THIS
         public static final double FLYWHEEL_IDLE_RPM = 0;
-
-        // do not edit manually; change diameter measurements instead.
-        public static final double INDEX_STEP_ROTATIONS = INDEX_WHEEL_DIAMETER_INCHES / NOTE_DIAMETER_INCHES;  // pi cancels out.
-    }
-
-    public static final class IntakeConstants {
+        public static final double INDEX_FLYWHEEL_COOP_RPM = 200;  // TODO requires tuning.
     }
 
     public static final class AutoConstants {
