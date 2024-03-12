@@ -32,16 +32,18 @@ public class RobotContainer {
     // public final WristSubsystem wristSubsystem = new WristSubsystem();
     // public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
 
-    SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Auto Square");  // FIXME DEFAULT AUTO SHOULD NOT BE TEST SEQUENCE.
+    SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("[B]"); //default starting pos for speaker
  
     public static XboxController gunner = new XboxController(3);
 
-    public Pose2d objectLocation = new Pose2d();  // FIXME INTEGRATE INTO AUTONAV, SHOULD NOT BE FLOATING INSIDE ROBOTCONTAINER.
+    public Pose2d objectLocation = new Pose2d();  // TODO: (basically needs testing code is in robot.java)
 
     public RobotContainer() {
-        SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 5);  // TODO tune durations.
-        SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, 5);
-        SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 5);
+        SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, ScoringState.LOADING, 1);  // TODO tune durations. Might need backup testing
+        SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, ScoringState.IDLE, 5); //this is problematic with what he had done...
+        SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, ScoringState.IDLE, 5);
+        InstantCommand intakeOn = new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem);
+        InstantCommand intakeOf = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem);
         InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.toggleAmp(), scoringSubsystem);
         InstantCommand toggleSpeaker = new InstantCommand(() -> scoringSubsystem.toggleSpeaker(), scoringSubsystem);
 
@@ -50,6 +52,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("load", commandLoad);
         NamedCommands.registerCommand("speaker", toggleSpeaker);
         NamedCommands.registerCommand("amp", toggleAmp);
+        NamedCommands.registerCommand("intakeOn", intakeOn);
+        NamedCommands.registerCommand("intakeOf", intakeOf);
 
         /*
         // Command for setting arm to the amp position
@@ -89,10 +93,10 @@ public class RobotContainer {
         new JoystickButton(gunner, XboxControllerButtons.RIGHT_BUMPER).onTrue(commandShoot);
         new JoystickButton(gunner, XboxControllerButtons.A).onTrue(commandLoad);
         new JoystickButton(gunner, XboxControllerButtons.B).onTrue(commandUnload);
-        new POVButton(gunner, 90).onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));  // TODO confirm POVs.
-        new POVButton(gunner, 270).onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
-        new POVButton(gunner, 0).onTrue(toggleAmp);
-        new POVButton(gunner, 180).onTrue(toggleSpeaker);
+        new POVButton(gunner, 0).onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
+        new POVButton(gunner,180).onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
+        new POVButton(gunner, 270).onTrue(toggleAmp);
+        new POVButton(gunner, 90).onTrue(toggleSpeaker);
         
         /*
         //Arm and Wrist
@@ -142,8 +146,7 @@ public class RobotContainer {
 
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner));
-        // FIXME: should be wrist intake, not intake.
-        // intakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
+        // wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
         
         /*SendableChooser<Integer> pipeline = new SendableChooser<>();
         pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));
