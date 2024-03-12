@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.FavoritePositions;
@@ -25,8 +27,8 @@ import frc.robot.subsystems.oi.ControlManager;
 
 public class RobotContainer {
     public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    // public final ArmSubsystem armSubsystem = new ArmSubsystem();
-    // public final WristSubsystem wristSubsystem = new WristSubsystem();
+    public final ArmSubsystem armSubsystem = new ArmSubsystem();
+    public final WristSubsystem wristSubsystem = new WristSubsystem();
 
     //object for presenting selection of options in shuffleboard/ smartdashboard
     SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Auto Square");
@@ -55,7 +57,7 @@ public class RobotContainer {
     public Pose2d objectLocation = new Pose2d();
 
     public RobotContainer() {
-        /*
+        
         // Command for setting arm to the amp position
         InstantCommand armLockAmp = new InstantCommand(() -> armSubsystem.ampPreset(), armSubsystem);
 
@@ -68,11 +70,11 @@ public class RobotContainer {
         // Command for setting wrist to the source position
         InstantCommand wristLockSource = new InstantCommand(() -> wristSubsystem.sourcePreset(), wristSubsystem);
 
-        // Command for letting the gunner freely adjust the arm position
-        InstantCommand armAdjust = new InstantCommand(() -> armSubsystem.adjustAngle(gunner.getLeftY()), armSubsystem);
+        // Command for letting the gunner freely adjust the arm position, tuning for the joystick control will be subject to change
+        InstantCommand armAdjust = new InstantCommand(() -> armSubsystem.adjustAngle(gunner.getLeftY() * 0.65), armSubsystem);
 
-        // Command for letting the gunner freely adjust the wrist position
-        InstantCommand wristAdjust = new InstantCommand(() -> wristSubsystem.adjustAngle(gunner.getRightY()), wristSubsystem);
+        // Command for letting the gunner freely adjust the wrist position, tuning for the joystick control will be subject to change
+        InstantCommand wristAdjust = new InstantCommand(() -> wristSubsystem.adjustAngle(gunner.getRightY() * 0.65), wristSubsystem);
 
         // Command for letting you adjust the wrist and arm together
         ParallelCommandGroup adjust = new ParallelCommandGroup(armAdjust, wristAdjust);
@@ -86,7 +88,7 @@ public class RobotContainer {
         semiWristAdjustAmp.addRequirements(wristSubsystem, armSubsystem);
         SequentialCommandGroup semiWristAdjustSource = new SequentialCommandGroup(armLockSource, wristAdjust);
         semiWristAdjustSource.addRequirements(wristSubsystem, armSubsystem);
-        */
+        
 
         
         
@@ -114,12 +116,15 @@ public class RobotContainer {
         gunner_pov180.onTrue(toggleSpeaker);
         gunner_pov0.onTrue(toggleAmp);
         //gunner_LB.onTrue(toggleFlywheel);
-        /*
+        
+        //Arm and Wrist
+        //While the 
         gunner_V.whileTrue(toAmp);
+
         gunner_M.whileTrue(toSource);
-        gunner_RS.whileTrue(adjust);
-        gunner_LS.whileTrue(semiWristAdjustAmp);
-        */
+        gunner_RS.whileTrue(armAdjust);
+        gunner_LS.whileTrue(wristAdjust);
+        
         gunner_pov270.whileTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
 
         // initialize driver button commands.
@@ -167,6 +172,7 @@ public class RobotContainer {
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner));
         intakeSubsystem.setDefaultCommand(new IntakeCmd(intakeSubsystem, gunner));
+        
         
         // FIXME: should be wrist intake, not intake.
         // intakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
