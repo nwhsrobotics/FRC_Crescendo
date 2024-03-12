@@ -29,8 +29,7 @@ public class ClimbCmd extends Command {
     if (gunner.getPOV() == -1) {
       climb.leftClimbMotor.set((gunner.getLeftY() > .1) ? .8 : (gunner.getLeftY() < -.1) ? -.8 : 0);
       climb.rightClimbMotor.set((gunner.getRightY() > .1) ? .8 : (gunner.getRightY() < -.1) ? -.8 : 0);
-    }
-    else{
+    } else {
       climb.leftClimbMotor.set((gunner.getPOV() == 0) ? .8 : (gunner.getPOV() == 180) ? -.8 : 0);
       climb.rightClimbMotor.set((gunner.getPOV() == 0) ? .8 : (gunner.getPOV() == 180) ? -.8 : 0);
     }
