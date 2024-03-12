@@ -26,10 +26,13 @@ public class ClimbCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (gunner.getLeftTriggerAxis() > 0.1){
-      climb.moveDown();
-    } else if (gunner.getRightTriggerAxis() > 0.1) {
-      climb.moveUp();
+    if (gunner.getPOV() == -1) {
+      climb.leftClimbMotor.set((gunner.getLeftY() > .1) ? .8 : (gunner.getLeftY() < -.1) ? -.8 : 0);
+      climb.rightClimbMotor.set((gunner.getRightY() > .1) ? .8 : (gunner.getRightY() < -.1) ? -.8 : 0);
+    }
+    else{
+      climb.leftClimbMotor.set((gunner.getPOV() == 0) ? .8 : (gunner.getPOV() == 180) ? -.8 : 0);
+      climb.rightClimbMotor.set((gunner.getPOV() == 0) ? .8 : (gunner.getPOV() == 180) ? -.8 : 0);
     }
   }
 
