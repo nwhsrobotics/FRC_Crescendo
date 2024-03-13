@@ -24,6 +24,15 @@ public class SetScoringStateCommand extends Command {
         addRequirements(subsystem);
     }
 
+    public SetScoringStateCommand(ScoringSubsystem subsystem, ScoringState state, double duration) {
+        this.subsystem = subsystem;
+        this.state = state;
+        this.endState = ScoringState.IDLE;
+        this.duration = duration;
+        timer = new Timer();
+        addRequirements(subsystem);
+    }
+
     @Override
     public void initialize() {
         timer.reset();

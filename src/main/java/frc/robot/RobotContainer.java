@@ -32,28 +32,28 @@ public class RobotContainer {
     // public final WristSubsystem wristSubsystem = new WristSubsystem();
     // public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
 
-    SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("[B]"); //default starting pos for speaker
+    SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("[B]"); // default starting pos for speaker
  
     public static XboxController gunner = new XboxController(3);
 
     public Pose2d objectLocation = new Pose2d();  // TODO: (basically needs testing code is in robot.java)
 
     public RobotContainer() {
-        SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, ScoringState.LOADING, 1);  // TODO tune durations. Might need backup testing
-        SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, ScoringState.IDLE, 5); //this is problematic with what he had done...
-        SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, ScoringState.IDLE, 5);
-        InstantCommand intakeOn = new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem);
-        InstantCommand intakeOf = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem);
-        InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.toggleAmp(), scoringSubsystem);
-        InstantCommand toggleSpeaker = new InstantCommand(() -> scoringSubsystem.toggleSpeaker(), scoringSubsystem);
+        SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 5);  // TODO tune durations. Might need backup testing
+        SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, 3);
+        SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 3);
+        InstantCommand intakeOn = new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem);  // auto only.
+        InstantCommand intakeOff = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem);
+        InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_AMP_RPM), scoringSubsystem);
+        InstantCommand toggleSpeaker = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM), scoringSubsystem);
 
         // expose scoring-related commands to autonomous routines.
-        NamedCommands.registerCommand("shoot", commandShoot);  // TODO check auto command usage.
+        NamedCommands.registerCommand("shoot", commandShoot);
         NamedCommands.registerCommand("load", commandLoad);
         NamedCommands.registerCommand("speaker", toggleSpeaker);
         NamedCommands.registerCommand("amp", toggleAmp);
         NamedCommands.registerCommand("intakeOn", intakeOn);
-        NamedCommands.registerCommand("intakeOf", intakeOf);
+        NamedCommands.registerCommand("intakeOff", intakeOff);
 
         /*
         // Command for setting arm to the amp position

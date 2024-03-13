@@ -79,21 +79,27 @@ public class ScoringSubsystem extends SubsystemBase {
     public ScoringSubsystem() {
         flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         flywheelMotor.setIdleMode(IdleMode.kCoast);
+        flywheelMotor.setInverted(true);
         flywheelEncoder = flywheelMotor.getEncoder();
         flywheelPIDController = flywheelMotor.getPIDController();
-        flywheelPIDController.setP(Constants.ScoringConstants.FLYWHEEL_PID_P);
-
+        flywheelPIDController.setP(0);
+        flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
+        
         indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
         indexMotor.setIdleMode(IdleMode.kCoast);
+        indexMotor.setInverted(true);
         indexEncoder = indexMotor.getEncoder();
         indexPIDController = indexMotor.getPIDController();
-        indexPIDController.setP(Constants.ScoringConstants.INDEX_PID_P);
+        indexPIDController.setP(0);
+        indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
 
         intakeMotor = new CANSparkMax(Constants.CANAssignments.INTAKE_MOTOR_ID, MotorType.kBrushless);
         intakeMotor.setIdleMode(IdleMode.kCoast);
+        intakeMotor.setInverted(true);
         intakeEncoder = intakeMotor.getEncoder();
         intakePIDController = intakeMotor.getPIDController();
-        intakePIDController.setP(Constants.ScoringConstants.INTAKE_PID_P);
+        intakePIDController.setP(0);
+        intakePIDController.setFF(Constants.ScoringConstants.INTAKE_PID_FF);
     }
 
     /**
@@ -117,28 +123,6 @@ public class ScoringSubsystem extends SubsystemBase {
      */
     public void setFlywheel(double rpm) {
         flywheelRPM = rpm;
-    }
-
-    /**
-     * Set flywheel to a target RPM, and set RPM to idle speed if RPM is already at target.
-     * 
-     * @param rpm - speed in rotations per minute.
-     */
-    public void toggleFlywheel(double rpm) {
-        if (flywheelRPM == rpm) {
-            flywheelRPM = Constants.ScoringConstants.FLYWHEEL_IDLE_RPM;
-            return;
-        }
-
-        setFlywheel(rpm);
-    }
-
-    public void toggleAmp() {
-        toggleFlywheel(Constants.ScoringConstants.FLYWHEEL_AMP_RPM);
-    }
-
-    public void toggleSpeaker() {
-        toggleFlywheel(Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM);
     }
 
     @Override
@@ -177,7 +161,8 @@ public class ScoringSubsystem extends SubsystemBase {
         }
 
         Logger.recordOutput("scoring.flywheel.isready", isFlywheelReady());
-        Logger.recordOutput("scoring.flywheel.rpm", flywheelRPM);
+        Logger.recordOutput("scoring.flywheel.rpm", flywheelEncoder.getVelocity());
+        Logger.recordOutput("scoring.flywheel.rpmtarget", flywheelRPM);
         Logger.recordOutput("scoring.index.rpm", indexEncoder.getVelocity());
         Logger.recordOutput("scoring.intake.rpm", intakeEncoder.getVelocity());
     }
