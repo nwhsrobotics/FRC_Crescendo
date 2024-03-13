@@ -15,8 +15,6 @@ public class ArmSubsystem extends SubsystemBase {
     private final CANSparkMax shoulderMotor;
     private final SparkPIDController shoulderPidController;
     private final RelativeEncoder shoulderRelativeEncoder;
-    private final double ampPosition = 104; // Measured from cad, rounded to the nearest whole number
-    private final double sourcePosition = 40; // Measured from cad, rounded to the nearest whole number
     private double desiredPosition = 0; // Set the arms angle at this degree
     private final double currentPosition;
     private final boolean autoLockEnabledAmp = false;
@@ -40,13 +38,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Sets the desired position to a pre-determined angle for the amp
     public void ampPreset() {
-        desiredPosition = (ampPosition / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredPosition = (140.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
     }
 
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
 
-        desiredPosition = (sourcePosition / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredPosition = (40.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
 
     }
 
