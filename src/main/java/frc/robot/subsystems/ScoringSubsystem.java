@@ -61,7 +61,7 @@ public class ScoringSubsystem extends SubsystemBase {
     private final SparkPIDController intakePIDController;
     private final RelativeEncoder intakeEncoder;
 
-    private double flywheelRPM = 0;
+    private double flywheelRPM = Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM; //by default shooter is speaker, to avoid toggling
 
     public ScoringSubsystem() {
         flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
