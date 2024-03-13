@@ -170,11 +170,11 @@ public final class Constants {
          * If the flywheel spins within the tolerance,
          * then it is considered up-to-speed for firing.
          */
-        public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 10.0;
+        public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 1200.0;
 
-        public static final double FLYWHEEL_PID_P = 0.005;
-        public static final double INDEX_PID_P = 0.009;  // TODO requires tuning.
-        public static final double INTAKE_PID_P = 0.009;  // TODO requires tuning.
+        public static final double FLYWHEEL_PID_FF = 0.0005;
+        public static final double INDEX_PID_FF = 0.0005;  // TODO requires tuning.
+        public static final double INTAKE_PID_FF = 0.0005;  // TODO requires tuning.
 
         /**
          * This controls the intake RPM when it is activated.
@@ -193,7 +193,7 @@ public final class Constants {
          * The indexer aids in ingesting the game piece,
          * elastically deforming it to be pressed firmly against the flywheel.
          */
-        public static final double INDEX_INTAKE_COOP_RPM = 500; // TODO requires tuning.
+        public static final double INDEX_INTAKE_COOP_RPM = 0; // TODO requires tuning.
         /**
          * This controls the indexer RPM when the intake is activated in the reverse direction.
          * 
@@ -206,10 +206,10 @@ public final class Constants {
          */
         public static final double INDEX_INTAKE_UNLOAD_RPM = 1000; // TODO requires tuning.
 
-        public static final double FLYWHEEL_SPEAKER_RPM = 200.0; //TODO FIX THIS
-        public static final double FLYWHEEL_AMP_RPM = 200.0; //TODO FIX THIS
+        public static final double FLYWHEEL_SPEAKER_RPM = 3500.0; //TODO FIX THIS
+        public static final double FLYWHEEL_AMP_RPM = 3500.0; //TODO FIX THIS
         public static final double FLYWHEEL_IDLE_RPM = 0;
-        public static final double INDEX_FLYWHEEL_COOP_RPM = 200;  // TODO requires tuning.
+        public static final double INDEX_FLYWHEEL_COOP_RPM = 400;  // TODO requires tuning.
     }
 
     public static final class AutoConstants {
