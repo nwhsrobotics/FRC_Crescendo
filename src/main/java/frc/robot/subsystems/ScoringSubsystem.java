@@ -21,35 +21,22 @@ public class ScoringSubsystem extends SubsystemBase {
      * 
      * Note that there are no restrictions for transitioning between states.
      * This is to prevent soft-locking of the subsystem,
-     * should the game piece get jammed within the assembly.
+     * should the game piece get jammed within the shooter assembly.
      * 
      * For example, you may "FIRE" after hitting "UNLOADING." 
      */
     public enum ScoringState {
         /**
-         * Drive the intake forwards, and slowly drive the indexer forwards.
-         * 
-         * <p>
-         * 
-         * This should press the ring against the flywheel,
+         * Intake a game piece into the shooter assembly.
          * but not push it past the flywheel and out of the shooter assembly.
          */
         LOADING,
         /**
-         * Drive the intake and indexer backwards.
-         * 
-         * <p>
-         * 
-         * This should completely eject the ring out of the robot,
+         * Eject the game piece currently inside of the robot,
          * through the intake assembly.
          */
         UNLOADING,
         /**
-         * Drive flywheel forwards, wait for it to reach the RPM target,
-         * and then drive the indexer forwards.
-         * 
-         * <p>
-         * 
          * Fire!
          */
         FIRE,
@@ -141,7 +128,7 @@ public class ScoringSubsystem extends SubsystemBase {
                 Logger.recordOutput("scoring.state", "LOADING");
                 break;
             case FIRE:
-           flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
+                flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
 
                 indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
                 intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);

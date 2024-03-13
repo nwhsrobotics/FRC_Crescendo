@@ -173,8 +173,8 @@ public final class Constants {
         public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 1200.0;
 
         public static final double FLYWHEEL_PID_FF = 0.0005;
-        public static final double INDEX_PID_FF = 0.0005;  // TODO requires tuning.
-        public static final double INTAKE_PID_FF = 0.0005;  // TODO requires tuning.
+        public static final double INDEX_PID_FF = 0.0005;
+        public static final double INTAKE_PID_FF = 0.0005;
 
         /**
          * This controls the intake RPM when it is activated.
