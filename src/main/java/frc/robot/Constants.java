@@ -34,7 +34,7 @@ public final class Constants {
 
         public static final int CLIMB_LEFT_MOTOR_ID = 14;
         public static final int CLIMB_RIGHT_MOTOR_ID = 30;
- 
+
         public static final int FLYWHEEL_MOTOR_ID = 7;
         public static final int INDEX_MOTOR_ID = 13;
 
@@ -145,8 +145,8 @@ public final class Constants {
     public static final class ClimbConstants {
         private static final double SPOOL_DIAMETER_METERS = 0.787 * 0.0254;
         private static final double GEAR_RATIO = Math.pow(7, 2);
-        public static final double CLIMB_DISTANCE_PER_ROTATION = SPOOL_DIAMETER_METERS / GEAR_RATIO; 
-        
+        public static final double CLIMB_DISTANCE_PER_ROTATION = SPOOL_DIAMETER_METERS / GEAR_RATIO;
+
         public static final double CLIMB_TRAVEL_DISTANCE_METERS = 12 * 0.0254;
         public static final double TOLERANCE_DISTANCE_METERS = 0.25 * 0.0254;
     }
@@ -178,27 +178,27 @@ public final class Constants {
 
         /**
          * This controls the intake RPM when it is activated.
-         * 
+         *
          * <p>
-         * 
+         * <p>
          * If the intake is told to be driven backwards,
          * this value still is applied, and simply made negative.
          */
         public static final double INTAKE_RPM = 1000;  // TODO requires tuning.
         /**
          * This controls the indexer RPM when the intake is activated in the forwards direction.
-         * 
+         *
          * <p>
-         * 
+         * <p>
          * The indexer aids in ingesting the game piece,
          * elastically deforming it to be pressed firmly against the flywheel.
          */
         public static final double INDEX_INTAKE_COOP_RPM = 0; // TODO requires tuning.
         /**
          * This controls the indexer RPM when the intake is activated in the reverse direction.
-         * 
+         *
          * <p>
-         * 
+         * <p>
          * The indexer is responsible for initially dislodging the game piece
          * from its resting position against the flywheel.
          * Once displaced far enough, the intake wheels can engage with the game piece

@@ -1,7 +1,5 @@
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -158,7 +156,7 @@ public class Robot extends LoggedRobot {
                 robotContainer.swerveSubsystem.autonavigator.resumeNavigation();
             }
         }
-        robotContainer.objectLocation = LimelightImplementation.transformTargetLocation(robotContainer.swerveSubsystem.odometer.getEstimatedPosition());
+        robotContainer.visionTargetLocation = LimelightImplementation.transformTargetLocation(robotContainer.swerveSubsystem.odometer.getEstimatedPosition());
         Logger.recordOutput("limelight.pipelineIndex", LimelightHelpers.getCurrentPipelineIndex("limelight"));
         Logger.recordOutput("limelight.pipelineName", LimelightImplementation.getPipelineName());
         Logger.recordOutput("limelight.objectDetected", LimelightHelpers.getTV("limelight"));

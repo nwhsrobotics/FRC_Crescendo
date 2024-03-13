@@ -88,7 +88,7 @@ public class DriverLeftJoysticksController implements Controller {
 
     @Override
     public int getFieldRelativeButton() {
-        return  8;
+        return 8;
     }
 
     @Override
