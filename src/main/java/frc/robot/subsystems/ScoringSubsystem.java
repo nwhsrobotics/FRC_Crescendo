@@ -3,12 +3,12 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import org.littletonrobotics.junction.Logger;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * Combines the shooter and intake into a singular cooperative subsystem.
@@ -16,14 +16,14 @@ import frc.robot.Constants;
 public class ScoringSubsystem extends SubsystemBase {
     /*
      * What state the subsystem is in.
-     * 
+     *
      * <p>
-     * 
+     *
      * Note that there are no restrictions for transitioning between states.
      * This is to prevent soft-locking of the subsystem,
      * should the game piece get jammed within the shooter assembly.
-     * 
-     * For example, you may "FIRE" after hitting "UNLOADING." 
+     *
+     * For example, you may "FIRE" after hitting "UNLOADING."
      */
     public enum ScoringState {
         /**
@@ -71,7 +71,7 @@ public class ScoringSubsystem extends SubsystemBase {
         flywheelPIDController = flywheelMotor.getPIDController();
         flywheelPIDController.setP(0);
         flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
-        
+
         indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
         indexMotor.setIdleMode(IdleMode.kCoast);
         indexMotor.setInverted(true);
@@ -100,12 +100,12 @@ public class ScoringSubsystem extends SubsystemBase {
 
     /**
      * Set flywheel to a target RPM.
-     * 
+     *
      * <p>
-     * 
+     * <p>
      * When the subsystem is told to fire,
      * this is the target RPM the flywheel will spin up to.
-     * 
+     *
      * @param rpm - speed in rotations per minute.
      */
     public void setFlywheel(double rpm) {
@@ -143,7 +143,7 @@ public class ScoringSubsystem extends SubsystemBase {
                 indexPIDController.setReference(-Constants.ScoringConstants.INDEX_INTAKE_UNLOAD_RPM, ControlType.kVelocity);
                 intakePIDController.setReference(-Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
                 Logger.recordOutput("scoring.state", "UNLOADING");
-                break;     
+                break;
             default:
                 break;
         }

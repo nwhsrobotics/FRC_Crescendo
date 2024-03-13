@@ -311,7 +311,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // This method is called periodically to update the robot's state and log data
     @Override
-    public void periodic() {       
+    public void periodic() {
         updateOdometry();
 
         // Log position of robot.
@@ -395,7 +395,7 @@ public class SwerveSubsystem extends SubsystemBase {
     /**
      * Update odometry periodically with vision and internal measurements
      */
-    public void updateOdometry(){
+    public void updateOdometry() {
         // Update the robot's odometer
         //odometer.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(getHeading()), getModulePositions());
         odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
@@ -444,6 +444,8 @@ public class SwerveSubsystem extends SubsystemBase {
         odometer.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
         //set back to normal april tag pipeline
         LimelightHelpers.setPipelineIndex("limelight", pipeline);
+        //use this logger key to log important evvents 
+        Logger.recordOutput("robot.events", "ResetOdometryWithVision");
     }
 
 }

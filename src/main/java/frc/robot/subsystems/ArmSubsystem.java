@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -10,6 +8,7 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
+import org.littletonrobotics.junction.Logger;
 
 public class ArmSubsystem extends SubsystemBase {
     private final CANSparkMax shoulderMotor;
@@ -22,7 +21,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
-        
+
         shoulderMotor = new CANSparkMax(Constants.CANAssignments.SHOULDER_MOTOR_ID, MotorType.kBrushless);
         shoulderRelativeEncoder = shoulderMotor.getEncoder();
         shoulderPidController = shoulderMotor.getPIDController();
@@ -52,16 +51,16 @@ public class ArmSubsystem extends SubsystemBase {
     public void adjustAngle(double changeInPosition) {
 
         desiredPosition += changeInPosition;
-        
+
     }
 
 
     @Override
     public void periodic() {
         shoulderPidController.setReference(desiredPosition, ControlType.kPosition);
-        
+
         //this makes sure the wrist does not move anymore if the same position preset is pressed away
-        if(currentPosition == desiredPosition){
+        if (currentPosition == desiredPosition) {
             shoulderMotor.stopMotor();
         }
 

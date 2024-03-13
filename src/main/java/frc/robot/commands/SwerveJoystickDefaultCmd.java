@@ -27,16 +27,14 @@ public class SwerveJoystickDefaultCmd extends Command {
                 : ChassisSpeeds.fromFieldRelativeSpeeds(ControlManager.Outputs.xSpeed, ControlManager.Outputs.ySpeed, ControlManager.Outputs.rotatingSpeed, new Rotation2d(0))));
         */
         ChassisSpeeds chassisSpeedsFromRelativeSpeeds;
-        
-        if(swerveSubsystem.isFieldRelative && ControlManager.fieldRelative){
-            chassisSpeedsFromRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ControlManager.Outputs.xSpeed, ControlManager.Outputs.ySpeed, ControlManager.Outputs.rotatingSpeed, swerveSubsystem.odometer.getEstimatedPosition().getRotation());
-        }
 
-        else {
+        if (swerveSubsystem.isFieldRelative && ControlManager.fieldRelative) {
+            chassisSpeedsFromRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ControlManager.Outputs.xSpeed, ControlManager.Outputs.ySpeed, ControlManager.Outputs.rotatingSpeed, swerveSubsystem.odometer.getEstimatedPosition().getRotation());
+        } else {
             chassisSpeedsFromRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ControlManager.Outputs.xSpeed, ControlManager.Outputs.ySpeed, ControlManager.Outputs.rotatingSpeed, new Rotation2d(0));
         }
         swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeedsFromRelativeSpeeds));
-        
+
     }
 
     @Override
