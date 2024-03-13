@@ -10,6 +10,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public final CANSparkMax rightClimbMotor = new CANSparkMax(Constants.CANAssignments.CLIMB_RIGHT_MOTOR_ID, MotorType.kBrushless);
 
     public ClimbSubsystem() {
+        leftClimbMotor.setInverted(true);
     }
 
     @Override
