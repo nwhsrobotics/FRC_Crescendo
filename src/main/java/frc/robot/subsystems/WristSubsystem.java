@@ -19,8 +19,7 @@ public class WristSubsystem extends SubsystemBase {
     private double desiredPosition;
     private final boolean autoLockEnabledAmp = false;
     private final boolean autoLockEnabledSource = false;
-    private final double ampPosition = 218; // Measured from cad, rounded to the nearest whole number
-    private final double sourcePosition = 1; // TBD
+    
 
     // Constructor for WristSubsystem
     public WristSubsystem() {
@@ -43,14 +42,14 @@ public class WristSubsystem extends SubsystemBase {
     // Sets the desired position to a pre-determined angle for the amp
     public void ampPreset() {
 
-        desiredPosition = (ampPosition / 360) * WristConstants.WRIST_GEAR_RATIO;
+        desiredPosition = (218.0 / 360) * WristConstants.WRIST_GEAR_RATIO;
 
     }
 
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
 
-        desiredPosition = (sourcePosition / 360) * WristConstants.WRIST_GEAR_RATIO;
+        desiredPosition = (43.1 / 360) * WristConstants.WRIST_GEAR_RATIO;
 
     }
 
