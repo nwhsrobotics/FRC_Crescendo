@@ -206,10 +206,10 @@ public final class Constants {
          */
         public static final double INDEX_INTAKE_UNLOAD_RPM = 1000; // TODO requires tuning.
 
-        public static final double FLYWHEEL_SPEAKER_RPM = 5000.0; //TODO FIX THIS
+        public static final double FLYWHEEL_SPEAKER_RPM = 4500.0; //TODO FIX THIS
         public static final double FLYWHEEL_AMP_RPM = 4250.0; //TODO FIX THIS
         public static final double FLYWHEEL_IDLE_RPM = 0;
-        public static final double INDEX_FLYWHEEL_COOP_RPM = 5000.0;  // TODO requires tuning.
+        public static final double INDEX_FLYWHEEL_COOP_RPM = 4500.0;  // TODO requires tuning.
     }
 
     public static final class AutoConstants {
