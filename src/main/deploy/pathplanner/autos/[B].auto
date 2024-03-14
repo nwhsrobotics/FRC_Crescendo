@@ -24,21 +24,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "[B] [Back] [Center] Exit"
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "[B] [Back] [Center] Return"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[B] [Back] [Center] Return"
           }
         },
         {
