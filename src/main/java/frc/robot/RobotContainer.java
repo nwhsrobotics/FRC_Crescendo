@@ -26,14 +26,16 @@ import frc.robot.subsystems.oi.ControlManager;
 import frc.robot.subsystems.oi.XboxControllerButtons;
 
 public class RobotContainer {
-    public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    public final SwerveSubsystem swerveSubsystem;  // INIT AFTER NAMED COMMAND REGISTRATION!
     public final ScoringSubsystem scoringSubsystem = new ScoringSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
     // public final ArmSubsystem armSubsystem = new ArmSubsystem();
     // public final WristSubsystem wristSubsystem = new WristSubsystem();
     // public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
 
-    SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("[B]"); // default starting pos for speaker
+    // B is default starting pos for speaker
+    // INIT AFTER SWERVE SUBSYSTEM!
+    SendableChooser<Command> autoChooser;
 
     public static XboxController gunner = new XboxController(3);
 
@@ -52,10 +54,15 @@ public class RobotContainer {
         // expose scoring-related commands to autonomous routines.
         NamedCommands.registerCommand("shoot", autoShoot);
         NamedCommands.registerCommand("load", commandLoad);
-        NamedCommands.registerCommand("speaker", toggleSpeaker);
-        NamedCommands.registerCommand("amp", toggleAmp);
+        NamedCommands.registerCommand("toggleSpeaker", toggleSpeaker);
+        NamedCommands.registerCommand("toggleAmp", toggleAmp);
         NamedCommands.registerCommand("intakeOn", intakeOn);
         NamedCommands.registerCommand("intakeOff", intakeOff);
+
+        // initialize swerve with autobuilder code inside.
+        swerveSubsystem = new SwerveSubsystem();
+
+        autoChooser = AutoBuilder.buildAutoChooser("[B]");
 
         /*
         // Command for setting arm to the amp position
