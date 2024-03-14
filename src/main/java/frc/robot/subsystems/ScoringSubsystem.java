@@ -6,8 +6,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-
-import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
@@ -55,13 +53,10 @@ public class ScoringSubsystem extends SubsystemBase {
 
     private final CANSparkMax flywheelMotor;
     private final RelativeEncoder flywheelEncoder;
-    private final BangBangController flywheelController;
-
+    private final SparkPIDController flywheelPIDController;
     private final CANSparkMax indexMotor;
     private final RelativeEncoder indexEncoder;
     private final SparkPIDController indexPIDController;
-    private final BangBangController indexAlternateController;
-
     private final CANSparkMax intakeMotor;
     private final SparkPIDController intakePIDController;
     private final RelativeEncoder intakeEncoder;
@@ -73,7 +68,9 @@ public class ScoringSubsystem extends SubsystemBase {
         flywheelMotor.setIdleMode(IdleMode.kCoast);
         flywheelMotor.setInverted(true);
         flywheelEncoder = flywheelMotor.getEncoder();
-        flywheelController = new BangBangController(Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE);
+        flywheelPIDController = flywheelMotor.getPIDController();
+        flywheelPIDController.setP(0);
+        flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
 
         indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
         indexMotor.setIdleMode(IdleMode.kCoast);
@@ -82,7 +79,6 @@ public class ScoringSubsystem extends SubsystemBase {
         indexPIDController = indexMotor.getPIDController();
         indexPIDController.setP(0);
         indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
-        indexAlternateController = new BangBangController(Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE);
 
         intakeMotor = new CANSparkMax(Constants.CANAssignments.INTAKE_MOTOR_ID, MotorType.kBrushless);
         intakeMotor.setIdleMode(IdleMode.kCoast);
@@ -120,13 +116,13 @@ public class ScoringSubsystem extends SubsystemBase {
     public void periodic() {
         switch (state) {
             case IDLE:
-                flywheelMotor.set(flywheelController.calculate(flywheelEncoder.getVelocity(), Constants.ScoringConstants.FLYWHEEL_IDLE_RPM));
+                flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
                 indexPIDController.setReference(0, ControlType.kDutyCycle);  // don't even bother with velocity control, just turn them off.
                 intakePIDController.setReference(0, ControlType.kDutyCycle);
                 Logger.recordOutput("scoring.state", "IDLE");
                 break;
             case LOADING:
-                flywheelMotor.set(flywheelController.calculate(flywheelEncoder.getVelocity(), Constants.ScoringConstants.FLYWHEEL_IDLE_RPM));
+                flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
                 indexPIDController.setReference(Constants.ScoringConstants.INDEX_INTAKE_COOP_RPM, ControlType.kVelocity);
                 System.out.println("===============================================");
                 System.out.println("loading command is running");
@@ -134,14 +130,8 @@ public class ScoringSubsystem extends SubsystemBase {
                 Logger.recordOutput("scoring.state", "LOADING");
                 break;
             case FIRE:
-                flywheelMotor.set(flywheelController.calculate(flywheelEncoder.getVelocity(), flywheelRPM));
-                indexPIDController.setReference(
-                    indexAlternateController.calculate(
-                        indexEncoder.getVelocity(),
-                        Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM
-                    ),
-                    ControlType.kDutyCycle
-                );
+                flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
+                indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
                 //intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
                 
                 /* our code before
@@ -150,12 +140,11 @@ public class ScoringSubsystem extends SubsystemBase {
                 if (isFlywheelReady() && flywheelEncoder.getVelocity() != Constants.ScoringConstants.FLYWHEEL_IDLE_RPM) {
                     indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
                 }
-                */
-
+                intakePIDController.setReference(0, ControlType.kDutyCycle);*/
                 Logger.recordOutput("scoring.state", "FIRE");
                 break;
             case UNLOADING:
-                flywheelMotor.set(flywheelController.calculate(flywheelEncoder.getVelocity(), Constants.ScoringConstants.FLYWHEEL_IDLE_RPM));
+                flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
                 indexPIDController.setReference(-Constants.ScoringConstants.INDEX_INTAKE_UNLOAD_RPM, ControlType.kVelocity);
                 intakePIDController.setReference(-Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
                 Logger.recordOutput("scoring.state", "UNLOADING");

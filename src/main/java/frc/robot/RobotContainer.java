@@ -42,7 +42,7 @@ public class RobotContainer {
     public Pose2d visionTargetLocation = new Pose2d();  // TODO: (basically needs testing code is in robot.java)
 
     public RobotContainer() {
-        SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 5);
+        SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 5);  // TODO tune durations. Might need backup testing
         SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, 3);
         SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 3);
         SetScoringStateCommand autoShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, ScoringState.LOADING, 1); //auto only
