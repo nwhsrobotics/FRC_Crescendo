@@ -127,7 +127,7 @@ public class RobotContainer {
         ControlManager.DriverButtonCommands.autonavigateToMidStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.MIDSTAGE), swerveSubsystem);
         ControlManager.DriverButtonCommands.autonavigateToBottomStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.BOTTOMSTAGE), swerveSubsystem);
         ControlManager.DriverButtonCommands.autonavigateToVisionTarget = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(visionTargetLocation), swerveSubsystem);
-        ControlManager.DriverButtonCommands.odometryVisionReset = new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule(), swerveSubsystem);
+        ControlManager.DriverButtonCommands.odometryVisionReset = new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule());
         ControlManager.DriverButtonCommands.nextPipeline = new InstantCommand(() -> LimelightImplementation.nextPipeline());
         ControlManager.reserveController(3);  // THE GUNNER CONTROLLER SHOULD BE ON PORT 3.
         ControlManager.registerController(new DriverXboxController());
