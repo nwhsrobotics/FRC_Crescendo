@@ -42,6 +42,15 @@ public class SetScoringStateCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        //crazy logic to potentially fix note getting stuck, basically "in auto" we actually have an end state but not in teleop
+        //so everytime we shoot in teleop after shooting ends, it will start unloading to get piece out so you can intake it again
+
+
+        /*if(state == ScoringState.FIRE && endState == null){
+            new SetScoringStateCommand(subsystem, ScoringState.UNLOADING, ScoringState.IDLE, 2).schedule();
+        } else {
+            subsystem.state = endState;
+        }*/
         subsystem.state = endState;
     }
 
