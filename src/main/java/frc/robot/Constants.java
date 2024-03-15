@@ -206,10 +206,10 @@ public final class Constants {
          */
         public static final double INDEX_INTAKE_UNLOAD_RPM = 1000; // TODO requires tuning.
 
-        public static final double FLYWHEEL_SPEAKER_RPM = 5000.0; //TODO FIX THIS
+        public static final double FLYWHEEL_SPEAKER_RPM = 5000.0;
         public static final double FLYWHEEL_AMP_RPM = 4250.0; //TODO FIX THIS
         public static final double FLYWHEEL_IDLE_RPM = 0;
-        public static final double INDEX_FLYWHEEL_COOP_RPM = 5000.0;  // TODO requires tuning.
+        public static final double INDEX_FLYWHEEL_COOP_RPM = 5000.0; 
     }
 
     public static final class AutoConstants {
@@ -237,7 +237,7 @@ public final class Constants {
 
         //TODO: Better constraints 
         public static final PathConstraints kPathfindingConstraints = new PathConstraints(
-                DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 3.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 6.0,
+                DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 2.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 3.0,
                 AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
         public static final SlewRateLimiter xLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 1.2);
         public static final SlewRateLimiter yLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 1.2);
@@ -266,8 +266,6 @@ public final class Constants {
         public static final double distanceFromCenter = 0.3; //in meters, straight distance to the camera from middle
         public static final double hypotenuseDistance = Math.hypot(horizontalOffset, distanceFromCenter); // actual distance in 2d from middle
         public static final double thethaFromCenter = -5.0; //this might be needed for angle offset
-
-        //TODO: Move everything here finish this
     }
 
     public enum RuntimeEnvironment {
