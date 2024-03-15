@@ -4,6 +4,7 @@ package frc.robot.subsystems.limelight;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.Constants;
 import frc.robot.Constants.LimelightConstants;
 import org.littletonrobotics.junction.Logger;
 
