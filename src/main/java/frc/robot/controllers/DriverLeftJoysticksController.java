@@ -77,7 +77,7 @@ public class DriverLeftJoysticksController implements Controller {
     }
 
     @Override
-    public int getOdometryVisionResetButton() {
+    public int getOdometryResetButton() {
         return 5;
     }
 
@@ -97,7 +97,7 @@ public class DriverLeftJoysticksController implements Controller {
     }
 
     @Override
-    public int getAutonavigateToVisionTarget() {
+    public int getAutonavigateToClosestTarget() {
         return 9;
     }
 

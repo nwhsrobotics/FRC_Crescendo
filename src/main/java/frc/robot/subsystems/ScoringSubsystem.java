@@ -112,6 +112,18 @@ public class ScoringSubsystem extends SubsystemBase {
         flywheelRPM = rpm;
     }
 
+    public void increaseRPM(){
+        if(flywheelRPM < 5500){
+            flywheelRPM += 100;
+        }
+    }
+
+    public void decreaseRPM(){
+        if(flywheelRPM > 100){
+            flywheelRPM -= 100;
+        }
+    }
+
     @Override
     public void periodic() {
         switch (state) {
