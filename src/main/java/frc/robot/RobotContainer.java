@@ -127,8 +127,9 @@ public class RobotContainer {
         ControlManager.DriverButtonCommands.autonavigateToMidStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.MIDSTAGE), swerveSubsystem);
         ControlManager.DriverButtonCommands.autonavigateToBottomStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.BOTTOMSTAGE), swerveSubsystem);
         //changed from swerveSubsystem.autonavigator.navigateTo(visionTargetLocation); finds path to closest POI (Point of interest)
-        ControlManager.DriverButtonCommands.autonavigateToVisionTarget = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(swerveSubsystem.odometer.getEstimatedPosition().nearest(Constants.FavoritePositions.allPoses)), swerveSubsystem);
-        ControlManager.DriverButtonCommands.odometryVisionReset = new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule());
+        //autonavigateToVisionTarget 
+        ControlManager.DriverButtonCommands.autonavigateToClosestTarget = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(swerveSubsystem.odometer.getEstimatedPosition().nearest(Constants.FavoritePositions.allPoses)), swerveSubsystem);
+        ControlManager.DriverButtonCommands.odometryResetPos = new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule());
         ControlManager.DriverButtonCommands.nextPipeline = new InstantCommand(() -> LimelightImplementation.nextPipeline());
         ControlManager.reserveController(3);  // THE GUNNER CONTROLLER SHOULD BE ON PORT 3.
         ControlManager.registerController(new DriverXboxController());

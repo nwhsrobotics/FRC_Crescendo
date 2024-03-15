@@ -87,7 +87,7 @@ public class DriverXboxController implements Controller {
     }
 
     @Override
-    public int getAutonavigateToVisionTarget() {
+    public int getAutonavigateToClosestTarget() {
         return 3;
     }
 
@@ -97,7 +97,7 @@ public class DriverXboxController implements Controller {
     }
 
     @Override
-    public int getOdometryVisionResetButton() {
+    public int getOdometryResetButton() {
         return 180 + Constants.OIConstants.kPOV;
     }
 

@@ -159,7 +159,7 @@ public interface Controller {
      *
      * @return - button number.
      */
-    default int getAutonavigateToVisionTarget() {
+    default int getAutonavigateToClosestTarget() {
         return -1;
     }
 
@@ -181,7 +181,7 @@ public interface Controller {
      *
      * @return - button number.
      */
-    default int getOdometryVisionResetButton() {
+    default int getOdometryResetButton() {
         return -1;
     }
 

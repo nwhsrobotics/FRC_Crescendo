@@ -45,8 +45,8 @@ public class ControlManager {
         public static Command autonavigateToTopStage = emptyButtonCommand;
         public static Command autonavigateToMidStage = emptyButtonCommand;
         public static Command autonavigateToBottomStage = emptyButtonCommand;
-        public static Command autonavigateToVisionTarget = emptyButtonCommand;
-        public static Command odometryVisionReset = emptyButtonCommand;
+        public static Command autonavigateToClosestTarget = emptyButtonCommand;
+        public static Command odometryResetPos = emptyButtonCommand;
         public static Command nextPipeline = emptyButtonCommand;
     }
 
@@ -132,8 +132,8 @@ public class ControlManager {
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToTopStageButton(), DriverButtonCommands.autonavigateToTopStage);
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToMidStageButton(), DriverButtonCommands.autonavigateToMidStage);
         makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToBottomStageButton(), DriverButtonCommands.autonavigateToBottomStage);
-        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToVisionTarget(), DriverButtonCommands.autonavigateToVisionTarget);
-        makeTriggerForButton(hid, controller.getPort(), controller.getOdometryVisionResetButton(), DriverButtonCommands.odometryVisionReset);
+        makeTriggerForButton(hid, controller.getPort(), controller.getAutonavigateToClosestTarget(), DriverButtonCommands.autonavigateToClosestTarget);
+        makeTriggerForButton(hid, controller.getPort(), controller.getOdometryResetButton(), DriverButtonCommands.odometryResetPos);
         makeTriggerForButton(hid, controller.getPort(), controller.getNextPipelineButton(), DriverButtonCommands.nextPipeline);
 
         Logger.recordOutput("controlmanager.controller." + controller.getPort() + ".name", controller.getName());
