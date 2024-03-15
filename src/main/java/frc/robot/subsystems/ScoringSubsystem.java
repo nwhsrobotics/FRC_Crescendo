@@ -124,8 +124,6 @@ public class ScoringSubsystem extends SubsystemBase {
             case LOADING:
                 flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
                 indexPIDController.setReference(Constants.ScoringConstants.INDEX_INTAKE_COOP_RPM, ControlType.kVelocity);
-                System.out.println("===============================================");
-                System.out.println("loading command is running");
                 intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
                 Logger.recordOutput("scoring.state", "LOADING");
                 break;
