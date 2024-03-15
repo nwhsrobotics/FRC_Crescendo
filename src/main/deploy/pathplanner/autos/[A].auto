@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.98,
-      "y": 6.5
+      "x": 0.69,
+      "y": 6.67
     },
     "rotation": 61.52180505415579
   },
@@ -24,15 +24,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "[A] [Back] [Left] Exit"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[A] [Back] [Left] Exit"
           }
         },
         {
@@ -42,15 +42,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "[A] [Front] [LeftMost] Exit"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[A] [Front] [LeftMost] Exit"
           }
         },
         {
@@ -60,15 +60,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "[A] [Front] [Left] Exit"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[A] [Front] [Left] Exit"
           }
         },
         {
@@ -78,12 +78,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "[A] [Front] [LeftMost] [Bypass] Exit"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "shoot"
@@ -92,7 +86,19 @@
         {
           "type": "path",
           "data": {
+            "pathName": "[A] [Front] [LeftMost] [Bypass] Exit"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "[A] [Front] [LeftMost] [Bypass] Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         }
       ]
