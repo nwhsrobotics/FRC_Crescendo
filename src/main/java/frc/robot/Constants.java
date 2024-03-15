@@ -248,10 +248,9 @@ public final class Constants {
     }
 
     public static final class FavoritePositions {
-        // TODO: CHANGE THIS WITH NEW DIMENSIONS
         public static final Pose2d SOURCE = new Pose2d(15.39, 0.94, Rotation2d.fromDegrees(-60.00));
-        public static final Pose2d AMP = new Pose2d(1.83, 7.68, Rotation2d.fromDegrees(90.00));
-        public static final Pose2d SPEAKER = new Pose2d(1.34, 5.54, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d AMP = new Pose2d(1.83, 7.70, Rotation2d.fromDegrees(90.00));
+        public static final Pose2d SPEAKER = new Pose2d(1.74, 5.54, Rotation2d.fromDegrees(0.00));
 
         public static final Pose2d MIDSTAGE = new Pose2d(5.85, 4.12, Rotation2d.fromDegrees(-180.00));
         //not near amp
