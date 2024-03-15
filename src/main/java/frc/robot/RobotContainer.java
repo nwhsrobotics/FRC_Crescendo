@@ -2,6 +2,8 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -42,9 +44,9 @@ public class RobotContainer {
     public Pose2d visionTargetLocation = new Pose2d();  // TODO: (basically needs testing code is in robot.java)
 
     public RobotContainer() {
-        SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 5);  // TODO tune durations. Might need backup testing
-        SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, 3);
-        SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 3);
+        SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 2);  // TODO tune durations. Might need backup testing
+        SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, 2);
+        SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 2);
         SetScoringStateCommand autoShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, ScoringState.LOADING, 1); //auto only
         InstantCommand intakeOn = new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem);  // auto only.
         InstantCommand intakeOff = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem); //auto only
@@ -125,7 +127,7 @@ public class RobotContainer {
         ControlManager.DriverButtonCommands.autonavigateToMidStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.MIDSTAGE), swerveSubsystem);
         ControlManager.DriverButtonCommands.autonavigateToBottomStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.BOTTOMSTAGE), swerveSubsystem);
         ControlManager.DriverButtonCommands.autonavigateToVisionTarget = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(visionTargetLocation), swerveSubsystem);
-        ControlManager.DriverButtonCommands.odometryVisionReset = new InstantCommand(() -> swerveSubsystem.resetOdometryWithVision(), swerveSubsystem);
+        ControlManager.DriverButtonCommands.odometryVisionReset = new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule(), swerveSubsystem);
         ControlManager.DriverButtonCommands.nextPipeline = new InstantCommand(() -> LimelightImplementation.nextPipeline());
         ControlManager.reserveController(3);  // THE GUNNER CONTROLLER SHOULD BE ON PORT 3.
         ControlManager.registerController(new DriverXboxController());
