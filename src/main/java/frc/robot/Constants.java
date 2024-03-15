@@ -182,25 +182,25 @@ public final class Constants {
          * This controls the intake RPM when it is activated.
          *
          * <p>
-         * <p>
+         * 
          * If the intake is told to be driven backwards,
          * this value still is applied, and simply made negative.
          */
-        public static final double INTAKE_RPM = 1000;  // TODO requires tuning.
+        public static final double INTAKE_RPM = 1200;  // TODO requires tuning.
         /**
          * This controls the indexer RPM when the intake is activated in the forwards direction.
          *
          * <p>
-         * <p>
+         * 
          * The indexer aids in ingesting the game piece,
          * elastically deforming it to be pressed firmly against the flywheel.
          */
-        public static final double INDEX_INTAKE_COOP_RPM = 0; // TODO requires tuning.
+        public static final double INDEX_INTAKE_COOP_RPM = 400; // TODO requires tuning.
         /**
          * This controls the indexer RPM when the intake is activated in the reverse direction.
          *
          * <p>
-         * <p>
+         * 
          * The indexer is responsible for initially dislodging the game piece
          * from its resting position against the flywheel.
          * Once displaced far enough, the intake wheels can engage with the game piece

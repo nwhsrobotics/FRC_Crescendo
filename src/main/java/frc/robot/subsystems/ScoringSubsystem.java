@@ -95,7 +95,7 @@ public class ScoringSubsystem extends SubsystemBase {
      * @return - boolean representing whether the flywheel is ready.
      */
     public boolean isFlywheelReady() {
-        return flywheelEncoder.getVelocity() >= flywheelRPM - Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE && flywheelEncoder.getVelocity() <= flywheelRPM + Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
+        return flywheelEncoder.getVelocity() >= flywheelRPM- 100&& flywheelEncoder.getVelocity() <= flywheelRPM + Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
     }
 
     /**
@@ -140,6 +140,7 @@ public class ScoringSubsystem extends SubsystemBase {
                 Logger.recordOutput("scoring.state", "LOADING");
                 break;
             case FIRE:
+                //flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
                 
@@ -151,7 +152,7 @@ public class ScoringSubsystem extends SubsystemBase {
                 if (isFlywheelReady() && flywheelEncoder.getVelocity() != Constants.ScoringConstants.FLYWHEEL_IDLE_RPM) {
                     indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
                 }
-                intakePIDController.setReference(0, ControlType.kDutyCycle);*/
+                */
                 Logger.recordOutput("scoring.state", "FIRE");
                 break;
             case UNLOADING:

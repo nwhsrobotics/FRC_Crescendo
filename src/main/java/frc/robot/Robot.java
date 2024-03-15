@@ -130,7 +130,7 @@ public class Robot extends LoggedRobot {
         }
 
         //this also works for resetting odometry while flipped 
-        //new PathPlannerAuto("Starting Point").schedule();
+        
         //but below this is a better option for restting odometry especially with dynamic positions with vision
 
         //TODO: Pathplanner always sets blue alliance middle as 0, 0 for odometry and always bases odometry origin at that position therefore we need to flip like this for red alliance
