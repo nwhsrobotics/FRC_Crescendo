@@ -104,8 +104,8 @@ public class RobotContainer {
         new JoystickButton(gunner, XboxControllerButtons.RIGHT_BUMPER).onTrue(commandShoot);
         new JoystickButton(gunner, XboxControllerButtons.A).onTrue(commandLoad);
         new JoystickButton(gunner, XboxControllerButtons.B).onTrue(commandUnload);
-        new POVButton(gunner, 0).onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
-        new POVButton(gunner, 180).onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
+        new POVButton(gunner, 0).onTrue(new InstantCommand(() -> scoringSubsystem.increaseRPM()));
+        new POVButton(gunner, 180).onTrue(new InstantCommand(() ->  scoringSubsystem.decreaseRPM()));
         new POVButton(gunner, 270).onTrue(toggleAmp);
         new POVButton(gunner, 90).onTrue(toggleSpeaker);
         

@@ -32,9 +32,6 @@ public class ClimbCmd extends Command {
         climb.rightClimbMotor.set((gunner.getRightTriggerAxis() > 0.5) ? 0.8 : (gunner.getRightY() > 0.1) ? 0.8 : (gunner.getRightY() < -0.1) ? -0.8 : 0);
     }
     
-    
-    
-
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
