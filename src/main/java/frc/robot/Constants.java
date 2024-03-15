@@ -257,6 +257,7 @@ public final class Constants {
         public static final Pose2d BOTTOMSTAGE = new Pose2d(4.37, 3.27, Rotation2d.fromDegrees(60.00));
         //same area as amp
         public static final Pose2d TOPSTAGE = new Pose2d(4.38, 4.89, Rotation2d.fromDegrees(-60.00));
+        //TODO: Find the right topspeaker and bottomspeaker place from where we can actually shoot from
         //same area as amp
         public static final Pose2d TOPSPEAKER = new Pose2d(0.71, 6.68, Rotation2d.fromDegrees(60));
         //away from amp
