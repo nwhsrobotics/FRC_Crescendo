@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import org.littletonrobotics.junction.Logger;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public final class Constants {
     public static final class CANAssignments {
@@ -246,7 +248,7 @@ public final class Constants {
     }
 
     public static final class FavoritePositions {
-        // TODO: confirm robot size; affects location coordinates.
+        // TODO: CHANGE THIS WITH NEW DIMENSIONS
         public static final Pose2d SOURCE = new Pose2d(15.39, 0.94, Rotation2d.fromDegrees(-60.00));
         public static final Pose2d AMP = new Pose2d(1.83, 7.68, Rotation2d.fromDegrees(90.00));
         public static final Pose2d SPEAKER = new Pose2d(1.34, 5.54, Rotation2d.fromDegrees(0.00));
@@ -256,6 +258,12 @@ public final class Constants {
         public static final Pose2d BOTTOMSTAGE = new Pose2d(4.37, 3.27, Rotation2d.fromDegrees(60.00));
         //same area as amp
         public static final Pose2d TOPSTAGE = new Pose2d(4.38, 4.89, Rotation2d.fromDegrees(-60.00));
+        //same area as amp
+        public static final Pose2d TOPSPEAKER = new Pose2d(0.71, 6.68, Rotation2d.fromDegrees(60));
+        //away from amp
+        public static final Pose2d BOTTOMSPEAKER = new Pose2d(0.71, 4.41, Rotation2d.fromDegrees(-60.00));
+        //list of all positions (POI) to pathfind to allow closest pathfinding
+        public static final List<Pose2d> allPoses = new ArrayList<Pose2d>(List.of(SOURCE, AMP, SPEAKER, MIDSTAGE, BOTTOMSTAGE, TOPSTAGE, TOPSPEAKER, BOTTOMSPEAKER));
     }
 
     public static final class LimelightConstants {
