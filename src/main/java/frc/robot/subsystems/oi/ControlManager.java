@@ -71,6 +71,7 @@ public class ControlManager {
         if (button == -1) {  // -1 means it should not be bound.
             return;
         }
+        //this will check if its a normal buttom or POV (kPov ideally is a constant to add to buttonnumber to differentiate between normal and POV buttons)
         if (button < OIConstants.kPOV) {
             new Trigger(() -> hid.getRawButton(button)).onTrue(new InstantCommand(() -> {
                 if (port != driverPort) {
@@ -80,6 +81,7 @@ public class ControlManager {
                 command.schedule();
             }));
         } else {
+            //if it is POV then bind it
             new Trigger(() -> hid.getPOV() == (button - OIConstants.kPOV)).onTrue(new InstantCommand(() -> {
                 if (port != driverPort) {
                     return;
