@@ -276,6 +276,12 @@ public final class Constants {
         public static final double thethaFromCenter = -5.0; //this might be needed for angle offset
     }
 
+    public static final class LowlightConstants {
+        public static final String LOWLIGHT_IP = "10.46.38.100";
+        public static final int INTERFACE_RECONNECT_ATTEMPT_INTERVAL_S = 12;
+        public static final int INTERFACE_SOCKET_TIMEOUT_MS = 500;
+    }
+
     public enum RuntimeEnvironment {
         /**
          * Running on physical robot.
