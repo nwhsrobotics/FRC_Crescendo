@@ -186,7 +186,7 @@ public final class Constants {
          * If the intake is told to be driven backwards,
          * this value still is applied, and simply made negative.
          */
-        public static final double INTAKE_RPM = 1200;  // TODO requires tuning.
+        public static final double INTAKE_RPM = 1650;  // TODO requires tuning.
         /**
          * This controls the indexer RPM when the intake is activated in the forwards direction.
          *
@@ -195,7 +195,7 @@ public final class Constants {
          * The indexer aids in ingesting the game piece,
          * elastically deforming it to be pressed firmly against the flywheel.
          */
-        public static final double INDEX_INTAKE_COOP_RPM = 400; // TODO requires tuning.
+        public static final double INDEX_INTAKE_COOP_RPM = 0;
         /**
          * This controls the indexer RPM when the intake is activated in the reverse direction.
          *
@@ -206,9 +206,9 @@ public final class Constants {
          * Once displaced far enough, the intake wheels can engage with the game piece
          * and eject it completely out of the scoring assembly.
          */
-        public static final double INDEX_INTAKE_UNLOAD_RPM = 1000; // TODO requires tuning.
+        public static final double INDEX_INTAKE_UNLOAD_RPM = 800; // TODO requires tuning.
 
-        public static final double FLYWHEEL_SPEAKER_RPM = 5000.0;
+        public static final double FLYWHEEL_SPEAKER_RPM = 5000;
         public static final double FLYWHEEL_AMP_RPM = 4250.0; //TODO FIX THIS
         public static final double FLYWHEEL_IDLE_RPM = 0;
         public static final double INDEX_FLYWHEEL_COOP_RPM = 5000.0; 
@@ -239,11 +239,11 @@ public final class Constants {
 
         //TODO: Better constraints 
         public static final PathConstraints kPathfindingConstraints = new PathConstraints(
-                DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 2.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 3.0,
+                DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 0.8, AutoConstants.kMaxAccelerationMetersPerSecondSquared * 0.75,
                 AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
-        public static final SlewRateLimiter xLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 1.2);
-        public static final SlewRateLimiter yLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 1.2);
-        public static final SlewRateLimiter zLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond * 0.85);
+        public static final SlewRateLimiter xLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 2.25);
+        public static final SlewRateLimiter yLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 2.25);
+        public static final SlewRateLimiter zLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond * 1.2);
         public static final int kPOV = 100;
     }
 
@@ -262,7 +262,7 @@ public final class Constants {
         //same area as amp
         public static final Pose2d TOPSPEAKER = new Pose2d(0.71, 6.68, Rotation2d.fromDegrees(60));
         //away from amp
-        public static final Pose2d BOTTOMSPEAKER = new Pose2d(0.71, 4.41, Rotation2d.fromDegrees(-60.00));
+        public static final Pose2d BOTTOMSPEAKER = new Pose2d(0.71, 4.25, Rotation2d.fromDegrees(-60.00));
         //list of all positions (POI) to pathfind to allow closest pathfinding
         public static final List<Pose2d> allPoses = new ArrayList<Pose2d>(List.of(SOURCE, AMP, SPEAKER, MIDSTAGE, BOTTOMSTAGE, TOPSTAGE, TOPSPEAKER, BOTTOMSPEAKER));
     }
