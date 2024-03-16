@@ -1,8 +1,8 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
-package frc.robot.subsystems;
+/* 
+ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -21,28 +21,20 @@ import frc.robot.subsystems.ScoringSubsystem.ScoringState;
 public class SourceToAmpSubsystem extends SubsystemBase {
 
   public enum ControlState {
-    /**
-     * Intake a game piece into the shooter assembly.
-     * but not push it past the flywheel and out of the shooter assembly.
-     */
+    
     AMP,
-    /**
-     * Eject the game piece currently inside of the robot,
-     * through the intake assembly.
-     */
+    
     SOURCE,
-    /**
-     * Fire!
-     */
+    
     FIRE,
 
 
     LOADING,
-    /*
-     * Do nothing.
-     */
+    
     IDLE,
 }
+
+
    public ControlState state = ControlState.IDLE;
 
     private final CANSparkMax shoulderMotor;
@@ -64,7 +56,7 @@ public class SourceToAmpSubsystem extends SubsystemBase {
     private final CANSparkMax wristIntakeMotor;
 
 
-  /** Creates a new SourceToAmpSubsystem. */
+  
   public SourceToAmpSubsystem() {
 
     shoulderMotor = new CANSparkMax(Constants.CANAssignments.SHOULDER_MOTOR_ID, MotorType.kBrushless);
@@ -80,7 +72,8 @@ public class SourceToAmpSubsystem extends SubsystemBase {
         currentPositionWrist = wristRelativeEncoder.getPosition();
 
         wristIntakeMotor = new CANSparkMax(Constants.CANAssignments.WRIST_INTAKE_ID, MotorType.kBrushless);
-
+  }
+ 
 
       public void ampPresetArm() {
           desiredPositionArm = (140.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
@@ -123,7 +116,7 @@ public class SourceToAmpSubsystem extends SubsystemBase {
 
 
 
-  }
+  
 
   @Override
   public void periodic() {
@@ -133,12 +126,12 @@ public class SourceToAmpSubsystem extends SubsystemBase {
                 shoulderPidController.setReference(0, ControlType.kDutyCycle);
                 wristPidController.setReference(0, ControlType.kDutyCycle);  // don't even bother with velocity control, just turn them off.
                 wristIntakeMotor.set(0);
-                Logger.recordOutput("scoring.state", "IDLE");
+                //Logger.recordOutput("scoring.state", "IDLE");
                 break;
             case AMP:
                 shoulderPidController.setReference(desiredPositionArm, ControlType.kPosition);
                 wristPidController.setReference(desiredPositionWrist, ControlType.kPosition);
-                Logger.recordOutput("scoring.state", "LOADING");
+                //Logger.recordOutput("scoring.state", "LOADING");
                 break;
             case SOURCE:
                 sourcePresetArm();
@@ -148,13 +141,12 @@ public class SourceToAmpSubsystem extends SubsystemBase {
                 wristIntakeMotor.set(1.0);
             case FIRE:
                 wristIntakeMotor.set(-1.0);
-                Logger.recordOutput("scoring.state", "FIRE");
+                //Logger.recordOutput("scoring.state", "FIRE");
                 break;
             case LOADING:
-                flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
-                indexPIDController.setReference(-Constants.ScoringConstants.INDEX_INTAKE_UNLOAD_RPM, ControlType.kVelocity);
-                intakePIDController.setReference(-Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
-                Logger.recordOutput("scoring.state", "UNLOADING");
+                wristIntakeMotor.set(1.0);
+                
+                //Logger.recordOutput("scoring.state", "UNLOADING");
                 break;
             default:
                 break;
@@ -173,4 +165,8 @@ public class SourceToAmpSubsystem extends SubsystemBase {
 
     // This method will be called once per scheduler run
   }
+  }
+
+
 }
+*/
