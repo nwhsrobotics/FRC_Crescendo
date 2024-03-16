@@ -54,6 +54,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
+    /*
+      public void underStage(){
+        desiredPosition = ()
+    }
+
+     */
+   
 
     @Override
     public void periodic() {

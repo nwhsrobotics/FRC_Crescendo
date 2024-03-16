@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6939035259888702,
-      "y": 4.41444177615628
+      "x": 0.8239035259888702,
+      "y": 4.25444177615628
     },
     "rotation": -60.0
   },
@@ -21,24 +21,6 @@
           "type": "named",
           "data": {
             "name": "intakeOn"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[C] [Back] [Right] Exit"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[C] [Back] [Right] Return"
           }
         },
         {
