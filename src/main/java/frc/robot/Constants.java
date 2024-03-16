@@ -293,7 +293,7 @@ public final class Constants {
 
     public static final class LoggerConstants {
         public static final RuntimeEnvironment MODE = RuntimeEnvironment.REAL;
-        public static final String RUNNING_UNDER = "2024.pre";
+        public static final String RUNNING_UNDER = "2024.q1";
         public static final ModuleType PDU_TYPE = ModuleType.kRev;
 
         // SET TO FALSE IF WE'RE RUNNING OUT OF BANDWIDTH.
