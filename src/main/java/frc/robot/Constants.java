@@ -249,7 +249,7 @@ public final class Constants {
 
     public static final class FavoritePositions {
         public static final Pose2d SOURCE = new Pose2d(15.39, 0.94, Rotation2d.fromDegrees(-60.00));
-        public static final Pose2d AMP = new Pose2d(1.83, 7.70, Rotation2d.fromDegrees(90.00));
+        public static final Pose2d AMP = new Pose2d(1.83, 7.70, Rotation2d.fromDegrees(-90.00));
         public static final Pose2d SPEAKER = new Pose2d(1.74, 5.54, Rotation2d.fromDegrees(0.00));
 
         public static final Pose2d MIDSTAGE = new Pose2d(5.85, 4.12, Rotation2d.fromDegrees(-180.00));
@@ -257,6 +257,7 @@ public final class Constants {
         public static final Pose2d BOTTOMSTAGE = new Pose2d(4.37, 3.27, Rotation2d.fromDegrees(60.00));
         //same area as amp
         public static final Pose2d TOPSTAGE = new Pose2d(4.38, 4.89, Rotation2d.fromDegrees(-60.00));
+        //0.49, 7.69 for odometry reset corner
         //TODO: Find the right topspeaker and bottomspeaker place from where we can actually shoot from
         //same area as amp
         public static final Pose2d TOPSPEAKER = new Pose2d(0.71, 6.68, Rotation2d.fromDegrees(60));
