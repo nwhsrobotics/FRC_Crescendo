@@ -4,7 +4,9 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.oi.Controller;
+import frc.robot.subsystems.oi.XboxControllerButtons;
 
 public class DriverXboxController implements Controller {
     private static final int port = 0;
@@ -68,32 +70,32 @@ public class DriverXboxController implements Controller {
 
     @Override
     public int getAutonavigationButton() {
-        return 10;
+        return XboxControllerButtons.RIGHT_STICK_BUTTON;
     }
 
     @Override
     public int getAutonavigateToAmpButton() {
-        return 2;
+        return XboxControllerButtons.B;
     }
 
     @Override
     public int getAutonavigateToSpeakerButton() {
-        return 1;
+        return XboxControllerButtons.A;
     }
 
     @Override
     public int getAutonavigateToSourceButton() {
-        return 4;
+        return XboxControllerButtons.Y;
     }
 
     @Override
     public int getAutonavigateToClosestTarget() {
-        return 3;
+        return XboxControllerButtons.X;
     }
 
     @Override
     public int getNavXResetButton() {
-        return 8;
+        return XboxControllerButtons.MENU;
     }
 
     @Override
@@ -101,15 +103,12 @@ public class DriverXboxController implements Controller {
         return 180 + Constants.OIConstants.kPOV;
     }
 
-    @Override
-    public int getNextPipelineButton() {
-        return -1;
-    }
-
+    /*
     @Override
     public boolean visionTargetAlignButtonIsPressed() {
         return xboxController.getLeftBumper() || xboxController.getRightBumper();
     }
+    */
 
     @Override
     public int getFieldRelativeButton() {
@@ -119,5 +118,20 @@ public class DriverXboxController implements Controller {
     @Override
     public String getName() {
         return "4638 Xbox Controller";
+    }
+
+    @Override
+    public int getAutonavigateToMidStageButton() {
+        return 0 + OIConstants.kPOV;
+    }
+
+    @Override
+    public int getAutonavigateToTopStageButton() {
+        return 90 + OIConstants.kPOV;  // should be left.
+    }
+
+    @Override
+    public int getAutonavigateToBottomStageButton() {
+        return 270 + OIConstants.kPOV;  // should be right.
     }
 }
