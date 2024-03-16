@@ -84,18 +84,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "[A] [Front] [LeftMost] [Bypass] Exit"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[A] [Front] [LeftMost] [Bypass] Return"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "shoot"
