@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.FavoritePositions;
+import frc.robot.cameras.NavCamera;
+import frc.robot.cameras.ShooterCamera;
 import frc.robot.commands.ClimbCmd;
 import frc.robot.commands.SetScoringStateCommand;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
@@ -24,6 +26,7 @@ import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.ScoringSubsystem.ScoringState;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.limelight.LimelightImplementation;
+import frc.robot.subsystems.lowlight.LowlightInterface;
 import frc.robot.subsystems.oi.ControlManager;
 import frc.robot.subsystems.oi.XboxControllerButtons;
 
@@ -44,6 +47,13 @@ public class RobotContainer {
     public Pose2d visionTargetLocation = new Pose2d();  // TODO: (basically needs testing code is in robot.java)
 
     public RobotContainer() {
+        ShooterCamera shooterCamera = new ShooterCamera();
+        NavCamera navCamera = new NavCamera();
+        LowlightInterface lowlightInterface = new LowlightInterface();
+        lowlightInterface.registerCamera(shooterCamera);
+        lowlightInterface.registerCamera(navCamera);
+        lowlightInterface.run();
+
         SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 4);  // TODO tune durations.
         SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, 4);
         SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 4);

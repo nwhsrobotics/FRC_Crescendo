@@ -1,0 +1,19 @@
+syntax = "proto3";
+package lowlight.control;
+
+message Command {
+    int32 id = 1;
+
+    // used for anything involving cameras.
+    optional int32 index = 2;
+
+    // used for creating cameras.
+    optional int32 quality = 3;
+}
+
+message Result {
+    bool ok = 1;
+    string message = 2;
+
+    optional int32 time = 3;
+}

@@ -2,6 +2,7 @@ plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2024.3.1"
     id "com.peterabeles.gversion" version "1.10"
+    id "com.google.protobuf" version "0.9.4"
 }
 
 java {
@@ -97,6 +98,8 @@ dependencies {
     // ADVANTAGEKIT
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$akitJson.version"
+
+    implementation 'com.google.protobuf:protobuf-java:3.15.8'
 }
 
 test {
@@ -136,4 +139,10 @@ gversion {
   dateFormat   = "yyyy-MM-dd HH:mm:ss z"
   timeZone     = "America/New_York" // Use preferred time zone
   indent       = "    "
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.15.8'
+    }
 }
