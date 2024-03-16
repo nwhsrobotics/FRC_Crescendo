@@ -98,6 +98,7 @@ public class DriverXboxController implements Controller {
 
     @Override
     public int getOdometryResetButton() {
+        //since this is a POV button we need to add the constant to differentiate between normal or not even if POV was 0 (up) 
         return 180 + Constants.OIConstants.kPOV;
     }
 
