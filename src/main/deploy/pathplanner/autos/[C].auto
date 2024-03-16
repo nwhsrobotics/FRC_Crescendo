@@ -82,24 +82,6 @@
           "data": {
             "name": "shoot"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[C] [Front] [Center] Exit"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[C] [Front] [Center] Return"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
         }
       ]
     }
