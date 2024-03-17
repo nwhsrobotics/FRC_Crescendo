@@ -14,7 +14,7 @@ import frc.robot.Constants.WristConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class WristSubsystem extends SubsystemBase {
-    private final CANSparkMax wristMotor;
+    public final CANSparkMax wristMotor;
     private final SparkPIDController wristPidController;
     private final RelativeEncoder wristRelativeEncoder;
     private AbsoluteEncoder wristAbsoluteEncoder;
@@ -37,7 +37,7 @@ public class WristSubsystem extends SubsystemBase {
     // Sets the desired position to a specified angle
     public void adjustAngle(double changeInPosition) {
 
-        desiredPosition = changeInPosition;
+        desiredPosition += changeInPosition;
 
     }
 

@@ -16,6 +16,7 @@ import frc.robot.Constants.FavoritePositions;
 import frc.robot.commands.ClimbCmd;
 import frc.robot.commands.SetScoringStateCommand;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
+import frc.robot.commands.WristAdjustCmd;
 import frc.robot.commands.WristIntakeCmd;
 import frc.robot.controllers.DriverJoysticksController;
 import frc.robot.controllers.DriverLeftJoysticksController;
@@ -35,7 +36,7 @@ public class RobotContainer {
     public final ScoringSubsystem scoringSubsystem = new ScoringSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
     // public final ArmSubsystem armSubsystem = new ArmSubsystem();
-    //public final WristSubsystem wristSubsystem = new WristSubsystem();
+    public final WristSubsystem wristSubsystem = new WristSubsystem();
     public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
 
     // B is default starting pos for speaker
@@ -167,6 +168,7 @@ public class RobotContainer {
 
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner));
+        wristSubsystem.setDefaultCommand(new WristAdjustCmd(wristSubsystem, gunner));
         // wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
         
         /*SendableChooser<Integer> pipeline = new SendableChooser<>();
