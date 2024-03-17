@@ -16,7 +16,7 @@
     },
     {
       "anchor": {
-        "x": 0.82,
+        "x": 1.1,
         "y": 6.79
       },
       "prevControl": {
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.35,
+    "rotation": 50.0,
     "rotateFast": true
   },
   "reversed": false,

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8239035259888702,
-      "y": 4.25444177615628
+      "x": 0.6933452953924437,
+      "y": 4.450117887396973
     },
-    "rotation": -60.0
+    "rotation": -50.0
   },
   "command": {
     "type": "sequential",
@@ -21,6 +21,12 @@
           "type": "named",
           "data": {
             "name": "intakeOn"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Corner"
           }
         },
         {

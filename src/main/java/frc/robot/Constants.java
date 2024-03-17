@@ -45,7 +45,7 @@ public final class Constants {
         // shoulder/wrist not used.
         // DO NOT INITIALIZE THEIR SUBSYSTEMS.
         public static final int SHOULDER_MOTOR_ID = 58;
-        public static final int WRIST_MOTOR_ID = 59;
+        public static final int WRIST_MOTOR_ID = 16;
         public static final int WRIST_INTAKE_ID = 18;
 
         /**
@@ -208,7 +208,7 @@ public final class Constants {
          */
         public static final double INDEX_INTAKE_UNLOAD_RPM = 800; // TODO requires tuning.
 
-        public static final double FLYWHEEL_SPEAKER_RPM = 5000;
+        public static final double FLYWHEEL_SPEAKER_RPM = 5250;
         public static final double FLYWHEEL_AMP_RPM = 4250.0; //TODO FIX THIS
         public static final double FLYWHEEL_IDLE_RPM = 0;
         public static final double INDEX_FLYWHEEL_COOP_RPM = 5000.0; 
