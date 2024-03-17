@@ -26,7 +26,17 @@ public class WristAdjustCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    wristSubsystem.wristMotor.set((-gunner.getLeftTriggerAxis() + gunner.getRightTriggerAxis())*.25);
+    System.out.println("The Wrist Adjust Command is running!!!");
+    if(gunner.getLeftTriggerAxis() > 0.1){
+      wristSubsystem.wristMotor.set(-gunner.getLeftTriggerAxis());
+
+    }
+    else if (gunner.getRightTriggerAxis() > .1) {
+      wristSubsystem.wristMotor.set(gunner.getRightTriggerAxis());
+    }
+    else {
+      wristSubsystem.wristMotor.set(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
