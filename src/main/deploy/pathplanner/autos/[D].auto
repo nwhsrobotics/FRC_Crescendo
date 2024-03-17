@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.49426107411415826,
+      "y": 2.096239741694889
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[D] [Exit]"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Starting Point D",
+  "choreoAuto": false
+}

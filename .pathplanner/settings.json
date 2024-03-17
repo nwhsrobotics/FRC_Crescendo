@@ -3,14 +3,16 @@
   "robotLength": 0.86,
   "holonomicMode": true,
   "pathFolders": [
+    "[D]",
     "[A]",
     "[B]",
     "[C]"
   ],
   "autoFolders": [
-    "Starting Point C",
+    "Starting Point D",
     "Starting Point A",
-    "Starting Point B"
+    "Starting Point B",
+    "Starting Point C"
   ],
   "defaultMaxVel": 1.8,
   "defaultMaxAccel": 1.8,
