@@ -26,14 +26,12 @@ public class WristSubsystem extends SubsystemBase {
 
     // Constructor for WristSubsystem
     public WristSubsystem() {
-
         wristMotor = new CANSparkMax(Constants.CANAssignments.WRIST_MOTOR_ID, MotorType.kBrushless);
         wristRelativeEncoder = wristMotor.getEncoder();
         wristPidController = wristMotor.getPIDController();
         wristPidController.setP(Constants.WristConstants.WRIST_PID_P);
-        currentPosition = wristAbsoluteEncoder.getPosition();
-        
-
+        currentPosition = 0;
+        // currentPosition = wristAbsoluteEncoder.getPosition();
     }
 
     // Sets the desired position to a specified angle

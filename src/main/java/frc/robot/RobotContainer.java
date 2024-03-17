@@ -16,6 +16,7 @@ import frc.robot.Constants.FavoritePositions;
 import frc.robot.commands.ClimbCmd;
 import frc.robot.commands.SetScoringStateCommand;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
+import frc.robot.commands.WristIntakeCmd;
 import frc.robot.controllers.DriverJoysticksController;
 import frc.robot.controllers.DriverLeftJoysticksController;
 import frc.robot.controllers.DriverXboxController;
@@ -23,6 +24,8 @@ import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.ScoringSubsystem.ScoringState;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.WristIntakeSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.limelight.LimelightImplementation;
 import frc.robot.subsystems.oi.ControlManager;
 import frc.robot.subsystems.oi.XboxControllerButtons;
@@ -32,8 +35,8 @@ public class RobotContainer {
     public final ScoringSubsystem scoringSubsystem = new ScoringSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
     // public final ArmSubsystem armSubsystem = new ArmSubsystem();
-    // public final WristSubsystem wristSubsystem = new WristSubsystem();
-    // public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
+    //public final WristSubsystem wristSubsystem = new WristSubsystem();
+    public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
 
     // B is default starting pos for speaker
     // INIT AFTER SWERVE SUBSYSTEM!
@@ -48,11 +51,13 @@ public class RobotContainer {
         SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, 2);
         SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 2);
         SetScoringStateCommand autoShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, ScoringState.LOADING, 1); //auto only
+        SetScoringStateCommand autoUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 1);
         InstantCommand intakeOn = new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem);  // auto only.
         InstantCommand intakeOff = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem); //auto only
         InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_AMP_RPM), scoringSubsystem);
         InstantCommand toggleSpeaker = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM), scoringSubsystem);
-
+        InstantCommand wristIntakeFwd = new InstantCommand(() -> wristIntakeSubsystem.forwards());
+        InstantCommand wristIntakeBackwards = new InstantCommand(() -> wristIntakeSubsystem.backwards());
         // expose scoring-related commands to autonomous routines.
         NamedCommands.registerCommand("shoot", autoShoot);
         NamedCommands.registerCommand("load", commandLoad);
@@ -60,6 +65,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("toggleAmp", toggleAmp);
         NamedCommands.registerCommand("intakeOn", intakeOn);
         NamedCommands.registerCommand("intakeOff", intakeOff);
+        NamedCommands.registerCommand("autoUnload", autoUnload);
 
         // initialize swerve with autobuilder code inside.
         swerveSubsystem = new SwerveSubsystem();
@@ -108,6 +114,8 @@ public class RobotContainer {
         new POVButton(gunner, 180).onTrue(new InstantCommand(() -> scoringSubsystem.decreaseRPM()));
         new POVButton(gunner, 270).onTrue(toggleAmp);
         new POVButton(gunner, 90).onTrue(toggleSpeaker);
+        new JoystickButton(gunner, XboxControllerButtons.LEFT_BUMPER).whileTrue(wristIntakeFwd);
+        new JoystickButton(gunner, XboxControllerButtons.VIEW).whileTrue(wristIntakeBackwards);
         
         /*
         //Arm and Wrist
