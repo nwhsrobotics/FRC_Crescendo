@@ -140,7 +140,6 @@ public class ScoringSubsystem extends SubsystemBase {
                 Logger.recordOutput("scoring.state", "LOADING");
                 break;
             case FIRE:
-                //flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
                 

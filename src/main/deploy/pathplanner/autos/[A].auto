@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.82,
-      "y": 6.79
+      "x": 0.6816344588466624,
+      "y": 6.686887667641241
     },
     "rotation": 61.52180505415579
   },
@@ -21,6 +21,12 @@
           "type": "named",
           "data": {
             "name": "toggleSpeaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[A] Foward"
           }
         },
         {

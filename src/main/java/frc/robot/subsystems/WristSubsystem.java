@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
@@ -27,6 +28,7 @@ public class WristSubsystem extends SubsystemBase {
     // Constructor for WristSubsystem
     public WristSubsystem() {
         wristMotor = new CANSparkMax(Constants.CANAssignments.WRIST_MOTOR_ID, MotorType.kBrushless);
+        wristMotor.setIdleMode(IdleMode.kBrake);
         wristRelativeEncoder = wristMotor.getEncoder();
         wristPidController = wristMotor.getPIDController();
         wristPidController.setP(Constants.WristConstants.WRIST_PID_P);
