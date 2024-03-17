@@ -46,7 +46,7 @@ public final class Constants {
         // DO NOT INITIALIZE THEIR SUBSYSTEMS.
         public static final int SHOULDER_MOTOR_ID = 58;
         public static final int WRIST_MOTOR_ID = 59;
-        public static final int WRIST_INTAKE_ID = 60;
+        public static final int WRIST_INTAKE_ID = 18;
 
         /**
          * Check for duplicate CAN assignments,
