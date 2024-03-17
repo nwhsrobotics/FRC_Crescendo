@@ -21,6 +21,7 @@ import frc.robot.commands.WristIntakeCmd;
 import frc.robot.controllers.DriverJoysticksController;
 import frc.robot.controllers.DriverLeftJoysticksController;
 import frc.robot.controllers.DriverXboxController;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.ScoringSubsystem.ScoringState;
@@ -86,12 +87,19 @@ public class RobotContainer {
         // Command for setting wrist to the source position
         InstantCommand wristLockSource = new InstantCommand(() -> wristSubsystem.sourcePreset(), wristSubsystem);
 
+        */
         // Command for letting the gunner freely adjust the arm position, tuning for the joystick control will be subject to change
-        InstantCommand armAdjust = new InstantCommand(() -> armSubsystem.adjustAngle(gunner.getLeftY() * 0.65), armSubsystem);
+        // InstantCommand armMoveUp = new InstantCommand(() -> armSubsystem.moveUp(), armSubsystem);
+
+        // InstantCommand armMoveDown = new InstantCommand(() -> armSubsystem.moveDown(), armSubsystem);
 
         // Command for letting the gunner freely adjust the wrist position, tuning for the joystick control will be subject to change
-        InstantCommand wristAdjust = new InstantCommand(() -> wristSubsystem.adjustAngle(gunner.getRightY() * 0.65), wristSubsystem);
-
+        InstantCommand wristUp = new InstantCommand(() -> wristSubsystem.adjustAngle(gunner.getLeftTriggerAxis() * 0.65), wristSubsystem);
+        
+        InstantCommand wristDown = new InstantCommand(() -> wristSubsystem.adjustAngle(-gunner.getLeftTriggerAxis() * 0.65), wristSubsystem);
+        
+        InstantCommand wristStop = new InstantCommand(() -> wristIntakeSubsystem.stop(), wristSubsystem);
+        /* 
         // Command for letting you adjust the wrist and arm together
         ParallelCommandGroup adjust = new ParallelCommandGroup(armAdjust, wristAdjust);
         adjust.addRequirements(wristSubsystem, armSubsystem);
@@ -115,8 +123,12 @@ public class RobotContainer {
         //new POVButton(gunner, 180).onTrue(new InstantCommand(() -> scoringSubsystem.decreaseRPM()));
         new POVButton(gunner, 90).onTrue(new InstantCommand(() -> scoringSubsystem.increaseRPM()));
         new POVButton(gunner, 270).onTrue(new InstantCommand(() -> scoringSubsystem.decreaseRPM()));
-        new JoystickButton(gunner, XboxControllerButtons.MENU).whileTrue(wristIntakeBackwards);
-        new JoystickButton(gunner, XboxControllerButtons.VIEW).whileTrue(wristIntakeFwd);
+        // new POVButton(gunner, 0).onTrue(armMoveUp);
+        // new POVButton(gunner, 180).onTrue(armMoveDown);
+        new JoystickButton(gunner, XboxControllerButtons.Y).whileTrue(wristIntakeBackwards);
+        new JoystickButton(gunner, XboxControllerButtons.X).whileTrue(wristIntakeFwd);
+        new JoystickButton(gunner, XboxControllerButtons.MENU).whileTrue(wristStop);
+        
         
         /*
         //Arm and Wrist

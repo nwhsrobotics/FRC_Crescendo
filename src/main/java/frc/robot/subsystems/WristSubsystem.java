@@ -30,18 +30,21 @@ public class WristSubsystem extends SubsystemBase {
         wristMotor = new CANSparkMax(Constants.CANAssignments.WRIST_MOTOR_ID, MotorType.kBrushless);
         wristMotor.setIdleMode(IdleMode.kBrake);
         wristRelativeEncoder = wristMotor.getEncoder();
+        wristAbsoluteEncoder = wristMotor.getAbsoluteEncoder();
         wristPidController = wristMotor.getPIDController();
-        wristPidController.setP(Constants.WristConstants.WRIST_PID_P);
-        currentPosition = 0;
+        wristPidController.setP(0.0005);
+
+        // wristPidController.setP(Constants.WristConstants.WRIST_PID_P);
+        currentPosition = wristAbsoluteEncoder.getPosition();
         // currentPosition = wristAbsoluteEncoder.getPosition();
     }
 
     // Sets the desired position to a specified angle
     public void adjustAngle(double changeInPosition) {
-
-        desiredPosition += changeInPosition;
-
+        desiredPosition += changeInPosition * 1024;
     }
+
+    
 
     // Sets the desired position to a pre-determined angle for the amp
     public void ampPreset() {
@@ -60,20 +63,10 @@ public class WristSubsystem extends SubsystemBase {
     // Called once per scheduler run
     @Override
     public void periodic() {
-
-        // Moves the arm towards the desired position with PID
         wristPidController.setReference(desiredPosition, ControlType.kPosition);
-
-        //this makes sure the wrist does not move anymore if the same position preset is pressed away
-        if (currentPosition == desiredPosition) {
-            wristMotor.stopMotor();
-        }
-
         Logger.recordOutput("wrist.desiredPosition", desiredPosition);
         Logger.recordOutput("wrist.currentPosition", currentPosition);
         Logger.recordOutput("wrist.autoLockEnabledAmp", autoLockEnabledAmp);
         Logger.recordOutput("wrist.autoLockEnabledSource", autoLockEnabledSource);
-
     }
-
 }

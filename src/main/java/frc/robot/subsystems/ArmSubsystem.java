@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -12,6 +14,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class ArmSubsystem extends SubsystemBase {
     private final CANSparkMax shoulderMotor;
+    public final CANSparkMax sensorHub;
     private final SparkPIDController shoulderPidController;
     private final RelativeEncoder shoulderRelativeEncoder;
     private double desiredPosition = 0; // Set the arms angle at this degree
@@ -19,15 +22,20 @@ public class ArmSubsystem extends SubsystemBase {
     private final boolean autoLockEnabledAmp = false;
     private final boolean autoLockEnabledSource = false;
 
+    
+
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
-
         shoulderMotor = new CANSparkMax(Constants.CANAssignments.SHOULDER_MOTOR_ID, MotorType.kBrushless);
+        shoulderMotor.setIdleMode(IdleMode.kBrake);
         shoulderRelativeEncoder = shoulderMotor.getEncoder();
+
+
         shoulderPidController = shoulderMotor.getPIDController();
         shoulderPidController.setP(Constants.ArmConstants.SHOULDER_PID_P);
         currentPosition = shoulderRelativeEncoder.getPosition();
 
+        sensorHub = new CANSparkMax(Constants.CANAssignments.ARM_SENSOR_HUB_ID, MotorType.kBrushless);
     }
 
     // Converts degrees to units
@@ -54,6 +62,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
+    public void moveUp(){
+        shoulderMotor.set(0.5);
+    }
+
+    public void moveDown(){
+        shoulderMotor.set(-0.5);
+    }
+
     /*
       public void underStage(){
         desiredPosition = ()
@@ -66,16 +82,9 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         shoulderPidController.setReference(desiredPosition, ControlType.kPosition);
 
-        //this makes sure the wrist does not move anymore if the same position preset is pressed away
-        if (currentPosition == desiredPosition) {
-            shoulderMotor.stopMotor();
-        }
-
         Logger.recordOutput("arm.desiredPosition", desiredPosition);
         Logger.recordOutput("arm.currentPosition", currentPosition);
         Logger.recordOutput("arm.autoLockEnabledAmp", autoLockEnabledAmp);
         Logger.recordOutput("arm.autoLockEnabledSource", autoLockEnabledSource);
-
-        // This method will be called once per scheduler run
     }
 }

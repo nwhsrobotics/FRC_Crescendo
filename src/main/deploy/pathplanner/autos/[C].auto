@@ -5,7 +5,7 @@
       "x": 0.6933452953924437,
       "y": 4.450117887396973
     },
-    "rotation": -50.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -38,13 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [Front] [RightMost] Exit"
+            "pathName": "[C] [Front] [Right] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [Front] [RightMost] Return"
+            "pathName": "[C] [Front] [Right] Return"
           }
         },
         {
@@ -56,13 +56,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [Front] [Right] Exit"
+            "pathName": "[C] [Front] [RightMost] Exit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[C] [Front] [Right] Return"
+            "pathName": "[C] [Front] [RightMost] Return"
           }
         },
         {
