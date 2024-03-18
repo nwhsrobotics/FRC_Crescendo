@@ -58,8 +58,8 @@ public class RobotContainer {
         InstantCommand intakeOff = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem); //auto only
         InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_AMP_RPM), scoringSubsystem);
         InstantCommand toggleSpeaker = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM), scoringSubsystem);
-        InstantCommand wristIntakeFwd = new InstantCommand(() -> wristIntakeSubsystem.forwards());
-        InstantCommand wristIntakeBackwards = new InstantCommand(() -> wristIntakeSubsystem.backwards());
+        //InstantCommand wristIntakeFwd = new InstantCommand(() -> wristIntakeSubsystem.forwards());
+        //InstantCommand wristIntakeBackwards = new InstantCommand(() -> wristIntakeSubsystem.backwards());
         // expose scoring-related commands to autonomous routines.
         NamedCommands.registerCommand("shoot", autoShoot);
         NamedCommands.registerCommand("load", commandLoad);
