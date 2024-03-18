@@ -71,6 +71,13 @@ public class ScoringSubsystem extends SubsystemBase {
         flywheelPIDController = flywheelMotor.getPIDController();
         flywheelPIDController.setP(0);
         flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
+        flywheelMotor.setSmartCurrentLimit(60); 
+        //flywheelMotor.setOpenLoopRampRate(0.3); /s
+        flywheelMotor.setClosedLoopRampRate(0.6); 
+        flywheelMotor.enableVoltageCompensation(12.0); 
+        flywheelMotor.clearFaults();
+        //flywheelMotor.restoreFactoryDefaults();
+        //flywheelMotor.burnFlash();
 
         indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
         indexMotor.setIdleMode(IdleMode.kCoast);
@@ -79,6 +86,13 @@ public class ScoringSubsystem extends SubsystemBase {
         indexPIDController = indexMotor.getPIDController();
         indexPIDController.setP(0);
         indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
+        indexMotor.setSmartCurrentLimit(60); 
+        //indexMotor.setOpenLoopRampRate(0.3); 
+        indexMotor.setClosedLoopRampRate(0.6); 
+        indexMotor.enableVoltageCompensation(12.0); 
+        indexMotor.clearFaults();
+        //indexMotor.restoreFactoryDefaults();
+        //indexMotor.burnFlash();
 
         intakeMotor = new CANSparkMax(Constants.CANAssignments.INTAKE_MOTOR_ID, MotorType.kBrushless);
         intakeMotor.setIdleMode(IdleMode.kCoast);
@@ -87,6 +101,13 @@ public class ScoringSubsystem extends SubsystemBase {
         intakePIDController = intakeMotor.getPIDController();
         intakePIDController.setP(0);
         intakePIDController.setFF(Constants.ScoringConstants.INTAKE_PID_FF);
+        intakeMotor.setSmartCurrentLimit(60); 
+        //intakeMotor.setOpenLoopRampRate(0.3);
+        intakeMotor.setClosedLoopRampRate(0.6); 
+        intakeMotor.enableVoltageCompensation(12.0); 
+        intakeMotor.clearFaults();
+        //intakeMotor.restoreFactoryDefaults();
+        //intakeMotor.burnFlash();
     }
 
     /**
