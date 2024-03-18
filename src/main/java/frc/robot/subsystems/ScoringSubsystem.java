@@ -65,49 +65,49 @@ public class ScoringSubsystem extends SubsystemBase {
 
     public ScoringSubsystem() {
         flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
+        flywheelMotor.restoreFactoryDefaults();
+        flywheelMotor.clearFaults();
         flywheelMotor.setIdleMode(IdleMode.kCoast);
         flywheelMotor.setInverted(true);
         flywheelEncoder = flywheelMotor.getEncoder();
         flywheelPIDController = flywheelMotor.getPIDController();
         flywheelPIDController.setP(0);
         flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
-        flywheelMotor.setSmartCurrentLimit(60); 
+        flywheelMotor.setSmartCurrentLimit(80); //big neo is good
         //flywheelMotor.setOpenLoopRampRate(0.3); /s
-        flywheelMotor.setClosedLoopRampRate(0.6); 
+        flywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
         flywheelMotor.enableVoltageCompensation(12.0); 
-        flywheelMotor.clearFaults();
-        //flywheelMotor.restoreFactoryDefaults();
-        //flywheelMotor.burnFlash();
+        flywheelMotor.burnFlash();
 
         indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
+        indexMotor.restoreFactoryDefaults();
+        indexMotor.clearFaults();
         indexMotor.setIdleMode(IdleMode.kCoast);
         indexMotor.setInverted(true);
         indexEncoder = indexMotor.getEncoder();
         indexPIDController = indexMotor.getPIDController();
         indexPIDController.setP(0);
         indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
-        indexMotor.setSmartCurrentLimit(60); 
+        indexMotor.setSmartCurrentLimit(80); //big neo is good
         //indexMotor.setOpenLoopRampRate(0.3); 
-        indexMotor.setClosedLoopRampRate(0.6); 
+        indexMotor.setClosedLoopRampRate(0.6); //TODO: Fine tune this, the lower the better cuz faster but don't wear it out
         indexMotor.enableVoltageCompensation(12.0); 
-        indexMotor.clearFaults();
-        //indexMotor.restoreFactoryDefaults();
-        //indexMotor.burnFlash();
+        indexMotor.burnFlash();
 
         intakeMotor = new CANSparkMax(Constants.CANAssignments.INTAKE_MOTOR_ID, MotorType.kBrushless);
+        intakeMotor.restoreFactoryDefaults();
+        intakeMotor.clearFaults();
         intakeMotor.setIdleMode(IdleMode.kCoast);
         intakeMotor.setInverted(true);
         intakeEncoder = intakeMotor.getEncoder();
         intakePIDController = intakeMotor.getPIDController();
         intakePIDController.setP(0);
         intakePIDController.setFF(Constants.ScoringConstants.INTAKE_PID_FF);
-        intakeMotor.setSmartCurrentLimit(60); 
+        intakeMotor.setSmartCurrentLimit(40); //limit lower cuz of neo 550
         //intakeMotor.setOpenLoopRampRate(0.3);
         intakeMotor.setClosedLoopRampRate(0.6); 
-        intakeMotor.enableVoltageCompensation(12.0); 
-        intakeMotor.clearFaults();
-        //intakeMotor.restoreFactoryDefaults();
-        //intakeMotor.burnFlash();
+        //intakeMotor.enableVoltageCompensation(12.0); 
+        intakeMotor.burnFlash();
     }
 
     /**
@@ -116,7 +116,7 @@ public class ScoringSubsystem extends SubsystemBase {
      * @return - boolean representing whether the flywheel is ready.
      */
     public boolean isFlywheelReady() {
-        return flywheelEncoder.getVelocity() >= flywheelRPM- 100&& flywheelEncoder.getVelocity() <= flywheelRPM + Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
+        return flywheelEncoder.getVelocity() >= flywheelRPM- 100 && flywheelEncoder.getVelocity() <= flywheelRPM + Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
     }
 
     /**
