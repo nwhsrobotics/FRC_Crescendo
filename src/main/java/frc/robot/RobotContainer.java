@@ -98,7 +98,7 @@ public class RobotContainer {
         
         InstantCommand wristDown = new InstantCommand(() -> wristSubsystem.adjustAngle(-gunner.getLeftTriggerAxis() * 0.65), wristSubsystem);
         
-        InstantCommand wristStop = new InstantCommand(() -> wristIntakeSubsystem.stop(), wristSubsystem);
+        //InstantCommand wristStop = new InstantCommand(() -> wristIntakeSubsystem.stop(), wristSubsystem);
         /* 
         // Command for letting you adjust the wrist and arm together
         ParallelCommandGroup adjust = new ParallelCommandGroup(armAdjust, wristAdjust);
@@ -125,9 +125,9 @@ public class RobotContainer {
         new POVButton(gunner, 270).onTrue(new InstantCommand(() -> scoringSubsystem.decreaseRPM()));
         // new POVButton(gunner, 0).onTrue(armMoveUp);
         // new POVButton(gunner, 180).onTrue(armMoveDown);
-        new JoystickButton(gunner, XboxControllerButtons.Y).whileTrue(wristIntakeBackwards);
-        new JoystickButton(gunner, XboxControllerButtons.X).whileTrue(wristIntakeFwd);
-        new JoystickButton(gunner, XboxControllerButtons.MENU).whileTrue(wristStop);
+        //new JoystickButton(gunner, XboxControllerButtons.Y).whileTrue(wristIntakeBackwards);
+        //new JoystickButton(gunner, XboxControllerButtons.X).whileTrue(wristIntakeFwd);
+        //new JoystickButton(gunner, XboxControllerButtons.MENU).whileTrue(wristStop);
         
         
         /*
@@ -181,7 +181,7 @@ public class RobotContainer {
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner));
         wristSubsystem.setDefaultCommand(new WristAdjustCmd(wristSubsystem, gunner));
-        // wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
+        wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
         
         /*SendableChooser<Integer> pipeline = new SendableChooser<>();
         pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));
