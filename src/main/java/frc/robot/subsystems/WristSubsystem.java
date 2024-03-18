@@ -33,15 +33,19 @@ public class WristSubsystem extends SubsystemBase {
         wristAbsoluteEncoder = wristMotor.getAbsoluteEncoder();
         wristPidController = wristMotor.getPIDController();
         wristPidController.setP(0.0005);
+        
+
 
         // wristPidController.setP(Constants.WristConstants.WRIST_PID_P);
         currentPosition = wristAbsoluteEncoder.getPosition();
+        desiredPosition = currentPosition;
         // currentPosition = wristAbsoluteEncoder.getPosition();
     }
 
     // Sets the desired position to a specified angle
     public void adjustAngle(double changeInPosition) {
         desiredPosition += changeInPosition * 1024;
+        
     }
 
     
