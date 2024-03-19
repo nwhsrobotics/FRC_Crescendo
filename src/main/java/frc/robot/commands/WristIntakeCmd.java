@@ -20,15 +20,7 @@ public class WristIntakeCmd extends Command {
 
     @Override
     public void execute() {
-        if (gunner.getXButton()) {
-            wristIntakeSubsystem.forwards();
-        } else if (gunner.getYButton()) {
-            wristIntakeSubsystem.backwards();
-        }
-        else {
-            
-            wristIntakeSubsystem.stop();
-        }
+        wristIntakeSubsystem.motor.set(gunner.getXButton() ? .2 : gunner.getYButton() ? -.2 : 0);
     }
 
     @Override

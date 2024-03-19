@@ -28,9 +28,6 @@ public class ClimbCmd extends Command {
     }
 
     public void execute() {
-        System.out.println(climb.leftClimbMotor.getAppliedOutput());
-        System.out.println(climb.rightClimbMotor.getAppliedOutput());
-        
         climb.leftClimbMotor.set(gunner.getLeftY() > .1 ? 1 : gunner.getLeftY() < -.1 ? -1 : 0);
         climb.rightClimbMotor.set(gunner.getRightY() > .1 ? 1 : gunner.getRightY() < -.1 ? -1 : 0);
         //climb.leftClimbMotor.set((gunner.getPOV() == 0) ? 0.8 : (gunner.getLeftY() > 0.1) ? 0.8 : (gunner.getLeftY() < -0.1) ? -0.8 : 0);
