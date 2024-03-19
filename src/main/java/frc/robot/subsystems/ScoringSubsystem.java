@@ -74,8 +74,8 @@ public class ScoringSubsystem extends SubsystemBase {
         flywheelPIDController.setP(0);
         flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
         flywheelMotor.setSmartCurrentLimit(80); //big neo is good
-        //flywheelMotor.setOpenLoopRampRate(0.3); /s
-        flywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
+        
+        // flywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
         flywheelMotor.enableVoltageCompensation(12.0); 
         flywheelMotor.burnFlash();
 
@@ -89,8 +89,8 @@ public class ScoringSubsystem extends SubsystemBase {
         indexPIDController.setP(0);
         indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
         indexMotor.setSmartCurrentLimit(80); //big neo is good
-        //indexMotor.setOpenLoopRampRate(0.3); 
-        indexMotor.setClosedLoopRampRate(0.6); //TODO: Fine tune this, the lower the better cuz faster but don't wear it out
+         
+        //indexMotor.setClosedLoopRampRate(0.6); //TODO: Fine tune this, the lower the better becuase its faster but don't wear it out
         indexMotor.enableVoltageCompensation(12.0); 
         indexMotor.burnFlash();
 
@@ -104,8 +104,8 @@ public class ScoringSubsystem extends SubsystemBase {
         intakePIDController.setP(0);
         intakePIDController.setFF(Constants.ScoringConstants.INTAKE_PID_FF);
         intakeMotor.setSmartCurrentLimit(40); //limit lower cuz of neo 550
-        //intakeMotor.setOpenLoopRampRate(0.3);
-        intakeMotor.setClosedLoopRampRate(0.6); 
+        
+        //intakeMotor.setClosedLoopRampRate(0.6); 
         //intakeMotor.enableVoltageCompensation(12.0); 
         intakeMotor.burnFlash();
     }

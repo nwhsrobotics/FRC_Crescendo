@@ -1,17 +1,16 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.WristIntakeSubsystem;
 
 public class WristIntakeCmd extends Command {
     WristIntakeSubsystem wristIntakeSubsystem;
-    private final boolean XButtonState;
-    private final boolean YButtonState;
+    private final XboxController gunner;
 
-    public WristIntakeCmd(WristIntakeSubsystem wristIntakeSubsystem, boolean XButtonState, boolean YButtonState) {
+    public WristIntakeCmd(WristIntakeSubsystem wristIntakeSubsystem, XboxController gunner) {
         this.wristIntakeSubsystem = wristIntakeSubsystem;
-        this.XButtonState = XButtonState;
-        this.YButtonState = YButtonState;
+        this.gunner = gunner;
         addRequirements(wristIntakeSubsystem);
     }
 
@@ -21,16 +20,19 @@ public class WristIntakeCmd extends Command {
 
     @Override
     public void execute() {
-        if (XButtonState) {
+        if (gunner.getXButton()) {
             wristIntakeSubsystem.forwards();
-        } else if (YButtonState) {
+        } else if (gunner.getYButton()) {
             wristIntakeSubsystem.backwards();
+        }
+        else {
+            
+            wristIntakeSubsystem.stop();
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        wristIntakeSubsystem.stop();
     }
 
     @Override
