@@ -181,7 +181,7 @@ public class RobotContainer {
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner));
         wristSubsystem.setDefaultCommand(new WristAdjustCmd(wristSubsystem, gunner));
-        wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner.getXButton(), gunner.getYButton()));
+        wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner));
         
         /*SendableChooser<Integer> pipeline = new SendableChooser<>();
         pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));

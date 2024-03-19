@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 8.288914032373519,
-        "y": 5.774493730805644
+        "x": 8.281967377058862,
+        "y": 5.773442417070284
       },
       "prevControl": {
-        "x": 8.255882280413106,
-        "y": 5.774493730805644
+        "x": 6.478498549008509,
+        "y": 7.822838812582047
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,19 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Speed Up",
+      "minWaypointRelativePos": 0.1,
+      "maxWaypointRelativePos": 0.65,
+      "constraints": {
+        "maxVelocity": 4.0,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 680.67,
+        "maxAngularAcceleration": 180.0
+      }
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.8,
@@ -39,7 +51,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": -44.21517539700821,
     "rotateFast": true
   },
   "reversed": false,
