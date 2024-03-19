@@ -54,9 +54,15 @@ public class ScoringSubsystem extends SubsystemBase {
     private final CANSparkMax flywheelMotor;
     private final RelativeEncoder flywheelEncoder;
     private final SparkPIDController flywheelPIDController;
+    //private final CANSparkMax secondaryFlywheelMotor;
+    //private final RelativeEncoder secondaryFlywheelEncoder;
+    //private final SparkPIDController secondaryFlywheelPIDController;
     private final CANSparkMax indexMotor;
     private final RelativeEncoder indexEncoder;
     private final SparkPIDController indexPIDController;
+    //private final CANSparkMax secondaryIndexMotor;
+    //private final RelativeEncoder secondaryIndexEncoder;
+    //private final SparkPIDController secondaryIndexPIDController;
     private final CANSparkMax intakeMotor;
     private final SparkPIDController intakePIDController;
     private final RelativeEncoder intakeEncoder;
@@ -74,10 +80,24 @@ public class ScoringSubsystem extends SubsystemBase {
         flywheelPIDController.setP(0);
         flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
         flywheelMotor.setSmartCurrentLimit(80); //big neo is good
-        
         // flywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
         flywheelMotor.enableVoltageCompensation(12.0); 
         flywheelMotor.burnFlash();
+
+        /*secondaryFlywheelMotor = new CANSparkMax(Constants.CANAssignments.SECONDARY_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
+        secondaryFlywheelMotor.restoreFactoryDefaults();
+        secondaryFlywheelMotor.clearFaults();
+        secondaryFlywheelMotor.setIdleMode(IdleMode.kCoast);
+        secondaryFlywheelMotor.setInverted(true);
+        secondaryFlywheelEncoder = secondaryFlywheelMotor.getEncoder();
+        secondaryFlywheelPIDController = secondaryFlywheelMotor.getPIDController();
+        secondaryFlywheelPIDController.setP(0);
+        secondaryFlywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
+        secondaryFlywheelMotor.setSmartCurrentLimit(80); //big neo is good
+        // secondaryFlywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
+        secondaryFlywheelMotor.enableVoltageCompensation(12.0); 
+        secondaryFlywheelMotor.follow(flywheelMotor);
+        secondaryFlywheelMotor.burnFlash();*/
 
         indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
         indexMotor.restoreFactoryDefaults();
@@ -89,10 +109,25 @@ public class ScoringSubsystem extends SubsystemBase {
         indexPIDController.setP(0);
         indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
         indexMotor.setSmartCurrentLimit(80); //big neo is good
-         
-        //indexMotor.setClosedLoopRampRate(0.6); //TODO: Fine tune this, the lower the better becuase its faster but don't wear it out
+        //indexMotor.setClosedLoopRampRate(0.6);
         indexMotor.enableVoltageCompensation(12.0); 
         indexMotor.burnFlash();
+
+        /*secondaryIndexMotor = new CANSparkMax(Constants.CANAssignments.SECONDARY_INDEX_MOTOR_ID, MotorType.kBrushless);
+        secondaryIndexMotor.restoreFactoryDefaults();
+        secondaryIndexMotor.clearFaults();
+        secondaryIndexMotor.setIdleMode(IdleMode.kCoast);
+        secondaryIndexMotor.setInverted(true);
+        secondaryIndexEncoder = secondaryIndexMotor.getEncoder();
+        secondaryIndexPIDController = secondaryIndexMotor.getPIDController();
+        secondaryIndexPIDController.setP(0);
+        secondaryIndexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
+        secondaryIndexMotor.setSmartCurrentLimit(80); //big neo is good
+        // secondaryIndexMotor.setClosedLoopRampRate(0.6);
+        secondaryIndexMotor.enableVoltageCompensation(12.0); 
+        secondaryIndexMotor.follow(indexMotor); //if wrong direction then just add "true" parameter or remove setInverted
+        secondaryIndexMotor.burnFlash();*/
+
 
         intakeMotor = new CANSparkMax(Constants.CANAssignments.INTAKE_MOTOR_ID, MotorType.kBrushless);
         intakeMotor.restoreFactoryDefaults();

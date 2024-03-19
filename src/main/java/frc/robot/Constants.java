@@ -39,6 +39,8 @@ public final class Constants {
 
         public static final int FLYWHEEL_MOTOR_ID = 7;
         public static final int INDEX_MOTOR_ID = 13;
+        public static final int SECONDARY_FLYWHEEL_MOTOR_ID = 41;
+        public static final int SECONDARY_INDEX_MOTOR_ID = 42;
 
         public static final int INTAKE_MOTOR_ID = 15;
 
@@ -209,7 +211,7 @@ public final class Constants {
          */
         public static final double INDEX_INTAKE_UNLOAD_RPM = 800; // TODO requires tuning.
 
-        public static final double FLYWHEEL_SPEAKER_RPM = 5250;
+        public static final double FLYWHEEL_SPEAKER_RPM = 5000;
         public static final double FLYWHEEL_AMP_RPM = 4250.0; //TODO FIX THIS
         public static final double FLYWHEEL_IDLE_RPM = 0;
         public static final double INDEX_FLYWHEEL_COOP_RPM = 5000.0; 
