@@ -18,11 +18,11 @@ public class WristIntakeSubsystem extends SubsystemBase {
     }
 
     public void forwards() {
-        motor.set(.25);
+        motor.set(.20);
     }
 
     public void backwards() {
-        motor.set(-.25);
+        motor.set(-.20);
     }
 
     public void stop() {
