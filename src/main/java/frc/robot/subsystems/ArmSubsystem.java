@@ -17,6 +17,7 @@ public class ArmSubsystem extends SubsystemBase {
     //public final CANSparkMax sensorHub;
     private final SparkPIDController shoulderPidController;
     private final RelativeEncoder shoulderRelativeEncoder;
+    private final CANSparkMax forgottenByTim;
     private double desiredPosition = 0; // Set the arms angle at this degree
     private final double currentPosition;
     private final boolean autoLockEnabledAmp = false;
@@ -26,13 +27,16 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
-        shoulderMotor = new CANSparkMax(Constants.CANAssignments.SHOULDER_MOTOR_ID, MotorType.kBrushless);
+        shoulderMotor = new CANSparkMax(19, MotorType.kBrushless);
+        forgottenByTim = new CANSparkMax(17, MotorType.kBrushless);
+        forgottenByTim.follow(shoulderMotor, true);
         shoulderMotor.setIdleMode(IdleMode.kBrake);
+        forgottenByTim.setIdleMode(IdleMode.kBrake);
         shoulderRelativeEncoder = shoulderMotor.getEncoder();
 
 
         shoulderPidController = shoulderMotor.getPIDController();
-        shoulderPidController.setP(Constants.ArmConstants.SHOULDER_PID_P);
+        shoulderPidController.setP(.1);
         currentPosition = shoulderRelativeEncoder.getPosition();
         desiredPosition = currentPosition;
 

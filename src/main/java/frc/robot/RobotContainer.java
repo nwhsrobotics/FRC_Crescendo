@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.FavoritePositions;
+import frc.robot.commands.ArmAdjustCmd;
 import frc.robot.commands.ClimbCmd;
 import frc.robot.commands.SetScoringStateCommand;
 import frc.robot.commands.SwerveJoystickDefaultCmd;
@@ -181,6 +182,7 @@ public class RobotContainer {
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner));
         wristSubsystem.setDefaultCommand(new WristAdjustCmd(wristSubsystem, gunner));
+        armSubsystem.setDefaultCommand(new ArmAdjustCmd(armSubsystem, gunner));
         wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner));
         
         /*SendableChooser<Integer> pipeline = new SendableChooser<>();
