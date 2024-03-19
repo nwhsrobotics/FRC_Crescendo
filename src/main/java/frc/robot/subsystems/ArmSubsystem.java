@@ -13,8 +13,8 @@ import frc.robot.Constants.ArmConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class ArmSubsystem extends SubsystemBase {
-    private final CANSparkMax shoulderMotor;
-    public final CANSparkMax sensorHub;
+    public final CANSparkMax shoulderMotor;
+    //public final CANSparkMax sensorHub;
     private final SparkPIDController shoulderPidController;
     private final RelativeEncoder shoulderRelativeEncoder;
     private double desiredPosition = 0; // Set the arms angle at this degree
@@ -34,8 +34,9 @@ public class ArmSubsystem extends SubsystemBase {
         shoulderPidController = shoulderMotor.getPIDController();
         shoulderPidController.setP(Constants.ArmConstants.SHOULDER_PID_P);
         currentPosition = shoulderRelativeEncoder.getPosition();
+        desiredPosition = currentPosition;
 
-        sensorHub = new CANSparkMax(Constants.CANAssignments.ARM_SENSOR_HUB_ID, MotorType.kBrushless);
+        //sensorHub = new CANSparkMax(Constants.CANAssignments.ARM_SENSOR_HUB_ID, MotorType.kBrushless);
     }
 
     // Converts degrees to units
@@ -83,7 +84,7 @@ public class ArmSubsystem extends SubsystemBase {
         shoulderPidController.setReference(desiredPosition, ControlType.kPosition);
 
         Logger.recordOutput("arm.desiredPosition", desiredPosition);
-        Logger.recordOutput("arm.currentPosition", currentPosition);
+        // Logger.recordOutput("arm.currentPosition", currentPosition);
         Logger.recordOutput("arm.autoLockEnabledAmp", autoLockEnabledAmp);
         Logger.recordOutput("arm.autoLockEnabledSource", autoLockEnabledSource);
     }

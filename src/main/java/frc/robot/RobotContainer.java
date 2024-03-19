@@ -36,7 +36,7 @@ public class RobotContainer {
     public final SwerveSubsystem swerveSubsystem;  // INIT AFTER NAMED COMMAND REGISTRATION!
     public final ScoringSubsystem scoringSubsystem = new ScoringSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
-    // public final ArmSubsystem armSubsystem = new ArmSubsystem();
+    public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
     public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
 
@@ -89,14 +89,14 @@ public class RobotContainer {
 
         */
         // Command for letting the gunner freely adjust the arm position, tuning for the joystick control will be subject to change
-        // InstantCommand armMoveUp = new InstantCommand(() -> armSubsystem.moveUp(), armSubsystem);
+       // InstantCommand armMoveUp = new InstantCommand(() -> armSubsystem.moveUp(), armSubsystem);
 
-        // InstantCommand armMoveDown = new InstantCommand(() -> armSubsystem.moveDown(), armSubsystem);
+        // armMoveDown = new InstantCommand(() -> armSubsystem.moveDown(), armSubsystem);
 
         // Command for letting the gunner freely adjust the wrist position, tuning for the joystick control will be subject to change
-        InstantCommand wristUp = new InstantCommand(() -> wristSubsystem.adjustAngle(gunner.getLeftTriggerAxis() * 0.65), wristSubsystem);
+        //InstantCommand wristUp = new InstantCommand(() -> wristSubsystem.adjustAngle(gunner.getLeftTriggerAxis() * 0.65), wristSubsystem);
         
-        InstantCommand wristDown = new InstantCommand(() -> wristSubsystem.adjustAngle(-gunner.getLeftTriggerAxis() * 0.65), wristSubsystem);
+        //InstantCommand wristDown = new InstantCommand(() -> wristSubsystem.adjustAngle(-gunner.getLeftTriggerAxis() * 0.65), wristSubsystem);
         
         //InstantCommand wristStop = new InstantCommand(() -> wristIntakeSubsystem.stop(), wristSubsystem);
         /* 
