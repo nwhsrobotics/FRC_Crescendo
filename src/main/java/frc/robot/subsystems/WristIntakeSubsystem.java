@@ -11,22 +11,10 @@ import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class WristIntakeSubsystem extends SubsystemBase {
-    private final CANSparkMax motor;
+    public final CANSparkMax motor;
 
     public WristIntakeSubsystem() {
         motor = new CANSparkMax(Constants.CANAssignments.WRIST_INTAKE_ID, MotorType.kBrushless);
-    }
-
-    public void forwards() {
-        motor.set(.20);
-    }
-
-    public void backwards() {
-        motor.set(-.20);
-    }
-
-    public void stop() {
-        motor.stopMotor();
     }
 
     @Override
