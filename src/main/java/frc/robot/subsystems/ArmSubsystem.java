@@ -50,13 +50,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Sets the desired position to a pre-determined angle for the amp
     public void ampPreset() {
-        desiredPosition = (140.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredPosition = -(20.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
     }
 
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
 
-        desiredPosition = (40.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredPosition = -(30.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
 
     }
 
@@ -75,7 +75,7 @@ public class ArmSubsystem extends SubsystemBase {
         shoulderMotor.set(-0.5);
     }
 
-    /*
+    /* 
       public void underStage(){
         desiredPosition = ()
     }
@@ -86,7 +86,7 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         shoulderPidController.setReference(desiredPosition, ControlType.kPosition);
-
+        System.out.println(desiredPosition + " " +  shoulderRelativeEncoder.getPosition());
         Logger.recordOutput("arm.desiredPosition", desiredPosition);
         // Logger.recordOutput("arm.currentPosition", currentPosition);
         Logger.recordOutput("arm.autoLockEnabledAmp", autoLockEnabledAmp);
