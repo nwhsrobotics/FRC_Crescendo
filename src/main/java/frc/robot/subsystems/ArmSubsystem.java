@@ -16,29 +16,35 @@ public class ArmSubsystem extends SubsystemBase {
     public final CANSparkMax shoulderMotor;
     //public final CANSparkMax sensorHub;
     private final SparkPIDController shoulderPidController;
+    private final SparkPIDController shoulderPidController2;
     private final RelativeEncoder shoulderRelativeEncoder;
-    private final CANSparkMax secondaryShoulderMotor;
+    private final RelativeEncoder shoulderRelativeEncoder2;
+    private final CANSparkMax shoulderMotor2;
     private double desiredPosition = 0; // Set the arms angle at this degree
     private double currentPosition;
-    private final boolean autoLockEnabledAmp = false;
-    private final boolean autoLockEnabledSource = false;
     private double maxRotPerTick = 0.1;
     
 
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
         shoulderMotor = new CANSparkMax(19, MotorType.kBrushless);
-        secondaryShoulderMotor = new CANSparkMax(17, MotorType.kBrushless);
-        secondaryShoulderMotor.follow(shoulderMotor, true);
+        forgottenByTim = new CANSparkMax(17, MotorType.kBrushless);
+        forgottenByTim.follow(shoulderMotor, true);
         shoulderMotor.setIdleMode(IdleMode.kBrake);
-        secondaryShoulderMotor.setIdleMode(IdleMode.kBrake);
+        forgottenByTim.setIdleMode(IdleMode.kBrake);
         shoulderRelativeEncoder = shoulderMotor.getEncoder();
+        shoulderRelativeEncoder2 = shoulderMotor2.getEncoder();
+
 
 
         shoulderPidController = shoulderMotor.getPIDController();
+        shoulderPidController2 = shoulderMotor2.getPIDController();
         shoulderPidController.setP(.1);
+        shoulderPidController.setOutputRange(currentPosition, maxRotPerTick);
         currentPosition = shoulderRelativeEncoder.getPosition();
         desiredPosition = currentPosition;
+        shoulderPidController.setOutputRange(currentPosition, maxRotPerTick);
+        shoulderPidController.setOutputRange(-0.5, 0.5);
 
         //sensorHub = new CANSparkMax(Constants.CANAssignments.ARM_SENSOR_HUB_ID, MotorType.kBrushless);
     }
@@ -95,15 +101,21 @@ public class ArmSubsystem extends SubsystemBase {
             currentPosition = desiredPosition;
             System.out.println("Is in range");
         }
+
+        if(currentPosition > ((33.0/360)*ArmConstants.SHOULDER_GEAR_RATIO)){
+            desiredPosition = (33.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        }
+        else if(currentPosition < (-20.0/360)*ArmConstants.SHOULDER_GEAR_RATIO){
+            desiredPosition = -(20.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        }
+
+
         System.out.println(currentPosition + "" + desiredPosition);
         shoulderPidController.setReference(currentPosition, ControlType.kPosition);
-        //shoulderPidController.setReference(currentPosition, ControlType.kPosition, 0, 2, ArbFFUnits.kVoltage); //TODO: FEEDFORWARD TO STAY IN PLACE/ COUNTERACT GRAVITY LOOK AT 888'S
-        //use TrapezoidProfile.State for smoothing out again look at 888's
-        // https://github.com/Robotiators-888/2024Season/blob/main/src/main/java/frc/robot/subsystems/SUB_Pivot.java
         System.out.println(desiredPosition + " " +  shoulderRelativeEncoder.getPosition());
         Logger.recordOutput("arm.desiredPosition", desiredPosition);
         // Logger.recordOutput("arm.currentPosition", currentPosition);
-        Logger.recordOutput("arm.autoLockEnabledAmp", autoLockEnabledAmp);
-        Logger.recordOutput("arm.autoLockEnabledSource", autoLockEnabledSource);
+        //Logger.recordOutput("arm.autoLockEnabledAmp", autoLockEnabledAmp);
+        //Logger.recordOutput("arm.autoLockEnabledSource", autoLockEnabledSource);
     }
 }
