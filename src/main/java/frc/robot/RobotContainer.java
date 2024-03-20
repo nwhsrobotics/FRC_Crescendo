@@ -126,13 +126,13 @@ public class RobotContainer {
         new JoystickButton(gunner, XboxControllerButtons.RIGHT_BUMPER).onTrue(commandShoot);
         new JoystickButton(gunner, XboxControllerButtons.A).onTrue(commandLoad);
         new JoystickButton(gunner, XboxControllerButtons.B).onTrue(commandUnload);
-        new JoystickButton(gunner, XboxControllerButtons.VIEW).onTrue(toAmp);
-        new JoystickButton(gunner, XboxControllerButtons.MENU).onTrue(toSource);
+        new POVButton(gunner, 0).onTrue(toAmp);
+        new POVButton(gunner, 90).onTrue(toSource);
 
         //new POVButton(gunner, 0).onTrue(new InstantCommand(() -> scoringSubsystem.increaseRPM()));
         //new POVButton(gunner, 180).onTrue(new InstantCommand(() -> scoringSubsystem.decreaseRPM()));
-        new POVButton(gunner, 90).onTrue(new InstantCommand(() -> scoringSubsystem.increaseRPM()));
-        new POVButton(gunner, 270).onTrue(new InstantCommand(() -> scoringSubsystem.decreaseRPM()));
+        new JoystickButton(gunner, XboxControllerButtons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(() -> scoringSubsystem.increaseRPM()));
+        new JoystickButton(gunner, XboxControllerButtons.LEFT_STICK_BUTTON).onTrue(new InstantCommand(() -> scoringSubsystem.decreaseRPM()));
         // new POVButton(gunner, 0).onTrue(armMoveUp);
         // new POVButton(gunner, 180).onTrue(armMoveDown);
         //new JoystickButton(gunner, XboxControllerButtons.Y).whileTrue(wristIntakeBackwards);

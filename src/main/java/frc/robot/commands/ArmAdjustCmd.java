@@ -26,7 +26,7 @@ public class ArmAdjustCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    armSubsystem.adjustAngle(gunner.getPOV() == 0 ? .2 : gunner.getPOV() == 180 ? -.2 : 0);
+    armSubsystem.adjustAngle(gunner.getBackButton() ? .2 : gunner.getStartButton() ? -.2 : 0);
   }
 
   // Called once the command ends or is interrupted.
