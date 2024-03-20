@@ -19,10 +19,11 @@ public class WristSubsystem extends SubsystemBase {
     private final SparkPIDController wristPidController;
     private final RelativeEncoder wristRelativeEncoder;
     private AbsoluteEncoder wristAbsoluteEncoder;
-    private final double currentPosition;
+    private double currentPosition;
     private double desiredPosition;
     private final boolean autoLockEnabledAmp = false;
     private final boolean autoLockEnabledSource = false;
+    private double maxRotPerTick = 0.1;
     
 
     // Constructor for WristSubsystem
@@ -60,14 +61,25 @@ public class WristSubsystem extends SubsystemBase {
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
 
-        desiredPosition = (43.1 / 360) * WristConstants.WRIST_GEAR_RATIO;
+        desiredPosition = (90.0 / 360) * WristConstants.WRIST_GEAR_RATIO;
 
     }
 
     // Called once per scheduler run
     @Override
     public void periodic() {
-        wristPidController.setReference(desiredPosition, ControlType.kPosition);
+        if(currentPosition + maxRotPerTick < desiredPosition){
+            currentPosition += maxRotPerTick;
+            System.out.println("Is less");
+        } else if (currentPosition - maxRotPerTick > desiredPosition){
+            currentPosition -= maxRotPerTick;
+            System.out.println("Is more");
+        } else {
+            currentPosition = desiredPosition;
+            System.out.println("Is in range");
+        }
+        System.out.println(currentPosition + "" + desiredPosition);
+        wristPidController.setReference(currentPosition, ControlType.kPosition);
         //System.out.println(String.format("Desired Position: %f Current Position: %f Difference: %f", desiredPosition, wristRelativeEncoder.getPosition(), desiredPosition - wristRelativeEncoder.getPosition()));
         Logger.recordOutput("wrist.desiredPosition", desiredPosition);
         Logger.recordOutput("wrist.currentPosition", currentPosition);

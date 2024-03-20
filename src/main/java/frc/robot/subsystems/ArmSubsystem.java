@@ -19,10 +19,10 @@ public class ArmSubsystem extends SubsystemBase {
     private final RelativeEncoder shoulderRelativeEncoder;
     private final CANSparkMax forgottenByTim;
     private double desiredPosition = 0; // Set the arms angle at this degree
-    private final double currentPosition;
+    private double currentPosition;
     private final boolean autoLockEnabledAmp = false;
     private final boolean autoLockEnabledSource = false;
-
+    private double maxRotPerTick = 0.1;
     
 
     // Constructor for ArmSubsystem
@@ -56,7 +56,7 @@ public class ArmSubsystem extends SubsystemBase {
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
 
-        desiredPosition = -(30.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredPosition = (33.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
 
     }
 
@@ -85,7 +85,18 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        shoulderPidController.setReference(desiredPosition, ControlType.kPosition);
+        if(currentPosition + maxRotPerTick < desiredPosition){
+            currentPosition += maxRotPerTick;
+            System.out.println("Is less");
+        } else if (currentPosition - maxRotPerTick > desiredPosition){
+            currentPosition -= maxRotPerTick;
+            System.out.println("Is more");
+        } else {
+            currentPosition = desiredPosition;
+            System.out.println("Is in range");
+        }
+        System.out.println(currentPosition + "" + desiredPosition);
+        shoulderPidController.setReference(currentPosition, ControlType.kPosition);
         System.out.println(desiredPosition + " " +  shoulderRelativeEncoder.getPosition());
         Logger.recordOutput("arm.desiredPosition", desiredPosition);
         // Logger.recordOutput("arm.currentPosition", currentPosition);

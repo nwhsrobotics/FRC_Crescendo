@@ -82,13 +82,13 @@ public class RobotContainer {
         InstantCommand armLockAmp = new InstantCommand(() -> armSubsystem.ampPreset(), armSubsystem);
 
         // Command for setting arm to the source position
-        //InstantCommand armLockSource = new InstantCommand(() -> armSubsystem.sourcePreset(), armSubsystem);
+        InstantCommand armLockSource = new InstantCommand(() -> armSubsystem.sourcePreset(), armSubsystem);
 
         // Command for setting wrist to the amp position
         InstantCommand wristLockAmp = new InstantCommand(() -> wristSubsystem.ampPreset(), wristSubsystem);
 
         // Command for setting wrist to the source position
-        //InstantCommand wristLockSource = new InstantCommand(() -> wristSubsystem.sourcePreset(), wristSubsystem);
+        InstantCommand wristLockSource = new InstantCommand(() -> wristSubsystem.sourcePreset(), wristSubsystem);
 
         
         // Command for letting the gunner freely adjust the arm position, tuning for the joystick control will be subject to change
@@ -110,6 +110,8 @@ public class RobotContainer {
         // Command group that has built-in logic 
         ParallelCommandGroup toAmp = new ParallelCommandGroup(armLockAmp, wristLockAmp, new InstantCommand(() -> System.out.println("&&&&&&&& running")));
         toAmp.addRequirements(wristSubsystem, armSubsystem);
+        ParallelCommandGroup toSource = new ParallelCommandGroup(armLockSource, wristLockSource, new InstantCommand(() -> System.out.println("&&&&&&&& running")));
+        toAmp.addRequirements(wristSubsystem, armSubsystem);
         /*
         SequentialCommandGroup toSource = new SequentialCommandGroup(armLockSource, wristLockSource);
         toSource.addRequirements(wristSubsystem, armSubsystem);
@@ -125,6 +127,7 @@ public class RobotContainer {
         new JoystickButton(gunner, XboxControllerButtons.A).onTrue(commandLoad);
         new JoystickButton(gunner, XboxControllerButtons.B).onTrue(commandUnload);
         new JoystickButton(gunner, XboxControllerButtons.VIEW).onTrue(toAmp);
+        new JoystickButton(gunner, XboxControllerButtons.MENU).onTrue(toSource);
 
         //new POVButton(gunner, 0).onTrue(new InstantCommand(() -> scoringSubsystem.increaseRPM()));
         //new POVButton(gunner, 180).onTrue(new InstantCommand(() -> scoringSubsystem.decreaseRPM()));
