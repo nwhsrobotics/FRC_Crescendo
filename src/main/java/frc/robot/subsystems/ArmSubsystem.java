@@ -28,23 +28,21 @@ public class ArmSubsystem extends SubsystemBase {
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
         shoulderMotor = new CANSparkMax(19, MotorType.kBrushless);
-        forgottenByTim = new CANSparkMax(17, MotorType.kBrushless);
-        forgottenByTim.follow(shoulderMotor, true);
+        shoulderMotor2 = new CANSparkMax(17, MotorType.kBrushless);
+
         shoulderMotor.setIdleMode(IdleMode.kBrake);
-        forgottenByTim.setIdleMode(IdleMode.kBrake);
+        shoulderMotor2.setIdleMode(IdleMode.kBrake);
+
         shoulderRelativeEncoder = shoulderMotor.getEncoder();
         shoulderRelativeEncoder2 = shoulderMotor2.getEncoder();
-
-
 
         shoulderPidController = shoulderMotor.getPIDController();
         shoulderPidController2 = shoulderMotor2.getPIDController();
         shoulderPidController.setP(.1);
-        shoulderPidController.setOutputRange(currentPosition, maxRotPerTick);
+        shoulderPidController.setOutputRange(-0.5, 0.5);
+
         currentPosition = shoulderRelativeEncoder.getPosition();
         desiredPosition = currentPosition;
-        shoulderPidController.setOutputRange(currentPosition, maxRotPerTick);
-        shoulderPidController.setOutputRange(-0.5, 0.5);
 
         //sensorHub = new CANSparkMax(Constants.CANAssignments.ARM_SENSOR_HUB_ID, MotorType.kBrushless);
     }
@@ -111,7 +109,9 @@ public class ArmSubsystem extends SubsystemBase {
 
 
         System.out.println(currentPosition + "" + desiredPosition);
+        //might change the currentPosition parameter back to desiredPosiition
         shoulderPidController.setReference(currentPosition, ControlType.kPosition);
+        shoulderPidController2.setReference(currentPosition, ControlType.kPosition);
         System.out.println(desiredPosition + " " +  shoulderRelativeEncoder.getPosition());
         Logger.recordOutput("arm.desiredPosition", desiredPosition);
         // Logger.recordOutput("arm.currentPosition", currentPosition);
