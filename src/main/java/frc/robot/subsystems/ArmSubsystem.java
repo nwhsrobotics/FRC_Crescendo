@@ -13,10 +13,11 @@ import frc.robot.Constants.ArmConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class ArmSubsystem extends SubsystemBase {
-    private final CANSparkMax shoulderMotor;
-    public final CANSparkMax sensorHub;
+    public final CANSparkMax shoulderMotor;
+    //public final CANSparkMax sensorHub;
     private final SparkPIDController shoulderPidController;
     private final RelativeEncoder shoulderRelativeEncoder;
+    private final CANSparkMax forgottenByTim;
     private double desiredPosition = 0; // Set the arms angle at this degree
     private final double currentPosition;
     private final boolean autoLockEnabledAmp = false;
@@ -26,16 +27,20 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
-        shoulderMotor = new CANSparkMax(Constants.CANAssignments.SHOULDER_MOTOR_ID, MotorType.kBrushless);
+        shoulderMotor = new CANSparkMax(19, MotorType.kBrushless);
+        forgottenByTim = new CANSparkMax(17, MotorType.kBrushless);
+        forgottenByTim.follow(shoulderMotor, true);
         shoulderMotor.setIdleMode(IdleMode.kBrake);
+        forgottenByTim.setIdleMode(IdleMode.kBrake);
         shoulderRelativeEncoder = shoulderMotor.getEncoder();
 
 
         shoulderPidController = shoulderMotor.getPIDController();
-        shoulderPidController.setP(Constants.ArmConstants.SHOULDER_PID_P);
+        shoulderPidController.setP(.1);
         currentPosition = shoulderRelativeEncoder.getPosition();
+        desiredPosition = currentPosition;
 
-        sensorHub = new CANSparkMax(Constants.CANAssignments.ARM_SENSOR_HUB_ID, MotorType.kBrushless);
+        //sensorHub = new CANSparkMax(Constants.CANAssignments.ARM_SENSOR_HUB_ID, MotorType.kBrushless);
     }
 
     // Converts degrees to units
@@ -45,13 +50,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Sets the desired position to a pre-determined angle for the amp
     public void ampPreset() {
-        desiredPosition = (140.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredPosition = -(20.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
     }
 
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
 
-        desiredPosition = (40.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredPosition = -(30.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
 
     }
 
@@ -70,7 +75,7 @@ public class ArmSubsystem extends SubsystemBase {
         shoulderMotor.set(-0.5);
     }
 
-    /*
+    /* 
       public void underStage(){
         desiredPosition = ()
     }
@@ -81,9 +86,9 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         shoulderPidController.setReference(desiredPosition, ControlType.kPosition);
-
+        System.out.println(desiredPosition + " " +  shoulderRelativeEncoder.getPosition());
         Logger.recordOutput("arm.desiredPosition", desiredPosition);
-        Logger.recordOutput("arm.currentPosition", currentPosition);
+        // Logger.recordOutput("arm.currentPosition", currentPosition);
         Logger.recordOutput("arm.autoLockEnabledAmp", autoLockEnabledAmp);
         Logger.recordOutput("arm.autoLockEnabledSource", autoLockEnabledSource);
     }
