@@ -6,16 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
-public class WristAdjustCmd extends Command {
-  public WristSubsystem wristSubsystem;
+public class ArmAdjustCmd extends Command {
+  public ArmSubsystem armSubsystem;
   public XboxController gunner;
-  /** Creates a new WristAdjustCmd. */
-  public WristAdjustCmd(WristSubsystem wristSubsystem, XboxController gunner) {
-    this.wristSubsystem = wristSubsystem;
+  /** Creates a new ArmAdjustCmd. */
+  public ArmAdjustCmd(ArmSubsystem armSubsystem, XboxController gunner) {
+    this.armSubsystem = armSubsystem;
     this.gunner = gunner;
-    addRequirements(wristSubsystem);
+    addRequirements(armSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -26,13 +26,13 @@ public class WristAdjustCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    wristSubsystem.adjustAngle(gunner.getLeftTriggerAxis() > .1 ? gunner.getLeftTriggerAxis() : gunner.getRightTriggerAxis() > .1 ? -gunner.getRightTriggerAxis() : 0);
+    armSubsystem.adjustAngle(gunner.getPOV() == 0 ? .2 : gunner.getPOV() == 180 ? -.2 : 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    wristSubsystem.wristMotor.stopMotor();
+    armSubsystem.shoulderMotor.stopMotor();
   }
 
   // Returns true when the command should end.

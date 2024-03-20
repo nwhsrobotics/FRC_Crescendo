@@ -160,14 +160,14 @@ public final class Constants {
 
     public static final class ArmConstants {
 
-        public static final double SHOULDER_PID_P = 0.5;
-        public static final double SHOULDER_GEAR_RATIO = 1; //placeholder number
+        public static final double SHOULDER_PID_P = 0.1;
+        public static final double SHOULDER_GEAR_RATIO = 100.0; //placeholder number
     }
 
     public static final class WristConstants {
 
         public static final double WRIST_PID_P = 0.5;
-        public static final double WRIST_GEAR_RATIO = 1; //placeholder number
+        public static final double WRIST_GEAR_RATIO = 100.0; //placeholder number
     }
 
     public static final class ScoringConstants {

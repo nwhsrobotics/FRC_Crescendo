@@ -32,19 +32,19 @@ public class WristSubsystem extends SubsystemBase {
         wristRelativeEncoder = wristMotor.getEncoder();
         wristAbsoluteEncoder = wristMotor.getAbsoluteEncoder();
         wristPidController = wristMotor.getPIDController();
-        wristPidController.setP(0.0005);
+        wristPidController.setP(0.1);
         
 
 
         // wristPidController.setP(Constants.WristConstants.WRIST_PID_P);
-        currentPosition = wristAbsoluteEncoder.getPosition();
+        currentPosition = wristRelativeEncoder.getPosition();
         desiredPosition = currentPosition;
         // currentPosition = wristAbsoluteEncoder.getPosition();
     }
 
     // Sets the desired position to a specified angle
     public void adjustAngle(double changeInPosition) {
-        desiredPosition += changeInPosition * 1024;
+        desiredPosition += changeInPosition;
         
     }
 
@@ -53,7 +53,7 @@ public class WristSubsystem extends SubsystemBase {
     // Sets the desired position to a pre-determined angle for the amp
     public void ampPreset() {
 
-        desiredPosition = (218.0 / 360) * WristConstants.WRIST_GEAR_RATIO;
+        desiredPosition = 0.0;
 
     }
 
@@ -68,6 +68,7 @@ public class WristSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         wristPidController.setReference(desiredPosition, ControlType.kPosition);
+        //System.out.println(String.format("Desired Position: %f Current Position: %f Difference: %f", desiredPosition, wristRelativeEncoder.getPosition(), desiredPosition - wristRelativeEncoder.getPosition()));
         Logger.recordOutput("wrist.desiredPosition", desiredPosition);
         Logger.recordOutput("wrist.currentPosition", currentPosition);
         Logger.recordOutput("wrist.autoLockEnabledAmp", autoLockEnabledAmp);
