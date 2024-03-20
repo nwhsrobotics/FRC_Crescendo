@@ -51,6 +51,8 @@ public final class Constants {
         public static final int WRIST_MOTOR_ID = 16;
         public static final int WRIST_INTAKE_ID = 18;
 
+        public static final int PDU_ID = 99;  // FIXME
+
         /**
          * Check for duplicate CAN assignments,
          * declared under the class this method is defined in.
@@ -295,10 +297,11 @@ public final class Constants {
         REPLAY
     }
 
+    public static final ModuleType PDU_TYPE = ModuleType.kRev;
+
     public static final class LoggerConstants {
         public static final RuntimeEnvironment MODE = RuntimeEnvironment.REAL;
         public static final String RUNNING_UNDER = "2024.q1";
-        public static final ModuleType PDU_TYPE = ModuleType.kRev;
 
         // SET TO FALSE IF WE'RE RUNNING OUT OF BANDWIDTH.
         public static final boolean SILENT_NT4 = false;
