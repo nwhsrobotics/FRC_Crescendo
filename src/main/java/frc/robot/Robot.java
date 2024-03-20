@@ -3,7 +3,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.LoggerConstants;
+import frc.robot.exalted.ImprovedPowerDistribution;
 import frc.robot.subsystems.limelight.LimelightHelpers;
 import frc.robot.subsystems.limelight.LimelightImplementation;
 import frc.robot.subsystems.oi.ControlManager;
@@ -17,6 +19,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
     public RobotContainer robotContainer;
+    public ImprovedPowerDistribution robotPD;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -25,6 +28,8 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotInit() {
+        robotPD = new ImprovedPowerDistribution(CANAssignments.PDU_ID, Constants.PDU_TYPE);
+
         Logger.recordMetadata("version", LoggerConstants.RUNNING_UNDER);
         Logger.recordMetadata("build_commit", BuildConstants.GIT_SHA);
         Logger.recordMetadata("build_branch", BuildConstants.GIT_BRANCH);
@@ -37,7 +42,6 @@ public class Robot extends LoggedRobot {
                 if (!LoggerConstants.SILENT_NT4) {
                     Logger.addDataReceiver(new NT4Publisher());
                 }
-                new PowerDistribution(1, LoggerConstants.PDU_TYPE);
                 break;
             case SIMULATION:
                 Logger.addDataReceiver(new WPILOGWriter(""));
