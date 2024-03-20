@@ -75,12 +75,12 @@ public class ArmSubsystem extends SubsystemBase {
         shoulderMotor.set(-0.5);
     }
 
-    /* 
+    
       public void underStage(){
-        desiredPosition = ()
+        desiredPosition = (80.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
     }
 
-     */
+     
    
 
     @Override
