@@ -17,7 +17,7 @@ public class ArmSubsystem extends SubsystemBase {
     //public final CANSparkMax sensorHub;
     private final SparkPIDController shoulderPidController;
     private final RelativeEncoder shoulderRelativeEncoder;
-    private final CANSparkMax forgottenByTim;
+    private final CANSparkMax secondaryShoulderMotor;
     private double desiredPosition = 0; // Set the arms angle at this degree
     private double currentPosition;
     private final boolean autoLockEnabledAmp = false;
@@ -28,10 +28,10 @@ public class ArmSubsystem extends SubsystemBase {
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
         shoulderMotor = new CANSparkMax(19, MotorType.kBrushless);
-        forgottenByTim = new CANSparkMax(17, MotorType.kBrushless);
-        forgottenByTim.follow(shoulderMotor, true);
+        secondaryShoulderMotor = new CANSparkMax(17, MotorType.kBrushless);
+        secondaryShoulderMotor.follow(shoulderMotor, true);
         shoulderMotor.setIdleMode(IdleMode.kBrake);
-        forgottenByTim.setIdleMode(IdleMode.kBrake);
+        secondaryShoulderMotor.setIdleMode(IdleMode.kBrake);
         shoulderRelativeEncoder = shoulderMotor.getEncoder();
 
 
@@ -97,6 +97,8 @@ public class ArmSubsystem extends SubsystemBase {
         }
         System.out.println(currentPosition + "" + desiredPosition);
         shoulderPidController.setReference(currentPosition, ControlType.kPosition);
+        //shoulderPidController.setReference(currentPosition, ControlType.kPosition, 0, 2, ArbFFUnits.kVoltage); //TODO: FEEDFORWARD TO STAY IN PLACE/ COUNTERACT GRAVITY LOOK AT 888'S
+        //use TrapezoidProfile.State for smoothing out again look at 888's
         System.out.println(desiredPosition + " " +  shoulderRelativeEncoder.getPosition());
         Logger.recordOutput("arm.desiredPosition", desiredPosition);
         // Logger.recordOutput("arm.currentPosition", currentPosition);
