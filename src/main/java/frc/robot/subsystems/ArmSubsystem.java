@@ -99,6 +99,7 @@ public class ArmSubsystem extends SubsystemBase {
         shoulderPidController.setReference(currentPosition, ControlType.kPosition);
         //shoulderPidController.setReference(currentPosition, ControlType.kPosition, 0, 2, ArbFFUnits.kVoltage); //TODO: FEEDFORWARD TO STAY IN PLACE/ COUNTERACT GRAVITY LOOK AT 888'S
         //use TrapezoidProfile.State for smoothing out again look at 888's
+        // https://github.com/Robotiators-888/2024Season/blob/main/src/main/java/frc/robot/subsystems/SUB_Pivot.java
         System.out.println(desiredPosition + " " +  shoulderRelativeEncoder.getPosition());
         Logger.recordOutput("arm.desiredPosition", desiredPosition);
         // Logger.recordOutput("arm.currentPosition", currentPosition);
