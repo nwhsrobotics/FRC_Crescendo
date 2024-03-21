@@ -2,19 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6933452953924437,
-      "y": 4.250117887396973
+      "x": 0.5926986399427344,
+      "y": 1.9963516290668946
     },
-    "rotation": -60.0
+    "rotation": 0.5846305207051652
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "intakeOn"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "[C] Forward"
+            "pathName": "Test"
           }
         },
         {
