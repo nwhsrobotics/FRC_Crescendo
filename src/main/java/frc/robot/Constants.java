@@ -170,6 +170,7 @@ public final class Constants {
 
         public static final double WRIST_PID_P = 0.5;
         public static final double WRIST_GEAR_RATIO = 100.0; //placeholder number
+        public static final double absOffset = 0;
     }
 
     public static final class ScoringConstants {

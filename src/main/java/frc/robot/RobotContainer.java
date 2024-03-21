@@ -86,7 +86,7 @@ public class RobotContainer {
 
         InstantCommand armLockUnderStage = new InstantCommand(() -> armSubsystem.underStage(), armSubsystem);
 
-        InstantCommand armHome = new InstantCommand(() -> armSubsystem.home(), armSubsystem);
+        //InstantCommand armHome = new InstantCommand(() -> armSubsystem.home(), armSubsystem);
 
         // Command for setting wrist to the amp position
         InstantCommand wristLockAmp = new InstantCommand(() -> wristSubsystem.ampPreset(), wristSubsystem);
@@ -138,7 +138,7 @@ public class RobotContainer {
         new POVButton(gunner, 0).onTrue(toAmp);
         new POVButton(gunner, 90).onTrue(toSource);
         new POVButton(gunner, 180).onTrue(toUnderStage);
-        new JoystickButton(gunner, XboxControllerButtons.LEFT_BUMPER).onTrue(armHome);
+        //new JoystickButton(gunner, XboxControllerButtons.LEFT_BUMPER).onTrue(armHome);
 
         //new POVButton(gunner, 0).onTrue(new InstantCommand(() -> scoringSubsystem.increaseRPM()));
         //new POVButton(gunner, 180).onTrue(new InstantCommand(() -> scoringSubsystem.decreaseRPM()));
