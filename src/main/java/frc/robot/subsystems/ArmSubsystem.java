@@ -65,7 +65,7 @@ public class ArmSubsystem extends SubsystemBase {
         currentPos_deg = rightShoulderRelativeEncoder.getPosition();
 
         double absRaw = shoulderAbsoluteEncoder.getPulseWidthPosition();
-        double adjustAbs = absRaw - ShoulderConstants.absOffset;
+        double adjustAbs = absRaw - Constants.ArmConstants.absOffset;
 
         // Normalize the adjusted absolute position between -0.5 and 0.5 instead of between 0 and 1
         if (adjustAbs > 0.5) {
