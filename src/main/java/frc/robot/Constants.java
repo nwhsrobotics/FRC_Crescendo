@@ -179,7 +179,7 @@ public final class Constants {
          */
         public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 400.0;
 
-        public static final double FLYWHEEL_PID_FF = 0.0005;
+        public static final double FLYWHEEL_PID_FF = 0.0005; //TODO: DECREASE THIS TOO MUCH OVERSHOOT, 888 uses 0.0002
         public static final double INDEX_PID_FF = 0.0005;
         public static final double INTAKE_PID_FF = 0.0005;
 
@@ -213,10 +213,10 @@ public final class Constants {
          */
         public static final double INDEX_INTAKE_UNLOAD_RPM = 800; // TODO requires tuning.
 
-        public static final double FLYWHEEL_SPEAKER_RPM = 5000;
+        public static final double FLYWHEEL_SPEAKER_RPM = 4250.0;
         public static final double FLYWHEEL_AMP_RPM = 4250.0; //TODO FIX THIS
         public static final double FLYWHEEL_IDLE_RPM = 0;
-        public static final double INDEX_FLYWHEEL_COOP_RPM = 5000.0; 
+        public static final double INDEX_FLYWHEEL_COOP_RPM = 4250.0; 
     }
 
     public static final class AutoConstants {

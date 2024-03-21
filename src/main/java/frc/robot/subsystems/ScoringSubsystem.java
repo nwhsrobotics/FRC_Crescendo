@@ -190,6 +190,7 @@ public class ScoringSubsystem extends SubsystemBase {
                 flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
                 indexPIDController.setReference(Constants.ScoringConstants.INDEX_INTAKE_COOP_RPM, ControlType.kVelocity);
                 intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
+                
                 Logger.recordOutput("scoring.state", "LOADING");
                 break;
             case FIRE:
@@ -203,7 +204,7 @@ public class ScoringSubsystem extends SubsystemBase {
                 }
 
 
-                /*//because we have voltage compensation now, this will actually work as efficiently
+                /*
                 //flywheelMotor.set(1.0);
                 //indexMotor.set(1.0);
                 
@@ -229,4 +230,5 @@ public class ScoringSubsystem extends SubsystemBase {
         Logger.recordOutput("scoring.index.rpm", indexEncoder.getVelocity());
         Logger.recordOutput("scoring.intake.rpm", intakeEncoder.getVelocity());
     }
+
 }
