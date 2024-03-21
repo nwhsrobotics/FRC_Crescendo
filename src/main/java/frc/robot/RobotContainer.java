@@ -84,6 +84,8 @@ public class RobotContainer {
         // Command for setting arm to the source position
         InstantCommand armLockSource = new InstantCommand(() -> armSubsystem.sourcePreset(), armSubsystem);
 
+        InstantCommand armLockUnderStage = new InstantCommand(() -> armSubsystem.underStage(), armSubsystem);
+
         InstantCommand armHome = new InstantCommand(() -> armSubsystem.home(), armSubsystem);
 
         // Command for setting wrist to the amp position
@@ -91,6 +93,9 @@ public class RobotContainer {
 
         // Command for setting wrist to the source position
         InstantCommand wristLockSource = new InstantCommand(() -> wristSubsystem.sourcePreset(), wristSubsystem);
+
+        InstantCommand wristLockUnderStage = new InstantCommand(() -> wristSubsystem.underStage(), armSubsystem);
+
 
         
         // Command for letting the gunner freely adjust the arm position, tuning for the joystick control will be subject to change
@@ -114,6 +119,8 @@ public class RobotContainer {
         toAmp.addRequirements(wristSubsystem, armSubsystem);
         ParallelCommandGroup toSource = new ParallelCommandGroup(armLockSource, wristLockSource, new InstantCommand(() -> System.out.println("&&&&&&&& running")));
         toAmp.addRequirements(wristSubsystem, armSubsystem);
+        ParallelCommandGroup toUnderStage = new ParallelCommandGroup(armLockUnderStage, wristLockUnderStage, new InstantCommand(() -> System.out.println("&&&&&&&& running")));
+        toAmp.addRequirements(wristSubsystem, armSubsystem);
         /*
         SequentialCommandGroup toSource = new SequentialCommandGroup(armLockSource, wristLockSource);
         toSource.addRequirements(wristSubsystem, armSubsystem);
@@ -130,6 +137,7 @@ public class RobotContainer {
         new JoystickButton(gunner, XboxControllerButtons.B).onTrue(commandUnload);
         new POVButton(gunner, 0).onTrue(toAmp);
         new POVButton(gunner, 90).onTrue(toSource);
+        new POVButton(gunner, 180).onTrue(toUnderStage);
         new JoystickButton(gunner, XboxControllerButtons.LEFT_BUMPER).onTrue(armHome);
 
         //new POVButton(gunner, 0).onTrue(new InstantCommand(() -> scoringSubsystem.increaseRPM()));

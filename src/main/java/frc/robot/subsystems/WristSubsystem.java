@@ -65,6 +65,12 @@ public class WristSubsystem extends SubsystemBase {
 
     }
 
+    public void underStage() {
+
+        desiredPosition = 0.0;
+
+    }
+
     // Called once per scheduler run
     @Override
     public void periodic() {
