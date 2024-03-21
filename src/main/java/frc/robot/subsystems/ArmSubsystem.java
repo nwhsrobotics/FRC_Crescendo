@@ -31,7 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
     private final TalonSRX shoulderAbsoluteEncoderController;
     private final SensorCollection shoulderAbsoluteEncoder;
 
-    private final CANSparkMax leftShoulderMotor;
+    public final CANSparkMax leftShoulderMotor;
     //private double desiredAngleRotations = 0; // Set the arms angle at this degree
     private double desiredPos_deg = 0;
     private double currentPos_deg;
