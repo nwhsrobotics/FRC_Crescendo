@@ -109,7 +109,7 @@ public class ScoringSubsystem extends SubsystemBase {
         indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
         indexMotor.setSmartCurrentLimit(80); //big neo is good
         //indexMotor.setClosedLoopRampRate(0.6);
-        indexMotor.enableVoltageCompensation(12.0); 
+        indexMotor.enableVoltageCompensation(12.0); //TODO: Increase voltage compensation to 12.5+ for it to shoot from right next to speaker
         //indexMotor.burnFlash();
 
         secondaryIndexMotor = new CANSparkMax(Constants.CANAssignments.SECONDARY_INDEX_MOTOR_ID, MotorType.kBrushless);
@@ -193,15 +193,24 @@ public class ScoringSubsystem extends SubsystemBase {
                 Logger.recordOutput("scoring.state", "LOADING");
                 break;
             case FIRE:
-                flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
+                //flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 //indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
                 
                 //intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
-                
+                flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 if (isFlywheelReady() && flywheelEncoder.getVelocity() != Constants.ScoringConstants.FLYWHEEL_IDLE_RPM) {
                     indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
                 }
+
+
+                /*//because we have voltage compensation now, this will actually work as efficiently
+                //flywheelMotor.set(1.0);
+                //indexMotor.set(1.0);
                 
+                flywheelMotor.set(1.0);
+                if(flywheelMotor.get() == 1.0){
+                    indexMotor.set(1.0);
+                }*/
                 Logger.recordOutput("scoring.state", "FIRE");
                 break;
             case UNLOADING:
