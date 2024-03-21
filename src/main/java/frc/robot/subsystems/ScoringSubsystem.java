@@ -95,7 +95,7 @@ public class ScoringSubsystem extends SubsystemBase {
         secondaryFlywheelMotor.setSmartCurrentLimit(80); //big neo is good
         // secondaryFlywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
         secondaryFlywheelMotor.enableVoltageCompensation(12.0); 
-        secondaryFlywheelMotor.follow(flywheelMotor);
+        secondaryFlywheelMotor.follow(flywheelMotor, true);
         //secondaryFlywheelMotor.burnFlash();
 
         indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
@@ -123,7 +123,7 @@ public class ScoringSubsystem extends SubsystemBase {
         secondaryIndexMotor.setSmartCurrentLimit(80); //big neo is good
         // secondaryIndexMotor.setClosedLoopRampRate(0.6);
         secondaryIndexMotor.enableVoltageCompensation(12.0); 
-        secondaryIndexMotor.follow(indexMotor); //if wrong direction then just add "true" parameter or remove setInverted
+        secondaryIndexMotor.follow(indexMotor, true); //if wrong direction then just add "true" parameter or remove setInverted
         //secondaryIndexMotor.burnFlash();
 
 
@@ -148,7 +148,7 @@ public class ScoringSubsystem extends SubsystemBase {
      * @return - boolean representing whether the flywheel is ready.
      */
     public boolean isFlywheelReady() {
-        return flywheelEncoder.getVelocity() >= flywheelRPM- 100 && flywheelEncoder.getVelocity() <= flywheelRPM + Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
+        return flywheelEncoder.getVelocity() >= flywheelRPM - Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE && flywheelEncoder.getVelocity() <= flywheelRPM + Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
     }
 
     /**
@@ -194,17 +194,14 @@ public class ScoringSubsystem extends SubsystemBase {
                 break;
             case FIRE:
                 flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
-                indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
+                //indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
                 
                 //intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
                 
-                /* our code before
-                flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
-                /*
                 if (isFlywheelReady() && flywheelEncoder.getVelocity() != Constants.ScoringConstants.FLYWHEEL_IDLE_RPM) {
                     indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
                 }
-                */
+                
                 Logger.recordOutput("scoring.state", "FIRE");
                 break;
             case UNLOADING:
