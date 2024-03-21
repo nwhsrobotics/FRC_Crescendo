@@ -51,22 +51,10 @@
       "rotateFast": true
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Speed Up",
-      "minWaypointRelativePos": 0.25,
-      "maxWaypointRelativePos": 1.35,
-      "constraints": {
-        "maxVelocity": 4.0,
-        "maxAcceleration": 2.0,
-        "maxAngularVelocity": 680.67,
-        "maxAngularAcceleration": 180.0
-      }
-    }
-  ],
+  "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.8,
+    "maxVelocity": 4.97,
     "maxAcceleration": 1.8,
     "maxAngularVelocity": 680.67,
     "maxAngularAcceleration": 180.0
