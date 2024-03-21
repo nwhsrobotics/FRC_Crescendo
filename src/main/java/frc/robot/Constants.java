@@ -162,6 +162,7 @@ public final class Constants {
 
         public static final double SHOULDER_PID_P = 0.1;
         public static final double SHOULDER_GEAR_RATIO = 100.0; //placeholder number
+        public static final double absOffset = 0.0;
     }
 
     public static final class WristConstants {

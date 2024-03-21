@@ -11,6 +11,7 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
@@ -23,11 +24,16 @@ public class ArmSubsystem extends SubsystemBase {
     private final SparkPIDController shoulderPidController2;
     private final RelativeEncoder shoulderRelativeEncoder;
     private final RelativeEncoder shoulderRelativeEncoder2;
+    private final DutyCycleEncoder shoulderAbsoluteEncoder;
     private final CANSparkMax shoulderMotor2;
-    private double desiredPosition = 0; // Set the arms angle at this degree
+    private double desiredAngleRotations = 0; // Set the arms angle at this degree
+    private double desiredPosition = 0;
     private double currentPosition;
     private double maxRotPerTick = 0.20;
+    private double absRawRotations;
+    private double absAdjust;
     private DigitalInput limit;
+    private int cpr = 0;
     
 
     // Constructor for ArmSubsystem
@@ -42,6 +48,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         shoulderRelativeEncoder = shoulderMotor.getEncoder();
         shoulderRelativeEncoder2 = shoulderMotor2.getEncoder();
+        shoulderAbsoluteEncoder = new DutyCycleEncoder(0);
 
         shoulderPidController = shoulderMotor.getPIDController();
         shoulderPidController2 = shoulderMotor2.getPIDController();
@@ -50,8 +57,11 @@ public class ArmSubsystem extends SubsystemBase {
         //shoulderPidController.setOutputRange(-0.5, 0.5);
 
         currentPosition = shoulderRelativeEncoder.getPosition();
-        desiredPosition = currentPosition;
-        TrapezoidProfile profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(5, 10));
+        double absRawRotations = shoulderAbsoluteEncoder.getAbsolutePosition()/(cpr * ArmConstants.SHOULDER_GEAR_RATIO);
+        double adjustAbs = absRawRotations - ArmConstants.absOffset;
+        
+        desiredPosition = absRawRotations;
+
 
         limit = new DigitalInput(0);
 
@@ -66,18 +76,25 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Sets the desired position to a pre-determined angle for the amp
     public void ampPreset() {
-        desiredPosition = -(20.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        //angle should be subject to change
+        
+        desiredAngleRotations = (20.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredPosition =  desiredAngleRotations - absRawRotations;
     }
 
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
+        
+        desiredAngleRotations = (33.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredPosition = desiredAngleRotations - absRawRotations;
 
-        desiredPosition = (33.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+
 
     }
 
     // Adjusts the current angle by adding a specified amount to the desired position
     public void adjustAngle(double changeInPosition) {
+        desiredPosition = absAdjust;
 
         desiredPosition += changeInPosition;
 
@@ -93,7 +110,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     
     public void underStage(){
-        desiredPosition = (80.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredAngleRotations = (80.0 / 360) * ArmConstants.SHOULDER_GEAR_RATIO;
+        desiredPosition = desiredAngleRotations - absRawRotations;
+
     }
     
     public void home(){
@@ -122,6 +141,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+
+
         if(currentPosition + maxRotPerTick < desiredPosition){
             currentPosition += maxRotPerTick;
             System.out.println("Is less");
