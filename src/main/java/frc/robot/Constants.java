@@ -46,7 +46,8 @@ public final class Constants {
 
         // shoulder/wrist not used.
         // DO NOT INITIALIZE THEIR SUBSYSTEMS.
-        public static final int SHOULDER_MOTOR_ID = 58;
+        public static final int RIGHT_SHOULDER_MOTOR_ID = 19;
+        public static final int LEFT_SHOULDER_MOTOR_ID = 17;
         public static final int ARM_SENSOR_HUB_ID = 24;
         public static final int WRIST_MOTOR_ID = 16;
         public static final int WRIST_INTAKE_ID = 18;
