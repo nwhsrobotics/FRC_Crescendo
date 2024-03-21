@@ -167,7 +167,7 @@ public class ArmSubsystem extends SubsystemBase {
         //might change the currentPosition parameter back to desiredPosiition
         shoulderPidController.setReference(currentPosition, ControlType.kPosition);
         shoulderPidController2.setReference(currentPosition, ControlType.kPosition);
-        //shoulderPidController.setReference(currentPosition, ControlType.kPosition, 0, 0.2, ArbFFUnits.kVoltage); //TODO: THIS
+        //shoulderPidController.setReference(currentPosition, ControlType.kPosition, 0, -Math.signum(shoulderRelativeEncoder.getPosition())*0.5, ArbFFUnits.kVoltage); //TODO: THIS
         //System.out.println(desiredPosition + " " +  shoulderRelativeEncoder.getPosition());
         Logger.recordOutput("arm.desiredPosition", desiredPosition);
 
