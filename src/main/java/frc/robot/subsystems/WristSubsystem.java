@@ -23,7 +23,7 @@ public class WristSubsystem extends SubsystemBase {
     private double desiredPosition;
     private final boolean autoLockEnabledAmp = false;
     private final boolean autoLockEnabledSource = false;
-    private double maxRotPerTick = 0.1;
+    private double maxRotPerTick = 0.5;
     
 
     // Constructor for WristSubsystem
@@ -33,7 +33,7 @@ public class WristSubsystem extends SubsystemBase {
         wristRelativeEncoder = wristMotor.getEncoder();
         wristAbsoluteEncoder = wristMotor.getAbsoluteEncoder();
         wristPidController = wristMotor.getPIDController();
-        wristPidController.setP(0.1);
+        wristPidController.setP(0.25);
         
 
 
@@ -78,7 +78,7 @@ public class WristSubsystem extends SubsystemBase {
             currentPosition = desiredPosition;
             System.out.println("Is in range");
         }
-        System.out.println(currentPosition + "" + desiredPosition);
+        System.out.println("Wrist current position" + currentPosition + "" + desiredPosition);
         wristPidController.setReference(currentPosition, ControlType.kPosition);
         //System.out.println(String.format("Desired Position: %f Current Position: %f Difference: %f", desiredPosition, wristRelativeEncoder.getPosition(), desiredPosition - wristRelativeEncoder.getPosition()));
         Logger.recordOutput("wrist.desiredPosition", desiredPosition);

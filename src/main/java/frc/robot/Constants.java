@@ -177,7 +177,7 @@ public final class Constants {
          * If the flywheel spins within the tolerance,
          * then it is considered up-to-speed for firing.
          */
-        public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 1200.0;
+        public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 400.0;
 
         public static final double FLYWHEEL_PID_FF = 0.0005;
         public static final double INDEX_PID_FF = 0.0005;
