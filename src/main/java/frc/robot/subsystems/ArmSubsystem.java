@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
@@ -24,7 +25,6 @@ public class ArmSubsystem extends SubsystemBase {
     private final TalonSRX shoulderAbsoluteEncoderController;
 
     private double targetRotations = 0;
-    private double maxRotPerTick = 0.20;
 
     private double getAbsoluteEncoderRotations() {
         return (shoulderAbsoluteEncoderController.getSelectedSensorPosition() / ArmConstants.SHOULDER_ABS_ENCODER_TICKS_PER_ROTATION) + ArmConstants.SHOULDER_ABS_ENCODER_ROTATION_OFFSET;
@@ -52,7 +52,10 @@ public class ArmSubsystem extends SubsystemBase {
         leftShoulderPidController.setOutputRange(-ArmConstants.SHOULDER_OUTPUT_LIMIT, ArmConstants.SHOULDER_OUTPUT_LIMIT);
         
         shoulderAbsoluteEncoderController = new TalonSRX(CANAssignments.ARM_SENSOR_HUB_ID);
-        shoulderAbsoluteEncoderController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+        ErrorCode code = shoulderAbsoluteEncoderController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+        if (code.value != 0) {
+            System.out.println("Achtung! Error in legacy Talon SRX for shoulder absolute encoder: " + code.name());
+        }
 
         rightShoulderEncoder.setPosition(getAbsoluteEncoderRotations());
         leftShoulderEncoder.setPosition(getAbsoluteEncoderRotations());
