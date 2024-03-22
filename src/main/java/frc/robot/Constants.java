@@ -180,9 +180,10 @@ public final class Constants {
          * If the flywheel spins within the tolerance,
          * then it is considered up-to-speed for firing.
          */
-        public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 400.0;
+        public static final double FLYWHEEL_TARGET_RPM_TOLERANCE = 600.0;
 
-        public static final double FLYWHEEL_PID_FF = 0.0005; //TODO: DECREASE THIS TOO MUCH OVERSHOOT, 888 uses 0.0002
+        public static final double FLYWHEEL_PID_FF = 0.0005;
+        public static final double FLYWHEEL_PID_P = 0.00001;
         public static final double INDEX_PID_FF = 0.0005;
         public static final double INTAKE_PID_FF = 0.0005;
 

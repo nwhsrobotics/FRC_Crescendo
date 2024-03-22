@@ -104,15 +104,11 @@ public class WristSubsystem extends SubsystemBase {
     public void periodic() {
         if(degreesToMotorRotation(currentPos_deg) + maxRotPerTick < degreesToMotorRotation(desiredPos_deg)){
             currentPos_deg += motorRotationTodegrees(maxRotPerTick);
-            System.out.println("Is less");
         } else if (currentPos_deg - motorRotationTodegrees(maxRotPerTick) > desiredPos_deg){
             currentPos_deg -= motorRotationTodegrees(maxRotPerTick);
-            System.out.println("Is more");
         } else {
             currentPos_deg = desiredPos_deg;
-            System.out.println("Is in range");
         }
-        System.out.println("Wrist current position" + currentPos_deg + "" + desiredPos_deg);
         wristPidController.setReference(0, ControlType.kDutyCycle);
         // wristPidController.setReference(currentPos_deg, ControlType.kPosition);
         //System.out.println(String.format("Desired Position: %f Current Position: %f Difference: %f", desiredPosition, wristRelativeEncoder.getPosition(), desiredPosition - wristRelativeEncoder.getPosition()));
@@ -120,7 +116,6 @@ public class WristSubsystem extends SubsystemBase {
         //Logger.recordOutput("wrist.currentPosition", currentPosition);
         Logger.recordOutput("wrist.rawposition", (wristAbsoluteEncoder.getAbsolutePosition()) / WristConstants.ABS_ENCODER_TICKS_PER_ROTATION);
         Logger.recordOutput("wrist.position", wristRelativeEncoder.getPosition());
-        Logger.recordOutput("wrist.positiondegrees", wristRelativeEncoder.getPosition());
 
         Logger.recordOutput("wrist.autoLockEnabledAmp", autoLockEnabledAmp);
         Logger.recordOutput("wrist.autoLockEnabledSource", autoLockEnabledSource);
