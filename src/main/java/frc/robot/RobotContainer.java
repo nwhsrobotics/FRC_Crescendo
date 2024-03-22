@@ -58,6 +58,9 @@ public class RobotContainer {
         SetScoringStateCommand autoShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, ScoringState.LOADING, 1); //auto only
         SetScoringStateCommand autoUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 1);
         InstantCommand intakeOn = new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem);  // auto only.
+        ParallelCommandGroup autoInit = new ParallelCommandGroup((new InstantCommand(() -> wristSubsystem.underStage(), wristSubsystem)),
+                                                                 (new InstantCommand(() -> armSubsystem.underStage(), armSubsystem)),
+                                                                 new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem));
         InstantCommand intakeOff = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem); //auto only
         InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_AMP_RPM), scoringSubsystem);
         InstantCommand toggleSpeaker = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM), scoringSubsystem);
@@ -71,6 +74,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("intakeOn", intakeOn);
         NamedCommands.registerCommand("intakeOff", intakeOff);
         NamedCommands.registerCommand("autoUnload", autoUnload);
+        NamedCommands.registerCommand("autoInit", autoInit);
 
         // initialize swerve with autobuilder code inside.
         swerveSubsystem = new SwerveSubsystem();
@@ -115,11 +119,11 @@ public class RobotContainer {
         //adjust.addRequirements(wristSubsystem, armSubsystem);
 
         // Command group that has built-in logic 
-        ParallelCommandGroup toAmp = new ParallelCommandGroup(armLockAmp, wristLockAmp, new InstantCommand(() -> System.out.println("&&&&&&&& running")));
+        ParallelCommandGroup toAmp = new ParallelCommandGroup(armLockAmp, wristLockAmp);
         // toAmp.addRequirements(wristSubsystem, armSubsystem);
-        ParallelCommandGroup toSource = new ParallelCommandGroup(armLockSource, wristLockSource, new InstantCommand(() -> System.out.println("&&&&&&&& running")));
+        ParallelCommandGroup toSource = new ParallelCommandGroup(armLockSource, wristLockSource);
         // toSource.addRequirements(wristSubsystem, armSubsystem);
-        ParallelCommandGroup toUnderStage = new ParallelCommandGroup(armLockUnderStage, wristLockUnderStage, new InstantCommand(() -> System.out.println("&&&&&&&& running")));
+        ParallelCommandGroup toUnderStage = new ParallelCommandGroup(armLockUnderStage, wristLockUnderStage);
         // toUnderStage.addRequirements(wristSubsystem, armSubsystem);
         /*
         SequentialCommandGroup toSource = new SequentialCommandGroup(armLockSource, wristLockSource);
