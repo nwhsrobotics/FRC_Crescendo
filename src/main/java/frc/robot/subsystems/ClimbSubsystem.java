@@ -13,9 +13,11 @@ public class ClimbSubsystem extends SubsystemBase {
     public final CANSparkMax rightClimbMotor = new CANSparkMax(Constants.CANAssignments.CLIMB_RIGHT_MOTOR_ID, MotorType.kBrushless);
 
     public ClimbSubsystem() {
+        leftClimbMotor.setSmartCurrentLimit(20);
         leftClimbMotor.setIdleMode(IdleMode.kBrake);
-        rightClimbMotor.setIdleMode(IdleMode.kBrake);
         leftClimbMotor.setInverted(true);
+        rightClimbMotor.setSmartCurrentLimit(20);
+        rightClimbMotor.setIdleMode(IdleMode.kBrake);
     }
 
     @Override
