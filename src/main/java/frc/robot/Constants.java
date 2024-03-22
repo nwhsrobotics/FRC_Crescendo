@@ -99,7 +99,6 @@ public final class Constants {
         }
     }
 
-
     public static final class ModuleConstants {
         public static final double kWheelDiameterMeters = 0.10033; // set up for MK4(i)
         public static final double kDriveMotorGearRatio = (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0); // (set up for MK4(i) L2)
@@ -160,10 +159,11 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
-
         public static final double SHOULDER_PID_P = 0.1;
         public static final double SHOULDER_GEAR_RATIO = 100.0; //placeholder number
-        public static final double absOffset = 0.0;
+        public static final int SHOULDER_ABS_ENCODER_TICKS_PER_ROTATION = 4096;
+        public static final double SHOULDER_ABS_ENCODER_ROTATION_OFFSET = 0.0;
+        public static final double SHOULDER_OUTPUT_LIMIT = 0.2;
     }
 
     public static final class WristConstants {
