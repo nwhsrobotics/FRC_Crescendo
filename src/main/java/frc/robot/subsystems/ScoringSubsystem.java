@@ -77,7 +77,7 @@ public class ScoringSubsystem extends SubsystemBase {
         flywheelMotor.setInverted(true);
         flywheelEncoder = flywheelMotor.getEncoder();
         flywheelPIDController = flywheelMotor.getPIDController();
-        flywheelPIDController.setP(0);
+        flywheelPIDController.setP(Constants.ScoringConstants.FLYWHEEL_PID_P);
         flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
         flywheelMotor.setSmartCurrentLimit(80); //big neo is good
         // flywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
@@ -90,7 +90,7 @@ public class ScoringSubsystem extends SubsystemBase {
         secondaryFlywheelMotor.setIdleMode(IdleMode.kCoast);
         secondaryFlywheelEncoder = secondaryFlywheelMotor.getEncoder();
         secondaryFlywheelPIDController = secondaryFlywheelMotor.getPIDController();
-        secondaryFlywheelPIDController.setP(0);
+        secondaryFlywheelPIDController.setP(Constants.ScoringConstants.FLYWHEEL_PID_P);
         secondaryFlywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
         secondaryFlywheelMotor.setSmartCurrentLimit(80); //big neo is good
         // secondaryFlywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
