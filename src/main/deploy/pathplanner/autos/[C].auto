@@ -14,13 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "toggleSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeOn"
+            "name": "autoInit"
           }
         },
         {
