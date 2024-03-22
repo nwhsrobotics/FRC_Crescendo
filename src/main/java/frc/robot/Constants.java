@@ -34,7 +34,7 @@ public final class Constants {
         public static final int FRONT_RIGHT_STEER_ABSOLUTE_ENCODER_ID = 21;
         public static final int BACK_RIGHT_STEER_ABSOLUTE_ENCODER_ID = 23;
 
-        public static final int CLIMB_LEFT_MOTOR_ID = 14;
+        public static final int CLIMB_LEFT_MOTOR_ID = 32;
         public static final int CLIMB_RIGHT_MOTOR_ID = 30;
 
         public static final int FLYWHEEL_MOTOR_ID = 7;
