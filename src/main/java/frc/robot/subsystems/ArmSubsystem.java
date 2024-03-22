@@ -15,6 +15,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class ArmSubsystem extends SubsystemBase {
     public final CANSparkMax rightShoulderMotor;
+    public final CANSparkMax leftShoulderMotor;
     private final SparkPIDController rightShoulderPidController;
     private final SparkPIDController leftShoulderPidController;
     private final RelativeEncoder rightShoulderEncoder;
@@ -22,7 +23,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     private final TalonSRX shoulderAbsoluteEncoderController;
 
-    private final CANSparkMax leftShoulderMotor;
     private double targetRotations = 0;
     private double maxRotPerTick = 0.20;
 
@@ -37,14 +37,14 @@ public class ArmSubsystem extends SubsystemBase {
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
         rightShoulderMotor = new CANSparkMax(CANAssignments.RIGHT_SHOULDER_MOTOR_ID, MotorType.kBrushless);
-        rightShoulderMotor.setIdleMode(IdleMode.kBrake);
+        rightShoulderMotor.setIdleMode(IdleMode.kCoast);
         rightShoulderEncoder = rightShoulderMotor.getEncoder();
         rightShoulderPidController = rightShoulderMotor.getPIDController();
         rightShoulderPidController.setP(.25);
         rightShoulderPidController.setOutputRange(-ArmConstants.SHOULDER_OUTPUT_LIMIT, ArmConstants.SHOULDER_OUTPUT_LIMIT);
         
         leftShoulderMotor = new CANSparkMax(CANAssignments.LEFT_SHOULDER_MOTOR_ID, MotorType.kBrushless);
-        leftShoulderMotor.setIdleMode(IdleMode.kBrake);
+        leftShoulderMotor.setIdleMode(IdleMode.kCoast);
         leftShoulderMotor.setInverted(true);
         leftShoulderEncoder = leftShoulderMotor.getEncoder();
         leftShoulderPidController = leftShoulderMotor.getPIDController();
@@ -90,13 +90,15 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        rightShoulderPidController.setReference(targetRotations, ControlType.kPosition);
-        leftShoulderPidController.setReference(targetRotations, ControlType.kPosition);
+        rightShoulderPidController.setReference(0, ControlType.kDutyCycle);
+        leftShoulderPidController.setReference(0, ControlType.kDutyCycle);
+        // rightShoulderPidController.setReference(targetRotations, ControlType.kPosition);
+        // leftShoulderPidController.setReference(targetRotations, ControlType.kPosition);
 
         Logger.recordOutput("arm.targetposition", targetRotations);
         Logger.recordOutput("arm.left.position", leftShoulderEncoder.getPosition());
         Logger.recordOutput("arm.right.position", rightShoulderEncoder.getPosition());
         Logger.recordOutput("arm.position", getAbsoluteEncoderRotations());
-        Logger.recordOutput("arm.rawposition", shoulderAbsoluteEncoderController.getSelectedSensorPosition() / ArmConstants.SHOULDER_ABS_ENCODER_TICKS_PER_ROTATION);
+        Logger.recordOutput("arm.rawposition", shoulderAbsoluteEncoderController.getSelectedSensorPosition());
     }
 }

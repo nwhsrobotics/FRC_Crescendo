@@ -160,17 +160,17 @@ public final class Constants {
 
     public static final class ArmConstants {
         public static final double SHOULDER_PID_P = 0.1;
-        public static final double SHOULDER_GEAR_RATIO = 100.0; //placeholder number
+        public static final double SHOULDER_GEAR_RATIO = 100.0;
         public static final int SHOULDER_ABS_ENCODER_TICKS_PER_ROTATION = 4096;
         public static final double SHOULDER_ABS_ENCODER_ROTATION_OFFSET = 0.0;
         public static final double SHOULDER_OUTPUT_LIMIT = 0.2;
     }
 
     public static final class WristConstants {
-
         public static final double WRIST_PID_P = 0.5;
-        public static final double WRIST_GEAR_RATIO = 100.0; //placeholder number
-        public static final double absOffset = 0;
+        public static final double WRIST_GEAR_RATIO = 100.0;
+        public static final double absOffset = -2.8;
+        public static final int ABS_ENCODER_TICKS_PER_ROTATION = 8192;
     }
 
     public static final class ScoringConstants {

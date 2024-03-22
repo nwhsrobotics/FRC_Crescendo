@@ -94,7 +94,7 @@ public class RobotContainer {
         // Command for setting wrist to the source position
         InstantCommand wristLockSource = new InstantCommand(() -> wristSubsystem.sourcePreset(), wristSubsystem);
 
-        InstantCommand wristLockUnderStage = new InstantCommand(() -> wristSubsystem.underStage(), armSubsystem);
+        InstantCommand wristLockUnderStage = new InstantCommand(() -> wristSubsystem.underStage(), wristSubsystem);
 
 
         
@@ -116,11 +116,11 @@ public class RobotContainer {
 
         // Command group that has built-in logic 
         ParallelCommandGroup toAmp = new ParallelCommandGroup(armLockAmp, wristLockAmp, new InstantCommand(() -> System.out.println("&&&&&&&& running")));
-        toAmp.addRequirements(wristSubsystem, armSubsystem);
+        // toAmp.addRequirements(wristSubsystem, armSubsystem);
         ParallelCommandGroup toSource = new ParallelCommandGroup(armLockSource, wristLockSource, new InstantCommand(() -> System.out.println("&&&&&&&& running")));
-        toAmp.addRequirements(wristSubsystem, armSubsystem);
+        // toSource.addRequirements(wristSubsystem, armSubsystem);
         ParallelCommandGroup toUnderStage = new ParallelCommandGroup(armLockUnderStage, wristLockUnderStage, new InstantCommand(() -> System.out.println("&&&&&&&& running")));
-        toAmp.addRequirements(wristSubsystem, armSubsystem);
+        // toUnderStage.addRequirements(wristSubsystem, armSubsystem);
         /*
         SequentialCommandGroup toSource = new SequentialCommandGroup(armLockSource, wristLockSource);
         toSource.addRequirements(wristSubsystem, armSubsystem);
