@@ -16,7 +16,7 @@
     },
     {
       "anchor": {
-        "x": 1.74,
+        "x": 1.54,
         "y": 5.55
       },
       "prevControl": {
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.97,
-    "maxAcceleration": 1.8,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 680.67,
     "maxAngularAcceleration": 180.0
   },

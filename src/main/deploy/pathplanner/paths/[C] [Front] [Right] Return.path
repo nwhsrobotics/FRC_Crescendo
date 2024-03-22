@@ -16,8 +16,8 @@
     },
     {
       "anchor": {
-        "x": 1.13,
-        "y": 4.2
+        "x": 0.86,
+        "y": 4.28
       },
       "prevControl": {
         "x": 1.8058747672416873,
@@ -33,13 +33,13 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.97,
-    "maxAcceleration": 1.8,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 680.67,
     "maxAngularAcceleration": 180.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -50.0,
+    "rotation": -54.0,
     "rotateFast": true
   },
   "reversed": false,

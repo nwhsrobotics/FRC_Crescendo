@@ -40,6 +40,10 @@ public class ScoringSubsystem extends SubsystemBase {
          * Fire!
          */
         FIRE,
+        /**
+         * Used during autonomous, turns on flywheel and indexer together to optimize time
+         */
+        FASTFIRE,
         /*
          * Do nothing.
          */
@@ -194,26 +198,21 @@ public class ScoringSubsystem extends SubsystemBase {
                 Logger.recordOutput("scoring.state", "LOADING");
                 break;
             case FIRE:
-                //flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
-                //indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
-                
                 //intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
                 flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 if (isFlywheelReady() && flywheelEncoder.getVelocity() != Constants.ScoringConstants.FLYWHEEL_IDLE_RPM) {
                     indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
                 }
 
-
                 /*
                 //flywheelMotor.set(1.0);
                 //indexMotor.set(1.0);
-                
-                flywheelMotor.set(1.0);
-                if(flywheelMotor.get() == 1.0){
-                    indexMotor.set(1.0);
-                }*/
+                */
                 Logger.recordOutput("scoring.state", "FIRE");
                 break;
+            case FASTFIRE:
+                flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
+                indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
             case UNLOADING:
                 flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
                 indexPIDController.setReference(-Constants.ScoringConstants.INDEX_INTAKE_UNLOAD_RPM, ControlType.kVelocity);

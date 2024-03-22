@@ -14,13 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "intakeOn"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "toggleSpeaker"
+            "name": "autoInit"
           }
         },
         {
@@ -63,24 +57,6 @@
           "type": "path",
           "data": {
             "pathName": "[B] [Back] [Right] Return"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autoUnload"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "load"
           }
         },
         {
