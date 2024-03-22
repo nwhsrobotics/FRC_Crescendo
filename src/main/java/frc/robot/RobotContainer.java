@@ -56,25 +56,28 @@ public class RobotContainer {
         SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, 2);
         SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 2);
         SetScoringStateCommand autoShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, ScoringState.LOADING, 1); //auto only
-        SetScoringStateCommand autoUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 1);
-        InstantCommand intakeOn = new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem);  // auto only.
+        //SetScoringStateCommand autoUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 1);
+        //InstantCommand intakeOn = new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem);  // auto only.
         ParallelCommandGroup autoInit = new ParallelCommandGroup((new InstantCommand(() -> wristSubsystem.underStage(), wristSubsystem)),
                                                                  (new InstantCommand(() -> armSubsystem.underStage(), armSubsystem)),
                                                                  new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem));
-        InstantCommand intakeOff = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem); //auto only
-        InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_AMP_RPM), scoringSubsystem);
-        InstantCommand toggleSpeaker = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM), scoringSubsystem);
+        //InstantCommand intakeOff = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem); //auto only
+        //InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_AMP_RPM), scoringSubsystem);
+        //InstantCommand toggleSpeaker = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM), scoringSubsystem);
         //InstantCommand wristIntakeFwd = new InstantCommand(() -> wristIntakeSubsystem.forwards());
         //InstantCommand wristIntakeBackwards = new InstantCommand(() -> wristIntakeSubsystem.backwards());
         // expose scoring-related commands to autonomous routines.
         NamedCommands.registerCommand("shoot", autoShoot);
+        NamedCommands.registerCommand("autoInit", autoInit);
+
+        /*
         NamedCommands.registerCommand("load", commandLoad);
         NamedCommands.registerCommand("toggleSpeaker", toggleSpeaker);
         NamedCommands.registerCommand("toggleAmp", toggleAmp);
         NamedCommands.registerCommand("intakeOn", intakeOn);
         NamedCommands.registerCommand("intakeOff", intakeOff);
         NamedCommands.registerCommand("autoUnload", autoUnload);
-        NamedCommands.registerCommand("autoInit", autoInit);
+         */
 
         // initialize swerve with autobuilder code inside.
         swerveSubsystem = new SwerveSubsystem();
