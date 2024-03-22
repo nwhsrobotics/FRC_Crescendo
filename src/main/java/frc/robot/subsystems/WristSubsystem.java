@@ -8,41 +8,38 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.WristConstants;
+
 import org.littletonrobotics.junction.Logger;
 
 public class WristSubsystem extends SubsystemBase {
     public final CANSparkMax wristMotor;
     private final SparkPIDController wristPidController;
     private final RelativeEncoder wristRelativeEncoder;
-    private AbsoluteEncoder wristAbsoluteEncoder;
+    private DutyCycleEncoder wristAbsoluteEncoder;
     private double currentPos_deg;
     private double desiredPos_deg;
     private final boolean autoLockEnabledAmp = false;
     private final boolean autoLockEnabledSource = false;
     private double maxRotPerTick = 0.5;
-    
 
     // Constructor for WristSubsystem
     public WristSubsystem() {
         wristMotor = new CANSparkMax(Constants.CANAssignments.WRIST_MOTOR_ID, MotorType.kBrushless);
-        wristMotor.setIdleMode(IdleMode.kBrake);
+        wristMotor.setIdleMode(IdleMode.kCoast);
         wristRelativeEncoder = wristMotor.getEncoder();
-        wristAbsoluteEncoder = wristMotor.getAbsoluteEncoder();
+        wristAbsoluteEncoder = new DutyCycleEncoder(0);
         wristPidController = wristMotor.getPIDController();
         wristPidController.setP(0.25);
         
-
-
         // wristPidController.setP(Constants.WristConstants.WRIST_PID_P);
         currentPos_deg = wristRelativeEncoder.getPosition();
 
-        double absRaw = wristAbsoluteEncoder.getPosition();
-        double adjustAbs = absRaw - Constants.WristConstants.absOffset;
+        double adjustAbs = (wristAbsoluteEncoder.getAbsolutePosition() + Constants.WristConstants.absOffset) / WristConstants.ABS_ENCODER_TICKS_PER_ROTATION;
 
         // Normalize the adjusted absolute position between -0.5 and 0.5 instead of between 0 and 1
         if (adjustAbs > 0.5) {
@@ -72,7 +69,6 @@ public class WristSubsystem extends SubsystemBase {
     // Sets the desired position to a specified angle
     public void adjustAngle(double changeInPosition) {
         desiredPos_deg += motorRotationTodegrees(changeInPosition);
-        
     }
 
     public double degreesToMotorRotation(double degrees) {
@@ -117,10 +113,15 @@ public class WristSubsystem extends SubsystemBase {
             System.out.println("Is in range");
         }
         System.out.println("Wrist current position" + currentPos_deg + "" + desiredPos_deg);
-        wristPidController.setReference(currentPos_deg, ControlType.kPosition);
+        wristPidController.setReference(0, ControlType.kDutyCycle);
+        // wristPidController.setReference(currentPos_deg, ControlType.kPosition);
         //System.out.println(String.format("Desired Position: %f Current Position: %f Difference: %f", desiredPosition, wristRelativeEncoder.getPosition(), desiredPosition - wristRelativeEncoder.getPosition()));
         //Logger.recordOutput("wrist.desiredPosition", desiredPosition);
         //Logger.recordOutput("wrist.currentPosition", currentPosition);
+        Logger.recordOutput("wrist.rawposition", (wristAbsoluteEncoder.getAbsolutePosition()) / WristConstants.ABS_ENCODER_TICKS_PER_ROTATION);
+        Logger.recordOutput("wrist.position", wristRelativeEncoder.getPosition());
+        Logger.recordOutput("wrist.positiondegrees", wristRelativeEncoder.getPosition());
+
         Logger.recordOutput("wrist.autoLockEnabledAmp", autoLockEnabledAmp);
         Logger.recordOutput("wrist.autoLockEnabledSource", autoLockEnabledSource);
     }
