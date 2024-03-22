@@ -70,24 +70,6 @@
           "data": {
             "name": "shoot"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autoUnload"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "load"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
         }
       ]
     }
