@@ -124,9 +124,9 @@ public class RobotContainer {
 
         // Command group that has built-in logic 
         ParallelCommandGroup toAmp = new ParallelCommandGroup(armLockAmp, wristLockAmp);
-        // toAmp.addRequirements(wristSubsystem, armSubsystem);
+        toAmp.addRequirements(wristSubsystem, armSubsystem);
         ParallelCommandGroup toSource = new ParallelCommandGroup(armLockSource, wristLockSource);
-        // toSource.addRequirements(wristSubsystem, armSubsystem);
+        toSource.addRequirements(wristSubsystem, armSubsystem);
         ParallelCommandGroup toUnderStage = new ParallelCommandGroup(armLockUnderStage, wristLockUnderStage);
         // toUnderStage.addRequirements(wristSubsystem, armSubsystem);
         /*

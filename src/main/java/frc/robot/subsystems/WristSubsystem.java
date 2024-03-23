@@ -20,7 +20,7 @@ public class WristSubsystem extends SubsystemBase {
     private final SparkPIDController wristPidController;
     private final RelativeEncoder wristRelativeEncoder;
     private DutyCycleEncoder wristAbsoluteEncoder;
-    private double currentPosition;
+    //private double currentPosition;
     private double desiredPosition;
     private final boolean autoLockEnabledAmp = false;
     private final boolean autoLockEnabledSource = false;
@@ -36,12 +36,12 @@ public class WristSubsystem extends SubsystemBase {
         wristPidController = wristMotor.getPIDController();
         wristPidController.setP(0.25);
         //is it the setOutputRange thats caussing it not to move 90 degrees?
-        wristPidController.setOutputRange(-maxRotPerTick, maxRotPerTick);
+        //wristPidController.setOutputRange(-maxRotPerTick, maxRotPerTick);
         
         // wristRelativeEncoder.setPosition(wristAbsoluteEncoder.getAbsolutePosition() + WristConstants.absOffset);
         // wristPidController.setP(Constants.WristConstants.WRIST_PID_P);
-        currentPosition = wristRelativeEncoder.getPosition();
-        desiredPosition = currentPosition;
+        //currentPosition = wristRelativeEncoder.getPosition();
+        //desiredPosition = currentPosition;
         // currentPosition = wristAbsoluteEncoder.getPosition();
     }
 
@@ -63,7 +63,7 @@ public class WristSubsystem extends SubsystemBase {
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
 
-        desiredPosition = (90.0 / 360) * WristConstants.WRIST_GEAR_RATIO;
+        desiredPosition = (90.0 / 360.0) * WristConstants.WRIST_GEAR_RATIO;
 
     }
 
@@ -78,7 +78,7 @@ public class WristSubsystem extends SubsystemBase {
     public void periodic() {
         wristPidController.setReference(desiredPosition, ControlType.kPosition);
         Logger.recordOutput("wrist.desiredPosition", desiredPosition);
-        Logger.recordOutput("wrist.currentPosition", currentPosition);
+        //Logger.recordOutput("wrist.currentPosition", currentPosition);
         Logger.recordOutput("wrist.autoLockEnabledAmp", autoLockEnabledAmp);
         Logger.recordOutput("wrist.autoLockEnabledSource", autoLockEnabledSource);
     }
