@@ -46,6 +46,24 @@
           "data": {
             "name": "shoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[B] [Front] [Center] Exit"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[B] [Front] [Center] Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
         }
       ]
     }
