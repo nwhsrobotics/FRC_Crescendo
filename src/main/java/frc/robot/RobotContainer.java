@@ -61,6 +61,7 @@ public class RobotContainer {
         ParallelCommandGroup autoInit = new ParallelCommandGroup((new InstantCommand(() -> wristSubsystem.underStage(), wristSubsystem)),
                                                                  (new InstantCommand(() -> armSubsystem.underStage(), armSubsystem)),
                                                                  new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem));
+        //autoInit.addRequirements(wristSubsystem, armSubsystem, scoringSubsystem);
         //InstantCommand intakeOff = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem); //auto only
         //InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_AMP_RPM), scoringSubsystem);
         //InstantCommand toggleSpeaker = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM), scoringSubsystem);
