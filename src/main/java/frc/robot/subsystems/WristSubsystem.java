@@ -36,7 +36,7 @@ public class WristSubsystem extends SubsystemBase {
         wristPidController = wristMotor.getPIDController();
         wristPidController.setP(0.25);
         //is it the setOutputRange thats caussing it not to move 90 degrees?
-        //wristPidController.setOutputRange(-maxRotPerTick, maxRotPerTick);
+        wristPidController.setOutputRange(-maxRotPerTick, maxRotPerTick);
         
         // wristRelativeEncoder.setPosition(wristAbsoluteEncoder.getAbsolutePosition() + WristConstants.absOffset);
         // wristPidController.setP(Constants.WristConstants.WRIST_PID_P);

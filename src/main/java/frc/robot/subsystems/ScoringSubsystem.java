@@ -198,7 +198,7 @@ public class ScoringSubsystem extends SubsystemBase {
                 Logger.recordOutput("scoring.state", "LOADING");
                 break;
             case FIRE:
-                //intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
+                intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
                 flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 if (isFlywheelReady() && flywheelEncoder.getVelocity() != Constants.ScoringConstants.FLYWHEEL_IDLE_RPM) {
                     indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
@@ -211,6 +211,7 @@ public class ScoringSubsystem extends SubsystemBase {
                 Logger.recordOutput("scoring.state", "FIRE");
                 break;
             case FASTFIRE:
+                intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
                 flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
             case UNLOADING:

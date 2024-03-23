@@ -14,8 +14,8 @@
     "Starting Point B",
     "Starting Point C"
   ],
-  "defaultMaxVel": 4.97,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxVel": 3.0,
+  "defaultMaxAccel": 1.8,
   "defaultMaxAngVel": 680.67,
   "defaultMaxAngAccel": 180.0,
   "maxModuleSpeed": 4.97

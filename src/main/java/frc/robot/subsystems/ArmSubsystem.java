@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -63,6 +64,11 @@ public class ArmSubsystem extends SubsystemBase {
         targetRotations = degreesToMotorRotation(-20);
     }
 
+    public void resetArmEncoders() {
+        leftShoulderEncoder.setPosition(0);
+        rightShoulderEncoder.setPosition(0);    
+    }
+
     /**
      * Move the arm to the preset for the Source.
      */
@@ -88,8 +94,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        rightShoulderPidController.setReference(targetRotations, ControlType.kPosition);
-        leftShoulderPidController.setReference(targetRotations, ControlType.kPosition);
+        //rightShoulderPidController.setReference(targetRotations, ControlType.kPosition);
+        //leftShoulderPidController.setReference(targetRotations, ControlType.kPosition);
+        rightShoulderPidController.setReference(targetRotations, ControlType.kPosition, 0, -Math.signum(rightShoulderEncoder.getPosition())*0.35, ArbFFUnits.kVoltage); //TODO: THIS
+        leftShoulderPidController.setReference(targetRotations, ControlType.kPosition, 0, -Math.signum(leftShoulderEncoder.getPosition())*0.35 , ArbFFUnits.kVoltage);
 
         Logger.recordOutput("arm.targetposition", targetRotations);
         
