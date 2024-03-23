@@ -62,7 +62,7 @@ public class WristSubsystem extends SubsystemBase {
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
 
-        desiredPosition = (85 / 360) * WristConstants.WRIST_GEAR_RATIO;
+        desiredPosition = (90.0 / 360) * WristConstants.WRIST_GEAR_RATIO;
 
     }
 
