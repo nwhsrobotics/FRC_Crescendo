@@ -25,7 +25,8 @@ public class ArmSubsystem extends SubsystemBase {
     private double targetRotations = 0;
 
     private double getAbsoluteEncoderRotations() {
-        return shoulderAbsoluteEncoder.getAbsolutePosition() + ArmConstants.SHOULDER_ABS_ENCODER_ROTATION_OFFSET;
+        return 0;
+        // return shoulderAbsoluteEncoder.getAbsolutePosition() + ArmConstants.SHOULDER_ABS_ENCODER_ROTATION_OFFSET;
     }
 
     private double degreesToMotorRotation(double degrees) {
@@ -59,14 +60,14 @@ public class ArmSubsystem extends SubsystemBase {
      * Move the arm to the preset for the Amp.
      */
     public void ampPreset() {
-        targetRotations = degreesToMotorRotation(20);
+        targetRotations = degreesToMotorRotation(-20);
     }
 
     /**
      * Move the arm to the preset for the Source.
      */
     public void sourcePreset() {
-        targetRotations = degreesToMotorRotation(-33);
+        targetRotations = degreesToMotorRotation(33);
     }
 
     /**
@@ -87,10 +88,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        rightShoulderPidController.setReference(0, ControlType.kDutyCycle);
-        leftShoulderPidController.setReference(0, ControlType.kDutyCycle);
-        // rightShoulderPidController.setReference(targetRotations, ControlType.kPosition);
-        // leftShoulderPidController.setReference(targetRotations, ControlType.kPosition);
+        rightShoulderPidController.setReference(targetRotations, ControlType.kPosition);
+        leftShoulderPidController.setReference(targetRotations, ControlType.kPosition);
 
         Logger.recordOutput("arm.targetposition", targetRotations);
         
