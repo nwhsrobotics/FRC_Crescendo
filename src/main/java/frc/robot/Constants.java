@@ -48,11 +48,10 @@ public final class Constants {
         // DO NOT INITIALIZE THEIR SUBSYSTEMS.
         public static final int RIGHT_SHOULDER_MOTOR_ID = 19;
         public static final int LEFT_SHOULDER_MOTOR_ID = 17;
-        public static final int ARM_SENSOR_HUB_ID = 24;
         public static final int WRIST_MOTOR_ID = 16;
         public static final int WRIST_INTAKE_ID = 18;
 
-        public static final int PDU_ID = 99;  // FIXME
+        public static final int PDU_ID = 24;
 
         /**
          * Check for duplicate CAN assignments,
@@ -93,7 +92,7 @@ public final class Constants {
                 }
             }
 
-            Logger.recordOutput("canassignmentsok", dupeFound);
+            Logger.recordOutput("canassignmentsok", !dupeFound);
 
             return dupeFound;
         }
@@ -161,16 +160,18 @@ public final class Constants {
     public static final class ArmConstants {
         public static final double SHOULDER_PID_P = 0.1;
         public static final double SHOULDER_GEAR_RATIO = 100.0;
-        public static final int SHOULDER_ABS_ENCODER_TICKS_PER_ROTATION = 4096;
-        public static final double SHOULDER_ABS_ENCODER_ROTATION_OFFSET = 0.0;
+        public static final double SHOULDER_ABS_ENCODER_ROTATION_OFFSET = -0.161;
         public static final double SHOULDER_OUTPUT_LIMIT = 0.2;
+
+        public static final int ABSOLUTE_ENCODER_DIO_CHANNEL = 0;
     }
 
     public static final class WristConstants {
         public static final double WRIST_PID_P = 0.5;
         public static final double WRIST_GEAR_RATIO = 100.0;
-        public static final double absOffset = -2.8;
-        public static final int ABS_ENCODER_TICKS_PER_ROTATION = 8192;
+        public static final double absOffset = 0;
+
+        public static final int ABSOLUTE_ENCODER_DIO_CHANNEL = 1;
     }
 
     public static final class ScoringConstants {

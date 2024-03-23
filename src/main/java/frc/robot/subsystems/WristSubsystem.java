@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -32,14 +31,14 @@ public class WristSubsystem extends SubsystemBase {
         wristMotor = new CANSparkMax(Constants.CANAssignments.WRIST_MOTOR_ID, MotorType.kBrushless);
         wristMotor.setIdleMode(IdleMode.kCoast);
         wristRelativeEncoder = wristMotor.getEncoder();
-        wristAbsoluteEncoder = new DutyCycleEncoder(0);
+        wristAbsoluteEncoder = new DutyCycleEncoder(WristConstants.ABSOLUTE_ENCODER_DIO_CHANNEL);
         wristPidController = wristMotor.getPIDController();
         wristPidController.setP(0.25);
         
         // wristPidController.setP(Constants.WristConstants.WRIST_PID_P);
         currentPos_deg = wristRelativeEncoder.getPosition();
 
-        double adjustAbs = (wristAbsoluteEncoder.getAbsolutePosition() + Constants.WristConstants.absOffset) / WristConstants.ABS_ENCODER_TICKS_PER_ROTATION;
+        double adjustAbs = (wristAbsoluteEncoder.getAbsolutePosition() + Constants.WristConstants.absOffset);
 
         // Normalize the adjusted absolute position between -0.5 and 0.5 instead of between 0 and 1
         if (adjustAbs > 0.5) {
@@ -114,8 +113,9 @@ public class WristSubsystem extends SubsystemBase {
         //System.out.println(String.format("Desired Position: %f Current Position: %f Difference: %f", desiredPosition, wristRelativeEncoder.getPosition(), desiredPosition - wristRelativeEncoder.getPosition()));
         //Logger.recordOutput("wrist.desiredPosition", desiredPosition);
         //Logger.recordOutput("wrist.currentPosition", currentPosition);
-        Logger.recordOutput("wrist.rawposition", (wristAbsoluteEncoder.getAbsolutePosition()) / WristConstants.ABS_ENCODER_TICKS_PER_ROTATION);
         Logger.recordOutput("wrist.position", wristRelativeEncoder.getPosition());
+        Logger.recordOutput("wrist.absposition", wristAbsoluteEncoder.getAbsolutePosition() + Constants.WristConstants.absOffset);
+        Logger.recordOutput("wrist.rawposition", wristAbsoluteEncoder.getAbsolutePosition());
 
         Logger.recordOutput("wrist.autoLockEnabledAmp", autoLockEnabledAmp);
         Logger.recordOutput("wrist.autoLockEnabledSource", autoLockEnabledSource);

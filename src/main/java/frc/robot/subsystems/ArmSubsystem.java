@@ -3,12 +3,10 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.CANAssignments;
@@ -22,12 +20,12 @@ public class ArmSubsystem extends SubsystemBase {
     private final RelativeEncoder rightShoulderEncoder;
     private final RelativeEncoder leftShoulderEncoder;
 
-    private final TalonSRX shoulderAbsoluteEncoderController;
+    private final DutyCycleEncoder shoulderAbsoluteEncoder;
 
     private double targetRotations = 0;
 
     private double getAbsoluteEncoderRotations() {
-        return (shoulderAbsoluteEncoderController.getSelectedSensorPosition() / ArmConstants.SHOULDER_ABS_ENCODER_TICKS_PER_ROTATION) + ArmConstants.SHOULDER_ABS_ENCODER_ROTATION_OFFSET;
+        return shoulderAbsoluteEncoder.getAbsolutePosition() + ArmConstants.SHOULDER_ABS_ENCODER_ROTATION_OFFSET;
     }
 
     private double degreesToMotorRotation(double degrees) {
@@ -37,25 +35,21 @@ public class ArmSubsystem extends SubsystemBase {
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
         rightShoulderMotor = new CANSparkMax(CANAssignments.RIGHT_SHOULDER_MOTOR_ID, MotorType.kBrushless);
-        rightShoulderMotor.setIdleMode(IdleMode.kCoast);
+        rightShoulderMotor.setIdleMode(IdleMode.kBrake);
         rightShoulderEncoder = rightShoulderMotor.getEncoder();
         rightShoulderPidController = rightShoulderMotor.getPIDController();
         rightShoulderPidController.setP(.25);
         rightShoulderPidController.setOutputRange(-ArmConstants.SHOULDER_OUTPUT_LIMIT, ArmConstants.SHOULDER_OUTPUT_LIMIT);
         
         leftShoulderMotor = new CANSparkMax(CANAssignments.LEFT_SHOULDER_MOTOR_ID, MotorType.kBrushless);
-        leftShoulderMotor.setIdleMode(IdleMode.kCoast);
+        leftShoulderMotor.setIdleMode(IdleMode.kBrake);
         leftShoulderMotor.setInverted(true);
         leftShoulderEncoder = leftShoulderMotor.getEncoder();
         leftShoulderPidController = leftShoulderMotor.getPIDController();
         leftShoulderPidController.setP(.25);
         leftShoulderPidController.setOutputRange(-ArmConstants.SHOULDER_OUTPUT_LIMIT, ArmConstants.SHOULDER_OUTPUT_LIMIT);
         
-        shoulderAbsoluteEncoderController = new TalonSRX(CANAssignments.ARM_SENSOR_HUB_ID);
-        ErrorCode code = shoulderAbsoluteEncoderController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
-        if (code.value != 0) {
-            System.out.println("Achtung! Error in legacy Talon SRX for shoulder absolute encoder: " + code.name());
-        }
+        shoulderAbsoluteEncoder = new DutyCycleEncoder(ArmConstants.ABSOLUTE_ENCODER_DIO_CHANNEL);
 
         rightShoulderEncoder.setPosition(getAbsoluteEncoderRotations());
         leftShoulderEncoder.setPosition(getAbsoluteEncoderRotations());
@@ -72,7 +66,7 @@ public class ArmSubsystem extends SubsystemBase {
      * Move the arm to the preset for the Source.
      */
     public void sourcePreset() {
-        targetRotations = degreesToMotorRotation(33);
+        targetRotations = degreesToMotorRotation(-33);
     }
 
     /**
@@ -99,9 +93,11 @@ public class ArmSubsystem extends SubsystemBase {
         // leftShoulderPidController.setReference(targetRotations, ControlType.kPosition);
 
         Logger.recordOutput("arm.targetposition", targetRotations);
+        
         Logger.recordOutput("arm.left.position", leftShoulderEncoder.getPosition());
         Logger.recordOutput("arm.right.position", rightShoulderEncoder.getPosition());
-        Logger.recordOutput("arm.position", getAbsoluteEncoderRotations());
-        Logger.recordOutput("arm.rawposition", shoulderAbsoluteEncoderController.getSelectedSensorPosition());
+
+        Logger.recordOutput("arm.absposition", getAbsoluteEncoderRotations());
+        Logger.recordOutput("arm.rawposition", shoulderAbsoluteEncoder.getAbsolutePosition());
     }
 }
