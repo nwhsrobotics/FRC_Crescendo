@@ -8,8 +8,10 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.WristConstants;
 import org.littletonrobotics.junction.Logger;
 
@@ -17,7 +19,7 @@ public class WristSubsystem extends SubsystemBase {
     public final CANSparkMax wristMotor;
     private final SparkPIDController wristPidController;
     private final RelativeEncoder wristRelativeEncoder;
-    private AbsoluteEncoder wristAbsoluteEncoder;
+    private DutyCycleEncoder wristAbsoluteEncoder;
     private double currentPosition;
     private double desiredPosition;
     private final boolean autoLockEnabledAmp = false;
@@ -30,12 +32,12 @@ public class WristSubsystem extends SubsystemBase {
         wristMotor = new CANSparkMax(Constants.CANAssignments.WRIST_MOTOR_ID, MotorType.kBrushless);
         wristMotor.setIdleMode(IdleMode.kBrake);
         wristRelativeEncoder = wristMotor.getEncoder();
-        wristAbsoluteEncoder = wristMotor.getAbsoluteEncoder();
+        wristAbsoluteEncoder = new DutyCycleEncoder(WristConstants.ABSOLUTE_ENCODER_DIO_CHANNEL);
         wristPidController = wristMotor.getPIDController();
         wristPidController.setP(0.25);
+        wristPidController.setOutputRange(-maxRotPerTick, maxRotPerTick);
         
-
-
+        // wristRelativeEncoder.setPosition(wristAbsoluteEncoder.getAbsolutePosition() + WristConstants.absOffset);
         // wristPidController.setP(Constants.WristConstants.WRIST_PID_P);
         currentPosition = wristRelativeEncoder.getPosition();
         desiredPosition = currentPosition;
@@ -60,7 +62,7 @@ public class WristSubsystem extends SubsystemBase {
     // Sets the desired position to a pre-determined angle for the source
     public void sourcePreset() {
 
-        desiredPosition = (90.0 / 360) * WristConstants.WRIST_GEAR_RATIO;
+        desiredPosition = (85 / 360) * WristConstants.WRIST_GEAR_RATIO;
 
     }
 
@@ -73,14 +75,7 @@ public class WristSubsystem extends SubsystemBase {
     // Called once per scheduler run
     @Override
     public void periodic() {
-        if(currentPosition + maxRotPerTick < desiredPosition){
-            currentPosition += maxRotPerTick;
-        } else if (currentPosition - maxRotPerTick > desiredPosition){
-            currentPosition -= maxRotPerTick;
-        } else {
-            currentPosition = desiredPosition;
-        }
-        wristPidController.setReference(currentPosition, ControlType.kPosition);
+        wristPidController.setReference(desiredPosition, ControlType.kPosition);
         Logger.recordOutput("wrist.desiredPosition", desiredPosition);
         Logger.recordOutput("wrist.currentPosition", currentPosition);
         Logger.recordOutput("wrist.autoLockEnabledAmp", autoLockEnabledAmp);
