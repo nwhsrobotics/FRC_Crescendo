@@ -55,12 +55,13 @@ public class RobotContainer {
         SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 3);  // TODO tune durations.
         SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, 2);
         SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 2);
-        SetScoringStateCommand autoShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, ScoringState.LOADING, 1); //auto only
+        SetScoringStateCommand autoShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, ScoringState.LOADING, 2); //auto only
         //SetScoringStateCommand autoUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 1);
         //InstantCommand intakeOn = new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem);  // auto only.
-        ParallelCommandGroup autoInit = new ParallelCommandGroup((new InstantCommand(() -> wristSubsystem.underStage(), wristSubsystem)),
-                                                                 (new InstantCommand(() -> armSubsystem.underStage(), armSubsystem)),
-                                                                 new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem));
+        //ParallelCommandGroup autoInit = new ParallelCommandGroup((new InstantCommand(() -> wristSubsystem.ampPreset(), wristSubsystem),
+                                                                 //(new InstantCommand(() -> armSubsystem.underStage(), armSubsystem));
+        ParallelCommandGroup autoInit = new ParallelCommandGroup();//new ParallelCommandGroup(new InstantCommand(() -> wristSubsystem.ampPreset(), wristSubsystem), 
+                                        //new InstantCommand(() -> armSubsystem.ampPreset(), armSubsystem));
         //autoInit.addRequirements(wristSubsystem, armSubsystem, scoringSubsystem);
         //InstantCommand intakeOff = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem); //auto only
         //InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_AMP_RPM), scoringSubsystem);
@@ -123,6 +124,7 @@ public class RobotContainer {
         //adjust.addRequirements(wristSubsystem, armSubsystem);
 
         // Command group that has built-in logic 
+        InstantCommand resetArmEncoders = new InstantCommand(() -> armSubsystem.resetArmEncoders(), armSubsystem);
         ParallelCommandGroup toAmp = new ParallelCommandGroup(armLockAmp, wristLockAmp);
         toAmp.addRequirements(wristSubsystem, armSubsystem);
         ParallelCommandGroup toSource = new ParallelCommandGroup(armLockSource, wristLockSource);
@@ -146,6 +148,7 @@ public class RobotContainer {
         new POVButton(gunner, 0).onTrue(toAmp);
         new POVButton(gunner, 90).onTrue(toSource);
         new POVButton(gunner, 180).onTrue(toUnderStage);
+        new POVButton(gunner, 270).onTrue(resetArmEncoders);
         //new JoystickButton(gunner, XboxControllerButtons.LEFT_BUMPER).onTrue(armHome);
 
         //new POVButton(gunner, 0).onTrue(new InstantCommand(() -> scoringSubsystem.increaseRPM()));

@@ -159,7 +159,7 @@ public final class Constants {
 
     public static final class ArmConstants {
         public static final double SHOULDER_PID_P = 0.1;
-        public static final double SHOULDER_GEAR_RATIO = 100.0;
+        public static final double SHOULDER_GEAR_RATIO = 112.0;
         public static final double SHOULDER_ABS_ENCODER_ROTATION_OFFSET = -0.161;
         public static final double SHOULDER_OUTPUT_LIMIT = 0.2;
 
