@@ -77,6 +77,7 @@ public class Auto extends SequentialCommandGroup {
               new InstantCommand(() -> LimelightHelpers.setPipelineIndex("limelight", 0)),
               // Navigate the robot to the initial position to shoot.
               swerve.pathfindToPosition(initialPos),
+              //swerve.pathfindToPosition(getClosestLocation()).onlyWhile(() -> !(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").rawFiducials[1].id == 7)),
               // Remove the closest location from the list of possible locations.
               new InstantCommand(() -> possibleLocations.remove(getClosestLocation())),
               // Execute the shooting command.
