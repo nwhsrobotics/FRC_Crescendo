@@ -275,6 +275,16 @@ public final class Constants {
         public static final Pose2d BOTTOMSPEAKER = new Pose2d(0.71, 4.285, Rotation2d.fromDegrees(-60.00));
         //list of all positions (POI) to pathfind to allow closest pathfinding
         public static final List<Pose2d> allPoses = new ArrayList<Pose2d>(List.of(SOURCE, AMP, SPEAKER, MIDSTAGE, BOTTOMSTAGE, TOPSTAGE, TOPSPEAKER, BOTTOMSPEAKER));
+
+        public static final Pose2d BACKRIGHT = new Pose2d(2.90, 4.10, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d BACKCENTER = new Pose2d(2.90, 5.55, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d BACKLEFT = new Pose2d(2.90, 7.00, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d FRONTRIGHTMOST = new Pose2d(8.29, 7.44, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d FRONTRIGHT = new Pose2d(8.29, 5.78, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d FRONTCENTER = new Pose2d(8.29, 4.10, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d FRONTLEFTMOST = new Pose2d(8.29, 2.44, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d FRONTLEFT = new Pose2d(8.29, 0.77, Rotation2d.fromDegrees(0.00));
+        public static final List<Pose2d> allNotes = new ArrayList<Pose2d>(List.of(BACKRIGHT, BACKCENTER, BACKLEFT, FRONTRIGHTMOST, FRONTRIGHT, FRONTCENTER, FRONTLEFT, FRONTLEFTMOST));
     }
 
     public static final class LimelightConstants {
