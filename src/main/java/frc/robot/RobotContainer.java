@@ -49,8 +49,6 @@ public class RobotContainer {
 
     public static XboxController gunner = new XboxController(3);
 
-    public Pose2d visionTargetLocation = new Pose2d();  // TODO: (basically needs testing code is in robot.java)
-
     public RobotContainer() {
         SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 3);  // TODO tune durations.
         SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, 2);

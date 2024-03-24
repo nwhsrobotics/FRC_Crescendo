@@ -13,6 +13,8 @@ import org.littletonrobotics.junction.Logger;
  */
 public class LimelightImplementation {
 
+    public static Pose2d visionTargetLocation = new Pose2d(); 
+
     /**
      * Implements simple proportional turning control with the Limelight.
      * Proportional control adjusts output based on error, here the difference between target's angle and camera's angle.
