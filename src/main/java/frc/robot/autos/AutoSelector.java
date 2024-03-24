@@ -12,7 +12,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AutoSelector {
     public AutoSelector(SwerveSubsystem swerve){
         SendableChooser<Command> autoChooser = new SendableChooser<>();
-        autoChooser.addOption("B [5 NOTE]", new Auto(swerve, new ArrayList<>(List.of(FavoritePositions.FRONTLEFT, FavoritePositions.FRONTLEFTMOST, FavoritePositions.FRONTRIGHT, FavoritePositions.FRONTRIGHTMOST)), 4));
+        autoChooser.addOption("B [5 NOTE]", new Auto(swerve, new ArrayList<>(List.of(FavoritePositions.FRONTLEFT, FavoritePositions.FRONTLEFTMOST, FavoritePositions.FRONTRIGHT, FavoritePositions.FRONTRIGHTMOST)), 4, FavoritePositions.SPEAKER));
         SmartDashboard.putData(autoChooser);
     }
 }
