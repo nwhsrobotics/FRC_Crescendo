@@ -23,18 +23,22 @@ import frc.robot.Constants.FavoritePositions;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Center extends SequentialCommandGroup {
+public class Auto extends SequentialCommandGroup {
   private SwerveSubsystem swerve;
   private List<Pose2d> possibleLocations;
+  private int noteLimit;
   /** Creates a new Center. */
-  public Center(SwerveSubsystem swerve) {
+  public Auto(SwerveSubsystem swerve, List<Pose2d> blackListLocations, int noteLimit) {
     this.swerve = swerve;
     possibleLocations = FavoritePositions.allNotes;
+    blackList(blackListLocations);
+    this.noteLimit = noteLimit;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
                   new InstantCommand(() -> swerve.resetOdometry(FavoritePositions.SPEAKER)),
                   NamedCommands.getCommand("autoInit"),
+                  NamedCommands.getCommand("shoot"),
                   getNotes()
     );
   }
@@ -42,26 +46,25 @@ public class Center extends SequentialCommandGroup {
   public SequentialCommandGroup getNotes() {
       SequentialCommandGroup exitReturnCommands = new SequentialCommandGroup();
   
-      for (int i = 0; i < 4; i++) {  //amount of notes to get
+      for (int i = 0; i < noteLimit; i++) {  //amount of notes to get + 1 preloaded
           exitReturnCommands.addCommands(
-              NamedCommands.getCommand("shoot"),
               new InstantCommand(() -> LimelightHelpers.setPipelineIndex("limelight", 1)),
               swerve.pathfindToPosition(getClosestLocation()).onlyWhile(() -> !LimelightHelpers.getTV("limelight")),
               swerve.pathfindToPosition(LimelightImplementation.visionTargetLocation),
               new InstantCommand(() -> LimelightHelpers.setPipelineIndex("limelight", 0)),
               swerve.pathfindToPosition(FavoritePositions.SPEAKER),
-              new InstantCommand(() -> possibleLocations.remove(getClosestLocation()))
+              new InstantCommand(() -> possibleLocations.remove(getClosestLocation())),
+              NamedCommands.getCommand("shoot")
           );
       }
   
       return exitReturnCommands;
   }
 
-  public void blackListLocations(){
-    possibleLocations.remove(FavoritePositions.FRONTLEFT);
-    possibleLocations.remove(FavoritePositions.FRONTLEFTMOST);
-    possibleLocations.remove(FavoritePositions.FRONTRIGHT);
-    possibleLocations.remove(FavoritePositions.FRONTRIGHTMOST);
+  public void blackList(List<Pose2d> blackListLocations){
+    for(Pose2d pos: blackListLocations){
+      possibleLocations.remove(pos);
+    }
   }
   
     
