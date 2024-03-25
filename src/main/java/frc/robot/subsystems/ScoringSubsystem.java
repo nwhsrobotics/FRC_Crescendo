@@ -85,7 +85,7 @@ public class ScoringSubsystem extends SubsystemBase {
         flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
         flywheelMotor.setSmartCurrentLimit(80); //big neo is good
         // flywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
-        flywheelMotor.enableVoltageCompensation(11.7); 
+        flywheelMotor.enableVoltageCompensation(11.7);
         //flywheelMotor.burnFlash();
 
         secondaryFlywheelMotor = new CANSparkMax(Constants.CANAssignments.SECONDARY_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
@@ -98,7 +98,7 @@ public class ScoringSubsystem extends SubsystemBase {
         secondaryFlywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
         secondaryFlywheelMotor.setSmartCurrentLimit(80); //big neo is good
         // secondaryFlywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
-        secondaryFlywheelMotor.enableVoltageCompensation(11.7); 
+        secondaryFlywheelMotor.enableVoltageCompensation(11.7);
         secondaryFlywheelMotor.follow(flywheelMotor, true);
         //secondaryFlywheelMotor.burnFlash();
 
@@ -126,7 +126,7 @@ public class ScoringSubsystem extends SubsystemBase {
         secondaryIndexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
         secondaryIndexMotor.setSmartCurrentLimit(80); //big neo is good
         // secondaryIndexMotor.setClosedLoopRampRate(0.6);
-        secondaryIndexMotor.enableVoltageCompensation(11.7); 
+        secondaryIndexMotor.enableVoltageCompensation(11.7);
         secondaryIndexMotor.follow(indexMotor, true); //if wrong direction then just add "true" parameter or remove setInverted
         //secondaryIndexMotor.burnFlash();
 
@@ -169,14 +169,14 @@ public class ScoringSubsystem extends SubsystemBase {
         flywheelRPM = rpm;
     }
 
-    public void increaseRPM(){
-        if(flywheelRPM < 5500){
+    public void increaseRPM() {
+        if (flywheelRPM < 5500) {
             flywheelRPM += 100;
         }
     }
 
-    public void decreaseRPM(){
-        if(flywheelRPM > 100){
+    public void decreaseRPM() {
+        if (flywheelRPM > 100) {
             flywheelRPM -= 100;
         }
     }
@@ -194,7 +194,7 @@ public class ScoringSubsystem extends SubsystemBase {
                 flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
                 indexPIDController.setReference(Constants.ScoringConstants.INDEX_INTAKE_COOP_RPM, ControlType.kVelocity);
                 intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
-                
+
                 Logger.recordOutput("scoring.state", "LOADING");
                 break;
             case FIRE:

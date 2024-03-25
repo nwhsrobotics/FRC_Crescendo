@@ -6,12 +6,9 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.WristConstants;
 import org.littletonrobotics.junction.Logger;
 
@@ -19,13 +16,13 @@ public class WristSubsystem extends SubsystemBase {
     public final CANSparkMax wristMotor;
     private final SparkPIDController wristPidController;
     private final RelativeEncoder wristRelativeEncoder;
-    private DutyCycleEncoder wristAbsoluteEncoder;
+    private final DutyCycleEncoder wristAbsoluteEncoder;
     //private double currentPosition;
     private double desiredPosition;
     private final boolean autoLockEnabledAmp = false;
     private final boolean autoLockEnabledSource = false;
-    private double maxRotPerTick = 0.5;
-    
+    private final double maxRotPerTick = 0.5;
+
 
     // Constructor for WristSubsystem
     public WristSubsystem() {
@@ -37,7 +34,7 @@ public class WristSubsystem extends SubsystemBase {
         wristPidController.setP(0.25);
         //is it the setOutputRange thats caussing it not to move 90 degrees?
         wristPidController.setOutputRange(-maxRotPerTick, maxRotPerTick);
-        
+
         // wristRelativeEncoder.setPosition(wristAbsoluteEncoder.getAbsolutePosition() + WristConstants.absOffset);
         // wristPidController.setP(Constants.WristConstants.WRIST_PID_P);
         //currentPosition = wristRelativeEncoder.getPosition();
@@ -48,10 +45,9 @@ public class WristSubsystem extends SubsystemBase {
     // Sets the desired position to a specified angle
     public void adjustAngle(double changeInPosition) {
         desiredPosition += changeInPosition;
-        
+
     }
 
-    
 
     // Sets the desired position to a pre-determined angle for the amp
     public void ampPreset() {

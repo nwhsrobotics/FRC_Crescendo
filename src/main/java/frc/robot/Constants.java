@@ -192,7 +192,7 @@ public final class Constants {
          * This controls the intake RPM when it is activated.
          *
          * <p>
-         * 
+         * <p>
          * If the intake is told to be driven backwards,
          * this value still is applied, and simply made negative.
          */
@@ -201,7 +201,7 @@ public final class Constants {
          * This controls the indexer RPM when the intake is activated in the forwards direction.
          *
          * <p>
-         * 
+         * <p>
          * The indexer aids in ingesting the game piece,
          * elastically deforming it to be pressed firmly against the flywheel.
          */
@@ -210,7 +210,7 @@ public final class Constants {
          * This controls the indexer RPM when the intake is activated in the reverse direction.
          *
          * <p>
-         * 
+         * <p>
          * The indexer is responsible for initially dislodging the game piece
          * from its resting position against the flywheel.
          * Once displaced far enough, the intake wheels can engage with the game piece
@@ -221,7 +221,7 @@ public final class Constants {
         public static final double FLYWHEEL_SPEAKER_RPM = 4250.0;
         public static final double FLYWHEEL_AMP_RPM = 4250.0; //TODO FIX THIS
         public static final double FLYWHEEL_IDLE_RPM = 0;
-        public static final double INDEX_FLYWHEEL_COOP_RPM = 4250.0; 
+        public static final double INDEX_FLYWHEEL_COOP_RPM = 4250.0;
     }
 
     public static final class AutoConstants {
