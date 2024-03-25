@@ -3,15 +3,19 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.FavoritePositions;
+import frc.robot.Constants.OIConstants;
 import frc.robot.autos.Auto;
 import frc.robot.commands.*;
 import frc.robot.controllers.DriverJoysticksController;
@@ -127,7 +131,28 @@ public class RobotContainer {
         SequentialCommandGroup semiWristAdjustSource = new SequentialCommandGroup(armLockSource, wristAdjust);
         semiWristAdjustSource.addRequirements(wristSubsystem, armSubsystem);
         */
+        /*swerveSubsystem.setDefaultCommand(
+        new RunCommand(
+            () -> swerveSubsystem.drive(
+                -MathUtil.applyDeadband(Math.copySign(Math.pow(Driver1.getRawAxis(1), 2), Driver1.getRawAxis(1)), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Math.copySign(Math.pow(Driver1.getRawAxis(0), 2), Driver1.getRawAxis(0)), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Driver1.getRawAxis(4), OIConstants.kDriveDeadband),
+                true, true),
+                swerveSubsystem));
 
+        //this one below is probably what we want
+        swerveSubsystem.setDefaultCommand(
+            // The left stick controls translation of the robot.
+            // Turning is controlled by the X axis of the right stick.
+            new RunCommand(
+                () -> swerveSubsystem.drive(
+                    -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                    true, true),
+                swerveSubsystem));
+                //TODO: Invert if red, multiply values by -1 because pathplanner origin is always at blue
+                */
 
         // bind gunner controls.
         new JoystickButton(gunner, XboxControllerButtons.RIGHT_BUMPER).onTrue(commandShoot);

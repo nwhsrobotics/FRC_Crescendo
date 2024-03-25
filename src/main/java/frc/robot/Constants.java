@@ -1,21 +1,23 @@
 package frc.robot;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import org.littletonrobotics.junction.Logger;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public final class Constants {
     public static final class CANAssignments {
@@ -121,6 +123,10 @@ public final class Constants {
                 new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //front right
                 new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //back left
                 new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //back right
+
+        public static final double kDirectionSlewRate = 1.2; // radians per second
+        public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
+        public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
         public static final boolean kFrontLeftTurningEncoderReversed = false;
         public static final boolean kBackLeftTurningEncoderReversed = false;
@@ -246,6 +252,7 @@ public final class Constants {
         public static final double scaleFactor = 0.6;
         public static final double kTeleDriveMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond * scaleFactor;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond * scaleFactor;
+        public static final double kDriveDeadband = 0.05;
 
         //TODO: Better constraints 
         public static final PathConstraints kPathfindingConstraints = new PathConstraints(
