@@ -52,9 +52,8 @@ public class LimelightImplementation {
             if (isAprilTagPipeline()) {
                 // Calculate targeting forward speed based on target's distance (TZ) in 3D space.
                 targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace("limelight")[2];
-                //TODO: USE distanceToCamera OR distanceToRobot now
                 //first april tag
-                // TODO: BELOW
+                // TODO: USE distanceToCamera OR distanceToRobot now BELOW
                 //double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").rawFiducials[0].distToRobot;
                 //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
                 targetingForwardSpeed *= 0.345;

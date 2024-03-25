@@ -1,21 +1,3 @@
-/**
- * ===========   /=\
- * //   /===\   \\/ o \
- * //   /     \ __=====/
- * // __|   O   |  \\\
- * ||/  |__     |  _||
- * ||\_ |  \    | / ||
- * ||\ \|   \___|/  ||
- * \\ \ |       |__ //
- * \\/  \     //  //
- * \\ / \===/   //
- * ===========
- * <p>
- * --[P E N G U I N]--
- * LOGISTICS
- */
-
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -28,12 +10,12 @@ import org.littletonrobotics.junction.Logger;
  *
  * Works in conjunction with the swerve subsystem.
  */
-public class PenguinLogistics {
+public class AutoNavigation {
     private Command navigationCommand;
     private boolean enabled = false;
     private final SwerveSubsystem swerve;
 
-    public PenguinLogistics(SwerveSubsystem swerve) {
+    public AutoNavigation(SwerveSubsystem swerve) {
         this.swerve = swerve;
     }
 

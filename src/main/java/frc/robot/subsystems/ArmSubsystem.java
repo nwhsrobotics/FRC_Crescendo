@@ -96,7 +96,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         //rightShoulderPidController.setReference(targetRotations, ControlType.kPosition);
         //leftShoulderPidController.setReference(targetRotations, ControlType.kPosition);
-        rightShoulderPidController.setReference(targetRotations, ControlType.kPosition, 0, -Math.signum(rightShoulderEncoder.getPosition()) * 0.35, ArbFFUnits.kVoltage); //TODO: THIS
+        rightShoulderPidController.setReference(targetRotations, ControlType.kPosition, 0, -Math.signum(rightShoulderEncoder.getPosition()) * 0.35, ArbFFUnits.kVoltage);
         leftShoulderPidController.setReference(targetRotations, ControlType.kPosition, 0, -Math.signum(leftShoulderEncoder.getPosition()) * 0.35, ArbFFUnits.kVoltage);
 
         Logger.recordOutput("arm.targetposition", targetRotations);

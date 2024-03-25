@@ -85,7 +85,7 @@ public class ScoringSubsystem extends SubsystemBase {
         flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
         flywheelMotor.setSmartCurrentLimit(80); //big neo is good
         // flywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
-        flywheelMotor.enableVoltageCompensation(11.7);
+        flywheelMotor.enableVoltageCompensation(12.0);
         //flywheelMotor.burnFlash();
 
         secondaryFlywheelMotor = new CANSparkMax(Constants.CANAssignments.SECONDARY_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
@@ -98,7 +98,7 @@ public class ScoringSubsystem extends SubsystemBase {
         secondaryFlywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
         secondaryFlywheelMotor.setSmartCurrentLimit(80); //big neo is good
         // secondaryFlywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
-        secondaryFlywheelMotor.enableVoltageCompensation(11.7);
+        secondaryFlywheelMotor.enableVoltageCompensation(12.0);
         secondaryFlywheelMotor.follow(flywheelMotor, true);
         //secondaryFlywheelMotor.burnFlash();
 
@@ -113,7 +113,7 @@ public class ScoringSubsystem extends SubsystemBase {
         indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
         indexMotor.setSmartCurrentLimit(80); //big neo is good
         //indexMotor.setClosedLoopRampRate(0.6);
-        indexMotor.enableVoltageCompensation(11.7); //TODO: Increase voltage compensation to 12.5+ for it to shoot from right next to speaker
+        indexMotor.enableVoltageCompensation(12.0); //TODO: Increase voltage compensation to 12.5+ for it to shoot from right next to speaker
         //indexMotor.burnFlash();
 
         secondaryIndexMotor = new CANSparkMax(Constants.CANAssignments.SECONDARY_INDEX_MOTOR_ID, MotorType.kBrushless);
@@ -122,11 +122,11 @@ public class ScoringSubsystem extends SubsystemBase {
         secondaryIndexMotor.setIdleMode(IdleMode.kCoast);
         secondaryIndexEncoder = secondaryIndexMotor.getEncoder();
         secondaryIndexPIDController = secondaryIndexMotor.getPIDController();
-        secondaryIndexPIDController.setP(0);
+        secondaryIndexPIDController.setP(0); //TODO: set the same P value like the flywheel? Thats why it was losing traction because more load = less speed
         secondaryIndexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
         secondaryIndexMotor.setSmartCurrentLimit(80); //big neo is good
         // secondaryIndexMotor.setClosedLoopRampRate(0.6);
-        secondaryIndexMotor.enableVoltageCompensation(11.7);
+        secondaryIndexMotor.enableVoltageCompensation(12.0);
         secondaryIndexMotor.follow(indexMotor, true); //if wrong direction then just add "true" parameter or remove setInverted
         //secondaryIndexMotor.burnFlash();
 
