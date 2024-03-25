@@ -33,7 +33,7 @@ public class ClimbCmd extends Command {
         //climb.leftClimbMotor.set((gunner.getPOV() == 0) ? 0.8 : (gunner.getLeftY() > 0.1) ? 0.8 : (gunner.getLeftY() < -0.1) ? -0.8 : 0);
         //climb.rightClimbMotor.set((gunner.getPOV() == 180) ? -0.8 : (gunner.getRightY() > 0.1) ? 0.8 : (gunner.getRightY() < -0.1) ? -0.8 : 0);
     }
-    
+
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {

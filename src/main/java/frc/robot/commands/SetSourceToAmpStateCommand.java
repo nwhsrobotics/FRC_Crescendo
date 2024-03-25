@@ -17,33 +17,33 @@ public class SetSourceToAmpStateCommand extends Command {
   ControlState state;
 
   /** Creates a new SetSourceToAmpStateCommand. */
-  //public SetSourceToAmpStateCommand(SourceToAmpSubsystem subsystem, ControlState state) {
-    //this.subsystem = subsystem;
-    //this.state = state;
-    
+//public SetSourceToAmpStateCommand(SourceToAmpSubsystem subsystem, ControlState state) {
+//this.subsystem = subsystem;
+//this.state = state;
 
-    // Use addRequirements() here to declare subsystem dependencies.
-  //}
 
-  // Called when the command is initially scheduled.
-  //@Override
-  //public void initialize() {
+// Use addRequirements() here to declare subsystem dependencies.
+//}
 
-    //subsystem.state = state;
-  //}
+// Called when the command is initially scheduled.
+//@Override
+//public void initialize() {
 
-  // Called every time the scheduler runs while the command is scheduled.
-  
+//subsystem.state = state;
+//}
 
-  // Called once the command ends or is interrupted.
-  //@Override
-  //public void end(boolean interrupted) {}
+// Called every time the scheduler runs while the command is scheduled.
 
-  // Returns true when the command should end.
-  //@Override
-  //public boolean isFinished() {
-    //return false;
-  //}
+
+// Called once the command ends or is interrupted.
+//@Override
+//public void end(boolean interrupted) {}
+
+// Returns true when the command should end.
+//@Override
+//public boolean isFinished() {
+//return false;
+//}
 //}
 
 //*/

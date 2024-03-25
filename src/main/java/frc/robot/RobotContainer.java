@@ -1,43 +1,30 @@
 package frc.robot;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.FavoritePositions;
 import frc.robot.autos.Auto;
-import frc.robot.commands.ArmAdjustCmd;
-import frc.robot.commands.ClimbCmd;
-import frc.robot.commands.SetScoringStateCommand;
-import frc.robot.commands.SwerveJoystickDefaultCmd;
-import frc.robot.commands.WristAdjustCmd;
-import frc.robot.commands.WristIntakeCmd;
+import frc.robot.commands.*;
 import frc.robot.controllers.DriverJoysticksController;
 import frc.robot.controllers.DriverLeftJoysticksController;
 import frc.robot.controllers.DriverXboxController;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.ScoringSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.ScoringSubsystem.ScoringState;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.WristIntakeSubsystem;
-import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.limelight.LimelightImplementation;
 import frc.robot.subsystems.oi.ControlManager;
 import frc.robot.subsystems.oi.XboxControllerButtons;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RobotContainer {
     public final SwerveSubsystem swerveSubsystem;  // INIT AFTER NAMED COMMAND REGISTRATION!
@@ -61,9 +48,9 @@ public class RobotContainer {
         //SetScoringStateCommand autoUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 1);
         //InstantCommand intakeOn = new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem);  // auto only.
         //ParallelCommandGroup autoInit = new ParallelCommandGroup((new InstantCommand(() -> wristSubsystem.ampPreset(), wristSubsystem),
-                                                                 //(new InstantCommand(() -> armSubsystem.underStage(), armSubsystem));
+        //(new InstantCommand(() -> armSubsystem.underStage(), armSubsystem));
         ParallelCommandGroup autoInit = new ParallelCommandGroup();//new ParallelCommandGroup(new InstantCommand(() -> wristSubsystem.ampPreset(), wristSubsystem), 
-                                        //new InstantCommand(() -> armSubsystem.ampPreset(), armSubsystem));
+        //new InstantCommand(() -> armSubsystem.ampPreset(), armSubsystem));
         //autoInit.addRequirements(wristSubsystem, armSubsystem, scoringSubsystem);
         //InstantCommand intakeOff = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem); //auto only
         //InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_AMP_RPM), scoringSubsystem);
@@ -88,7 +75,7 @@ public class RobotContainer {
 
         autoChooser = AutoBuilder.buildAutoChooser("[B]");
 
-        
+
         // Command for setting arm to the amp position
         InstantCommand armLockAmp = new InstantCommand(() -> armSubsystem.ampPreset(), armSubsystem);
 
@@ -108,19 +95,18 @@ public class RobotContainer {
         InstantCommand wristLockUnderStage = new InstantCommand(() -> wristSubsystem.underStage(), wristSubsystem);
 
 
-        
         // Command for letting the gunner freely adjust the arm position, tuning for the joystick control will be subject to change
-       // InstantCommand armMoveUp = new InstantCommand(() -> armSubsystem.moveUp(), armSubsystem);
+        // InstantCommand armMoveUp = new InstantCommand(() -> armSubsystem.moveUp(), armSubsystem);
 
         // armMoveDown = new InstantCommand(() -> armSubsystem.moveDown(), armSubsystem);
 
         // Command for letting the gunner freely adjust the wrist position, tuning for the joystick control will be subject to change
         //InstantCommand wristUp = new InstantCommand(() -> wristSubsystem.adjustAngle(gunner.getLeftTriggerAxis() * 0.65), wristSubsystem);
-        
+
         //InstantCommand wristDown = new InstantCommand(() -> wristSubsystem.adjustAngle(-gunner.getLeftTriggerAxis() * 0.65), wristSubsystem);
-        
+
         //InstantCommand wristStop = new InstantCommand(() -> wristIntakeSubsystem.stop(), wristSubsystem);
-         
+
         // Command for letting you adjust the wrist and arm together
         //ParallelCommandGroup adjust = new ParallelCommandGroup(armAdjust, wristAdjust);
         //adjust.addRequirements(wristSubsystem, armSubsystem);
@@ -141,7 +127,7 @@ public class RobotContainer {
         SequentialCommandGroup semiWristAdjustSource = new SequentialCommandGroup(armLockSource, wristAdjust);
         semiWristAdjustSource.addRequirements(wristSubsystem, armSubsystem);
         */
-        
+
 
         // bind gunner controls.
         new JoystickButton(gunner, XboxControllerButtons.RIGHT_BUMPER).onTrue(commandShoot);
@@ -163,9 +149,8 @@ public class RobotContainer {
         //new JoystickButton(gunner, XboxControllerButtons.Y).whileTrue(wristIntakeBackwards);
         //new JoystickButton(gunner, XboxControllerButtons.X).whileTrue(wristIntakeFwd);
         //new JoystickButton(gunner, XboxControllerButtons.MENU).whileTrue(wristStop);
-        
-        
-        
+
+
         //Arm and Wrist
         /*
         gunner_.whileTrue(toAmp);
@@ -173,7 +158,7 @@ public class RobotContainer {
         gunner_RS.whileTrue(armAdjust);
         gunner_LS.whileTrue(wristAdjust);
         */
-        
+
 
         ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw(), swerveSubsystem);
         ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative, swerveSubsystem);

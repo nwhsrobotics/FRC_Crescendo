@@ -4,7 +4,6 @@ package frc.robot.subsystems.limelight;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.Constants;
 import frc.robot.Constants.LimelightConstants;
 import org.littletonrobotics.junction.Logger;
 
@@ -13,7 +12,7 @@ import org.littletonrobotics.junction.Logger;
  */
 public class LimelightImplementation {
 
-    public static Pose2d visionTargetLocation = new Pose2d(); 
+    public static Pose2d visionTargetLocation = new Pose2d();
 
     /**
      * Implements simple proportional turning control with the Limelight.
