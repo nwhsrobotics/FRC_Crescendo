@@ -130,18 +130,6 @@ public class Robot extends LoggedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-
-        //this also works for resetting odometry while flipped 
-
-        //but below this is a better option for restting odometry especially with dynamic positions with vision
-
-        //TODO: Pathplanner always sets blue alliance middle as 0, 0 for odometry and always bases odometry origin at that position therefore we need to flip like this for red alliance
-        /*var alliance = DriverStation.getAlliance();
-        if(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red){
-            robotContainer.swerveSubsystem.resetOdometry(GeometryUtil.flipFieldPose(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point")));
-        } else {
-            robotContainer.swerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Starting Point")); 
-        }*/
     }
 
     /**

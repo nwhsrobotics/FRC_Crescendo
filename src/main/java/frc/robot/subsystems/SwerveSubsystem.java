@@ -38,7 +38,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // because that is the forwards direction relative to the field.
     public boolean isFieldRelative = true;
 
-    public PenguinLogistics autonavigator;
+    public AutoNavigation autonavigator;
 
     // 4 instances of SwerveModule to represent each wheel module with the constants
     public final SwerveModule frontLeft = new SwerveModule(
@@ -121,7 +121,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 this
         );
 
-        this.autonavigator = new PenguinLogistics(this);
+        this.autonavigator = new AutoNavigation(this);
 
         // Pause for 500 milliseconds to allow the gyro to stabilize.
         // Set the yaw of the gyro to 0 afterwards.
