@@ -42,14 +42,15 @@ public class PathFindVision extends Command {
     if(pathFind.isFinished()){
       if(LimelightHelpers.getTV("limelight")){
         //basically if note was pushed while intaking and never came inside then go pathfind again
+          pathFind = null;
           pathFind = swerve.pathfindToPosition(LimelightImplementation.visionTargetLocation);
           pathFind.schedule();
       } else {
         //if note was taken by opponent from center say for example
         possibleLocations.remove(pathFindLoc);
         //then pathfind to other note location until we get one in
-        new PathFindVision(swerve, score, possibleLocations, swerve.getPose().nearest(possibleLocations)).schedule();
-        this.end(true);
+        //new PathFindVision(swerve, score, possibleLocations, swerve.getPose().nearest(possibleLocations)).schedule();
+        this.cancel();
       }
     }
   }

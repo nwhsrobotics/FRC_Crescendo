@@ -93,11 +93,11 @@ public class SwerveSubsystem extends SubsystemBase {
             Rotation2d.fromDegrees(getHeading()),
             getModulePositions(),
             new Pose2d(),
-            VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-            VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+            VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(1)),
+            VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(5)));
     //The default standard deviations of the module states are 0.1 meters for x, 0.1 meters for y, and 0.1 radians for heading. 
     //The default standard deviations of the vision measurements are 0.9 meters for x, 0.9 meters for y, and 0.9 radians for heading.
-    //Decrease standard deviations to trust the data more (rn the vision is mostly insignificant compared to module state)
+    //Decrease standard deviations to trust the data more (right now the vision is mostly insignificant compared to module state)
 
     // Slew rate filter variables for controlling lateral acceleration
     private double currentRotation = 0.0;
@@ -185,16 +185,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
     /**
-     * DON'T USE THIS WILL BREAK PATHPLANNER USE resetOdometryWithVision instead
-     * <p>
-     * <p>
      * Reset the heading (yaw) and the odometry pose of the robot.
-     */
-        /* 
-    public void resetHeadingAndPose() {
+     */ 
+    public void resetHeading() {
         gyro.zeroYaw(); // Reset the yaw angle
-        resetOdometry(new Pose2d()); // Reset the robot's odometry pose
-    } */
+    } 
 
     /**
      * Switch between field-relative and robot-relative driving.
@@ -279,9 +274,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param pathName The name of the path file to load and follow.
      */
     public void pathFindThenFollowPath(String pathName) {
-        //lastPath = pathName;
-        //lastPathType = "Path";
-
+        Command pathfindingCommand;
         // Load the path we want to pathfind to and follow
         PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
 
@@ -290,17 +283,16 @@ public class SwerveSubsystem extends SubsystemBase {
                 DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 8.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 8.0,
                 AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
 
-        // Since AutoBuilder is configured, we can use it to build pathfinding commands
         // What pathfinding does is pathfind to the start of a path and then continue along that path.
         // If you don't want to continue along the path, you can make it pathfind to a specific location.
-        /*
+        
         pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
                 path,
                 constraints,
-                2.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+                0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
         pathfindingCommand.schedule();
-        */
+        
     }
 
     /**
@@ -381,28 +373,9 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Check if the robot is in a clover state.
-     *
-     * @return True if the robot is in a clover brake state, false otherwise.
+     * Orient wheels into a X (clover) position to prevent movement
      */
-    public boolean isClover() {
-        return frontLeft.getTurningPositionWrapped() > Math.PI / 4 - Math.toRadians(1.0) && frontLeft.getTurningPositionWrapped() < Math.PI / 4 + Math.toRadians(1.0)
-                && frontRight.getTurningPositionWrapped() > -Math.PI / 4 - Math.toRadians(1.0) && frontRight.getTurningPositionWrapped() < -Math.PI / 4 + Math.toRadians(1.0)
-                && backLeft.getTurningPositionWrapped() > -Math.PI / 4 - Math.toRadians(1.0) && backLeft.getTurningPositionWrapped() < -Math.PI / 4 + Math.toRadians(1.0)
-                && backRight.getTurningPositionWrapped() > Math.PI / 4 - Math.toRadians(1.0) && backRight.getTurningPositionWrapped() < Math.PI / 4 + Math.toRadians(1.0);
-    }
-
-    /**
-     * Orient wheels into a "clover" formation, in order to brake.
-     */
-    public void brake() {
-        //stopModules();
-
-        // Sets the turning motors to their braking positions
-        /*frontLeft.turningMotor.set(frontLeft.turningPidController.calculate(frontLeft.getTurningPosition(), Math.PI / 4));
-        frontRight.turningMotor.set(frontRight.turningPidController.calculate(frontRight.getTurningPosition(), -Math.PI / 4));
-        backLeft.turningMotor.set(backLeft.turningPidController.calculate(backLeft.getTurningPosition(), -Math.PI / 4));
-        backRight.turningMotor.set(backRight.turningPidController.calculate(backRight.getTurningPosition(), Math.PI / 4));*/
+    public void setX() {
         frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
         frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
         backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));

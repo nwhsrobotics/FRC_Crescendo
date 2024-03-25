@@ -57,7 +57,6 @@ public class LimelightImplementation {
                 //double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").rawFiducials[0].distToRobot;
                 //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
                 targetingForwardSpeed *= 0.345;
-                //TODO: change the signs
                 targetingForwardSpeed *= -1.0;
             } else {
                 double kP = .1;

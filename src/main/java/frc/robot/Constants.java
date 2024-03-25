@@ -254,7 +254,6 @@ public final class Constants {
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond * scaleFactor;
         public static final double kDriveDeadband = 0.05;
 
-        //TODO: Better constraints 
         public static final PathConstraints kPathfindingConstraints = new PathConstraints(
                 DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 0.8, AutoConstants.kMaxAccelerationMetersPerSecondSquared * 0.75,
                 AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
@@ -275,7 +274,6 @@ public final class Constants {
         //same area as amp
         public static final Pose2d TOPSTAGE = new Pose2d(4.38, 4.89, Rotation2d.fromDegrees(-60.00));
         //0.49, 7.69 for odometry reset corner
-        //TODO: Find the right topspeaker and bottomspeaker place from where we can actually shoot from
         //same area as amp
         public static final Pose2d TOPSPEAKER = new Pose2d(0.71, 6.68, Rotation2d.fromDegrees(60));
         //away from amp
