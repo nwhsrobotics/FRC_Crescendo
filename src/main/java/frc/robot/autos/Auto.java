@@ -83,7 +83,7 @@ public class Auto extends SequentialCommandGroup {
                     // Remove the closest location from the list of possible locations.
                     new InstantCommand(() -> possibleLocations.remove(getClosestLocation())),
                     // Execute the shooting command.
-                    NamedCommands.getCommand("shoot"),
+                    NamedCommands.getCommand("shoot")
                     //new AutoScoringCommand(score, ScoringState.FIRE, ScoringState.IDLE)
             );
         }
