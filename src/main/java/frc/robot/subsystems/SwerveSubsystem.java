@@ -396,13 +396,17 @@ public class SwerveSubsystem extends SubsystemBase {
      * Orient wheels into a "clover" formation, in order to brake.
      */
     public void brake() {
-        stopModules();
+        //stopModules();
 
         // Sets the turning motors to their braking positions
-        frontLeft.turningMotor.set(frontLeft.turningPidController.calculate(frontLeft.getTurningPosition(), Math.PI / 4));
+        /*frontLeft.turningMotor.set(frontLeft.turningPidController.calculate(frontLeft.getTurningPosition(), Math.PI / 4));
         frontRight.turningMotor.set(frontRight.turningPidController.calculate(frontRight.getTurningPosition(), -Math.PI / 4));
         backLeft.turningMotor.set(backLeft.turningPidController.calculate(backLeft.getTurningPosition(), -Math.PI / 4));
-        backRight.turningMotor.set(backRight.turningPidController.calculate(backRight.getTurningPosition(), Math.PI / 4));
+        backRight.turningMotor.set(backRight.turningPidController.calculate(backRight.getTurningPosition(), Math.PI / 4));*/
+        frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+        frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+        backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+        backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
     }
 
     /**
