@@ -6,6 +6,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
@@ -72,6 +74,7 @@ public class ScoringSubsystem extends SubsystemBase {
     private final RelativeEncoder intakeEncoder;
 
     private double flywheelRPM = Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM; //by default shooter is speaker, to avoid toggling
+    public boolean noteInside;
 
     public ScoringSubsystem() {
         flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
@@ -194,6 +197,9 @@ public class ScoringSubsystem extends SubsystemBase {
                 flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
                 indexPIDController.setReference(Constants.ScoringConstants.INDEX_INTAKE_COOP_RPM, ControlType.kVelocity);
                 intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
+                if(didCurrentSpikeIntake(intakeMotor)){
+                    noteInside = true;
+                } 
 
                 Logger.recordOutput("scoring.state", "LOADING");
                 break;
@@ -202,6 +208,9 @@ public class ScoringSubsystem extends SubsystemBase {
                 flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 if (isFlywheelReady() && flywheelEncoder.getVelocity() != Constants.ScoringConstants.FLYWHEEL_IDLE_RPM) {
                     indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
+                    if(didCurrentSpike(flywheelMotor)){
+                        noteInside = false;
+                    }
                 }
 
                 /*
@@ -214,10 +223,16 @@ public class ScoringSubsystem extends SubsystemBase {
                 intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
                 flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
+                if(didCurrentSpike(flywheelMotor)){
+                    noteInside = false;
+                }
             case UNLOADING:
                 flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
                 indexPIDController.setReference(-Constants.ScoringConstants.INDEX_INTAKE_UNLOAD_RPM, ControlType.kVelocity);
                 intakePIDController.setReference(-Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
+                if(didCurrentSpikeIntake(intakeMotor)){
+                    noteInside = false;
+                } 
                 Logger.recordOutput("scoring.state", "UNLOADING");
                 break;
             default:
@@ -231,4 +246,19 @@ public class ScoringSubsystem extends SubsystemBase {
         Logger.recordOutput("scoring.intake.rpm", intakeEncoder.getVelocity());
     }
 
+    public boolean didCurrentSpike(CANSparkMax motor) {
+        double current = motor.getOutputCurrent();
+        double threshold = 40.0;
+        return current > threshold;
+    }
+
+    public boolean didCurrentSpikeIntake(CANSparkMax motor) {
+        double current = motor.getOutputCurrent();
+        double threshold = 20.0;
+        return current > threshold;
+    }
+
+    public boolean isNoteInside(){
+        return noteInside;
+    }
 }
