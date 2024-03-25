@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
@@ -139,8 +140,10 @@ public class SwerveSubsystem extends SubsystemBase {
         // Pause for 500 milliseconds to allow the gyro to stabilize.
         // Set the yaw of the gyro to 0 afterwards.
         // TODO: Do we need this anymore? Might cause conflicts with path planner
-        Commands.waitSeconds(0.5)
-                .andThen(new RunCommand(() -> gyro.zeroYaw()));
+        //gyro.reset();
+        Commands.waitUntil(() -> !gyro.isCalibrating()).andThen(new InstantCommand(() -> gyro.zeroYaw()));
+        /*Commands.waitSeconds(0.5)
+                .andThen(new RunCommand(() -> gyro.zeroYaw()));*/
     }
 
     /**
