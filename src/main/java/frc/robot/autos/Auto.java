@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.FavoritePositions;
+import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.ScoringSubsystem.ScoringState;
 import frc.robot.subsystems.limelight.LimelightHelpers;
 import frc.robot.subsystems.limelight.LimelightImplementation;
 
@@ -24,6 +26,7 @@ import java.util.List;
 // This class represents an autonomous routine for an FRC robot.
 public class Auto extends SequentialCommandGroup {
     private final SwerveSubsystem swerve;
+    private final ScoringSubsystem score;
     private final List<Pose2d> possibleLocations;
     private final int noteLimit;
     private final Pose2d initialPos;
@@ -36,8 +39,9 @@ public class Auto extends SequentialCommandGroup {
      * @param noteLimit          The limit on the number of notes to be obtained during autonomous + 1 preloaded.
      * @param initialPos         The initial position to reset the robot odometry to.
      */
-    public Auto(SwerveSubsystem swerve, List<Pose2d> blackListLocations, int noteLimit, Pose2d initialPos) {
+    public Auto(SwerveSubsystem swerve, ScoringSubsystem score, List<Pose2d> blackListLocations, int noteLimit, Pose2d initialPos) {
         this.swerve = swerve;
+        this.score = score;
         possibleLocations = FavoritePositions.allNotes;
         blackList(blackListLocations);
         this.noteLimit = noteLimit;
@@ -70,6 +74,7 @@ public class Auto extends SequentialCommandGroup {
                     swerve.pathfindToPosition(getClosestLocation()).onlyWhile(() -> !LimelightHelpers.getTV("limelight")),
                     // Navigate the robot to a specific location based on vision targeting.
                     swerve.pathfindToPosition(LimelightImplementation.visionTargetLocation),
+                    //new PathFindVision(swerve, score, possibleLocations, getClosestLocation()),
                     // Set the limelight pipeline index back to 0 for april tag localization.
                     new InstantCommand(() -> LimelightHelpers.setPipelineIndex("limelight", 0)),
                     // Navigate the robot to the initial position to shoot.
@@ -78,7 +83,8 @@ public class Auto extends SequentialCommandGroup {
                     // Remove the closest location from the list of possible locations.
                     new InstantCommand(() -> possibleLocations.remove(getClosestLocation())),
                     // Execute the shooting command.
-                    NamedCommands.getCommand("shoot")
+                    NamedCommands.getCommand("shoot"),
+                    //new AutoScoringCommand(score, ScoringState.FIRE, ScoringState.IDLE)
             );
         }
 

@@ -403,11 +403,26 @@ public class SwerveSubsystem extends SubsystemBase {
         //LimelightHelpers.setPipelineIndex("limelight", 0);
         LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
         double poseDifference = odometer.getEstimatedPosition().getTranslation().getDistance(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").pose.getTranslation());
+        double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").avgTagDist;
         double xyStds = 0.9;
         double degStds = 0.9;
         if (limelightMeasurement.tagCount >= 2) {
-            xyStds = 0.5;
-            degStds = 6;
+            if(dist < 1.0){
+                xyStds = 0.1;
+                degStds = 1;
+            } else if (dist < 2.0){
+                xyStds = 0.2;
+                degStds = 2;
+            } else if (dist < 3.0){
+                xyStds = 0.3;
+                degStds = 3;
+            } else if (dist < 4.0){
+                xyStds = 0.4;
+                degStds = 4;
+            } else {
+                xyStds = 0.5;
+                degStds = 6;
+            }
         } else {
             if (limelightMeasurement.avgTagArea > 0.8 && poseDifference < 0.5) {
                 xyStds = 1.0;
