@@ -116,7 +116,7 @@ public class ScoringSubsystem extends SubsystemBase {
         indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
         indexMotor.setSmartCurrentLimit(80); //big neo is good
         //indexMotor.setClosedLoopRampRate(0.6);
-        indexMotor.enableVoltageCompensation(12.0); //TODO: Increase voltage compensation to 12.5+ for it to shoot from right next to speaker
+        indexMotor.enableVoltageCompensation(12.0);
         //indexMotor.burnFlash();
 
         secondaryIndexMotor = new CANSparkMax(Constants.CANAssignments.SECONDARY_INDEX_MOTOR_ID, MotorType.kBrushless);
