@@ -1,12 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.LoggerConstants;
 import frc.robot.exalted.ImprovedPowerDistribution;
 import frc.robot.subsystems.limelight.LimelightImplementation;
-import frc.robot.subsystems.oi.ControlManager;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -137,10 +137,8 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        ControlManager.processDriver();
-
         if (robotContainer.swerveSubsystem.autonavigator.isEnabled()) {
-            if (ControlManager.Outputs.xSpeed != 0 || ControlManager.Outputs.ySpeed != 0 || ControlManager.Outputs.rotatingSpeed != 0) {
+            if (MathUtil.applyDeadband(robotContainer.driver.getLeftX(), 0.05) != 0 || MathUtil.applyDeadband(robotContainer.driver.getLeftY(), 0.05) != 0 || MathUtil.applyDeadband(robotContainer.driver.getRightX(), 0.05) != 0) {
                 robotContainer.swerveSubsystem.autonavigator.pauseNavigation();
             } else {
                 robotContainer.swerveSubsystem.autonavigator.resumeNavigation();

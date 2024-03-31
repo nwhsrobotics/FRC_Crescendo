@@ -18,31 +18,26 @@ import frc.robot.Constants.FavoritePositions;
 import frc.robot.Constants.OIConstants;
 import frc.robot.autos.Auto;
 import frc.robot.commands.*;
-import frc.robot.controllers.DriverJoysticksController;
-import frc.robot.controllers.DriverLeftJoysticksController;
-import frc.robot.controllers.DriverXboxController;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ScoringSubsystem.ScoringState;
 import frc.robot.subsystems.limelight.LimelightImplementation;
-import frc.robot.subsystems.oi.ControlManager;
 import frc.robot.subsystems.oi.XboxControllerButtons;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RobotContainer {
-    public final SwerveSubsystem swerveSubsystem;  // INIT AFTER NAMED COMMAND REGISTRATION!
+    public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     public final ScoringSubsystem scoringSubsystem = new ScoringSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
     public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
 
-    // B is default starting pos for speaker
-    // INIT AFTER SWERVE SUBSYSTEM!
     SendableChooser<Command> autoChooser;
 
-    public static XboxController gunner = new XboxController(3);
+    public XboxController driver = new XboxController(0);
+    public static XboxController gunner = new XboxController(1);
 
     public RobotContainer() {
         SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 3);  // TODO tune durations.
@@ -65,18 +60,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("shoot", autoShoot);
         NamedCommands.registerCommand("autoInit", autoInit);
 
-        /*
-        NamedCommands.registerCommand("load", commandLoad);
-        NamedCommands.registerCommand("toggleSpeaker", toggleSpeaker);
-        NamedCommands.registerCommand("toggleAmp", toggleAmp);
-        NamedCommands.registerCommand("intakeOn", intakeOn);
-        NamedCommands.registerCommand("intakeOff", intakeOff);
-        NamedCommands.registerCommand("autoUnload", autoUnload);
-         */
-
-        // initialize swerve with autobuilder code inside.
-        swerveSubsystem = new SwerveSubsystem();
-
+        //INIT after registering named commands
         autoChooser = AutoBuilder.buildAutoChooser("[B]");
 
 
@@ -131,28 +115,7 @@ public class RobotContainer {
         SequentialCommandGroup semiWristAdjustSource = new SequentialCommandGroup(armLockSource, wristAdjust);
         semiWristAdjustSource.addRequirements(wristSubsystem, armSubsystem);
         */
-        /*swerveSubsystem.setDefaultCommand(
-        new RunCommand(
-            () -> swerveSubsystem.drive(
-                -MathUtil.applyDeadband(Math.copySign(Math.pow(Driver1.getRawAxis(1), 2), Driver1.getRawAxis(1)), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(Math.copySign(Math.pow(Driver1.getRawAxis(0), 2), Driver1.getRawAxis(0)), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(Driver1.getRawAxis(4), OIConstants.kDriveDeadband),
-                true, true),
-                swerveSubsystem));
 
-        //this one below is probably what we want
-        swerveSubsystem.setDefaultCommand(
-            // The left stick controls translation of the robot.
-            // Turning is controlled by the X axis of the right stick.
-            new RunCommand(
-                () -> swerveSubsystem.drive(
-                    -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                    true, true),
-                swerveSubsystem));
-                //TODO: Invert if red, multiply values by -1 because pathplanner origin is always at blue
-                */
 
         // bind gunner controls.
         new JoystickButton(gunner, XboxControllerButtons.RIGHT_BUMPER).onTrue(commandShoot);
@@ -199,10 +162,6 @@ public class RobotContainer {
         ControlManager.DriverButtonCommands.autonavigateToClosestTarget = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(swerveSubsystem.odometer.getEstimatedPosition().nearest(Constants.FavoritePositions.allPoses)), swerveSubsystem);
         ControlManager.DriverButtonCommands.odometryResetPos = new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule());
         ControlManager.DriverButtonCommands.nextPipeline = new InstantCommand(() -> LimelightImplementation.nextPipeline());
-        ControlManager.reserveController(3);  // THE GUNNER CONTROLLER SHOULD BE ON PORT 3.
-        ControlManager.registerController(new DriverXboxController());
-        ControlManager.registerController(new DriverJoysticksController());
-        ControlManager.registerController(new DriverLeftJoysticksController());
 
         // setup selector for controller.
         SendableChooser<Integer> controllerChooser = new SendableChooser<>();
