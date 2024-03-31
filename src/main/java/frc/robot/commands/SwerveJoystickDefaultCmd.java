@@ -12,14 +12,16 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveJoystickDefaultCmd extends Command {
     private final SwerveSubsystem swerveSubsystem;
+    private final VisionSubsystem vision;
     private final XboxController xbox;
     private boolean fieldRelative;
 
     // constructor that initializes SwerveSubsystem, Joystick and adds SwerveSubsystem as a requirement
-    public SwerveJoystickDefaultCmd(SwerveSubsystem swerveSubsystem, XboxController xbox) {
+    public SwerveJoystickDefaultCmd(SwerveSubsystem swerveSubsystem, XboxController xbox, VisionSubsystem vision) {
+        this.vision = vision;
         this.xbox = xbox;
         this.swerveSubsystem = swerveSubsystem;
-        addRequirements(swerveSubsystem);
+        addRequirements(swerveSubsystem, vision);
     }
 
     @Override
@@ -28,13 +30,14 @@ public class SwerveJoystickDefaultCmd extends Command {
 
     @Override
     public void execute() {
+        //TODO: If we get 2 limelights, separate the object alligning and april tag alligning button
             if (xbox.getLeftBumper() || xbox.getRightBumper()) {  //vision allign button
             //while using Limelight, turn off field-relative driving.
             fieldRelative = false;
             swerveSubsystem.drive(
-                VisionSubsystem.limelight_range_proportional(),
+                vision.limelight_range_proportional(),
                 0, 
-                VisionSubsystem.limelight_aim_proportional(),
+                vision.limelight_aim_proportional(),
                 swerveSubsystem.isFieldRelative && fieldRelative, false);
 
         } else if (!(xbox.getRightTriggerAxis() > 0.1)) {  //if booster not pressed

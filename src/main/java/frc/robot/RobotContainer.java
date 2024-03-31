@@ -25,6 +25,7 @@ public class RobotContainer {
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
     public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
+    public final VisionSubsystem vision = new VisionSubsystem("limelight", swerveSubsystem);
 
     SendableChooser<Command> autoChooser;
 
@@ -79,11 +80,11 @@ public class RobotContainer {
         new JoystickButton(driver, XboxControllerButtons.A).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SPEAKER), swerveSubsystem));
         new JoystickButton(driver, XboxControllerButtons.B).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(swerveSubsystem.odometer.getEstimatedPosition().nearest(Constants.FavoritePositions.allPoses)), swerveSubsystem));
         new POVButton(driver, 0).onTrue(new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule()));
-        new POVButton(driver, 180).onTrue(new InstantCommand(VisionSubsystem::nextPipeline));
+        new POVButton(driver, 180).onTrue(new InstantCommand(() -> vision.nextPipeline()));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, driver));
+        swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, driver, vision));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner));
         wristSubsystem.setDefaultCommand(new WristAdjustCmd(wristSubsystem, gunner));
         armSubsystem.setDefaultCommand(new ArmAdjustCmd(armSubsystem, gunner));

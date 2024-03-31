@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.util.LimelightHelpers;
 
@@ -12,9 +13,16 @@ import org.littletonrobotics.junction.Logger;
 /**
  * This class contains implementations for using Limelight camera for aiming, ranging, and transforming target location.
  */
-public class VisionSubsystem {
+public class VisionSubsystem extends SubsystemBase {
 
-    public static Pose2d visionTargetLocation = new Pose2d();
+    public Pose2d visionTargetLocation = new Pose2d();
+    public String limelightName;
+    public final SwerveSubsystem swerve;
+
+    public VisionSubsystem(String limelightName, SwerveSubsystem swerve){
+        this.limelightName = limelightName;
+        this.swerve = swerve;
+    }
 
     /**
      * Implements simple proportional turning control with the Limelight.
@@ -22,14 +30,14 @@ public class VisionSubsystem {
      *
      * @return The angular velocity proportional to the horizontal angle error (tx) detected by the Limelight.
      */
-    public static double limelight_aim_proportional() {
-        if (LimelightHelpers.getTV("limelight")) {
+    public double limelight_aim_proportional() {
+        if (LimelightHelpers.getTV(limelightName)) {
             // Proportional constant determining the aggressiveness of turning.
             double kP = .035;
 
             // Calculate targeting angular velocity based on horizontal angle error (tx) from Limelight.
             // like maybe thethaFromCenter add to offset
-            double targetingAngularVelocity = (LimelightHelpers.getTX("limelight") + LimelightConstants.thethaFromCenter) * kP;
+            double targetingAngularVelocity = (LimelightHelpers.getTX(limelightName) + LimelightConstants.thethaFromCenter) * kP;
 
             //targetingAngularVelocity *= Constants.DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
             // Convert angular velocity to radians per second.
@@ -48,26 +56,26 @@ public class VisionSubsystem {
      *
      * @return The forward speed proportional to the vertical angle error (ty) from Limelight.
      */
-    public static double limelight_range_proportional() {
-        if (LimelightHelpers.getTV("limelight")) {
+    public double limelight_range_proportional() {
+        if (LimelightHelpers.getTV(limelightName)) {
             double targetingForwardSpeed = 0.0;
             if (isAprilTagPipeline()) {
                 // Calculate targeting forward speed based on target's distance (TZ) in 3D space.
-                targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace("limelight")[2];
+                targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace(limelightName)[2];
                 //first april tag
                 // TODO: USE distanceToCamera OR distanceToRobot now BELOW
-                //double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").rawFiducials[0].distToRobot;
+                //double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName).rawFiducials[0].distToRobot;
                 //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
                 targetingForwardSpeed *= 0.345;
                 targetingForwardSpeed *= -1.0;
             } else {
                 double kP = .1;
-                //double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
-                //double targetingForwardSpeed = 2 / (LimelightHelpers.getTY("limelight") * 0.1 * kP);
+                //double targetingForwardSpeed = LimelightHelpers.getTY(limelightName) * kP;
+                //double targetingForwardSpeed = 2 / (LimelightHelpers.getTY(limelightName) * 0.1 * kP);
 
                 //if(Double.isInfinite(targetingForwardSpeed)) return 0;
 
-                //targetingForwardSpeed = -distanceFromLimelight(LimelightHelpers.getTY("limelight") * 0.5 * kP);
+                //targetingForwardSpeed = -distanceFromLimelight(LimelightHelpers.getTY(limelightName) * 0.5 * kP);
                 // Calculate targeting forward speed based on vertical angle error (ty) from Limelight.
                 targetingForwardSpeed = -hypotenuseLength() * kP;
             }
@@ -81,8 +89,8 @@ public class VisionSubsystem {
      *
      * @return The calculated distance from the Limelight to the target.
      */
-    public static double distanceFromLimelight() {
-        if (LimelightHelpers.getTV("limelight")) {
+    public double distanceFromLimelight() {
+        if (LimelightHelpers.getTV(limelightName)) {
             // Angle at which the Limelight is mounted (degrees).
             double limelightMountAngleDegrees = LimelightConstants.mountAngle;
             // Height of Limelight lens above the floor (meters).
@@ -91,7 +99,7 @@ public class VisionSubsystem {
             double goalHeightMeters = 0.0;
 
             // Calculate angle to the target.
-            double angleToGoalDegrees = limelightMountAngleDegrees + LimelightHelpers.getTY("limelight");
+            double angleToGoalDegrees = limelightMountAngleDegrees + LimelightHelpers.getTY(limelightName);
             double angleToGoalRadians = angleToGoalDegrees * (Math.PI / 180.0);
 
             // Calculate distance to the target.
@@ -105,10 +113,10 @@ public class VisionSubsystem {
      *
      * @return The calculated hypotenuse length (aka actual length to object) between the Limelight and the target.
      */
-    public static double hypotenuseLength() {
-        if (LimelightHelpers.getTV("limelight")) {
+    public double hypotenuseLength() {
+        if (LimelightHelpers.getTV(limelightName)) {
             double legLength = distanceFromLimelight();
-            double cosTheta = Math.cos(LimelightHelpers.getTX("limelight") / 180 * Math.PI);
+            double cosTheta = Math.cos(LimelightHelpers.getTX(limelightName) / 180 * Math.PI);
             return legLength / cosTheta;
         }
         return 0.0;
@@ -119,10 +127,10 @@ public class VisionSubsystem {
      *
      * @return The calculated horizontal offset distance from the target.
      */
-    public static double horizontalOffestDistance() {
-        if (LimelightHelpers.getTV("limelight")) {
+    public double horizontalOffestDistance() {
+        if (LimelightHelpers.getTV(limelightName)) {
             double legLength = distanceFromLimelight();
-            double tanTheta = Math.tan(LimelightHelpers.getTX("limelight") / 180 * Math.PI);
+            double tanTheta = Math.tan(LimelightHelpers.getTX(limelightName) / 180 * Math.PI);
             return legLength * tanTheta;
         }
         return 0.0;
@@ -133,8 +141,8 @@ public class VisionSubsystem {
      *
      * @return True if the AprilTag pipeline is being used, false otherwise.
      */
-    private static boolean isAprilTagPipeline() {
-        return LimelightHelpers.getCurrentPipelineIndex("limelight") == 0.0;
+    private boolean isAprilTagPipeline() {
+        return LimelightHelpers.getCurrentPipelineIndex(limelightName) == 0.0;
     }
 
     /**
@@ -143,15 +151,15 @@ public class VisionSubsystem {
      * @param pos The current position of the target.
      * @return The transformed position of the target.
      */
-    public static Pose2d transformTargetLocation(Pose2d pos) {
-        if (LimelightHelpers.getTV("limelight")) {
+    public Pose2d transformTargetLocation(Pose2d pos) {
+        if (LimelightHelpers.getTV(limelightName)) {
             double distance = Math.abs(hypotenuseLength());
 
             Translation2d translation = pos.getTranslation();
 
             // Calculate the rotation of the target based on Limelight's horizontal angle (tx).
             // Note: We add the rotation of the Limelight to the target's existing rotation.
-            Rotation2d targetRotation = pos.getRotation().plus(Rotation2d.fromDegrees(LimelightHelpers.getTX("limelight")));
+            Rotation2d targetRotation = pos.getRotation().plus(Rotation2d.fromDegrees(LimelightHelpers.getTX(limelightName)));
 
             // Calculate the actual X-coordinate after rotation
             double actualX = translation.getX() + (distance * Math.cos(targetRotation.getRadians()) - (LimelightConstants.horizontalOffset * Math.sin(targetRotation.getRadians())));
@@ -169,17 +177,17 @@ public class VisionSubsystem {
         return pos;
     }
 
-    public static void nextPipeline() {
-        int currentIndex = (int) LimelightHelpers.getCurrentPipelineIndex("limelight");
+    public void nextPipeline() {
+        int currentIndex = (int) LimelightHelpers.getCurrentPipelineIndex(limelightName);
         if (currentIndex < 1.0) {
-            LimelightHelpers.setPipelineIndex("limelight", currentIndex + 1);
+            LimelightHelpers.setPipelineIndex(limelightName, currentIndex + 1);
         } else {
-            LimelightHelpers.setPipelineIndex("limelight", 0);
+            LimelightHelpers.setPipelineIndex(limelightName, 0);
         }
     }
 
-    public static String getPipelineName() {
-        int currentIndex = (int) LimelightHelpers.getCurrentPipelineIndex("limelight");
+    public String getPipelineName() {
+        int currentIndex = (int) LimelightHelpers.getCurrentPipelineIndex(limelightName);
         switch (currentIndex) {
             case 0:
                 return "AprilTag";
@@ -189,6 +197,14 @@ public class VisionSubsystem {
                 return "None";
         }
 
+    }
+
+    @Override
+    public void periodic() {
+        visionTargetLocation = transformTargetLocation(swerve.odometer.getEstimatedPosition());
+        Logger.recordOutput("limelight.pipelineIndex", LimelightHelpers.getCurrentPipelineIndex(limelightName));
+        Logger.recordOutput("limelight.pipelineName", getPipelineName());
+        Logger.recordOutput("limelight.objectDetected", LimelightHelpers.getTV(limelightName));
     }
 
     //Remove a lot of redudant methods like getting sin of distance vs getting tan of a leg is same thing but its being repeated
