@@ -147,44 +147,19 @@ public class RobotContainer {
         gunner_LS.whileTrue(wristAdjust);
         */
 
-
-        ControlManager.DriverButtonCommands.navXResetCommand = new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw(), swerveSubsystem);
-        ControlManager.DriverButtonCommands.toggleFieldRelativeCommand = new InstantCommand(() -> swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative, swerveSubsystem);
-        ControlManager.DriverButtonCommands.toggleAutonavigationCommand = new InstantCommand(() -> swerveSubsystem.autonavigator.toggle(), swerveSubsystem);
-        ControlManager.DriverButtonCommands.autonavigateToAmp = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.AMP), swerveSubsystem);
-        ControlManager.DriverButtonCommands.autonavigateToSource = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SOURCE), swerveSubsystem);
-        ControlManager.DriverButtonCommands.autonavigateToSpeaker = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SPEAKER), swerveSubsystem);
-        ControlManager.DriverButtonCommands.autonavigateToTopStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.TOPSTAGE), swerveSubsystem);
-        ControlManager.DriverButtonCommands.autonavigateToMidStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.MIDSTAGE), swerveSubsystem);
-        ControlManager.DriverButtonCommands.autonavigateToBottomStage = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.BOTTOMSTAGE), swerveSubsystem);
-        //changed from swerveSubsystem.autonavigator.navigateTo(visionTargetLocation); finds path to closest POI (Point of interest)
-        //autonavigateToVisionTarget 
-        ControlManager.DriverButtonCommands.autonavigateToClosestTarget = new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(swerveSubsystem.odometer.getEstimatedPosition().nearest(Constants.FavoritePositions.allPoses)), swerveSubsystem);
-        ControlManager.DriverButtonCommands.odometryResetPos = new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule());
-        ControlManager.DriverButtonCommands.nextPipeline = new InstantCommand(() -> LimelightImplementation.nextPipeline());
-
-        // setup selector for controller.
-        SendableChooser<Integer> controllerChooser = new SendableChooser<>();
-        for (String option : ControlManager.getControllerLabels()) {
-            controllerChooser.addOption(option, ControlManager.getControllerPortFromLabel(option));
-        }
-        int defaultPort = ControlManager.getControllerLowest();
-        if (defaultPort != -1) {
-            controllerChooser.setDefaultOption(ControlManager.getControllerLabel(defaultPort), defaultPort);
-            ControlManager.setDriverPort(defaultPort);
-        } else {
-            controllerChooser.setDefaultOption("None", -1);
-        }
-        controllerChooser.onChange((port) -> {
-            if (port != null) {
-                ControlManager.setDriverPort(port);
-            }
-        });
-        SmartDashboard.putData("Driver Controllers", controllerChooser);
+        new JoystickButton(driver, XboxControllerButtons.MENU).onTrue( new InstantCommand(() -> swerveSubsystem.gyro.zeroYaw(), swerveSubsystem));
+        new JoystickButton(driver, XboxControllerButtons.VIEW).onTrue(new InstantCommand(() -> swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative, swerveSubsystem));
+        new JoystickButton(driver, XboxControllerButtons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.toggle(), swerveSubsystem));
+        new JoystickButton(driver, XboxControllerButtons.X).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.AMP), swerveSubsystem));
+        new JoystickButton(driver, XboxControllerButtons.Y).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SOURCE), swerveSubsystem));
+        new JoystickButton(driver, XboxControllerButtons.A).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SPEAKER), swerveSubsystem));
+        new JoystickButton(driver, XboxControllerButtons.B).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(swerveSubsystem.odometer.getEstimatedPosition().nearest(Constants.FavoritePositions.allPoses)), swerveSubsystem));
+        new POVButton(driver, 0).onTrue(new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule()));
+        new POVButton(driver, 180).onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem));
+        swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, driver));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner));
         wristSubsystem.setDefaultCommand(new WristAdjustCmd(wristSubsystem, gunner));
         armSubsystem.setDefaultCommand(new ArmAdjustCmd(armSubsystem, gunner));
