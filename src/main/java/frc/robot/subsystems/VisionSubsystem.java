@@ -1,16 +1,18 @@
 // This class provides implementations for utilizing a Limelight camera for various robot control tasks.
-package frc.robot.subsystems.limelight;
+package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants.LimelightConstants;
+import frc.robot.util.LimelightHelpers;
+
 import org.littletonrobotics.junction.Logger;
 
 /**
  * This class contains implementations for using Limelight camera for aiming, ranging, and transforming target location.
  */
-public class LimelightImplementation {
+public class VisionSubsystem {
 
     public static Pose2d visionTargetLocation = new Pose2d();
 

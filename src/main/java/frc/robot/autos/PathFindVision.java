@@ -8,10 +8,10 @@ import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.limelight.LimelightHelpers;
-import frc.robot.subsystems.limelight.LimelightImplementation;
+import frc.robot.util.LimelightHelpers;
 
 public class PathFindVision extends Command {
   private SwerveSubsystem swerve;
@@ -26,7 +26,7 @@ public class PathFindVision extends Command {
     addRequirements(swerve, score);
     possibleLocations = locations;
     this.pathFindLoc = pathFindLoc;
-    pathFind = swerve.pathfindToPosition(LimelightImplementation.visionTargetLocation);
+    pathFind = swerve.pathfindToPosition(VisionSubsystem.visionTargetLocation);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -43,7 +43,7 @@ public class PathFindVision extends Command {
       if(LimelightHelpers.getTV("limelight")){
         //basically if note was pushed while intaking and never came inside then go pathfind again
           pathFind = null;
-          pathFind = swerve.pathfindToPosition(LimelightImplementation.visionTargetLocation);
+          pathFind = swerve.pathfindToPosition(VisionSubsystem.visionTargetLocation);
           pathFind.schedule();
       } else {
         //if note was taken by opponent from center say for example

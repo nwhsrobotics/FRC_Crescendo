@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.limelight.LimelightImplementation;
 
 public class SwerveJoystickDefaultCmd extends Command {
     private final SwerveSubsystem swerveSubsystem;
@@ -32,9 +32,9 @@ public class SwerveJoystickDefaultCmd extends Command {
             //while using Limelight, turn off field-relative driving.
             fieldRelative = false;
             swerveSubsystem.drive(
-                LimelightImplementation.limelight_range_proportional(),
+                VisionSubsystem.limelight_range_proportional(),
                 0, 
-                LimelightImplementation.limelight_aim_proportional(),
+                VisionSubsystem.limelight_aim_proportional(),
                 swerveSubsystem.isFieldRelative && fieldRelative, false);
 
         } else if (!(xbox.getRightTriggerAxis() > 0.1)) {  //if booster not pressed

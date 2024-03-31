@@ -5,8 +5,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.LoggerConstants;
-import frc.robot.exalted.ImprovedPowerDistribution;
-import frc.robot.subsystems.limelight.LimelightImplementation;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.util.ImprovedPowerDistribution;
+import frc.robot.util.LimelightHelpers;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -144,10 +146,10 @@ public class Robot extends LoggedRobot {
                 robotContainer.swerveSubsystem.autonavigator.resumeNavigation();
             }
         }
-        LimelightImplementation.visionTargetLocation = LimelightImplementation.transformTargetLocation(robotContainer.swerveSubsystem.odometer.getEstimatedPosition());
-        /*Logger.recordOutput("limelight.pipelineIndex", LimelightHelpers.getCurrentPipelineIndex("limelight"));
-        Logger.recordOutput("limelight.pipelineName", LimelightImplementation.getPipelineName());
-        Logger.recordOutput("limelight.objectDetected", LimelightHelpers.getTV("limelight"));*/
+        VisionSubsystem.visionTargetLocation = VisionSubsystem.transformTargetLocation(robotContainer.swerveSubsystem.odometer.getEstimatedPosition());
+        Logger.recordOutput("limelight.pipelineIndex", LimelightHelpers.getCurrentPipelineIndex("limelight"));
+        Logger.recordOutput("limelight.pipelineName", VisionSubsystem.getPipelineName());
+        Logger.recordOutput("limelight.objectDetected", LimelightHelpers.getTV("limelight"));
     }
 
     @Override

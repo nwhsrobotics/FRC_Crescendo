@@ -20,8 +20,7 @@ import frc.robot.autos.Auto;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ScoringSubsystem.ScoringState;
-import frc.robot.subsystems.limelight.LimelightImplementation;
-import frc.robot.subsystems.oi.XboxControllerButtons;
+import frc.robot.util.XboxControllerButtons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,22 +39,12 @@ public class RobotContainer {
     public static XboxController gunner = new XboxController(1);
 
     public RobotContainer() {
-        SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 3);  // TODO tune durations.
+        SetScoringStateCommand commandShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, 3);
         SetScoringStateCommand commandLoad = new SetScoringStateCommand(scoringSubsystem, ScoringState.LOADING, 2);
         SetScoringStateCommand commandUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 2);
         SetScoringStateCommand autoShoot = new SetScoringStateCommand(scoringSubsystem, ScoringState.FIRE, ScoringState.LOADING, 2); //auto only
-        //SetScoringStateCommand autoUnload = new SetScoringStateCommand(scoringSubsystem, ScoringState.UNLOADING, 1);
-        //InstantCommand intakeOn = new InstantCommand(() -> scoringSubsystem.state = ScoringState.LOADING, scoringSubsystem);  // auto only.
-        //ParallelCommandGroup autoInit = new ParallelCommandGroup((new InstantCommand(() -> wristSubsystem.ampPreset(), wristSubsystem),
-        //(new InstantCommand(() -> armSubsystem.underStage(), armSubsystem));
+        //ParallelCommandGroup autoInit = new ParallelCommandGroup((new InstantCommand(() -> wristSubsystem.ampPreset(), wristSubsystem), (new InstantCommand(() -> armSubsystem.underStage(), armSubsystem));
         ParallelCommandGroup autoInit = new ParallelCommandGroup();//new ParallelCommandGroup(new InstantCommand(() -> wristSubsystem.ampPreset(), wristSubsystem), 
-        //new InstantCommand(() -> armSubsystem.ampPreset(), armSubsystem));
-        //autoInit.addRequirements(wristSubsystem, armSubsystem, scoringSubsystem);
-        //InstantCommand intakeOff = new InstantCommand(() -> scoringSubsystem.state = ScoringState.IDLE, scoringSubsystem); //auto only
-        //InstantCommand toggleAmp = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_AMP_RPM), scoringSubsystem);
-        //InstantCommand toggleSpeaker = new InstantCommand(() -> scoringSubsystem.setFlywheel(Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM), scoringSubsystem);
-        //InstantCommand wristIntakeFwd = new InstantCommand(() -> wristIntakeSubsystem.forwards());
-        //InstantCommand wristIntakeBackwards = new InstantCommand(() -> wristIntakeSubsystem.backwards());
         // expose scoring-related commands to autonomous routines.
         NamedCommands.registerCommand("shoot", autoShoot);
         NamedCommands.registerCommand("autoInit", autoInit);
@@ -64,28 +53,16 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser("[B]");
 
 
-        // Command for setting arm to the amp position
         InstantCommand armLockAmp = new InstantCommand(() -> armSubsystem.ampPreset(), armSubsystem);
-
-        // Command for setting arm to the source position
         InstantCommand armLockSource = new InstantCommand(() -> armSubsystem.sourcePreset(), armSubsystem);
-
         InstantCommand armLockUnderStage = new InstantCommand(() -> armSubsystem.underStage(), armSubsystem);
-
-        //InstantCommand armHome = new InstantCommand(() -> armSubsystem.home(), armSubsystem);
-
-        // Command for setting wrist to the amp position
         InstantCommand wristLockAmp = new InstantCommand(() -> wristSubsystem.ampPreset(), wristSubsystem);
-
-        // Command for setting wrist to the source position
         InstantCommand wristLockSource = new InstantCommand(() -> wristSubsystem.sourcePreset(), wristSubsystem);
-
         InstantCommand wristLockUnderStage = new InstantCommand(() -> wristSubsystem.underStage(), wristSubsystem);
 
 
         // Command for letting the gunner freely adjust the arm position, tuning for the joystick control will be subject to change
         // InstantCommand armMoveUp = new InstantCommand(() -> armSubsystem.moveUp(), armSubsystem);
-
         // armMoveDown = new InstantCommand(() -> armSubsystem.moveDown(), armSubsystem);
 
         // Command for letting the gunner freely adjust the wrist position, tuning for the joystick control will be subject to change
@@ -155,7 +132,7 @@ public class RobotContainer {
         new JoystickButton(driver, XboxControllerButtons.A).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SPEAKER), swerveSubsystem));
         new JoystickButton(driver, XboxControllerButtons.B).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(swerveSubsystem.odometer.getEstimatedPosition().nearest(Constants.FavoritePositions.allPoses)), swerveSubsystem));
         new POVButton(driver, 0).onTrue(new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule()));
-        new POVButton(driver, 180).onTrue(new InstantCommand(() -> LimelightImplementation.nextPipeline()));
+        new POVButton(driver, 180).onTrue(new InstantCommand(() -> VisionSubsystem.nextPipeline()));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -164,18 +141,7 @@ public class RobotContainer {
         wristSubsystem.setDefaultCommand(new WristAdjustCmd(wristSubsystem, gunner));
         armSubsystem.setDefaultCommand(new ArmAdjustCmd(armSubsystem, gunner));
         wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner));
-        
-        /*SendableChooser<Integer> pipeline = new SendableChooser<>();
-        pipeline.setDefaultOption("AprilTag", Integer.valueOf(0));
-        pipeline.addOption("Note", Integer.valueOf(1));
-        pipeline.addOption("AprilTagZoom", Integer.valueOf(2));
-        pipeline.addOption("NoteZoom", Integer.valueOf(3));
-        SmartDashboard.putData(pipeline);
-        pipeline.onChange((pipelineNum) -> {
-            LimelightHelpers.setPipelineIndex("limelight", pipelineNum);
-            Logger.recordOutput("limelight.pipelineIndex", pipelineNum);
-            Logger.recordOutput("limelight.pipelineName", LimelightImplementation.getPipelineName());
-        });*/
+    
     }
 
     public Command getAutonomousCommand() {
