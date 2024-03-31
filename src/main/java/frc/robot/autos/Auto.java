@@ -32,6 +32,7 @@ public class Auto extends SequentialCommandGroup {
     private final List<Pose2d> possibleLocations;
     private final int noteLimit;
     private final Pose2d initialPos;
+    private final VisionSubsystem vision;
 
     /**
      * Creates a new instance of the Auto class.
@@ -41,9 +42,10 @@ public class Auto extends SequentialCommandGroup {
      * @param noteLimit          The limit on the number of notes to be obtained during autonomous + 1 preloaded.
      * @param initialPos         The initial position to reset the robot odometry to.
      */
-    public Auto(SwerveSubsystem swerve, ScoringSubsystem score, List<Pose2d> blackListLocations, int noteLimit, Pose2d initialPos) {
+    public Auto(SwerveSubsystem swerve, ScoringSubsystem score, VisionSubsystem vision, List<Pose2d> blackListLocations, int noteLimit, Pose2d initialPos) {
         this.swerve = swerve;
         this.score = score;
+        this.vision = vision;
         possibleLocations = FavoritePositions.allNotes;
         blackList(blackListLocations);
         this.noteLimit = noteLimit;
@@ -75,7 +77,7 @@ public class Auto extends SequentialCommandGroup {
                     // Navigate the robot to the closest location without considering vision targeting.
                     swerve.pathfindToPosition(getClosestLocation()).onlyWhile(() -> !LimelightHelpers.getTV("limelight")),
                     // Navigate the robot to a specific location based on vision targeting.
-                    swerve.pathfindToPosition(VisionSubsystem.visionTargetLocation),
+                    swerve.pathfindToPosition(vision.visionTargetLocation),
                     //new PathFindVision(swerve, score, possibleLocations, getClosestLocation()),
                     //or command.repeatedly also works for single command
                     //Commands.repeatingSequence(new PathFindVision(swerve, score, possibleLocations, getClosestLocation()).until(() -> score.isNoteInside())),

@@ -16,17 +16,19 @@ import frc.robot.util.LimelightHelpers;
 public class PathFindVision extends Command {
   private SwerveSubsystem swerve;
   private ScoringSubsystem score;
+  private VisionSubsystem vision;
   private Command pathFind; 
   private List<Pose2d> possibleLocations;
   private Pose2d pathFindLoc;
   /** Creates a new PathFindVision. */
-  public PathFindVision(SwerveSubsystem swerve, ScoringSubsystem score, List<Pose2d> locations, Pose2d pathFindLoc) {
+  public PathFindVision(SwerveSubsystem swerve, ScoringSubsystem score, VisionSubsystem vision, List<Pose2d> locations, Pose2d pathFindLoc) {
     this.swerve = swerve;
     this.score = score;
+    this.vision = vision;
     addRequirements(swerve, score);
     possibleLocations = locations;
     this.pathFindLoc = pathFindLoc;
-    pathFind = swerve.pathfindToPosition(VisionSubsystem.visionTargetLocation);
+    pathFind = swerve.pathfindToPosition(vision.visionTargetLocation);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -43,7 +45,7 @@ public class PathFindVision extends Command {
       if(LimelightHelpers.getTV("limelight")){
         //basically if note was pushed while intaking and never came inside then go pathfind again
           pathFind = null;
-          pathFind = swerve.pathfindToPosition(VisionSubsystem.visionTargetLocation);
+          pathFind = swerve.pathfindToPosition(vision.visionTargetLocation);
           pathFind.schedule();
       } else {
         //if note was taken by opponent from center say for example

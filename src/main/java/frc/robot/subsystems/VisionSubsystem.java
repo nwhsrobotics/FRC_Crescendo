@@ -202,9 +202,9 @@ public class VisionSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         visionTargetLocation = transformTargetLocation(swerve.odometer.getEstimatedPosition());
-        Logger.recordOutput("limelight.pipelineIndex", LimelightHelpers.getCurrentPipelineIndex(limelightName));
-        Logger.recordOutput("limelight.pipelineName", getPipelineName());
-        Logger.recordOutput("limelight.objectDetected", LimelightHelpers.getTV(limelightName));
+        Logger.recordOutput(limelightName + ".pipelineIndex", LimelightHelpers.getCurrentPipelineIndex(limelightName));
+        Logger.recordOutput(limelightName + ".pipelineName", getPipelineName());
+        Logger.recordOutput(limelightName + ".objectDetected", LimelightHelpers.getTV(limelightName));
     }
 
     //Remove a lot of redudant methods like getting sin of distance vs getting tan of a leg is same thing but its being repeated

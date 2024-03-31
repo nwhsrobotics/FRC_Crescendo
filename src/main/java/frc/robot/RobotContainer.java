@@ -61,7 +61,7 @@ public class RobotContainer {
         ParallelCommandGroup toUnderStage = new ParallelCommandGroup(armLockUnderStage, wristLockUnderStage);
 
         new JoystickButton(gunner, XboxControllerButtons.RIGHT_BUMPER).onTrue(commandShoot);
-        new JoystickButton(gunner, XboxControllerButtons.LEFT_BUMPER).onTrue(new Auto(swerveSubsystem, scoringSubsystem, new ArrayList<>(List.of(FavoritePositions.FRONTLEFT, FavoritePositions.FRONTLEFTMOST, FavoritePositions.FRONTRIGHT, FavoritePositions.FRONTRIGHTMOST)), 4, FavoritePositions.SPEAKER));
+        new JoystickButton(gunner, XboxControllerButtons.LEFT_BUMPER).onTrue(new Auto(swerveSubsystem, scoringSubsystem, vision, new ArrayList<>(List.of(FavoritePositions.FRONTLEFT, FavoritePositions.FRONTLEFTMOST, FavoritePositions.FRONTRIGHT, FavoritePositions.FRONTRIGHTMOST)), 4, FavoritePositions.SPEAKER));
         new JoystickButton(gunner, XboxControllerButtons.A).onTrue(commandLoad);
         new JoystickButton(gunner, XboxControllerButtons.B).onTrue(commandUnload);
         new POVButton(gunner, 0).onTrue(toAmp);
