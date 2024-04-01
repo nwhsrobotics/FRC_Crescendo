@@ -1,23 +1,21 @@
 package frc.robot;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import org.littletonrobotics.junction.Logger;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public final class Constants {
     public static final class CANAssignments {
@@ -225,7 +223,7 @@ public final class Constants {
         public static final double INDEX_INTAKE_UNLOAD_RPM = 800; // TODO requires tuning.
 
         public static final double FLYWHEEL_SPEAKER_RPM = 4750.0; //it was 4250 during second comp, increased it because does it even matter anymore?
-        public static final double FLYWHEEL_AMP_RPM = 450.0; 
+        public static final double FLYWHEEL_AMP_RPM = 450.0;
         public static final double FLYWHEEL_IDLE_RPM = 0;
         public static final double INDEX_FLYWHEEL_COOP_RPM = 4750.0;
     }

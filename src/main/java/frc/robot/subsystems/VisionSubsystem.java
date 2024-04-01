@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.util.LimelightHelpers;
-
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -19,7 +18,7 @@ public class VisionSubsystem extends SubsystemBase {
     public String limelightName;
     public final SwerveSubsystem swerve;
 
-    public VisionSubsystem(String limelightName, SwerveSubsystem swerve){
+    public VisionSubsystem(String limelightName, SwerveSubsystem swerve) {
         this.limelightName = limelightName;
         this.swerve = swerve;
     }

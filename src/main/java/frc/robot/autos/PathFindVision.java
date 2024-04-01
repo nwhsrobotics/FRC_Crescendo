@@ -4,68 +4,71 @@
 
 package frc.robot.autos;
 
-import java.util.List;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.LimelightHelpers;
 
+import java.util.List;
+
 public class PathFindVision extends Command {
-  private SwerveSubsystem swerve;
-  private ScoringSubsystem score;
-  private VisionSubsystem vision;
-  private Command pathFind; 
-  private List<Pose2d> possibleLocations;
-  private Pose2d pathFindLoc;
-  /** Creates a new PathFindVision. */
-  public PathFindVision(SwerveSubsystem swerve, ScoringSubsystem score, VisionSubsystem vision, List<Pose2d> locations, Pose2d pathFindLoc) {
-    this.swerve = swerve;
-    this.score = score;
-    this.vision = vision;
-    addRequirements(swerve, score);
-    possibleLocations = locations;
-    this.pathFindLoc = pathFindLoc;
-    pathFind = swerve.pathfindToPosition(vision.visionTargetLocation);
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+    private final SwerveSubsystem swerve;
+    private final ScoringSubsystem score;
+    private final VisionSubsystem vision;
+    private Command pathFind;
+    private final List<Pose2d> possibleLocations;
+    private final Pose2d pathFindLoc;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    pathFind.schedule();
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    if(pathFind.isFinished()){
-      if(LimelightHelpers.getTV("limelight")){
-        //basically if note was pushed while intaking and never came inside then go pathfind again
-          pathFind = null;
-          pathFind = swerve.pathfindToPosition(vision.visionTargetLocation);
-          pathFind.schedule();
-      } else {
-        //if note was taken by opponent from center say for example
-        possibleLocations.remove(pathFindLoc);
-        //then pathfind to other note location until we get one in
-        //new PathFindVision(swerve, score, possibleLocations, swerve.getPose().nearest(possibleLocations)).schedule();
-        this.cancel();
-      }
+    /**
+     * Creates a new PathFindVision.
+     */
+    public PathFindVision(SwerveSubsystem swerve, ScoringSubsystem score, VisionSubsystem vision, List<Pose2d> locations, Pose2d pathFindLoc) {
+        this.swerve = swerve;
+        this.score = score;
+        this.vision = vision;
+        addRequirements(swerve, score);
+        possibleLocations = locations;
+        this.pathFindLoc = pathFindLoc;
+        pathFind = swerve.pathfindToPosition(vision.visionTargetLocation);
+        // Use addRequirements() here to declare subsystem dependencies.
     }
-  }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    pathFind.cancel();
-  }
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        pathFind.schedule();
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return score.isNoteInside();
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        if (pathFind.isFinished()) {
+            if (LimelightHelpers.getTV("limelight")) {
+                //basically if note was pushed while intaking and never came inside then go pathfind again
+                pathFind = null;
+                pathFind = swerve.pathfindToPosition(vision.visionTargetLocation);
+                pathFind.schedule();
+            } else {
+                //if note was taken by opponent from center say for example
+                possibleLocations.remove(pathFindLoc);
+                //then pathfind to other note location until we get one in
+                //new PathFindVision(swerve, score, possibleLocations, swerve.getPose().nearest(possibleLocations)).schedule();
+                this.cancel();
+            }
+        }
+    }
+
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        pathFind.cancel();
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return score.isNoteInside();
+    }
 }
