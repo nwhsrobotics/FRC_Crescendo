@@ -57,22 +57,19 @@ public class RobotContainer {
 
         InstantCommand resetArmEncoders = new InstantCommand(armSubsystem::resetArmEncoders, armSubsystem);
         ParallelCommandGroup toAmp = new ParallelCommandGroup(armLockAmp, wristLockAmp);
-        toAmp.addRequirements(wristSubsystem, armSubsystem);
         ParallelCommandGroup toSource = new ParallelCommandGroup(armLockSource, wristLockSource);
-        toSource.addRequirements(wristSubsystem, armSubsystem);
         ParallelCommandGroup toUnderStage = new ParallelCommandGroup(armLockUnderStage, wristLockUnderStage);
 
         new JoystickButton(gunner, XboxControllerButtons.RIGHT_BUMPER).onTrue(commandShoot);
         new JoystickButton(gunner, XboxControllerButtons.LEFT_BUMPER).onTrue(new Auto(swerveSubsystem, scoringSubsystem, vision, new ArrayList<>(List.of(FavoritePositions.FRONTLEFT, FavoritePositions.FRONTLEFTMOST, FavoritePositions.FRONTRIGHT, FavoritePositions.FRONTRIGHTMOST)), 4, FavoritePositions.SPEAKER));
         new JoystickButton(gunner, XboxControllerButtons.A).onTrue(commandLoad);
         new JoystickButton(gunner, XboxControllerButtons.B).onTrue(commandUnload);
+        new JoystickButton(gunner, XboxControllerButtons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(scoringSubsystem::increaseRPM));
+        new JoystickButton(gunner, XboxControllerButtons.LEFT_STICK_BUTTON).onTrue(new InstantCommand(scoringSubsystem::decreaseRPM));
         new POVButton(gunner, 0).onTrue(toAmp);
         new POVButton(gunner, 90).onTrue(toSource);
         new POVButton(gunner, 180).onTrue(toUnderStage);
         new POVButton(gunner, 270).onTrue(resetArmEncoders);
-
-        new JoystickButton(gunner, XboxControllerButtons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(scoringSubsystem::increaseRPM));
-        new JoystickButton(gunner, XboxControllerButtons.LEFT_STICK_BUTTON).onTrue(new InstantCommand(scoringSubsystem::decreaseRPM));
 
         new JoystickButton(driver, XboxControllerButtons.MENU).onTrue(new InstantCommand(swerveSubsystem.gyro::zeroYaw, swerveSubsystem));
         new JoystickButton(driver, XboxControllerButtons.VIEW).onTrue(new InstantCommand(() -> swerveSubsystem.isFieldRelative = !swerveSubsystem.isFieldRelative, swerveSubsystem));
