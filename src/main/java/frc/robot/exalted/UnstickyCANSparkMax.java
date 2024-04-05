@@ -1,11 +1,11 @@
 package frc.robot.exalted;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVLibError;
 
 /**
  * Like CANSparkMax, but automatically clears sticky faults.
@@ -15,7 +15,7 @@ public class UnstickyCANSparkMax extends CANSparkMax {
 
     public UnstickyCANSparkMax(int deviceId, MotorType type) {
         super(deviceId, type);
-        
+
         clearToleratedStickyFaults();
     }
 
@@ -31,7 +31,7 @@ public class UnstickyCANSparkMax extends CANSparkMax {
      */
     public List<FaultID> getStickyFaultsAsList() {
         List<FaultID> faults = new ArrayList<>();
-        
+
         for (FaultID fault : FaultID.values()) {
             if (getStickyFault(fault)) {
                 faults.add(fault);

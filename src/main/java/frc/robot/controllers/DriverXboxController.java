@@ -123,7 +123,7 @@ public class DriverXboxController implements Controller {
 
     @Override
     public int getAutonavigateToMidStageButton() {
-        return 0 + OIConstants.kPOV;
+        return OIConstants.kPOV;
     }
 
     @Override

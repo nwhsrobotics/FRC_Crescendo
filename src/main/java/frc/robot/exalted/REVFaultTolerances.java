@@ -1,23 +1,21 @@
 package frc.robot.exalted;
 
+import com.revrobotics.CANSparkBase.FaultID;
+
 import java.util.Arrays;
 import java.util.List;
 
-import com.revrobotics.CANSparkBase.FaultID;
-
 public class REVFaultTolerances {
-    private List<FaultID> toleratedFaults;
+    private final List<FaultID> toleratedFaults;
 
     /**
      * Create default fault tolerances.
      */
     public REVFaultTolerances() {
-        toleratedFaults = Arrays.asList(new FaultID[] {
-            FaultID.kBrownout,
-            FaultID.kCANRX,
-            FaultID.kCANTX,
-            FaultID.kHasReset,
-        });
+        toleratedFaults = Arrays.asList(FaultID.kBrownout,
+                FaultID.kCANRX,
+                FaultID.kCANTX,
+                FaultID.kHasReset);
     }
 
     /**

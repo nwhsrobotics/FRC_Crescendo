@@ -1,21 +1,23 @@
 package frc.robot;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import org.littletonrobotics.junction.Logger;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public final class Constants {
     public static final class CANAssignments {
@@ -122,6 +124,10 @@ public final class Constants {
                 new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //back left
                 new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //back right
 
+        public static final double kDirectionSlewRate = 1.2; // radians per second
+        public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
+        public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
+
         public static final boolean kFrontLeftTurningEncoderReversed = false;
         public static final boolean kBackLeftTurningEncoderReversed = false;
         public static final boolean kFrontRightTurningEncoderReversed = false;
@@ -192,7 +198,7 @@ public final class Constants {
          * This controls the intake RPM when it is activated.
          *
          * <p>
-         * 
+         * <p>
          * If the intake is told to be driven backwards,
          * this value still is applied, and simply made negative.
          */
@@ -201,7 +207,7 @@ public final class Constants {
          * This controls the indexer RPM when the intake is activated in the forwards direction.
          *
          * <p>
-         * 
+         * <p>
          * The indexer aids in ingesting the game piece,
          * elastically deforming it to be pressed firmly against the flywheel.
          */
@@ -210,7 +216,7 @@ public final class Constants {
          * This controls the indexer RPM when the intake is activated in the reverse direction.
          *
          * <p>
-         * 
+         * <p>
          * The indexer is responsible for initially dislodging the game piece
          * from its resting position against the flywheel.
          * Once displaced far enough, the intake wheels can engage with the game piece
@@ -218,10 +224,10 @@ public final class Constants {
          */
         public static final double INDEX_INTAKE_UNLOAD_RPM = 800; // TODO requires tuning.
 
-        public static final double FLYWHEEL_SPEAKER_RPM = 4250.0;
-        public static final double FLYWHEEL_AMP_RPM = 4250.0; //TODO FIX THIS
+        public static final double FLYWHEEL_SPEAKER_RPM = 4750.0; //it was 4250 during second comp, increased it because does it even matter anymore?
+        public static final double FLYWHEEL_AMP_RPM = 450.0; 
         public static final double FLYWHEEL_IDLE_RPM = 0;
-        public static final double INDEX_FLYWHEEL_COOP_RPM = 4250.0; 
+        public static final double INDEX_FLYWHEEL_COOP_RPM = 4750.0;
     }
 
     public static final class AutoConstants {
@@ -246,8 +252,8 @@ public final class Constants {
         public static final double scaleFactor = 0.6;
         public static final double kTeleDriveMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond * scaleFactor;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond * scaleFactor;
+        public static final double kDriveDeadband = 0.05;
 
-        //TODO: Better constraints 
         public static final PathConstraints kPathfindingConstraints = new PathConstraints(
                 DriveConstants.kPhysicalMaxSpeedMetersPerSecond * 0.8, AutoConstants.kMaxAccelerationMetersPerSecondSquared * 0.75,
                 AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
@@ -268,13 +274,22 @@ public final class Constants {
         //same area as amp
         public static final Pose2d TOPSTAGE = new Pose2d(4.38, 4.89, Rotation2d.fromDegrees(-60.00));
         //0.49, 7.69 for odometry reset corner
-        //TODO: Find the right topspeaker and bottomspeaker place from where we can actually shoot from
         //same area as amp
         public static final Pose2d TOPSPEAKER = new Pose2d(0.71, 6.68, Rotation2d.fromDegrees(60));
         //away from amp
         public static final Pose2d BOTTOMSPEAKER = new Pose2d(0.71, 4.285, Rotation2d.fromDegrees(-60.00));
         //list of all positions (POI) to pathfind to allow closest pathfinding
         public static final List<Pose2d> allPoses = new ArrayList<Pose2d>(List.of(SOURCE, AMP, SPEAKER, MIDSTAGE, BOTTOMSTAGE, TOPSTAGE, TOPSPEAKER, BOTTOMSPEAKER));
+
+        public static final Pose2d BACKRIGHT = new Pose2d(2.90, 4.10, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d BACKCENTER = new Pose2d(2.90, 5.55, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d BACKLEFT = new Pose2d(2.90, 7.00, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d FRONTRIGHTMOST = new Pose2d(8.29, 7.44, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d FRONTRIGHT = new Pose2d(8.29, 5.78, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d FRONTCENTER = new Pose2d(8.29, 4.10, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d FRONTLEFTMOST = new Pose2d(8.29, 2.44, Rotation2d.fromDegrees(0.00));
+        public static final Pose2d FRONTLEFT = new Pose2d(8.29, 0.77, Rotation2d.fromDegrees(0.00));
+        public static final List<Pose2d> allNotes = new ArrayList<Pose2d>(List.of(BACKRIGHT, BACKCENTER, BACKLEFT, FRONTRIGHTMOST, FRONTRIGHT, FRONTCENTER, FRONTLEFT, FRONTLEFTMOST));
     }
 
     public static final class LimelightConstants {
