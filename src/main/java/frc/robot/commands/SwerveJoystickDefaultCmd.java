@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.OIConstants;
@@ -52,6 +54,12 @@ public class SwerveJoystickDefaultCmd extends Command {
                     -MathUtil.applyDeadband(xbox.getLeftX(), OIConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband),
                     swerveSubsystem.isFieldRelative && fieldRelative, true);
+            //invert if red so drivers dont have to abitary reset gyro and field relative everytime
+            /*swerveSubsystem.drive(
+                    -MathUtil.applyDeadband(invertIfRed(xbox.getLeftY()), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(invertIfRed(xbox.getLeftX()), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(invertIfRed(xbox.getRightX()), OIConstants.kDriveDeadband),
+                    swerveSubsystem.isFieldRelative && fieldRelative, true);*/
         } else {
             fieldRelative = true;
             swerveSubsystem.drive(
@@ -80,6 +88,16 @@ public class SwerveJoystickDefaultCmd extends Command {
     @Override
     public boolean isFinished() {
         return false;
+    }
+
+    public double invertIfRed(double num){
+        var alliance = DriverStation.getAlliance();
+        if(alliance.isPresent()){
+            if(alliance.get() == DriverStation.Alliance.Red){
+                return -1;
+            }
+        }
+        return 1;
     }
 
 
