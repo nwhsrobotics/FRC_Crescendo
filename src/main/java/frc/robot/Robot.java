@@ -11,6 +11,10 @@ import frc.robot.subsystems.Vision;
 import frc.robot.util.ImprovedPowerDistribution;
 import frc.robot.util.LimelightHelpers;
 
+import java.util.HashSet;
+
+import javax.swing.text.html.HTMLDocument.Iterator;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -148,8 +152,21 @@ public class Robot extends LoggedRobot {
                 robotContainer.swerveSubsystem.autonavigator.resumeNavigation();
             }
         }
-        String llname = LimelightConstants.llObjectDetectionName;
-        Vision.visionTargetLocation = Vision.transformTargetLocation(robotContainer.swerveSubsystem.getPose(), llname);
+        String llname = LimelightConstants.llObjectDetectionName; 
+        Vision.visionTargetLocation = Vision.transformTargetLocation(robotContainer.swerveSubsystem.getPose(), llname); 
+        HashSet<Integer> tagsFound = new HashSet<>();
+        for (int i = 0; i < LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llLocalizationName).tagCount; i++) {
+            tagsFound.add(LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llLocalizationName).rawFiducials[i].id);
+        }
+        Vision.tagIds.removeIf(tagId -> !tagsFound.contains(tagId));
+        tagsFound.forEach(tagId -> {
+            if(!Vision.tagIds.contains(tagId)){
+                Vision.tagIds.add(tagId);
+            }
+        });
+        
+        
+        
         //Logger.recordOutput(llname + ".pipelineIndex", LimelightHelpers.getCurrentPipelineIndex(llname));
         //Logger.recordOutput(llname + ".pipelineName", Vision.getPipelineName(llname));
         //Logger.recordOutput(llname + ".objectDetected", LimelightHelpers.getTV(llname));

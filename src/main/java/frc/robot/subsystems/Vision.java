@@ -6,6 +6,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.util.LimelightHelpers;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -15,6 +19,7 @@ public class Vision{
 
     public static Pose2d visionTargetLocation = new Pose2d();
     public static double tagDist;
+    public static ArrayList<Integer> tagIds = new ArrayList<>();
     /**
      * Implements simple proportional turning control with the Limelight.
      * Proportional control adjusts output based on error, here the difference between target's angle and camera's angle.
