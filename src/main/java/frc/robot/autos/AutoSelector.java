@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FavoritePositions;
 import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Vision;
 
 import java.util.ArrayList;
 import java.util.List;

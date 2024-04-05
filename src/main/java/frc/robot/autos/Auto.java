@@ -8,16 +8,14 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.FavoritePositions;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.ScoringSubsystem.ScoringState;
-import frc.robot.subsystems.limelight.LimelightHelpers;
-import frc.robot.subsystems.limelight.LimelightImplementation;
+import frc.robot.subsystems.Vision;
+import frc.robot.util.LimelightHelpers;
 
 import java.util.List;
 
@@ -70,20 +68,21 @@ public class Auto extends SequentialCommandGroup {
 
         for (int i = 0; i < noteLimit; i++) {  //amount of notes to get + 1 preloaded
             exitReturnCommands.addCommands(
+                    //currently only using 1 limelight
                     // Set the limelight pipeline index to 1 for vision processing.
-                    new InstantCommand(() -> LimelightHelpers.setPipelineIndex("limelight", 1)),
+                    new InstantCommand(() -> LimelightHelpers.setPipelineIndex(LimelightConstants.llObjectDetectionName, 1)),
                     // Navigate the robot to the closest location without considering vision targeting.
-                    swerve.pathfindToPosition(getClosestLocation()).onlyWhile(() -> !LimelightHelpers.getTV("limelight")),
+                    swerve.pathfindToPosition(getClosestLocation()).onlyWhile(() -> !LimelightHelpers.getTV(LimelightConstants.llObjectDetectionName)),
                     // Navigate the robot to a specific location based on vision targeting.
-                    swerve.pathfindToPosition(LimelightImplementation.visionTargetLocation),
+                    swerve.pathfindToPosition(Vision.visionTargetLocation),
                     //new PathFindVision(swerve, score, possibleLocations, getClosestLocation()),
                     //or command.repeatedly also works for single command
                     //Commands.repeatingSequence(new PathFindVision(swerve, score, possibleLocations, getClosestLocation()).until(() -> score.isNoteInside())),
                     // Set the limelight pipeline index back to 0 for april tag localization.
-                    new InstantCommand(() -> LimelightHelpers.setPipelineIndex("limelight", 0)),
+                    new InstantCommand(() -> LimelightHelpers.setPipelineIndex(LimelightConstants.llObjectDetectionName, 0)),
                     // Navigate the robot to the initial position to shoot.
                     swerve.pathfindToPosition(initialPos),
-                    //swerve.pathfindToPosition(getClosestLocation()).onlyWhile(() -> !(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").rawFiducials[0].id == 7)),
+                    //swerve.pathfindToPosition(getClosestLocation()).onlyWhile(() -> !(LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llObjectDetectionName).rawFiducials[0].id == 7)),
                     // Remove the closest location from the list of possible locations.
                     new InstantCommand(() -> possibleLocations.remove(getClosestLocation())),
                     // Execute the shooting command.

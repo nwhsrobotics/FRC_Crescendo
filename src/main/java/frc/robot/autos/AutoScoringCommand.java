@@ -9,39 +9,43 @@ import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.ScoringSubsystem.ScoringState;
 
 public class AutoScoringCommand extends Command {
-  ScoringSubsystem score;
-  boolean orginal;
-  ScoringState state;
-  ScoringState endState;
-  /** Creates a new ScoringCommand. */
-  public AutoScoringCommand(ScoringSubsystem score, ScoringState state, ScoringState endState) {
-    this.score = score;
-    orginal = score.isNoteInside();
-    this.state = state;
-    this.endState = endState;
-    addRequirements(score);
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+    ScoringSubsystem score;
+    boolean orginal;
+    ScoringState state;
+    ScoringState endState;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    score.state = state;
-  }
+    /**
+     * Creates a new ScoringCommand.
+     */
+    public AutoScoringCommand(ScoringSubsystem score, ScoringState state, ScoringState endState) {
+        this.score = score;
+        orginal = score.isNoteInside();
+        this.state = state;
+        this.endState = endState;
+        addRequirements(score);
+        // Use addRequirements() here to declare subsystem dependencies.
+    }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        score.state = state;
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    score.state = endState;
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return score.isNoteInside() != orginal;
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        score.state = endState;
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return score.isNoteInside() != orginal;
+    }
 }

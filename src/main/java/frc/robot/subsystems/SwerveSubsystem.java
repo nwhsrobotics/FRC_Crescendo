@@ -21,15 +21,14 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.limelight.LimelightHelpers;
-import frc.robot.subsystems.oi.ControlManager;
-
+import frc.robot.util.LimelightHelpers;
+import frc.robot.util.SwerveUtils;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -89,6 +88,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // create an AHRS object for gyro
     public final AHRS gyro = new AHRS(I2C.Port.kMXP);
 
+
     //odometry is a system to keep track of robots current position and rotation on the fields based on the coordinate system
     public final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(
             DriveConstants.kDriveKinematics,
@@ -106,8 +106,8 @@ public class SwerveSubsystem extends SubsystemBase {
     private double currentTranslationDir = 0.0;
     private double currentTranslationMag = 0.0;
 
-    private SlewRateLimiter magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
-    private SlewRateLimiter rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
+    private final SlewRateLimiter magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
+    private final SlewRateLimiter rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
     private double prevTime = WPIUtilJNI.now() * 1e-6;
 
     /**
@@ -190,10 +190,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /**
      * Reset the heading (yaw) and the odometry pose of the robot.
-     */ 
+     */
     public void resetHeading() {
         gyro.zeroYaw(); // Reset the yaw angle
-    } 
+    }
 
     /**
      * Switch between field-relative and robot-relative driving.
@@ -289,14 +289,14 @@ public class SwerveSubsystem extends SubsystemBase {
 
         // What pathfinding does is pathfind to the start of a path and then continue along that path.
         // If you don't want to continue along the path, you can make it pathfind to a specific location.
-        
+
         pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
                 path,
                 constraints,
                 0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
         pathfindingCommand.schedule();
-        
+
     }
 
     /**
@@ -394,23 +394,23 @@ public class SwerveSubsystem extends SubsystemBase {
         //odometer.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(getHeading()), getModulePositions());
         odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
         //stddevs should be scaled to improve accuracy https://www.chiefdelphi.com/t/poseestimators-and-limelight-botpose/430334/3
-        //LimelightHelpers.setPipelineIndex("limelight", 0);
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-        double poseDifference = odometer.getEstimatedPosition().getTranslation().getDistance(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").pose.getTranslation());
-        double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").avgTagDist;
+        //LimelightHelpers.setPipelineIndex(LimelightConstants.llLocalizationName, 0);
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llLocalizationName);
+        double poseDifference = odometer.getEstimatedPosition().getTranslation().getDistance(LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llLocalizationName).pose.getTranslation());
+        double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llLocalizationName).avgTagDist;
         double xyStds = 0.9;
         double degStds = 0.9;
         if (limelightMeasurement.tagCount >= 2) {
-            if(dist < 1.0){
+            if (dist < 1.0) {
                 xyStds = 0.1;
                 degStds = 1;
-            } else if (dist < 2.0){
+            } else if (dist < 2.0) {
                 xyStds = 0.2;
                 degStds = 2;
-            } else if (dist < 3.0){
+            } else if (dist < 3.0) {
                 xyStds = 0.3;
                 degStds = 3;
-            } else if (dist < 4.0){
+            } else if (dist < 4.0) {
                 xyStds = 0.4;
                 degStds = 4;
             } else {
@@ -450,56 +450,53 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param rateLimit     Whether to enable rate limiting for smoother control.
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
-        
+
         double xSpeedCommanded;
         double ySpeedCommanded;
 
         if (rateLimit) {
-        // Convert XY to polar for rate limiting
-        double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
-        double inputTranslationMag = Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2));
+            // Convert XY to polar for rate limiting
+            double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
+            double inputTranslationMag = Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2));
 
-        // Calculate the direction slew rate based on an estimate of the lateral acceleration
-        double directionSlewRate;
-        if (currentTranslationMag != 0.0) {
-            directionSlewRate = Math.abs(DriveConstants.kDirectionSlewRate / currentTranslationMag);
-        } else {
-            directionSlewRate = 500.0; //some high number that means the slew rate is effectively instantaneous
-        }
-        
+            // Calculate the direction slew rate based on an estimate of the lateral acceleration
+            double directionSlewRate;
+            if (currentTranslationMag != 0.0) {
+                directionSlewRate = Math.abs(DriveConstants.kDirectionSlewRate / currentTranslationMag);
+            } else {
+                directionSlewRate = 500.0; //some high number that means the slew rate is effectively instantaneous
+            }
 
-        double currentTime = WPIUtilJNI.now() * 1e-6;
-        double elapsedTime = currentTime - prevTime;
-        double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, currentTranslationDir);
-        if (angleDif < 0.45*Math.PI) {
-            currentTranslationDir = SwerveUtils.StepTowardsCircular(currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
-            currentTranslationMag = magLimiter.calculate(inputTranslationMag);
-        }
-        else if (angleDif > 0.85*Math.PI) {
-            if (currentTranslationMag > 1e-4) { //some small number to avoid floating-point errors with equality checking
-            // keep currentTranslationDir unchanged
-            currentTranslationMag = magLimiter.calculate(0.0);
+
+            double currentTime = WPIUtilJNI.now() * 1e-6;
+            double elapsedTime = currentTime - prevTime;
+            double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, currentTranslationDir);
+            if (angleDif < 0.45 * Math.PI) {
+                currentTranslationDir = SwerveUtils.StepTowardsCircular(currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
+                currentTranslationMag = magLimiter.calculate(inputTranslationMag);
+            } else if (angleDif > 0.85 * Math.PI) {
+                if (currentTranslationMag > 1e-4) { //some small number to avoid floating-point errors with equality checking
+                    // keep currentTranslationDir unchanged
+                    currentTranslationMag = magLimiter.calculate(0.0);
+                } else {
+                    currentTranslationDir = SwerveUtils.WrapAngle(currentTranslationDir + Math.PI);
+                    currentTranslationMag = magLimiter.calculate(inputTranslationMag);
+                }
+            } else {
+                currentTranslationDir = SwerveUtils.StepTowardsCircular(currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
+                currentTranslationMag = magLimiter.calculate(0.0);
             }
-            else {
-            currentTranslationDir = SwerveUtils.WrapAngle(currentTranslationDir + Math.PI);
-            currentTranslationMag = magLimiter.calculate(inputTranslationMag);
-            }
-        }
-        else {
-            currentTranslationDir = SwerveUtils.StepTowardsCircular(currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
-            currentTranslationMag = magLimiter.calculate(0.0);
-        }
-        prevTime = currentTime;
-        
-        xSpeedCommanded = currentTranslationMag * Math.cos(currentTranslationDir);
-        ySpeedCommanded = currentTranslationMag * Math.sin(currentTranslationDir);
-        currentRotation = rotLimiter.calculate(rot);
+            prevTime = currentTime;
+
+            xSpeedCommanded = currentTranslationMag * Math.cos(currentTranslationDir);
+            ySpeedCommanded = currentTranslationMag * Math.sin(currentTranslationDir);
+            currentRotation = rotLimiter.calculate(rot);
 
 
         } else {
-        xSpeedCommanded = xSpeed;
-        ySpeedCommanded = ySpeed;
-        currentRotation = rot;
+            xSpeedCommanded = xSpeed;
+            ySpeedCommanded = ySpeed;
+            currentRotation = rot;
         }
 
         // Convert the commanded speeds into the correct units for the drivetrain
@@ -508,9 +505,9 @@ public class SwerveSubsystem extends SubsystemBase {
         double rotDelivered = currentRotation * DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
 
         SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-            fieldRelative && ControlManager.fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, odometer.getEstimatedPosition().getRotation())
-                : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
+                fieldRelative
+                        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, odometer.getEstimatedPosition().getRotation())
+                        : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         frontLeft.setDesiredState(swerveModuleStates[0]);
         frontRight.setDesiredState(swerveModuleStates[1]);
@@ -524,14 +521,15 @@ public class SwerveSubsystem extends SubsystemBase {
      * It is RECOMMENDED to stand still and be close to the April tag when resetting this way as it solely relies on vision
      */
     public void resetOdometryWithVision() {
-        int pipeline = (int) LimelightHelpers.getCurrentPipelineIndex("limelight");
+        String name = LimelightConstants.llLocalizationName;
+        int pipeline = (int) LimelightHelpers.getCurrentPipelineIndex(name);
         //set the pipeline index to the high resolution april tag (less fps but high accuracy)
-        LimelightHelpers.setPipelineIndex("limelight", 0);
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+        LimelightHelpers.setPipelineIndex(name, 0);
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(name);
         odometer.setVisionMeasurementStdDevs(VecBuilder.fill(0, 0, Units.degreesToRadians(0)));
         odometer.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
         //set back to normal april tag pipeline
-        LimelightHelpers.setPipelineIndex("limelight", pipeline);
+        LimelightHelpers.setPipelineIndex(name, pipeline);
         //use this logger key to log important evvents 
         Logger.recordOutput("robot.events", "ResetOdometryWithVision");
     }
