@@ -6,9 +6,10 @@ package frc.robot.autos;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.Vision;
 import frc.robot.util.LimelightHelpers;
 
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.List;
 public class PathFindVision extends Command {
     private final SwerveSubsystem swerve;
     private final ScoringSubsystem score;
-    private final VisionSubsystem vision;
     private Command pathFind;
     private final List<Pose2d> possibleLocations;
     private final Pose2d pathFindLoc;
@@ -24,14 +24,13 @@ public class PathFindVision extends Command {
     /**
      * Creates a new PathFindVision.
      */
-    public PathFindVision(SwerveSubsystem swerve, ScoringSubsystem score, VisionSubsystem vision, List<Pose2d> locations, Pose2d pathFindLoc) {
+    public PathFindVision(SwerveSubsystem swerve, ScoringSubsystem score, List<Pose2d> locations, Pose2d pathFindLoc) {
         this.swerve = swerve;
         this.score = score;
-        this.vision = vision;
         addRequirements(swerve, score);
         possibleLocations = locations;
         this.pathFindLoc = pathFindLoc;
-        pathFind = swerve.pathfindToPosition(vision.visionTargetLocation);
+        pathFind = swerve.pathfindToPosition(Vision.visionTargetLocation);
         // Use addRequirements() here to declare subsystem dependencies.
     }
 
@@ -45,10 +44,10 @@ public class PathFindVision extends Command {
     @Override
     public void execute() {
         if (pathFind.isFinished()) {
-            if (LimelightHelpers.getTV("limelight")) {
+            if (LimelightHelpers.getTV(LimelightConstants.llObjectDetectionName)) {
                 //basically if note was pushed while intaking and never came inside then go pathfind again
                 pathFind = null;
-                pathFind = swerve.pathfindToPosition(vision.visionTargetLocation);
+                pathFind = swerve.pathfindToPosition(Vision.visionTargetLocation);
                 pathFind.schedule();
             } else {
                 //if note was taken by opponent from center say for example

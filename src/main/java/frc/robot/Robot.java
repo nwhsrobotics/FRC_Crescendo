@@ -4,9 +4,13 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.CANAssignments;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.LoggerConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.Vision;
 import frc.robot.util.ImprovedPowerDistribution;
+import frc.robot.util.LimelightHelpers;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -144,6 +148,11 @@ public class Robot extends LoggedRobot {
                 robotContainer.swerveSubsystem.autonavigator.resumeNavigation();
             }
         }
+        String llname = LimelightConstants.llObjectDetectionName;
+        Vision.visionTargetLocation = Vision.transformTargetLocation(robotContainer.swerveSubsystem.getPose(), llname);
+        //Logger.recordOutput(llname + ".pipelineIndex", LimelightHelpers.getCurrentPipelineIndex(llname));
+        //Logger.recordOutput(llname + ".pipelineName", Vision.getPipelineName(llname));
+        //Logger.recordOutput(llname + ".objectDetected", LimelightHelpers.getTV(llname));
     }
 
     @Override

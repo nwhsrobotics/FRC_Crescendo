@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.SwerveUtils;
@@ -391,10 +392,10 @@ public class SwerveSubsystem extends SubsystemBase {
         //odometer.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(getHeading()), getModulePositions());
         odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
         //stddevs should be scaled to improve accuracy https://www.chiefdelphi.com/t/poseestimators-and-limelight-botpose/430334/3
-        //LimelightHelpers.setPipelineIndex("limelight", 0);
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-        double poseDifference = odometer.getEstimatedPosition().getTranslation().getDistance(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").pose.getTranslation());
-        double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").avgTagDist;
+        //LimelightHelpers.setPipelineIndex(LimelightConstants.llLocalizationName, 0);
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llLocalizationName);
+        double poseDifference = odometer.getEstimatedPosition().getTranslation().getDistance(LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llLocalizationName).pose.getTranslation());
+        double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llLocalizationName).avgTagDist;
         double xyStds = 0.9;
         double degStds = 0.9;
         if (limelightMeasurement.tagCount >= 2) {
@@ -518,14 +519,15 @@ public class SwerveSubsystem extends SubsystemBase {
      * It is RECOMMENDED to stand still and be close to the April tag when resetting this way as it solely relies on vision
      */
     public void resetOdometryWithVision() {
-        int pipeline = (int) LimelightHelpers.getCurrentPipelineIndex("limelight");
+        String name = LimelightConstants.llLocalizationName;
+        int pipeline = (int) LimelightHelpers.getCurrentPipelineIndex(name);
         //set the pipeline index to the high resolution april tag (less fps but high accuracy)
-        LimelightHelpers.setPipelineIndex("limelight", 0);
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+        LimelightHelpers.setPipelineIndex(name, 0);
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(name);
         odometer.setVisionMeasurementStdDevs(VecBuilder.fill(0, 0, Units.degreesToRadians(0)));
         odometer.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
         //set back to normal april tag pipeline
-        LimelightHelpers.setPipelineIndex("limelight", pipeline);
+        LimelightHelpers.setPipelineIndex(name, pipeline);
         //use this logger key to log important evvents 
         Logger.recordOutput("robot.events", "ResetOdometryWithVision");
     }

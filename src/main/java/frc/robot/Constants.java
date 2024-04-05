@@ -298,6 +298,8 @@ public final class Constants {
         public static final double distanceFromCenter = 0.3; //in meters, straight distance to the camera from middle
         public static final double hypotenuseDistance = Math.hypot(horizontalOffset, distanceFromCenter); // actual distance in 2d from middle
         public static final double thethaFromCenter = -5.0; //this might be needed for angle offset
+        public static String llObjectDetectionName = "limelight";
+        public static String llLocalizationName = "limelightLoc";
     }
 
     public enum RuntimeEnvironment {

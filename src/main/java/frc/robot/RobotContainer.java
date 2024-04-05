@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.FavoritePositions;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.autos.Auto;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -27,7 +28,6 @@ public class RobotContainer {
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final WristSubsystem wristSubsystem = new WristSubsystem();
     public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
-    public final VisionSubsystem vision = new VisionSubsystem("limelight", swerveSubsystem);
 
     SendableChooser<Command> autoChooser;
 
@@ -61,7 +61,7 @@ public class RobotContainer {
         ParallelCommandGroup toUnderStage = new ParallelCommandGroup(armLockUnderStage, wristLockUnderStage);
 
         new JoystickButton(gunner, XboxControllerButtons.RIGHT_BUMPER).onTrue(commandShoot);
-        new JoystickButton(gunner, XboxControllerButtons.LEFT_BUMPER).onTrue(new Auto(swerveSubsystem, scoringSubsystem, vision, new ArrayList<>(List.of(FavoritePositions.FRONTLEFT, FavoritePositions.FRONTLEFTMOST, FavoritePositions.FRONTRIGHT, FavoritePositions.FRONTRIGHTMOST)), 4, FavoritePositions.SPEAKER));
+        new JoystickButton(gunner, XboxControllerButtons.LEFT_BUMPER).onTrue(new Auto(swerveSubsystem, scoringSubsystem, new ArrayList<>(List.of(FavoritePositions.FRONTLEFT, FavoritePositions.FRONTLEFTMOST, FavoritePositions.FRONTRIGHT, FavoritePositions.FRONTRIGHTMOST)), 4, FavoritePositions.SPEAKER));
         new JoystickButton(gunner, XboxControllerButtons.A).onTrue(commandLoad);
         new JoystickButton(gunner, XboxControllerButtons.B).onTrue(commandUnload);
         new JoystickButton(gunner, XboxControllerButtons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(scoringSubsystem::increaseRPM));
@@ -79,11 +79,11 @@ public class RobotContainer {
         new JoystickButton(driver, XboxControllerButtons.A).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(FavoritePositions.SPEAKER), swerveSubsystem));
         new JoystickButton(driver, XboxControllerButtons.B).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(swerveSubsystem.odometer.getEstimatedPosition().nearest(Constants.FavoritePositions.allPoses)), swerveSubsystem));
         new POVButton(driver, 0).onTrue(new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule()));
-        new POVButton(driver, 180).onTrue(new InstantCommand(() -> vision.nextPipeline()));
+        new POVButton(driver, 180).onTrue(new InstantCommand(() -> Vision.nextPipeline(LimelightConstants.llObjectDetectionName)));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, driver, vision));
+        swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, driver));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner));
         wristSubsystem.setDefaultCommand(new WristAdjustCmd(wristSubsystem, gunner));
         armSubsystem.setDefaultCommand(new ArmAdjustCmd(armSubsystem, gunner));

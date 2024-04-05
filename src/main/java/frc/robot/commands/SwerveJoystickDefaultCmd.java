@@ -3,22 +3,21 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.Vision;
 
 public class SwerveJoystickDefaultCmd extends Command {
     private final SwerveSubsystem swerveSubsystem;
-    private final VisionSubsystem vision;
     private final XboxController xbox;
     private boolean fieldRelative;
 
     // constructor that initializes SwerveSubsystem, Joystick and adds SwerveSubsystem as a requirement
-    public SwerveJoystickDefaultCmd(SwerveSubsystem swerveSubsystem, XboxController xbox, VisionSubsystem vision) {
-        this.vision = vision;
+    public SwerveJoystickDefaultCmd(SwerveSubsystem swerveSubsystem, XboxController xbox) {
         this.xbox = xbox;
         this.swerveSubsystem = swerveSubsystem;
-        addRequirements(swerveSubsystem, vision);
+        addRequirements(swerveSubsystem);
     }
 
     @Override
@@ -27,14 +26,22 @@ public class SwerveJoystickDefaultCmd extends Command {
 
     @Override
     public void execute() {
-        //TODO: If we get 2 limelights, separate the object alligning and april tag alligning button
-        if (xbox.getLeftBumper() || xbox.getRightBumper()) {  //vision allign button
+        //assuming 2 limelights
+        if (xbox.getLeftBumper()) {  //for object detection alligning
             //while using Limelight, turn off field-relative driving.
             fieldRelative = false;
             swerveSubsystem.drive(
-                    vision.limelight_range_proportional(),
+                    Vision.limelight_range_proportional(LimelightConstants.llObjectDetectionName),
                     0,
-                    vision.limelight_aim_proportional(),
+                    Vision.limelight_aim_proportional(LimelightConstants.llObjectDetectionName),
+                    swerveSubsystem.isFieldRelative && fieldRelative, false);
+
+        } else if(xbox.getRightBumper()){ //for april tag allign
+            fieldRelative = false;
+            swerveSubsystem.drive(
+                    Vision.limelight_range_proportional(LimelightConstants.llLocalizationName),
+                    0,
+                    Vision.limelight_aim_proportional(LimelightConstants.llLocalizationName),
                     swerveSubsystem.isFieldRelative && fieldRelative, false);
 
         } else if (!(xbox.getRightTriggerAxis() > 0.1)) {  //if booster not pressed
