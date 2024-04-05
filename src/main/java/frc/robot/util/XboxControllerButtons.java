@@ -1,4 +1,4 @@
-package frc.robot.subsystems.oi;
+package frc.robot.util;
 
 /*
  * Numeric IDs for buttons managed by the XboxController class.
