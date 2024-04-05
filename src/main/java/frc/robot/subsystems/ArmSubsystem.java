@@ -3,10 +3,10 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkPIDController.ArbFFUnits;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -42,7 +42,7 @@ public class ArmSubsystem extends SubsystemBase {
         rightShoulderPidController = rightShoulderMotor.getPIDController();
         rightShoulderPidController.setP(.25);
         rightShoulderPidController.setOutputRange(-ArmConstants.SHOULDER_OUTPUT_LIMIT, ArmConstants.SHOULDER_OUTPUT_LIMIT);
-        
+
         leftShoulderMotor = new CANSparkMax(CANAssignments.LEFT_SHOULDER_MOTOR_ID, MotorType.kBrushless);
         leftShoulderMotor.setIdleMode(IdleMode.kBrake);
         leftShoulderMotor.setInverted(true);
@@ -50,7 +50,7 @@ public class ArmSubsystem extends SubsystemBase {
         leftShoulderPidController = leftShoulderMotor.getPIDController();
         leftShoulderPidController.setP(.25);
         leftShoulderPidController.setOutputRange(-ArmConstants.SHOULDER_OUTPUT_LIMIT, ArmConstants.SHOULDER_OUTPUT_LIMIT);
-        
+
         shoulderAbsoluteEncoder = new DutyCycleEncoder(ArmConstants.ABSOLUTE_ENCODER_DIO_CHANNEL);
 
         rightShoulderEncoder.setPosition(getAbsoluteEncoderRotations());
@@ -66,7 +66,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void resetArmEncoders() {
         leftShoulderEncoder.setPosition(0);
-        rightShoulderEncoder.setPosition(0);    
+        rightShoulderEncoder.setPosition(0);
     }
 
     /**
@@ -78,13 +78,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     /**
      * Adjust the target position in rotations.
-     * 
-     * @param changeInPosition - change in rotations. 
+     *
+     * @param changeInPosition - change in rotations.
      */
     public void adjustByRotations(double changeInPosition) {
         targetRotations += changeInPosition;
     }
-    
+
     /**
      * Move the arm to fit under the stage.
      */
@@ -96,11 +96,11 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         //rightShoulderPidController.setReference(targetRotations, ControlType.kPosition);
         //leftShoulderPidController.setReference(targetRotations, ControlType.kPosition);
-        rightShoulderPidController.setReference(targetRotations, ControlType.kPosition, 0, -Math.signum(rightShoulderEncoder.getPosition())*0.35, ArbFFUnits.kVoltage); //TODO: THIS
-        leftShoulderPidController.setReference(targetRotations, ControlType.kPosition, 0, -Math.signum(leftShoulderEncoder.getPosition())*0.35 , ArbFFUnits.kVoltage);
+        rightShoulderPidController.setReference(targetRotations, ControlType.kPosition, 0, -Math.signum(rightShoulderEncoder.getPosition()) * 0.35, ArbFFUnits.kVoltage);
+        leftShoulderPidController.setReference(targetRotations, ControlType.kPosition, 0, -Math.signum(leftShoulderEncoder.getPosition()) * 0.35, ArbFFUnits.kVoltage);
 
         Logger.recordOutput("arm.targetposition", targetRotations);
-        
+
         Logger.recordOutput("arm.left.position", leftShoulderEncoder.getPosition());
         Logger.recordOutput("arm.right.position", rightShoulderEncoder.getPosition());
 

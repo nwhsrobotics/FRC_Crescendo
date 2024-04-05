@@ -6,6 +6,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -13,11 +14,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
@@ -25,6 +28,8 @@ import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.limelight.LimelightHelpers;
+import frc.robot.subsystems.oi.ControlManager;
+
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -39,7 +44,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // because that is the forwards direction relative to the field.
     public boolean isFieldRelative = true;
 
-    public PenguinLogistics autonavigator;
+    public AutoNavigation autonavigator;
 
     // 4 instances of SwerveModule to represent each wheel module with the constants
     public final SwerveModule frontLeft = new SwerveModule(
@@ -90,11 +95,20 @@ public class SwerveSubsystem extends SubsystemBase {
             Rotation2d.fromDegrees(getHeading()),
             getModulePositions(),
             new Pose2d(),
-            VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-            VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+            VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(1)),
+            VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(5)));
     //The default standard deviations of the module states are 0.1 meters for x, 0.1 meters for y, and 0.1 radians for heading. 
     //The default standard deviations of the vision measurements are 0.9 meters for x, 0.9 meters for y, and 0.9 radians for heading.
-    //Decrease standard deviations to trust the data more (rn the vision is mostly insignificant compared to module state)
+    //Decrease standard deviations to trust the data more (right now the vision is mostly insignificant compared to module state)
+
+    // Slew rate filter variables for controlling lateral acceleration
+    private double currentRotation = 0.0;
+    private double currentTranslationDir = 0.0;
+    private double currentTranslationMag = 0.0;
+
+    private SlewRateLimiter magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
+    private SlewRateLimiter rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
+    private double prevTime = WPIUtilJNI.now() * 1e-6;
 
     /**
      * Constructor for the SwerveSubsystem class.
@@ -122,13 +136,15 @@ public class SwerveSubsystem extends SubsystemBase {
                 this
         );
 
-        this.autonavigator = new PenguinLogistics(this);
+        this.autonavigator = new AutoNavigation(this);
 
         // Pause for 500 milliseconds to allow the gyro to stabilize.
         // Set the yaw of the gyro to 0 afterwards.
         // TODO: Do we need this anymore? Might cause conflicts with path planner
-        Commands.waitSeconds(0.5)
-                .andThen(new RunCommand(() -> gyro.zeroYaw()));
+        //gyro.reset();
+        Commands.waitUntil(() -> !gyro.isCalibrating()).andThen(new InstantCommand(() -> gyro.zeroYaw()));
+        /*Commands.waitSeconds(0.5)
+                .andThen(new RunCommand(() -> gyro.zeroYaw()));*/
     }
 
     /**
@@ -173,16 +189,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
     /**
-     * DON'T USE THIS WILL BREAK PATHPLANNER USE resetOdometryWithVision instead
-     * <p>
-     * <p>
      * Reset the heading (yaw) and the odometry pose of the robot.
-     */
-        /* 
-    public void resetHeadingAndPose() {
+     */ 
+    public void resetHeading() {
         gyro.zeroYaw(); // Reset the yaw angle
-        resetOdometry(new Pose2d()); // Reset the robot's odometry pose
-    } */
+    } 
 
     /**
      * Switch between field-relative and robot-relative driving.
@@ -267,9 +278,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param pathName The name of the path file to load and follow.
      */
     public void pathFindThenFollowPath(String pathName) {
-        //lastPath = pathName;
-        //lastPathType = "Path";
-
+        Command pathfindingCommand;
         // Load the path we want to pathfind to and follow
         PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
 
@@ -278,17 +287,16 @@ public class SwerveSubsystem extends SubsystemBase {
                 DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 8.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 8.0,
                 AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
 
-        // Since AutoBuilder is configured, we can use it to build pathfinding commands
         // What pathfinding does is pathfind to the start of a path and then continue along that path.
         // If you don't want to continue along the path, you can make it pathfind to a specific location.
-        /*
+        
         pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
                 path,
                 constraints,
-                2.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+                0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
         pathfindingCommand.schedule();
-        */
+        
     }
 
     /**
@@ -369,28 +377,13 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Check if the robot is in a clover state.
-     *
-     * @return True if the robot is in a clover brake state, false otherwise.
+     * Orient wheels into a X (clover) position to prevent movement
      */
-    public boolean isClover() {
-        return frontLeft.getTurningPositionWrapped() > Math.PI / 4 - Math.toRadians(1.0) && frontLeft.getTurningPositionWrapped() < Math.PI / 4 + Math.toRadians(1.0)
-                && frontRight.getTurningPositionWrapped() > -Math.PI / 4 - Math.toRadians(1.0) && frontRight.getTurningPositionWrapped() < -Math.PI / 4 + Math.toRadians(1.0)
-                && backLeft.getTurningPositionWrapped() > -Math.PI / 4 - Math.toRadians(1.0) && backLeft.getTurningPositionWrapped() < -Math.PI / 4 + Math.toRadians(1.0)
-                && backRight.getTurningPositionWrapped() > Math.PI / 4 - Math.toRadians(1.0) && backRight.getTurningPositionWrapped() < Math.PI / 4 + Math.toRadians(1.0);
-    }
-
-    /**
-     * Orient wheels into a "clover" formation, in order to brake.
-     */
-    public void brake() {
-        stopModules();
-
-        // Sets the turning motors to their braking positions
-        frontLeft.turningMotor.set(frontLeft.turningPidController.calculate(frontLeft.getTurningPosition(), Math.PI / 4));
-        frontRight.turningMotor.set(frontRight.turningPidController.calculate(frontRight.getTurningPosition(), -Math.PI / 4));
-        backLeft.turningMotor.set(backLeft.turningPidController.calculate(backLeft.getTurningPosition(), -Math.PI / 4));
-        backRight.turningMotor.set(backRight.turningPidController.calculate(backRight.getTurningPosition(), Math.PI / 4));
+    public void setX() {
+        frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+        frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+        backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+        backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
     }
 
     /**
@@ -404,11 +397,26 @@ public class SwerveSubsystem extends SubsystemBase {
         //LimelightHelpers.setPipelineIndex("limelight", 0);
         LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
         double poseDifference = odometer.getEstimatedPosition().getTranslation().getDistance(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").pose.getTranslation());
+        double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").avgTagDist;
         double xyStds = 0.9;
         double degStds = 0.9;
         if (limelightMeasurement.tagCount >= 2) {
-            xyStds = 0.5;
-            degStds = 6;
+            if(dist < 1.0){
+                xyStds = 0.1;
+                degStds = 1;
+            } else if (dist < 2.0){
+                xyStds = 0.2;
+                degStds = 2;
+            } else if (dist < 3.0){
+                xyStds = 0.3;
+                degStds = 3;
+            } else if (dist < 4.0){
+                xyStds = 0.4;
+                degStds = 4;
+            } else {
+                xyStds = 0.5;
+                degStds = 6;
+            }
         } else {
             if (limelightMeasurement.avgTagArea > 0.8 && poseDifference < 0.5) {
                 xyStds = 1.0;
@@ -429,6 +437,85 @@ public class SwerveSubsystem extends SubsystemBase {
         Logger.recordOutput("swerve.odometer.xCoordinate", odometer.getEstimatedPosition().getX());
         Logger.recordOutput("swerve.odometer.yCoordinate", odometer.getEstimatedPosition().getY());
         Logger.recordOutput("swerve.odometer.rotation", odometer.getEstimatedPosition().getRotation().getDegrees());
+    }
+
+    /**
+     * Method to drive the robot using joystick info.
+     *
+     * @param xSpeed        Speed of the robot in the x direction (forward).
+     * @param ySpeed        Speed of the robot in the y direction (sideways).
+     * @param rot           Angular rate of the robot.
+     * @param fieldRelative Whether the provided x and y speeds are relative to the
+     *                      field.
+     * @param rateLimit     Whether to enable rate limiting for smoother control.
+     */
+    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+        
+        double xSpeedCommanded;
+        double ySpeedCommanded;
+
+        if (rateLimit) {
+        // Convert XY to polar for rate limiting
+        double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
+        double inputTranslationMag = Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2));
+
+        // Calculate the direction slew rate based on an estimate of the lateral acceleration
+        double directionSlewRate;
+        if (currentTranslationMag != 0.0) {
+            directionSlewRate = Math.abs(DriveConstants.kDirectionSlewRate / currentTranslationMag);
+        } else {
+            directionSlewRate = 500.0; //some high number that means the slew rate is effectively instantaneous
+        }
+        
+
+        double currentTime = WPIUtilJNI.now() * 1e-6;
+        double elapsedTime = currentTime - prevTime;
+        double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, currentTranslationDir);
+        if (angleDif < 0.45*Math.PI) {
+            currentTranslationDir = SwerveUtils.StepTowardsCircular(currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
+            currentTranslationMag = magLimiter.calculate(inputTranslationMag);
+        }
+        else if (angleDif > 0.85*Math.PI) {
+            if (currentTranslationMag > 1e-4) { //some small number to avoid floating-point errors with equality checking
+            // keep currentTranslationDir unchanged
+            currentTranslationMag = magLimiter.calculate(0.0);
+            }
+            else {
+            currentTranslationDir = SwerveUtils.WrapAngle(currentTranslationDir + Math.PI);
+            currentTranslationMag = magLimiter.calculate(inputTranslationMag);
+            }
+        }
+        else {
+            currentTranslationDir = SwerveUtils.StepTowardsCircular(currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
+            currentTranslationMag = magLimiter.calculate(0.0);
+        }
+        prevTime = currentTime;
+        
+        xSpeedCommanded = currentTranslationMag * Math.cos(currentTranslationDir);
+        ySpeedCommanded = currentTranslationMag * Math.sin(currentTranslationDir);
+        currentRotation = rotLimiter.calculate(rot);
+
+
+        } else {
+        xSpeedCommanded = xSpeed;
+        ySpeedCommanded = ySpeed;
+        currentRotation = rot;
+        }
+
+        // Convert the commanded speeds into the correct units for the drivetrain
+        double xSpeedDelivered = xSpeedCommanded * DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
+        double ySpeedDelivered = ySpeedCommanded * DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
+        double rotDelivered = currentRotation * DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
+
+        SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+            fieldRelative && ControlManager.fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, odometer.getEstimatedPosition().getRotation())
+                : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        frontLeft.setDesiredState(swerveModuleStates[0]);
+        frontRight.setDesiredState(swerveModuleStates[1]);
+        backLeft.setDesiredState(swerveModuleStates[2]);
+        backRight.setDesiredState(swerveModuleStates[3]);
     }
 
     /**

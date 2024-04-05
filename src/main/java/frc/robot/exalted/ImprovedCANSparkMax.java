@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * Like CANSparkMax, but:
- * 
+ * <p>
  * * Automatically clears sticky faults.
  * * Initially resets settings to default.
  * * Saves new settings to SPARK MAX (call .finalizeSettings() when ready).
  * * Sets current limit depending on whether a NEO or NEO 550 is attached.
- * 
+ * <p>
  * It assumes that the connected motor is brushless.
  */
 public class ImprovedCANSparkMax extends UnstickyCANSparkMax {
@@ -75,9 +75,9 @@ public class ImprovedCANSparkMax extends UnstickyCANSparkMax {
 
     /**
      * Burns flash according to the condition set for this SPARK MAX.
-     * 
+     *
      * <p>
-     * 
+     * <p>
      * Call after the SPARK MAX has been configured (with PID and other parameters).
      */
     public void finalizeSettings() {
@@ -91,7 +91,7 @@ public class ImprovedCANSparkMax extends UnstickyCANSparkMax {
                 if (DriverStation.isTest()) {
                     burnFlash();
                 }
-                
+
                 break;
             case OnlyWithFMS:
                 if (DriverStation.isFMSAttached()) {

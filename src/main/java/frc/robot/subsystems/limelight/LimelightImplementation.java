@@ -4,7 +4,6 @@ package frc.robot.subsystems.limelight;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.Constants;
 import frc.robot.Constants.LimelightConstants;
 import org.littletonrobotics.junction.Logger;
 
@@ -12,6 +11,8 @@ import org.littletonrobotics.junction.Logger;
  * This class contains implementations for using Limelight camera for aiming, ranging, and transforming target location.
  */
 public class LimelightImplementation {
+
+    public static Pose2d visionTargetLocation = new Pose2d();
 
     /**
      * Implements simple proportional turning control with the Limelight.
@@ -51,9 +52,11 @@ public class LimelightImplementation {
             if (isAprilTagPipeline()) {
                 // Calculate targeting forward speed based on target's distance (TZ) in 3D space.
                 targetingForwardSpeed = LimelightHelpers.getCameraPose_TargetSpace("limelight")[2];
+                //first april tag
+                // TODO: USE distanceToCamera OR distanceToRobot now BELOW
+                //double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").rawFiducials[0].distToRobot;
                 //targetingForwardSpeed *= Constants.DriveConstants.kPhysicalMaxSpeedMetersPerSecond;
                 targetingForwardSpeed *= 0.345;
-                //TODO: change the signs
                 targetingForwardSpeed *= -1.0;
             } else {
                 double kP = .1;
