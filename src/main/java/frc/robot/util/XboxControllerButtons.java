@@ -14,4 +14,8 @@ public final class XboxControllerButtons {
     public static final int MENU = 8;
     public static final int LEFT_STICK_BUTTON = 9;
     public static final int RIGHT_STICK_BUTTON = 10;
+    public static final int POV_UP = 0;
+    public static final int POV_DOWN = 180;
+    public static final int POV_RIGHT = 270;
+    public static final int POV_LEFT = 90;
 }
