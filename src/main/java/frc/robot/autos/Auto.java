@@ -79,6 +79,7 @@ public class Auto extends SequentialCommandGroup {
                     //or command.repeatedly also works for single command
                     //Commands.repeatingSequence(new PathFindVision(swerve, score, possibleLocations, getClosestLocation()).until(() -> score.isNoteInside())),
                     // Set the limelight pipeline index back to 0 for april tag localization.
+                    //note inside logic doesn't work currently but no current spike implementation done
                     new InstantCommand(() -> LimelightHelpers.setPipelineIndex(LimelightConstants.llObjectDetectionName, 0)),
                     // Navigate the robot to the initial position to shoot.
                     swerve.pathfindToPosition(initialPos),

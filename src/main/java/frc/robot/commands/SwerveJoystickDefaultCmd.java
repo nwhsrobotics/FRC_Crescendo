@@ -54,7 +54,7 @@ public class SwerveJoystickDefaultCmd extends Command {
                     -MathUtil.applyDeadband(xbox.getLeftX(), OIConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband),
                     swerveSubsystem.isFieldRelative && fieldRelative, true);
-            //invert if red so drivers dont have to abitary reset gyro and field relative everytime
+            //TODO: invert if red so drivers dont have to abitarly reset gyro and field relative everytime
             /*swerveSubsystem.drive(
                     -MathUtil.applyDeadband(invertIfRed(xbox.getLeftY()), OIConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(invertIfRed(xbox.getLeftX()), OIConstants.kDriveDeadband),
@@ -68,9 +68,8 @@ public class SwerveJoystickDefaultCmd extends Command {
                     -MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband),
                     swerveSubsystem.isFieldRelative && fieldRelative, false);
         }
-        //TODO: Invert if red, multiply values by -1 because pathplanner origin is always at blue
-
-                    /*        swerveSubsystem.setDefaultCommand(
+        //fancy equation probably would us to get rid of speed coefficients
+        /*swerveSubsystem.setDefaultCommand(
         new RunCommand(
             () -> swerveSubsystem.drive(
                 -MathUtil.applyDeadband(Math.copySign(Math.pow(Driver1.getRawAxis(1), 2), Driver1.getRawAxis(1)), OIConstants.kDriveDeadband),

@@ -152,6 +152,7 @@ public class Robot extends LoggedRobot {
                 robotContainer.swerveSubsystem.autonavigator.resumeNavigation();
             }
         }
+        /* 
         String llname = LimelightConstants.llObjectDetectionName; 
         Vision.visionTargetLocation = Vision.transformTargetLocation(robotContainer.swerveSubsystem.getPose(), llname); 
         HashSet<Integer> tagsFound = new HashSet<>();
@@ -164,12 +165,10 @@ public class Robot extends LoggedRobot {
                 Vision.tagIds.add(tagId);
             }
         });
-        
-        
-        
         //Logger.recordOutput(llname + ".pipelineIndex", LimelightHelpers.getCurrentPipelineIndex(llname));
         //Logger.recordOutput(llname + ".pipelineName", Vision.getPipelineName(llname));
         //Logger.recordOutput(llname + ".objectDetected", LimelightHelpers.getTV(llname));
+        */
     }
 
     @Override
