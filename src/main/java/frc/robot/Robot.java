@@ -4,17 +4,9 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.CANAssignments;
-import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.LoggerConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.Vision;
 import frc.robot.util.ImprovedPowerDistribution;
-import frc.robot.util.LimelightHelpers;
-
-import java.util.HashSet;
-
-import javax.swing.text.html.HTMLDocument.Iterator;
-
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
