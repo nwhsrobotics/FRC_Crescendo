@@ -35,7 +35,7 @@ public class SwerveJoystickDefaultCmd extends Command {
                     Vision.limelight_range_proportional(LimelightConstants.llObjectDetectionName),
                     0,
                     Vision.limelight_aim_proportional(LimelightConstants.llObjectDetectionName),
-                    swerveSubsystem.isFieldRelative && fieldRelative, false);
+                    swerveSubsystem.isFieldRelative() && fieldRelative, false);
 
         } else if (xbox.getRightBumper()) { //for april tag allign
             fieldRelative = false;
@@ -43,7 +43,7 @@ public class SwerveJoystickDefaultCmd extends Command {
                     Vision.limelight_range_proportional(LimelightConstants.llLocalizationName),
                     0,
                     Vision.limelight_aim_proportional(LimelightConstants.llLocalizationName),
-                    swerveSubsystem.isFieldRelative && fieldRelative, false);
+                    swerveSubsystem.isFieldRelative() && fieldRelative, false);
 
         } else if (!(xbox.getRightTriggerAxis() > 0.1)) {  //if booster not pressed
             fieldRelative = true;
@@ -52,7 +52,7 @@ public class SwerveJoystickDefaultCmd extends Command {
                     -MathUtil.applyDeadband(xbox.getLeftY(), OIConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(xbox.getLeftX(), OIConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband),
-                    swerveSubsystem.isFieldRelative && fieldRelative, true);
+                    swerveSubsystem.isFieldRelative() && fieldRelative, true);
             //TODO: invert if red so drivers dont have to abitarly reset gyro and field relative everytime
             /*swerveSubsystem.drive(
                     -MathUtil.applyDeadband(invertIfRed(xbox.getLeftY()), OIConstants.kDriveDeadband),
@@ -65,7 +65,7 @@ public class SwerveJoystickDefaultCmd extends Command {
                     -MathUtil.applyDeadband(xbox.getLeftY(), OIConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(xbox.getLeftX(), OIConstants.kDriveDeadband),
                     -MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband),
-                    swerveSubsystem.isFieldRelative && fieldRelative, false);
+                    swerveSubsystem.isFieldRelative() && fieldRelative, false);
         }
         //fancy equation probably would us to get rid of speed coefficients
         /*swerveSubsystem.setDefaultCommand(

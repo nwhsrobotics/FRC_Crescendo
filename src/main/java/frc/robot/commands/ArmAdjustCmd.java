@@ -45,8 +45,7 @@ public class ArmAdjustCmd extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        armSubsystem.rightShoulderMotor.stopMotor();
-        armSubsystem.leftShoulderMotor.stopMotor();
+        armSubsystem.stopMotors();
     }
 
     // Returns true when the command should end.

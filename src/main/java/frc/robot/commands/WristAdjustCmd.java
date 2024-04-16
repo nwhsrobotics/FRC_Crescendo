@@ -44,7 +44,7 @@ public class WristAdjustCmd extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        wristSubsystem.wristMotor.stopMotor();
+        wristSubsystem.stopMotor();
     }
 
     // Returns true when the command should end.

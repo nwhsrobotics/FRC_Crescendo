@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.WristConstants;
-import frc.robot.util.CanSpark;
+import frc.robot.util.ImprovedCanSpark;
 import org.littletonrobotics.junction.Logger;
 
 public class WristSubsystem extends SubsystemBase {
-    public final CANSparkMax wristMotor;
+    private final CANSparkMax wristMotor;
     private final SparkPIDController wristPidController;
     private final RelativeEncoder wristRelativeEncoder;
     private final DutyCycleEncoder wristAbsoluteEncoder;
@@ -26,7 +26,7 @@ public class WristSubsystem extends SubsystemBase {
 
     // Constructor for WristSubsystem
     public WristSubsystem() {
-        wristMotor = new CanSpark(Constants.CANAssignments.WRIST_MOTOR_ID, CanSpark.MotorKind.NEO550, CANSparkBase.IdleMode.kBrake);
+        wristMotor = new ImprovedCanSpark(Constants.CANAssignments.WRIST_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO550, CANSparkBase.IdleMode.kBrake);
         wristRelativeEncoder = wristMotor.getEncoder();
         wristAbsoluteEncoder = new DutyCycleEncoder(WristConstants.ABSOLUTE_ENCODER_DIO_CHANNEL);
         wristPidController = wristMotor.getPIDController();
@@ -60,6 +60,10 @@ public class WristSubsystem extends SubsystemBase {
 
         desiredPosition = (90.0 / 360.0) * WristConstants.WRIST_GEAR_RATIO;
 
+    }
+
+    public void stopMotor(){
+        wristMotor.stopMotor();
     }
 
     public void underStage() {

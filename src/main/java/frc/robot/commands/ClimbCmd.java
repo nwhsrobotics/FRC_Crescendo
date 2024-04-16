@@ -43,8 +43,8 @@ public class ClimbCmd extends Command {
             rightMotorSpeed = -1;
         }
 
-        climb.leftClimbMotor.set(leftMotorSpeed);
-        climb.rightClimbMotor.set(rightMotorSpeed);
+        climb.setLeftSpeed(leftMotorSpeed);
+        climb.setRightSpeed(rightMotorSpeed);
     }
 
     // Called once the command ends or is interrupted.
