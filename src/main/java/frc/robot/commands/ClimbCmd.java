@@ -28,8 +28,23 @@ public class ClimbCmd extends Command {
     }
 
     public void execute() {
-        climb.leftClimbMotor.set(gunner.getLeftY() > .1 ? 1 : gunner.getLeftY() < -.1 ? -1 : 0);
-        climb.rightClimbMotor.set(gunner.getRightY() > .1 ? 1 : gunner.getRightY() < -.1 ? -1 : 0);
+        double leftMotorSpeed = 0;
+        double rightMotorSpeed = 0;
+
+        if (gunner.getLeftY() > 0.1) {
+            leftMotorSpeed = 1;
+        } else if (gunner.getLeftY() < -0.1) {
+            leftMotorSpeed = -1;
+        }
+
+        if (gunner.getRightY() > 0.1) {
+            rightMotorSpeed = 1;
+        } else if (gunner.getRightY() < -0.1) {
+            rightMotorSpeed = -1;
+        }
+
+        climb.leftClimbMotor.set(leftMotorSpeed);
+        climb.rightClimbMotor.set(rightMotorSpeed);
     }
 
     // Called once the command ends or is interrupted.

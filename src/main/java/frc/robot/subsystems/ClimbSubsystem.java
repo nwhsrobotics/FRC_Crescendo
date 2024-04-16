@@ -1,21 +1,17 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.CanSpark;
 
 public class ClimbSubsystem extends SubsystemBase {
-    public final CANSparkMax leftClimbMotor = new CANSparkMax(Constants.CANAssignments.CLIMB_LEFT_MOTOR_ID, MotorType.kBrushless);
-    public final CANSparkMax rightClimbMotor = new CANSparkMax(Constants.CANAssignments.CLIMB_RIGHT_MOTOR_ID, MotorType.kBrushless);
+    public final CANSparkMax leftClimbMotor = new CanSpark(Constants.CANAssignments.CLIMB_LEFT_MOTOR_ID, CanSpark.MotorKind.NEO550, CANSparkBase.IdleMode.kBrake);
+    public final CANSparkMax rightClimbMotor = new CanSpark(Constants.CANAssignments.CLIMB_RIGHT_MOTOR_ID, CanSpark.MotorKind.NEO550, CANSparkBase.IdleMode.kBrake);
 
     public ClimbSubsystem() {
-        leftClimbMotor.setSmartCurrentLimit(20);
-        leftClimbMotor.setIdleMode(IdleMode.kBrake);
         leftClimbMotor.setInverted(true);
-        rightClimbMotor.setSmartCurrentLimit(20);
-        rightClimbMotor.setIdleMode(IdleMode.kBrake);
     }
 
     @Override
