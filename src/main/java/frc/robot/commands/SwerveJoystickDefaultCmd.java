@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.OIConstants;
@@ -38,7 +37,7 @@ public class SwerveJoystickDefaultCmd extends Command {
                     Vision.limelight_aim_proportional(LimelightConstants.llObjectDetectionName),
                     swerveSubsystem.isFieldRelative && fieldRelative, false);
 
-        } else if(xbox.getRightBumper()){ //for april tag allign
+        } else if (xbox.getRightBumper()) { //for april tag allign
             fieldRelative = false;
             swerveSubsystem.drive(
                     Vision.limelight_range_proportional(LimelightConstants.llLocalizationName),
@@ -89,10 +88,10 @@ public class SwerveJoystickDefaultCmd extends Command {
         return false;
     }
 
-    public double invertIfRed(double num){
+    public double invertIfRed(double num) {
         var alliance = DriverStation.getAlliance();
-        if(alliance.isPresent()){
-            if(alliance.get() == DriverStation.Alliance.Red){
+        if (alliance.isPresent()) {
+            if (alliance.get() == DriverStation.Alliance.Red) {
                 return -1;
             }
         }

@@ -245,7 +245,7 @@ public class ScoringSubsystem extends SubsystemBase {
     }
 
     /*
-     * TODO: This doesn't work right now 
+     * TODO: This doesn't work right now
      */
     public boolean didCurrentSpike(CANSparkMax motor) {
         double current = motor.getOutputCurrent();
@@ -254,7 +254,7 @@ public class ScoringSubsystem extends SubsystemBase {
     }
 
     /*
-     * TODO: This doesn't work right now 
+     * TODO: This doesn't work right now
      */
     public boolean didCurrentSpikeIntake(CANSparkMax motor) {
         double current = motor.getOutputCurrent();

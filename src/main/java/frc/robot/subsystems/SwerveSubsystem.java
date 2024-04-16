@@ -17,7 +17,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -26,7 +25,6 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.Constants.OIConstants;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.SwerveUtils;
 import org.littletonrobotics.junction.Logger;
@@ -308,7 +306,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public Command pathfindToPosition(Pose2d position) {
         Command command = AutoBuilder.pathfindToPoseFlipped(
                 position,
-                OIConstants.kPathfindingConstraints,
+                AutoConstants.kPathfindingConstraints,
                 0.0, // Goal end velocity in meters/sec
                 0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
