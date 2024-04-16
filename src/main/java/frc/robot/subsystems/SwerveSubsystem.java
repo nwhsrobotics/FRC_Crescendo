@@ -39,12 +39,12 @@ public class SwerveSubsystem extends SubsystemBase {
     // for example, even if the robot is oriented towards the driver station,
     // holding forwards will move the robot away from the driver station,
     // because that is the forwards direction relative to the field.
-    public boolean isFieldRelative = true;
+    private boolean isFieldRelative = true;
 
     public AutoNavigation autonavigator;
 
     // 4 instances of SwerveModule to represent each wheel module with the constants
-    public final SwerveModule frontLeft = new SwerveModule(
+    private final SwerveModule frontLeft = new SwerveModule(
             CANAssignments.FRONT_LEFT_DRIVE_MOTOR_ID,
             CANAssignments.FRONT_LEFT_STEER_MOTOR_ID,
             DriveConstants.kFrontLeftDriveEncoderReversed,
@@ -53,7 +53,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
 
-    public final SwerveModule frontRight = new SwerveModule(
+    private final SwerveModule frontRight = new SwerveModule(
             CANAssignments.FRONT_RIGHT_DRIVE_MOTOR_ID,
             CANAssignments.FRONT_RIGHT_STEER_MOTOR_ID,
             DriveConstants.kFrontRightDriveEncoderReversed,
@@ -62,7 +62,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
 
-    public final SwerveModule backLeft = new SwerveModule(
+    private final SwerveModule backLeft = new SwerveModule(
             CANAssignments.BACK_LEFT_DRIVE_MOTOR_ID,
             CANAssignments.BACK_LEFT_STEER_MOTOR_ID,
             DriveConstants.kBackLeftDriveEncoderReversed,
@@ -71,7 +71,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
 
-    public final SwerveModule backRight = new SwerveModule(
+    private final SwerveModule backRight = new SwerveModule(
             CANAssignments.BACK_RIGHT_DRIVE_MOTOR_ID,
             CANAssignments.BACK_RIGHT_STEER_MOTOR_ID,
             DriveConstants.kBackRightDriveEncoderReversed,
@@ -81,14 +81,14 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     // array of SwerveModules for convenience in accessing all modules
-    public final SwerveModule[] swerveMods = {frontLeft, frontRight, backLeft, backRight};
+    private final SwerveModule[] swerveMods = {frontLeft, frontRight, backLeft, backRight};
 
     // create an AHRS object for gyro
-    public final AHRS gyro = new AHRS(I2C.Port.kMXP);
+    private final AHRS gyro = new AHRS(I2C.Port.kMXP);
 
 
     //odometry is a system to keep track of robots current position and rotation on the fields based on the coordinate system
-    public final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(
+    private final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(
             DriveConstants.kDriveKinematics,
             Rotation2d.fromDegrees(getHeading()),
             getModulePositions(),
@@ -172,6 +172,9 @@ public class SwerveSubsystem extends SubsystemBase {
     public double getPitchDeg() {
         return -gyro.getPitch();
     }
+    public boolean isFieldRelative() {
+        return isFieldRelative;
+    }
 
     /**
      * Drive the robot relative to its current orientation.
@@ -231,14 +234,17 @@ public class SwerveSubsystem extends SubsystemBase {
         odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), pose);
     }
 
+    public void zeroGyro(){
+        gyro.zeroYaw();
+    }
+
     /**
      * Straighten the orientation of each swerve module.
      */
     public void straighten() {
         // Turn each swerve module to point straight ahead
         for (SwerveModule s_mod : swerveMods) {
-            s_mod.turningMotor.set(s_mod.turningPidController.calculate(s_mod.getAbsoluteEncoderRad(), 0)); // use PID control to turn to the desired angle
-            s_mod.turningMotor.set(0); // Stop turning once the desired angle is reached
+            s_mod.straighten();
         }
     }
 

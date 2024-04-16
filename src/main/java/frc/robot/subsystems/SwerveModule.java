@@ -10,22 +10,22 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.util.CanSpark;
+import frc.robot.util.ImprovedCanSpark;
 
 /**
  * Represents a swerve module with independent drive and turning motors.
  */
 public class SwerveModule {
     // Drive and Turning Motors
-    public final CANSparkMax driveMotor;
-    public final CANSparkMax turningMotor;
+    private final CANSparkMax driveMotor;
+    private final CANSparkMax turningMotor;
 
     // Encoders
-    public final RelativeEncoder driveEncoder;
+    private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turningEncoder; // built-in NEO encoder (steering)
 
     // PID Controller for Turning
-    public final PIDController turningPidController;
+    private final PIDController turningPidController;
 
     // Absolute Encoder for Steering
     private final CANcoder absoluteEncoder;
@@ -53,8 +53,8 @@ public class SwerveModule {
         absoluteEncoder = new CANcoder(absoluteEncoderId);
 
         // Initialize the drive and turning motors using the given ids
-        driveMotor = new CanSpark(driveMotorId, CanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
-        turningMotor = new CanSpark(turningMotorId, CanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
+        driveMotor = new ImprovedCanSpark(driveMotorId, ImprovedCanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
+        turningMotor = new ImprovedCanSpark(turningMotorId, ImprovedCanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
 
         // Set the inversion of the drive and turning motors based on the given values
         driveMotor.setInverted(driveMotorReversed);
@@ -233,5 +233,10 @@ public class SwerveModule {
     public void stop() {
         driveMotor.set(0);
         turningMotor.set(0);
+    }
+
+    public void straighten(){
+        turningMotor.set(turningPidController.calculate(getAbsoluteEncoderRad(), 0)); // use PID control to turn to the desired angle
+        turningMotor.set(0); // Stop turning once the desired angle is reached
     }
 }

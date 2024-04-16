@@ -3,14 +3,14 @@ package frc.robot.util;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.DriverStation;
 
-public class CanSpark extends CANSparkMax {
+public class ImprovedCanSpark extends CANSparkMax {
 
     public enum MotorKind {
         NEO550,
         NEO
     }
 
-    public CanSpark(int id, MotorKind motor, IdleMode mode, double volComp) {
+    public ImprovedCanSpark(int id, MotorKind motor, IdleMode mode, double volComp) {
         super(id, MotorType.kBrushless);
         restoreFactoryDefaults();
         clearFaults();
@@ -25,7 +25,7 @@ public class CanSpark extends CANSparkMax {
         }
     }
 
-    public CanSpark(int id, MotorKind motor, IdleMode mode) {
+    public ImprovedCanSpark(int id, MotorKind motor, IdleMode mode) {
         super(id, MotorType.kBrushless);
         restoreFactoryDefaults();
         clearFaults();

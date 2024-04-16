@@ -71,7 +71,7 @@ public class RobotContainer {
         new POVButton(gunner, Buttons.POV_DOWN).onTrue(toUnderStage);
         new POVButton(gunner, Buttons.POV_RIGHT).onTrue(resetArmEncoders);
 
-        new JoystickButton(driver, Buttons.MENU).onTrue(new InstantCommand(swerveSubsystem.gyro::zeroYaw, swerveSubsystem));
+        new JoystickButton(driver, Buttons.MENU).onTrue(new InstantCommand(swerveSubsystem::zeroGyro, swerveSubsystem));
         new JoystickButton(driver, Buttons.VIEW).onTrue(new InstantCommand(swerveSubsystem::switchFR, swerveSubsystem));
         new JoystickButton(driver, Buttons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(swerveSubsystem.autonavigator::toggle, swerveSubsystem));
         new JoystickButton(driver, Buttons.X).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.AMP), swerveSubsystem));

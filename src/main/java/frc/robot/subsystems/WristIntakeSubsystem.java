@@ -8,14 +8,14 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.CanSpark;
+import frc.robot.util.ImprovedCanSpark;
 import org.littletonrobotics.junction.Logger;
 
 public class WristIntakeSubsystem extends SubsystemBase {
-    public final CANSparkMax motor;
+    private final CANSparkMax motor;
 
     public WristIntakeSubsystem() {
-        motor = new CanSpark(Constants.CANAssignments.WRIST_INTAKE_ID, CanSpark.MotorKind.NEO550, CANSparkBase.IdleMode.kBrake);
+        motor = new ImprovedCanSpark(Constants.CANAssignments.WRIST_INTAKE_ID, ImprovedCanSpark.MotorKind.NEO550, CANSparkBase.IdleMode.kBrake);
     }
 
     @Override
@@ -23,5 +23,7 @@ public class WristIntakeSubsystem extends SubsystemBase {
         Logger.recordOutput("wrist.intakePower", motor.get());
     }
 
-
+    public void setSpeed(double speed){
+        motor.set(speed);
+    }
 }

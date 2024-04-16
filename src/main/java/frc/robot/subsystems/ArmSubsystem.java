@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.CANAssignments;
-import frc.robot.util.CanSpark;
+import frc.robot.util.ImprovedCanSpark;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -18,8 +18,8 @@ import org.littletonrobotics.junction.Logger;
  */
 public class ArmSubsystem extends SubsystemBase {
     // Motors for controlling the arm
-    public final CANSparkMax rightShoulderMotor;
-    public final CANSparkMax leftShoulderMotor;
+    private final CANSparkMax rightShoulderMotor;
+    private final CANSparkMax leftShoulderMotor;
 
     // PID controllers for the shoulder motors
     private final SparkPIDController rightShoulderPidController;
@@ -38,14 +38,14 @@ public class ArmSubsystem extends SubsystemBase {
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
         // Initialize right shoulder motor
-        rightShoulderMotor = new CanSpark(CANAssignments.RIGHT_SHOULDER_MOTOR_ID, CanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
+        rightShoulderMotor = new ImprovedCanSpark(CANAssignments.RIGHT_SHOULDER_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
         rightShoulderEncoder = rightShoulderMotor.getEncoder();
         rightShoulderPidController = rightShoulderMotor.getPIDController();
         rightShoulderPidController.setP(0.25);
         rightShoulderPidController.setOutputRange(-ArmConstants.SHOULDER_OUTPUT_LIMIT, ArmConstants.SHOULDER_OUTPUT_LIMIT);
 
         // Initialize left shoulder motor
-        leftShoulderMotor = new CanSpark(CANAssignments.LEFT_SHOULDER_MOTOR_ID, CanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
+        leftShoulderMotor = new ImprovedCanSpark(CANAssignments.LEFT_SHOULDER_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
         leftShoulderMotor.setInverted(true);
         leftShoulderEncoder = leftShoulderMotor.getEncoder();
         leftShoulderPidController = leftShoulderMotor.getPIDController();
@@ -92,6 +92,11 @@ public class ArmSubsystem extends SubsystemBase {
     public void resetArmEncoders() {
         leftShoulderEncoder.setPosition(0);
         rightShoulderEncoder.setPosition(0);
+    }
+
+    public void stopMotors(){
+        rightShoulderMotor.stopMotor();
+        leftShoulderMotor.stopMotor();
     }
 
     /**
