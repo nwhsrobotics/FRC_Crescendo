@@ -20,7 +20,13 @@ public class WristIntakeCmd extends Command {
 
     @Override
     public void execute() {
-        wristIntakeSubsystem.motor.set(gunner.getXButton() ? .2 : gunner.getYButton() ? -.2 : 0);
+        if (gunner.getXButton()) {
+            wristIntakeSubsystem.motor.set(0.2);
+        } else if (gunner.getYButton()) {
+            wristIntakeSubsystem.motor.set(-0.2);
+        } else {
+            wristIntakeSubsystem.motor.set(0);
+        }
     }
 
     @Override

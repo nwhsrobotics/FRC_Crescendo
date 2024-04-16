@@ -1,8 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
@@ -11,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.util.CanSpark;
 
 /**
  * Represents a swerve module with independent drive and turning motors.
@@ -53,10 +53,8 @@ public class SwerveModule {
         absoluteEncoder = new CANcoder(absoluteEncoderId);
 
         // Initialize the drive and turning motors using the given ids
-        driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
-        driveMotor.setIdleMode(IdleMode.kBrake);
-        turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
-        turningMotor.setIdleMode(IdleMode.kBrake);
+        driveMotor = new CanSpark(driveMotorId, CanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
+        turningMotor = new CanSpark(turningMotorId, CanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
 
         // Set the inversion of the drive and turning motors based on the given values
         driveMotor.setInverted(driveMotorReversed);

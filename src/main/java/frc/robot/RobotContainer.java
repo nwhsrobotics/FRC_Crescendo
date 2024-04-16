@@ -16,7 +16,7 @@ import frc.robot.Constants.Positions;
 import frc.robot.autos.Auto;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.util.XboxControllerButtons;
+import frc.robot.util.Buttons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,27 +60,27 @@ public class RobotContainer {
         ParallelCommandGroup toSource = new ParallelCommandGroup(armLockSource, wristLockSource);
         ParallelCommandGroup toUnderStage = new ParallelCommandGroup(armLockUnderStage, wristLockUnderStage);
 
-        new JoystickButton(gunner, XboxControllerButtons.RIGHT_BUMPER).onTrue(commandShoot);
-        new JoystickButton(gunner, XboxControllerButtons.LEFT_BUMPER).onTrue(new Auto(swerveSubsystem, scoringSubsystem, new ArrayList<>(List.of(Positions.FRONTLEFT, Positions.FRONTLEFTMOST, Positions.FRONTRIGHT, Positions.FRONTRIGHTMOST)), 4, Positions.SPEAKER));
-        new JoystickButton(gunner, XboxControllerButtons.A).onTrue(commandLoad);
-        new JoystickButton(gunner, XboxControllerButtons.B).onTrue(commandUnload);
-        new JoystickButton(gunner, XboxControllerButtons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(scoringSubsystem::increaseRPM));
-        new JoystickButton(gunner, XboxControllerButtons.LEFT_STICK_BUTTON).onTrue(new InstantCommand(scoringSubsystem::decreaseRPM));
-        new POVButton(gunner, XboxControllerButtons.POV_UP).onTrue(toAmp);
-        new POVButton(gunner, XboxControllerButtons.POV_LEFT).onTrue(toSource);
-        new POVButton(gunner, XboxControllerButtons.POV_DOWN).onTrue(toUnderStage);
-        new POVButton(gunner, XboxControllerButtons.POV_RIGHT).onTrue(resetArmEncoders);
+        new JoystickButton(gunner, Buttons.RIGHT_BUMPER).onTrue(commandShoot);
+        new JoystickButton(gunner, Buttons.LEFT_BUMPER).onTrue(new Auto(swerveSubsystem, scoringSubsystem, new ArrayList<>(List.of(Positions.FRONTLEFT, Positions.FRONTLEFTMOST, Positions.FRONTRIGHT, Positions.FRONTRIGHTMOST)), 4, Positions.SPEAKER));
+        new JoystickButton(gunner, Buttons.A).onTrue(commandLoad);
+        new JoystickButton(gunner, Buttons.B).onTrue(commandUnload);
+        new JoystickButton(gunner, Buttons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(scoringSubsystem::increaseRPM));
+        new JoystickButton(gunner, Buttons.LEFT_STICK_BUTTON).onTrue(new InstantCommand(scoringSubsystem::decreaseRPM));
+        new POVButton(gunner, Buttons.POV_UP).onTrue(toAmp);
+        new POVButton(gunner, Buttons.POV_LEFT).onTrue(toSource);
+        new POVButton(gunner, Buttons.POV_DOWN).onTrue(toUnderStage);
+        new POVButton(gunner, Buttons.POV_RIGHT).onTrue(resetArmEncoders);
 
-        new JoystickButton(driver, XboxControllerButtons.MENU).onTrue(new InstantCommand(swerveSubsystem.gyro::zeroYaw, swerveSubsystem));
-        new JoystickButton(driver, XboxControllerButtons.VIEW).onTrue(new InstantCommand(swerveSubsystem::switchFR, swerveSubsystem));
-        new JoystickButton(driver, XboxControllerButtons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(swerveSubsystem.autonavigator::toggle, swerveSubsystem));
-        new JoystickButton(driver, XboxControllerButtons.X).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.AMP), swerveSubsystem));
-        new JoystickButton(driver, XboxControllerButtons.Y).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.SOURCE), swerveSubsystem));
-        new JoystickButton(driver, XboxControllerButtons.A).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.SPEAKER), swerveSubsystem));
+        new JoystickButton(driver, Buttons.MENU).onTrue(new InstantCommand(swerveSubsystem.gyro::zeroYaw, swerveSubsystem));
+        new JoystickButton(driver, Buttons.VIEW).onTrue(new InstantCommand(swerveSubsystem::switchFR, swerveSubsystem));
+        new JoystickButton(driver, Buttons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(swerveSubsystem.autonavigator::toggle, swerveSubsystem));
+        new JoystickButton(driver, Buttons.X).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.AMP), swerveSubsystem));
+        new JoystickButton(driver, Buttons.Y).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.SOURCE), swerveSubsystem));
+        new JoystickButton(driver, Buttons.A).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.SPEAKER), swerveSubsystem));
         //new JoystickButton(driver, XboxControllerButtons.B).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(swerveSubsystem.odometer.getEstimatedPosition().nearest(Constants.FavoritePositions.allPoses)), swerveSubsystem));
-        new JoystickButton(driver, XboxControllerButtons.B).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Vision.visionTargetLocation), swerveSubsystem));
-        new POVButton(driver, XboxControllerButtons.POV_UP).onTrue(new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule()));
-        new POVButton(driver, XboxControllerButtons.POV_DOWN).onTrue(new InstantCommand(() -> Vision.nextPipeline(LimelightConstants.llObjectDetectionName)));
+        new JoystickButton(driver, Buttons.B).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Vision.visionTargetLocation), swerveSubsystem));
+        new POVButton(driver, Buttons.POV_UP).onTrue(new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule()));
+        new POVButton(driver, Buttons.POV_DOWN).onTrue(new InstantCommand(() -> Vision.nextPipeline(LimelightConstants.llObjectDetectionName)));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 

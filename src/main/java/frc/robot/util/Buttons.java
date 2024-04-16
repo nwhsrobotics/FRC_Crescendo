@@ -3,7 +3,7 @@ package frc.robot.util;
 /*
  * Numeric IDs for buttons managed by the XboxController class.
  */
-public final class XboxControllerButtons {
+public final class Buttons {
     public static final int A = 1;
     public static final int B = 2;
     public static final int X = 3;

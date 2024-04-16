@@ -2,12 +2,12 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.CanSpark;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -71,80 +71,43 @@ public class ScoringSubsystem extends SubsystemBase {
     private final SparkPIDController intakePIDController;
     private final RelativeEncoder intakeEncoder;
 
-    private double flywheelRPM = Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM; //by default shooter is speaker, to avoid toggling
+    private double flywheelRPM = Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM;
     public boolean noteInside;
 
     public ScoringSubsystem() {
-        flywheelMotor = new CANSparkMax(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
-        flywheelMotor.restoreFactoryDefaults();
-        flywheelMotor.clearFaults();
-        flywheelMotor.setIdleMode(IdleMode.kCoast);
+        flywheelMotor = new CanSpark(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, CanSpark.MotorKind.NEO, IdleMode.kCoast, 12.0);
         flywheelMotor.setInverted(true);
         flywheelEncoder = flywheelMotor.getEncoder();
         flywheelPIDController = flywheelMotor.getPIDController();
         flywheelPIDController.setP(Constants.ScoringConstants.FLYWHEEL_PID_P);
         flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
-        flywheelMotor.setSmartCurrentLimit(80); //big neo is good
-        // flywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
-        flywheelMotor.enableVoltageCompensation(12.0);
-        //flywheelMotor.burnFlash();
 
-        secondaryFlywheelMotor = new CANSparkMax(Constants.CANAssignments.SECONDARY_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
-        secondaryFlywheelMotor.restoreFactoryDefaults();
-        secondaryFlywheelMotor.clearFaults();
-        secondaryFlywheelMotor.setIdleMode(IdleMode.kCoast);
+        secondaryFlywheelMotor = new CanSpark(Constants.CANAssignments.SECONDARY_FLYWHEEL_MOTOR_ID, CanSpark.MotorKind.NEO, IdleMode.kCoast, 12.0);
         secondaryFlywheelEncoder = secondaryFlywheelMotor.getEncoder();
         secondaryFlywheelPIDController = secondaryFlywheelMotor.getPIDController();
         secondaryFlywheelPIDController.setP(Constants.ScoringConstants.FLYWHEEL_PID_P);
         secondaryFlywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
-        secondaryFlywheelMotor.setSmartCurrentLimit(80); //big neo is good
-        // secondaryFlywheelMotor.setClosedLoopRampRate(0.6); // it takes 0.6second to reach max speed
-        secondaryFlywheelMotor.enableVoltageCompensation(12.0);
         secondaryFlywheelMotor.follow(flywheelMotor, true);
-        //secondaryFlywheelMotor.burnFlash();
 
-        indexMotor = new CANSparkMax(Constants.CANAssignments.INDEX_MOTOR_ID, MotorType.kBrushless);
-        indexMotor.restoreFactoryDefaults();
-        indexMotor.clearFaults();
-        indexMotor.setIdleMode(IdleMode.kCoast);
+        indexMotor = new CanSpark(Constants.CANAssignments.INDEX_MOTOR_ID, CanSpark.MotorKind.NEO, IdleMode.kCoast, 12.0);
         indexMotor.setInverted(true);
         indexEncoder = indexMotor.getEncoder();
         indexPIDController = indexMotor.getPIDController();
-        indexPIDController.setP(0);
         indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
-        indexMotor.setSmartCurrentLimit(80); //big neo is good
-        //indexMotor.setClosedLoopRampRate(0.6);
-        indexMotor.enableVoltageCompensation(12.0);
-        //indexMotor.burnFlash();
 
-        secondaryIndexMotor = new CANSparkMax(Constants.CANAssignments.SECONDARY_INDEX_MOTOR_ID, MotorType.kBrushless);
-        secondaryIndexMotor.restoreFactoryDefaults();
-        secondaryIndexMotor.clearFaults();
-        secondaryIndexMotor.setIdleMode(IdleMode.kCoast);
+        secondaryIndexMotor = new CanSpark(Constants.CANAssignments.SECONDARY_INDEX_MOTOR_ID, CanSpark.MotorKind.NEO, IdleMode.kCoast, 12.0);
         secondaryIndexEncoder = secondaryIndexMotor.getEncoder();
         secondaryIndexPIDController = secondaryIndexMotor.getPIDController();
         secondaryIndexPIDController.setP(0); //TODO: set the same P value like the flywheel? Thats why it was losing traction because more load = less speed
         secondaryIndexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
-        secondaryIndexMotor.setSmartCurrentLimit(80); //big neo is good
-        // secondaryIndexMotor.setClosedLoopRampRate(0.6);
-        secondaryIndexMotor.enableVoltageCompensation(12.0);
-        secondaryIndexMotor.follow(indexMotor, true); //if wrong direction then just add "true" parameter or remove setInverted
-        //secondaryIndexMotor.burnFlash();
+        secondaryIndexMotor.follow(indexMotor, true);
 
-
-        intakeMotor = new CANSparkMax(Constants.CANAssignments.INTAKE_MOTOR_ID, MotorType.kBrushless);
-        intakeMotor.restoreFactoryDefaults();
-        intakeMotor.clearFaults();
-        intakeMotor.setIdleMode(IdleMode.kCoast);
+        intakeMotor = new CanSpark(Constants.CANAssignments.INTAKE_MOTOR_ID, CanSpark.MotorKind.NEO550, IdleMode.kCoast, 12.0);
         intakeMotor.setInverted(true);
         intakeEncoder = intakeMotor.getEncoder();
         intakePIDController = intakeMotor.getPIDController();
         intakePIDController.setP(0);
         intakePIDController.setFF(Constants.ScoringConstants.INTAKE_PID_FF);
-        intakeMotor.setSmartCurrentLimit(40); //limit lower cuz of neo 550
-        //intakeMotor.setClosedLoopRampRate(0.6); 
-        //intakeMotor.enableVoltageCompensation(12.0); 
-        //intakeMotor.burnFlash();
     }
 
     /**
@@ -153,7 +116,8 @@ public class ScoringSubsystem extends SubsystemBase {
      * @return - boolean representing whether the flywheel is ready.
      */
     public boolean isFlywheelReady() {
-        return flywheelEncoder.getVelocity() >= flywheelRPM - Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE && flywheelEncoder.getVelocity() <= flywheelRPM + Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
+        return flywheelEncoder.getVelocity() >= flywheelRPM - Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE &&
+                flywheelEncoder.getVelocity() <= flywheelRPM + Constants.ScoringConstants.FLYWHEEL_TARGET_RPM_TOLERANCE;
     }
 
     /**
@@ -210,11 +174,6 @@ public class ScoringSubsystem extends SubsystemBase {
                         noteInside = false;
                     }*/
                 }
-
-                /*
-                //flywheelMotor.set(1.0);
-                //indexMotor.set(1.0);
-                */
                 Logger.recordOutput("scoring.state", "FIRE");
                 break;
             case FASTFIRE:
@@ -224,6 +183,8 @@ public class ScoringSubsystem extends SubsystemBase {
                 /*if (didCurrentSpike(flywheelMotor)) {
                     noteInside = false;
                 }*/
+                Logger.recordOutput("scoring.state", "FASTFIRE");
+                break;
             case UNLOADING:
                 flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
                 indexPIDController.setReference(-Constants.ScoringConstants.INDEX_INTAKE_UNLOAD_RPM, ControlType.kVelocity);

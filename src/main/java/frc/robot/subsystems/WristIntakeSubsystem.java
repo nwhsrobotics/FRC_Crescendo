@@ -4,17 +4,18 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.CanSpark;
 import org.littletonrobotics.junction.Logger;
 
 public class WristIntakeSubsystem extends SubsystemBase {
     public final CANSparkMax motor;
 
     public WristIntakeSubsystem() {
-        motor = new CANSparkMax(Constants.CANAssignments.WRIST_INTAKE_ID, MotorType.kBrushless);
+        motor = new CanSpark(Constants.CANAssignments.WRIST_INTAKE_ID, CanSpark.MotorKind.NEO550, CANSparkBase.IdleMode.kBrake);
     }
 
     @Override
