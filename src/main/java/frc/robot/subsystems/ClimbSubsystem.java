@@ -19,7 +19,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void setRightSpeed(double speed){
-        leftClimbMotor.set(speed);
+        rightClimbMotor.set(speed);
     }
 
     @Override
