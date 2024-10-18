@@ -17,6 +17,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -84,7 +85,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule[] swerveMods = {frontLeft, frontRight, backLeft, backRight};
 
     // create an AHRS object for gyro
-    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
+    private final AHRS gyro = new AHRS(Port.kUSB);
 
     //odometry is a system to keep track of robots current position and rotation on the fields based on the coordinate system
     private final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(
