@@ -25,9 +25,9 @@ public class RobotContainer {
     public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     public final ScoringSubsystem scoringSubsystem = new ScoringSubsystem();
     public final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
-    public final ArmSubsystem armSubsystem = new ArmSubsystem();
-    public final WristSubsystem wristSubsystem = new WristSubsystem();
-    public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
+    //public final ArmSubsystem armSubsystem = new ArmSubsystem(); //arm removed =[
+    //public final WristSubsystem wristSubsystem = new WristSubsystem();
+    //public final WristIntakeSubsystem wristIntakeSubsystem = new WristIntakeSubsystem();
 
     private final SendableChooser<Command> autoChooser;
 
@@ -48,17 +48,17 @@ public class RobotContainer {
         //INIT after registering named commands
         autoChooser = AutoBuilder.buildAutoChooser("[B]");
 
-        InstantCommand armLockAmp = new InstantCommand(armSubsystem::ampPreset, armSubsystem);
-        InstantCommand armLockSource = new InstantCommand(armSubsystem::sourcePreset, armSubsystem);
-        InstantCommand armLockUnderStage = new InstantCommand(armSubsystem::underStage, armSubsystem);
-        InstantCommand wristLockAmp = new InstantCommand(wristSubsystem::ampPreset, wristSubsystem);
-        InstantCommand wristLockSource = new InstantCommand(wristSubsystem::sourcePreset, wristSubsystem);
-        InstantCommand wristLockUnderStage = new InstantCommand(wristSubsystem::underStage, wristSubsystem);
+        //InstantCommand armLockAmp = new InstantCommand(armSubsystem::ampPreset, armSubsystem);
+        //InstantCommand armLockSource = new InstantCommand(armSubsystem::sourcePreset, armSubsystem);
+        //InstantCommand armLockUnderStage = new InstantCommand(armSubsystem::underStage, armSubsystem);
+        //InstantCommand wristLockAmp = new InstantCommand(wristSubsystem::ampPreset, wristSubsystem);
+        //InstantCommand wristLockSource = new InstantCommand(wristSubsystem::sourcePreset, wristSubsystem);
+        //InstantCommand wristLockUnderStage = new InstantCommand(wristSubsystem::underStage, wristSubsystem);
 
-        InstantCommand resetArmEncoders = new InstantCommand(armSubsystem::resetArmEncoders, armSubsystem);
-        ParallelCommandGroup toAmp = new ParallelCommandGroup(armLockAmp, wristLockAmp);
-        ParallelCommandGroup toSource = new ParallelCommandGroup(armLockSource, wristLockSource);
-        ParallelCommandGroup toUnderStage = new ParallelCommandGroup(armLockUnderStage, wristLockUnderStage);
+        //InstantCommand resetArmEncoders = new InstantCommand(armSubsystem::resetArmEncoders, armSubsystem);
+        //ParallelCommandGroup toAmp = new ParallelCommandGroup(armLockAmp, wristLockAmp);
+        //ParallelCommandGroup toSource = new ParallelCommandGroup(armLockSource, wristLockSource);
+        //ParallelCommandGroup toUnderStage = new ParallelCommandGroup(armLockUnderStage, wristLockUnderStage);
 
         new JoystickButton(gunner, Buttons.RIGHT_BUMPER).onTrue(commandShoot);
         new JoystickButton(gunner, Buttons.LEFT_BUMPER).onTrue(new Auto(swerveSubsystem, scoringSubsystem, new ArrayList<>(List.of(Positions.FRONTLEFT, Positions.FRONTLEFTMOST, Positions.FRONTRIGHT, Positions.FRONTRIGHTMOST)), 4, Positions.SPEAKER));
@@ -66,10 +66,10 @@ public class RobotContainer {
         new JoystickButton(gunner, Buttons.B).onTrue(commandUnload);
         new JoystickButton(gunner, Buttons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(scoringSubsystem::increaseRPM));
         new JoystickButton(gunner, Buttons.LEFT_STICK_BUTTON).onTrue(new InstantCommand(scoringSubsystem::decreaseRPM));
-        new POVButton(gunner, Buttons.POV_UP).onTrue(toAmp);
-        new POVButton(gunner, Buttons.POV_LEFT).onTrue(toSource);
-        new POVButton(gunner, Buttons.POV_DOWN).onTrue(toUnderStage);
-        new POVButton(gunner, Buttons.POV_RIGHT).onTrue(resetArmEncoders);
+        //new POVButton(gunner, Buttons.POV_UP).onTrue(toAmp);
+        //new POVButton(gunner, Buttons.POV_LEFT).onTrue(toSource);
+        //new POVButton(gunner, Buttons.POV_DOWN).onTrue(toUnderStage);
+        //new POVButton(gunner, Buttons.POV_RIGHT).onTrue(resetArmEncoders);
 
         new JoystickButton(driver, Buttons.MENU).onTrue(new InstantCommand(swerveSubsystem::zeroGyro, swerveSubsystem));
         new JoystickButton(driver, Buttons.VIEW).onTrue(new InstantCommand(swerveSubsystem::switchFR, swerveSubsystem));
@@ -86,9 +86,9 @@ public class RobotContainer {
 
         swerveSubsystem.setDefaultCommand(new SwerveJoystickDefaultCmd(swerveSubsystem, driver));
         climbSubsystem.setDefaultCommand(new ClimbCmd(climbSubsystem, gunner));
-        wristSubsystem.setDefaultCommand(new WristAdjustCmd(wristSubsystem, gunner));
-        armSubsystem.setDefaultCommand(new ArmAdjustCmd(armSubsystem, gunner));
-        wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner));
+        //wristSubsystem.setDefaultCommand(new WristAdjustCmd(wristSubsystem, gunner));
+        //armSubsystem.setDefaultCommand(new ArmAdjustCmd(armSubsystem, gunner));
+        //wristIntakeSubsystem.setDefaultCommand(new WristIntakeCmd(wristIntakeSubsystem, gunner));
     }
 
     public Command getAutonomousCommand() {
