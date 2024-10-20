@@ -75,34 +75,34 @@ public class ScoringSubsystem extends SubsystemBase {
     private boolean noteInside;
 
     public ScoringSubsystem() {
-        flywheelMotor = new ImprovedCanSpark(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.0);
+        flywheelMotor = new ImprovedCanSpark(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.25);
         flywheelMotor.setInverted(true);
         flywheelEncoder = flywheelMotor.getEncoder();
         flywheelPIDController = flywheelMotor.getPIDController();
         flywheelPIDController.setP(Constants.ScoringConstants.FLYWHEEL_PID_P);
         flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
 
-        secondaryFlywheelMotor = new ImprovedCanSpark(Constants.CANAssignments.SECONDARY_FLYWHEEL_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.0);
+        secondaryFlywheelMotor = new ImprovedCanSpark(Constants.CANAssignments.SECONDARY_FLYWHEEL_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.25);
         secondaryFlywheelEncoder = secondaryFlywheelMotor.getEncoder();
         secondaryFlywheelPIDController = secondaryFlywheelMotor.getPIDController();
         secondaryFlywheelPIDController.setP(Constants.ScoringConstants.FLYWHEEL_PID_P);
         secondaryFlywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
         secondaryFlywheelMotor.follow(flywheelMotor, true);
 
-        indexMotor = new ImprovedCanSpark(Constants.CANAssignments.INDEX_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.0);
+        indexMotor = new ImprovedCanSpark(Constants.CANAssignments.INDEX_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.25);
         indexMotor.setInverted(true);
         indexEncoder = indexMotor.getEncoder();
         indexPIDController = indexMotor.getPIDController();
         indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
 
-        secondaryIndexMotor = new ImprovedCanSpark(Constants.CANAssignments.SECONDARY_INDEX_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.0);
+        secondaryIndexMotor = new ImprovedCanSpark(Constants.CANAssignments.SECONDARY_INDEX_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.25);
         secondaryIndexEncoder = secondaryIndexMotor.getEncoder();
         secondaryIndexPIDController = secondaryIndexMotor.getPIDController();
         secondaryIndexPIDController.setP(0); //TODO: set the same P value like the flywheel? Thats why it was losing traction because more load = less speed
         secondaryIndexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
         secondaryIndexMotor.follow(indexMotor, true);
 
-        intakeMotor = new ImprovedCanSpark(Constants.CANAssignments.INTAKE_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO550, IdleMode.kCoast, 12.0);
+        intakeMotor = new ImprovedCanSpark(Constants.CANAssignments.INTAKE_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO550, IdleMode.kCoast, 12.25);
         intakeMotor.setInverted(true);
         intakeEncoder = intakeMotor.getEncoder();
         intakePIDController = intakeMotor.getPIDController();
