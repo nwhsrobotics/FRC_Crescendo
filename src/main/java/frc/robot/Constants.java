@@ -121,9 +121,9 @@ public final class Constants {
                 new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //back left
                 new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //back right
 
-        public static final double kDirectionSlewRate = 1.2; // radians per second
-        public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
-        public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
+        public static final double kDirectionSlewRate = 0.9; // radians per second
+        public static final double kMagnitudeSlewRate = 1.35; // percent per second (1 = 100%)
+        public static final double kRotationalSlewRate = 1.5; // percent per second (1 = 100%)
 
         public static final boolean kFrontLeftTurningEncoderReversed = false;
         public static final boolean kBackLeftTurningEncoderReversed = false;

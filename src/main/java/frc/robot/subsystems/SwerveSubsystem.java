@@ -40,7 +40,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // for example, even if the robot is oriented towards the driver station,
     // holding forwards will move the robot away from the driver station,
     // because that is the forwards direction relative to the field.
-    private boolean isFieldRelative = false;
+    private boolean isFieldRelative = true;
 
     public AutoNavigation autonavigator;
 
