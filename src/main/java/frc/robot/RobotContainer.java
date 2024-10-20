@@ -73,14 +73,14 @@ public class RobotContainer {
 
         new JoystickButton(driver, Buttons.MENU).onTrue(new InstantCommand(swerveSubsystem::zeroGyro, swerveSubsystem));
         new JoystickButton(driver, Buttons.VIEW).onTrue(new InstantCommand(swerveSubsystem::switchFR, swerveSubsystem));
-        new JoystickButton(driver, Buttons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(swerveSubsystem.autonavigator::toggle, swerveSubsystem));
-        new JoystickButton(driver, Buttons.X).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.AMP), swerveSubsystem));
-        new JoystickButton(driver, Buttons.Y).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.SOURCE), swerveSubsystem));
-        new JoystickButton(driver, Buttons.A).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.SPEAKER), swerveSubsystem));
+        //new JoystickButton(driver, Buttons.RIGHT_STICK_BUTTON).onTrue(new InstantCommand(swerveSubsystem.autonavigator::toggle, swerveSubsystem));
+        //new JoystickButton(driver, Buttons.X).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.AMP), swerveSubsystem));
+        //new JoystickButton(driver, Buttons.Y).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.SOURCE), swerveSubsystem));
+        //new JoystickButton(driver, Buttons.A).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Positions.SPEAKER), swerveSubsystem));
         //new JoystickButton(driver, XboxControllerButtons.B).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(swerveSubsystem.odometer.getEstimatedPosition().nearest(Constants.FavoritePositions.allPoses)), swerveSubsystem));
-        new JoystickButton(driver, Buttons.B).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Vision.visionTargetLocation), swerveSubsystem));
-        new POVButton(driver, Buttons.POV_UP).onTrue(new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule()));
-        new POVButton(driver, Buttons.POV_DOWN).onTrue(new InstantCommand(() -> Vision.nextPipeline(LimelightConstants.llObjectDetectionName)));
+        //new JoystickButton(driver, Buttons.B).onTrue(new InstantCommand(() -> swerveSubsystem.autonavigator.navigateTo(Vision.visionTargetLocation), swerveSubsystem));
+        //new POVButton(driver, Buttons.POV_UP).onTrue(new InstantCommand(() -> new PathPlannerAuto("Starting Point").schedule()));
+        //new POVButton(driver, Buttons.POV_DOWN).onTrue(new InstantCommand(() -> Vision.nextPipeline(LimelightConstants.llObjectDetectionName)));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
