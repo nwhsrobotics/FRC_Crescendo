@@ -2,27 +2,13 @@
 
 package frc.robot.util;
 
-import edu.wpi.first.networktables.DoubleArrayEntry;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.TimestampedDoubleArray;
-import frc.robot.util.LimelightHelpers.LimelightResults;
-import frc.robot.util.LimelightHelpers.PoseEstimate;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation2d;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
@@ -30,7 +16,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.concurrent.ConcurrentHashMap;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoubleArrayEntry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.TimestampedDoubleArray;
 
 /**
  * LimelightHelpers provides static methods and classes for interfacing with Limelight vision cameras in FRC.
@@ -40,101 +38,176 @@ public class LimelightHelpers {
 
     private static final Map<String, DoubleArrayEntry> doubleArrayEntries = new ConcurrentHashMap<>();
 
+/**
+ * Represents a Color/Retroreflective Target Result extracted from JSON Output
+ * t6t_cs - Target's position relative to camera
+ * - Most direct way to get distance to target
+ *  - [x,y,z,rx,ry,rz] where:
+ *    - z is straight-line distance to target
+ *    - x is left/right offset
+ *    - y is up/down offset
+ * 
+ * t6t_rs - Target's position relative to robot center
+ *  - Like t6t_cs but accounts for camera mounting position
+ *  - Better for robot movements since it's from robot center
+ * 
+ * t6r_fs - Robot's position on field
+ *  - Only useful if you define field layout
+ *  - Used for advanced autonomous
+ *
+ * t6r_ts - Robot's position relative to target
+ *   - Advanced positioning calculations
+ *
+ * t6c_ts - Camera's position relative to target
+ *   - Usually t6t_cs is preferred
+ */
+public static class LimelightTarget_Retro {
+
+    @JsonProperty("t6c_ts")
+    private double[] cameraPose_TargetSpace;
+
+    @JsonProperty("t6r_fs")
+    private double[] robotPose_FieldSpace;
+
+    @JsonProperty("t6r_ts")
+    private double[] robotPose_TargetSpace;
+
+    @JsonProperty("t6t_cs")
+    private double[] targetPose_CameraSpace;
+
+    @JsonProperty("t6t_rs")
+    private double[] targetPose_RobotSpace;
+
     /**
-     * Represents a Color/Retroreflective Target Result extracted from JSON Output
+     * Gets the camera's position relative to target in 3D space.
+     * Usually t6t_cs (target pose in camera space) is preferred for most applications.
+     * @return Pose3d representing camera position in target space [x,y,z,rx,ry,rz]
      */
-    public static class LimelightTarget_Retro {
-
-        @JsonProperty("t6c_ts")
-        private double[] cameraPose_TargetSpace;
-
-        @JsonProperty("t6r_fs")
-        private double[] robotPose_FieldSpace;
-
-        @JsonProperty("t6r_ts")
-        private  double[] robotPose_TargetSpace;
-
-        @JsonProperty("t6t_cs")
-        private double[] targetPose_CameraSpace;
-
-        @JsonProperty("t6t_rs")
-        private double[] targetPose_RobotSpace;
-
-        public Pose3d getCameraPose_TargetSpace()
-        {
-            return toPose3D(cameraPose_TargetSpace);
-        }
-        public Pose3d getRobotPose_FieldSpace()
-        {
-            return toPose3D(robotPose_FieldSpace);
-        }
-        public Pose3d getRobotPose_TargetSpace()
-        {
-            return toPose3D(robotPose_TargetSpace);
-        }
-        public Pose3d getTargetPose_CameraSpace()
-        {
-            return toPose3D(targetPose_CameraSpace);
-        }
-        public Pose3d getTargetPose_RobotSpace()
-        {
-            return toPose3D(targetPose_RobotSpace);
-        }
-
-        public Pose2d getCameraPose_TargetSpace2D()
-        {
-            return toPose2D(cameraPose_TargetSpace);
-        }
-        public Pose2d getRobotPose_FieldSpace2D()
-        {
-            return toPose2D(robotPose_FieldSpace);
-        }
-        public Pose2d getRobotPose_TargetSpace2D()
-        {
-            return toPose2D(robotPose_TargetSpace);
-        }
-        public Pose2d getTargetPose_CameraSpace2D()
-        {
-            return toPose2D(targetPose_CameraSpace);
-        }
-        public Pose2d getTargetPose_RobotSpace2D()
-        {
-            return toPose2D(targetPose_RobotSpace);
-        }
-
-        @JsonProperty("ta")
-        public double ta;
-
-        @JsonProperty("tx")
-        public double tx;
-        
-        @JsonProperty("ty")
-        public double ty;
-
-        @JsonProperty("txp")
-        public double tx_pixels;
-
-        @JsonProperty("typ")
-        public double ty_pixels;
-
-        @JsonProperty("tx_nocross")
-        public double tx_nocrosshair;
-
-        @JsonProperty("ty_nocross")
-        public double ty_nocrosshair;
-
-        @JsonProperty("ts")
-        public double ts;
-
-        public LimelightTarget_Retro() {
-            cameraPose_TargetSpace = new double[6];
-            robotPose_FieldSpace = new double[6];
-            robotPose_TargetSpace = new double[6];
-            targetPose_CameraSpace = new double[6];
-            targetPose_RobotSpace = new double[6];
-        }
-
+    public Pose3d getCameraPose_TargetSpace() {
+        return toPose3D(cameraPose_TargetSpace);
     }
+
+    /**
+     * Gets the robot's position on the field in 3D space.
+     * Only useful if field layout is defined. Used for advanced autonomous operations.
+     * @return Pose3d representing robot position in field space [x,y,z,rx,ry,rz]
+     */
+    public Pose3d getRobotPose_FieldSpace() {
+        return toPose3D(robotPose_FieldSpace);
+    }
+
+    /**
+     * Gets the robot's position relative to target in 3D space.
+     * Used for advanced positioning calculations.
+     * @return Pose3d representing robot position in target space [x,y,z,rx,ry,rz]
+     */
+    public Pose3d getRobotPose_TargetSpace() {
+        return toPose3D(robotPose_TargetSpace);
+    }
+
+    /**
+     * Gets the target's position relative to camera in 3D space.
+     * Most direct way to get distance to target where:
+     * - z is straight-line distance to target
+     * - x is left/right offset
+     * - y is up/down offset
+     * @return Pose3d representing target position in camera space [x,y,z,rx,ry,rz]
+     */
+    public Pose3d getTargetPose_CameraSpace() {
+        return toPose3D(targetPose_CameraSpace);
+    }
+
+    /**
+     * Gets the target's position relative to robot center in 3D space.
+     * Similar to target pose in camera space but accounts for camera mounting position.
+     * Better for robot movements since it's from robot center.
+     * @return Pose3d representing target position in robot space [x,y,z,rx,ry,rz]
+     */
+    public Pose3d getTargetPose_RobotSpace() {
+        return toPose3D(targetPose_RobotSpace);
+    }
+
+    /**
+     * Gets the camera's position relative to target in 2D space.
+     * 2D projection of the 3D pose. Usually t6t_cs is preferred.
+     * @return Pose2d representing camera position in target space [x,y,rotation]
+     */
+    public Pose2d getCameraPose_TargetSpace2D() {
+        return toPose2D(cameraPose_TargetSpace);
+    }
+
+    /**
+     * Gets the robot's position on the field in 2D space.
+     * 2D projection of the 3D pose. Only useful if field layout is defined.
+     * @return Pose2d representing robot position in field space [x,y,rotation]
+     */
+    public Pose2d getRobotPose_FieldSpace2D() {
+        return toPose2D(robotPose_FieldSpace);
+    }
+
+    /**
+     * Gets the robot's position relative to target in 2D space.
+     * 2D projection of the 3D pose for advanced positioning calculations.
+     * @return Pose2d representing robot position in target space [x,y,rotation]
+     */
+    public Pose2d getRobotPose_TargetSpace2D() {
+        return toPose2D(robotPose_TargetSpace);
+    }
+
+    /**
+     * Gets the target's position relative to camera in 2D space.
+     * 2D projection of the 3D pose. Most direct way to get distance to target.
+     * @return Pose2d representing target position in camera space [x,y,rotation]
+     */
+    public Pose2d getTargetPose_CameraSpace2D() {
+        return toPose2D(targetPose_CameraSpace);
+    }
+
+    /**
+     * Gets the target's position relative to robot center in 2D space.
+     * 2D projection of the 3D pose. Accounts for camera mounting position.
+     * @return Pose2d representing target position in robot space [x,y,rotation]
+     */
+    public Pose2d getTargetPose_RobotSpace2D() {
+        return toPose2D(targetPose_RobotSpace);
+    }
+
+    @JsonProperty("ta")
+    public double ta;
+
+    @JsonProperty("tx")
+    public double tx;
+    
+    @JsonProperty("ty")
+    public double ty;
+
+    @JsonProperty("txp")
+    public double tx_pixels;
+
+    @JsonProperty("typ")
+    public double ty_pixels;
+
+    @JsonProperty("tx_nocross")
+    public double tx_nocrosshair;
+
+    @JsonProperty("ty_nocross")
+    public double ty_nocrosshair;
+
+    @JsonProperty("ts")
+    public double ts;
+
+    /**
+     * Default constructor initializing all pose arrays.
+     * Creates new double arrays of size 6 for each pose type [x,y,z,rx,ry,rz].
+     */
+    public LimelightTarget_Retro() {
+        cameraPose_TargetSpace = new double[6];
+        robotPose_FieldSpace = new double[6];
+        robotPose_TargetSpace = new double[6];
+        targetPose_CameraSpace = new double[6];
+        targetPose_RobotSpace = new double[6];
+    }
+}
 
     /**
      * Represents an AprilTag/Fiducial Target Result extracted from JSON Output
