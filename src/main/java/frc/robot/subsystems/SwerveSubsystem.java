@@ -394,54 +394,66 @@ public class SwerveSubsystem extends SubsystemBase {
      * Update odometry periodically with vision and internal measurements
      */
     public void updateOdometry() {
-        // Update the robot's odometer
-        //odometer.updateWithTime(Timer.getFPGATimestamp(), Rotation2d.fromDegrees(getHeading()), getModulePositions());
         odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
-        //stddevs should be scaled to improve accuracy https://www.chiefdelphi.com/t/poseestimators-and-limelight-botpose/430334/3
-        //LimelightHelpers.setPipelineIndex(LimelightConstants.llLocalizationName, 0);
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llLocalizationName);
-        double poseDifference = odometer.getEstimatedPosition().getTranslation().getDistance(LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llLocalizationName).pose.getTranslation());
-        double dist = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimelightConstants.llLocalizationName).avgTagDist;
-        double xyStds = 0.9;
-        double degStds = 0.9;
-        if (limelightMeasurement.tagCount >= 2) {
-            if (dist < 1.0) {
-                xyStds = 0.1;
-                degStds = 1;
-            } else if (dist < 2.0) {
-                xyStds = 0.2;
-                degStds = 2;
-            } else if (dist < 3.0) {
-                xyStds = 0.3;
-                degStds = 3;
-            } else if (dist < 4.0) {
-                xyStds = 0.4;
-                degStds = 4;
-            } else {
-                xyStds = 0.5;
-                degStds = 6;
+    
+    
+        boolean useMegaTag2 = true; //set to false to use MegaTag1
+        // we might use megatag1 when disabled to auto orient and megatag2 when enable
+        // here: https://www.chiefdelphi.com/t/introducing-megatag2-by-limelight-vision/461243/78 
+        boolean doRejectUpdate = false;
+        if(useMegaTag2 == false)
+        {
+          LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+          
+          if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
+          {
+            if(mt1.rawFiducials[0].ambiguity > .7)
+            {
+              doRejectUpdate = true;
             }
-        } else {
-            if (limelightMeasurement.avgTagArea > 0.8 && poseDifference < 0.5) {
-                xyStds = 1.0;
-                degStds = 12;
-            } else if (limelightMeasurement.avgTagArea > 0.1 && poseDifference < 0.3) {
-                // 1 target farther away and estimated pose is close
-                xyStds = 2.0;
-                degStds = 30;
+            if(mt1.rawFiducials[0].distToCamera > 3)
+            {
+              doRejectUpdate = true;
             }
+          }
+          if(mt1.tagCount == 0)
+          {
+            doRejectUpdate = true;
+          }
+    
+          if(!doRejectUpdate)
+          {
+            odometer.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+            odometer.addVisionMeasurement(
+                mt1.pose,
+                mt1.timestampSeconds);
+          }
         }
-        //odometer.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-        odometer.setVisionMeasurementStdDevs(
-                VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
-        odometer.addVisionMeasurement(
-                limelightMeasurement.pose,
-                limelightMeasurement.timestampSeconds);
-        Logger.recordOutput("swerve.odometer", odometer.getEstimatedPosition());
-        Logger.recordOutput("swerve.odometer.xCoordinate", odometer.getEstimatedPosition().getX());
-        Logger.recordOutput("swerve.odometer.yCoordinate", odometer.getEstimatedPosition().getY());
-        Logger.recordOutput("swerve.odometer.rotation", odometer.getEstimatedPosition().getRotation().getDegrees());
-    }
+        else if (useMegaTag2 == true)
+        {
+          LimelightHelpers.SetRobotOrientation("limelight", odometer.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+          LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+          if(Math.abs(gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+          {
+            doRejectUpdate = true;
+          }
+          if(mt2.tagCount == 0)
+          {
+            doRejectUpdate = true;
+          }
+          if(!doRejectUpdate)
+          {
+            odometer.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+            odometer.addVisionMeasurement(
+                mt2.pose,
+                mt2.timestampSeconds);
+          }
+          Logger.recordOutput("swerve.odometer", odometer.getEstimatedPosition());
+          Logger.recordOutput("swerve.odometer.xCoordinate", odometer.getEstimatedPosition().getX());
+          Logger.recordOutput("swerve.odometer.yCoordinate", odometer.getEstimatedPosition().getY());
+          Logger.recordOutput("swerve.odometer.rotation", odometer.getEstimatedPosition().getRotation().getDegrees());
+        }
+      }
 
     /**
      * Method to drive the robot using joystick info.
