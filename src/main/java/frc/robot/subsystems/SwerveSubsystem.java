@@ -15,9 +15,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -353,6 +356,28 @@ public class SwerveSubsystem extends SubsystemBase {
         Logger.recordOutput("swerve.drive.front.right.velocity", frontRight.getDriveVelocity());
         Logger.recordOutput("swerve.drive.back.left.velocity", backLeft.getDriveVelocity());
         Logger.recordOutput("swerve.drive.back.right.velocity", backRight.getDriveVelocity());
+
+        // Below code is just to test elastic dashboard custom widget
+        SmartDashboard.putData("Swerve Drive", new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("SwerveDrive");
+
+                builder.addDoubleProperty("Front Left Angle", () -> frontLeft.getTurningPosition(), null);
+                builder.addDoubleProperty("Front Left Velocity", () -> frontLeft.getDriveVelocity(), null);
+
+                builder.addDoubleProperty("Front Right Angle", () -> frontRight.getTurningPosition(), null);
+                builder.addDoubleProperty("Front Right Velocity", () -> frontRight.getDriveVelocity(), null);
+
+                builder.addDoubleProperty("Back Left Angle", () -> backLeft.getTurningPosition(), null);
+                builder.addDoubleProperty("Back Left Velocity", () -> backLeft.getDriveVelocity(), null);
+
+                builder.addDoubleProperty("Back Right Angle", () -> backRight.getTurningPosition(), null);
+                builder.addDoubleProperty("Back Right Velocity", () -> backRight.getDriveVelocity(), null);
+
+                builder.addDoubleProperty("Robot Angle", () -> gyro.getAngle(), null);
+            }
+            });
     }
 
     /**

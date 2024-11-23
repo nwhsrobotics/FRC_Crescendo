@@ -7,6 +7,9 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.Elastic;
+import frc.robot.util.Elastic.ElasticNotification;
+import frc.robot.util.Elastic.ElasticNotification.NotificationLevel;
 import frc.robot.util.ImprovedCanSpark;
 import org.littletonrobotics.junction.Logger;
 
@@ -159,6 +162,12 @@ public class ScoringSubsystem extends SubsystemBase {
                 flywheelPIDController.setReference(Constants.ScoringConstants.FLYWHEEL_IDLE_RPM, ControlType.kVelocity);
                 indexPIDController.setReference(Constants.ScoringConstants.INDEX_INTAKE_COOP_RPM, ControlType.kVelocity);
                 intakePIDController.setReference(Constants.ScoringConstants.INTAKE_RPM, ControlType.kVelocity);
+                Elastic.sendAlert(new ElasticNotification()
+                    .withLevel(NotificationLevel.INFO)
+                    .withTitle("Scoring")
+                    .withDescription("Your robot is currently loading!")
+                    .withDisplaySeconds(3.0)
+                );
                 /*if (didCurrentSpikeIntake(intakeMotor)) {
                     noteInside = true;
                 }*/
@@ -170,6 +179,9 @@ public class ScoringSubsystem extends SubsystemBase {
                 flywheelPIDController.setReference(flywheelRPM, ControlType.kVelocity);
                 if (isFlywheelReady() && flywheelEncoder.getVelocity() != Constants.ScoringConstants.FLYWHEEL_IDLE_RPM) {
                     indexPIDController.setReference(Constants.ScoringConstants.INDEX_FLYWHEEL_COOP_RPM, ControlType.kVelocity);
+                    ElasticNotification notification = new ElasticNotification(NotificationLevel.INFO, "Shot",
+                     "Your robot is currently shooting a game piece. Another type of notification");
+                    Elastic.sendAlert(notification);
                     /*if (didCurrentSpike(flywheelMotor)) {
                         noteInside = false;
                     }*/
