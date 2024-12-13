@@ -340,6 +340,8 @@ public class SwerveSubsystem extends SubsystemBase {
         Logger.recordOutput("swerve.pitch", getPitchDeg());
         Logger.recordOutput("swerve.heading", getHeading());
 
+        
+
         // Log steering direction.
         Logger.recordOutput("swerve.steer.front.left.abs", frontLeft.getAbsoluteEncoderRad());
         Logger.recordOutput("swerve.steer.front.right.abs", frontRight.getAbsoluteEncoderRad());
@@ -358,7 +360,7 @@ public class SwerveSubsystem extends SubsystemBase {
         Logger.recordOutput("swerve.drive.back.right.velocity", backRight.getDriveVelocity());
 
         // Below code is just to test elastic dashboard custom widget
-        SmartDashboard.putData("Swerve Drive", new Sendable() {
+        /*SmartDashboard.putData("Swerve Drive", new Sendable() {
             @Override
             public void initSendable(SendableBuilder builder) {
                 builder.setSmartDashboardType("SwerveDrive");
@@ -377,7 +379,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
                 builder.addDoubleProperty("Robot Angle", () -> gyro.getAngle(), null);
             }
-            });
+            });*/
     }
 
     /**

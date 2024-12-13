@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.LoggerConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.Vision;
 import frc.robot.util.ImprovedPowerDistribution;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -97,6 +98,10 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void disabledPeriodic() {
+        Logger.recordOutput("ll.straightLineDist", Vision.lineOfSightDistance("limelight"));
+        Logger.recordOutput("ll.verticalDist", Vision.verticalPlaneDistance("limelight"));
+        Logger.recordOutput("ll.horizontalDist", Vision.horizontalOffestDistance("limelight"));
+        Logger.recordOutput("ll.3dHypotnuese", Vision.full3DDistance("limelight"));
     }
 
     /**
