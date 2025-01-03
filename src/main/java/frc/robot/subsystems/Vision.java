@@ -147,7 +147,7 @@ public class Vision {
      * @param limelightName The name of the limelight.
      * @return True if AprilTag pipeline is active, else false.
      */
-    private static boolean isAprilTagPipeline(String limelightName) {
+    public static boolean isAprilTagPipeline(String limelightName) {
         return LimelightHelpers.getCurrentPipelineIndex(limelightName) == 0.0;
     }
 

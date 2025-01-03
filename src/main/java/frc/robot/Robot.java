@@ -1,13 +1,17 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.CANAssignments;
 import frc.robot.Constants.LoggerConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.VisionAlternative;
 import frc.robot.util.ImprovedPowerDistribution;
+import frc.robot.util.LimelightHelpers;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -102,6 +106,9 @@ public class Robot extends LoggedRobot {
         Logger.recordOutput("ll.verticalDist", Vision.verticalPlaneDistance("limelight"));
         Logger.recordOutput("ll.horizontalDist", Vision.horizontalOffestDistance("limelight"));
         Logger.recordOutput("ll.3dHypotnuese", Vision.full3DDistance("limelight"));
+        Logger.recordOutput("ll.detect", LimelightHelpers.getTY(""));
+    
+        Logger.recordOutput("ll.target", Vision.transformTargetLocation(new Pose2d(), "limelight").toString());
     }
 
     /**
