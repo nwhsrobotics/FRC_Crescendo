@@ -19,8 +19,8 @@ import frc.robot.util.ImprovedCanSparkFlex;
  */
 public class SwerveModule {
     // Drive and Turning Motors
-    private final CANSparkFlex driveMotor;
-    private final CANSparkFlex turningMotor;
+    private final CANSparkMax driveMotor;
+    private final CANSparkMax turningMotor;
 
     // Encoders
     private final RelativeEncoder driveEncoder;
@@ -55,8 +55,8 @@ public class SwerveModule {
         absoluteEncoder = new CANcoder(absoluteEncoderId);
 
         // Initialize the drive and turning motors using the given ids
-        driveMotor = new ImprovedCanSparkFlex(driveMotorId, ImprovedCanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
-        turningMotor = new ImprovedCanSparkFlex(turningMotorId, ImprovedCanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
+        driveMotor = new ImprovedCanSpark(driveMotorId, ImprovedCanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
+        turningMotor = new ImprovedCanSpark(turningMotorId, ImprovedCanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
 
         // Set the inversion of the drive and turning motors based on the given values
         driveMotor.setInverted(driveMotorReversed);

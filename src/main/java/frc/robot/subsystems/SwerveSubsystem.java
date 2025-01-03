@@ -423,7 +423,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void updateOdometry() {
         odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
     
-    
+        /*if (Vision.isAprilTagPipeline("limelight")){
         boolean useMegaTag2 = true; //set to false to use MegaTag1
         // we might use megatag1 when disabled to auto orient and megatag2 when enable
         // here: https://www.chiefdelphi.com/t/introducing-megatag2-by-limelight-vision/461243/78 
@@ -475,11 +475,12 @@ public class SwerveSubsystem extends SubsystemBase {
                 mt2.pose,
                 mt2.timestampSeconds);
           }
+        }
           Logger.recordOutput("swerve.odometer", odometer.getEstimatedPosition());
           Logger.recordOutput("swerve.odometer.xCoordinate", odometer.getEstimatedPosition().getX());
           Logger.recordOutput("swerve.odometer.yCoordinate", odometer.getEstimatedPosition().getY());
           Logger.recordOutput("swerve.odometer.rotation", odometer.getEstimatedPosition().getRotation().getDegrees());
-        }
+        }*/
       }
 
     /**
