@@ -133,10 +133,17 @@ public class Vision {
      */
     public static double horizontalOffestDistance(String limelightName) {
         if (LimelightHelpers.getTV(limelightName)) {
-            double legLength = verticalPlaneDistance(limelightName);
+            double legLength = lineOfSightDistance(limelightName);
             double txRadians = Math.toRadians(LimelightHelpers.getTX(limelightName));
-            double tanTheta = Math.tan(txRadians);
-            return legLength * tanTheta;
+            // double theta = LimelightHelpers.getTX(limelightName);
+            return legLength*Math.atan(txRadians);
+            /* 
+            double cosTheta = Math.cos(txRadians);
+            if (cosTheta == 0.0) {
+                return 0.0;
+            }
+            return legLength / cosTheta;
+            */
         }
         return 0.0;
     }
