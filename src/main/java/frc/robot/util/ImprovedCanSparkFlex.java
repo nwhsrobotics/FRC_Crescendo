@@ -1,42 +1,51 @@
 package frc.robot.util;
 
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.sim.SparkFlexExternalEncoderSim;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
 
-public class ImprovedCanSparkFlex extends CANSparkFlex {
+public class ImprovedCanSparkFlex extends SparkFlex {
 
     public enum MotorKind {
         NEO550,
-        NEO
+        NEO,
+        VORTEX
     }
 
-    public ImprovedCanSparkFlex(int id, MotorKind motor, IdleMode mode, double volComp) {
+    public ImprovedCanSparkFlex(int id, MotorKind motor, SparkBaseConfig config, IdleMode mode, double volComp) {
         super(id, MotorType.kBrushless);
-        restoreFactoryDefaults();
         clearFaults();
-        setIdleMode(mode);
+        config.idleMode(mode);
         setVoltage(volComp);
-        switch(motor){
-            case NEO -> setSmartCurrentLimit(80);
-            case NEO550 -> setSmartCurrentLimit(20);
+        //config.voltageCompensation(volComp)
+        switch (motor) {
+            case NEO -> config.smartCurrentLimit(80);
+            case NEO550 -> config.smartCurrentLimit(20);
+            case VORTEX -> config.smartCurrentLimit(80);
         }
         if (DriverStation.isFMSAttached()) {
-            burnFlash();
+            configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        } else {
+            configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         }
     }
 
-    public ImprovedCanSparkFlex(int id, frc.robot.util.ImprovedCanSpark.MotorKind neo, IdleMode mode) {
+    public ImprovedCanSparkFlex(int id, MotorKind motor, SparkBaseConfig config, IdleMode mode) {
         super(id, MotorType.kBrushless);
-        restoreFactoryDefaults();
         clearFaults();
-        setIdleMode(mode);
-        switch(neo){
-            case NEO -> setSmartCurrentLimit(80);
-            case NEO550 -> setSmartCurrentLimit(20);
+        config.idleMode(mode);
+        switch (motor) {
+            case NEO -> config.smartCurrentLimit(80);
+            case NEO550 -> config.smartCurrentLimit(20);
+            case VORTEX -> config.smartCurrentLimit(80);
         }
         if (DriverStation.isFMSAttached()) {
-            burnFlash();
+            configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        } else {
+            configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         }
     }
 }

@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -13,8 +15,8 @@ import frc.robot.util.ImprovedCanSpark;
 import org.littletonrobotics.junction.Logger;
 
 public class WristSubsystem extends SubsystemBase {
-    private final CANSparkMax wristMotor;
-    private final SparkPIDController wristPidController;
+    private final SparkMax wristMotor;
+    private final SparkClosedLoopController wristPidController;
     private final RelativeEncoder wristRelativeEncoder;
     private final DutyCycleEncoder wristAbsoluteEncoder;
     //private double currentPosition;
@@ -22,17 +24,17 @@ public class WristSubsystem extends SubsystemBase {
     private final boolean autoLockEnabledAmp = false;
     private final boolean autoLockEnabledSource = false;
     private final double maxRotPerTick = 0.5;
-
+    private final SparkMaxConfig wristConfig = new SparkMaxConfig();
 
     // Constructor for WristSubsystem
     public WristSubsystem() {
-        wristMotor = new ImprovedCanSpark(Constants.CANAssignments.WRIST_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO550, CANSparkBase.IdleMode.kBrake);
+        wristConfig.closedLoop.p(0.25);
+        wristConfig.closedLoop.outputRange(-maxRotPerTick, maxRotPerTick);
+        wristMotor = new ImprovedCanSpark(Constants.CANAssignments.WRIST_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO550, IdleMode.kBrake);
         wristRelativeEncoder = wristMotor.getEncoder();
         wristAbsoluteEncoder = new DutyCycleEncoder(WristConstants.ABSOLUTE_ENCODER_DIO_CHANNEL);
-        wristPidController = wristMotor.getPIDController();
-        wristPidController.setP(0.25);
+        wristPidController = wristMotor.getClosedLoopController();
         //is it the setOutputRange thats caussing it not to move 90 degrees?
-        wristPidController.setOutputRange(-maxRotPerTick, maxRotPerTick);
 
         // wristRelativeEncoder.setPosition(wristAbsoluteEncoder.getAbsolutePosition() + WristConstants.absOffset);
         // wristPidController.setP(Constants.WristConstants.WRIST_PID_P);

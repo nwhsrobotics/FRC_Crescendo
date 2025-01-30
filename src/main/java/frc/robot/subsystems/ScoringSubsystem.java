@@ -1,10 +1,6 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.Elastic;
@@ -12,6 +8,13 @@ import frc.robot.util.Elastic.ElasticNotification;
 import frc.robot.util.Elastic.ElasticNotification.NotificationLevel;
 import frc.robot.util.ImprovedCanSpark;
 import org.littletonrobotics.junction.Logger;
+
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 /**
  * Combines the shooter and intake into a singular cooperative subsystem.
@@ -58,59 +61,61 @@ public class ScoringSubsystem extends SubsystemBase {
      */
     public ScoringState state = ScoringState.IDLE;
 
-    private final CANSparkMax flywheelMotor;
+    private final SparkMax flywheelMotor;
     private final RelativeEncoder flywheelEncoder;
-    private final SparkPIDController flywheelPIDController;
-    private final CANSparkMax secondaryFlywheelMotor;
+    private final SparkClosedLoopController flywheelPIDController;
+    private final SparkMaxConfig flywheelConfig = new SparkMaxConfig();
+    private final SparkMax secondaryFlywheelMotor;
     private final RelativeEncoder secondaryFlywheelEncoder;
-    private final SparkPIDController secondaryFlywheelPIDController;
-    private final CANSparkMax indexMotor;
+    private final SparkClosedLoopController secondaryFlywheelPIDController;
+    private final SparkMaxConfig secondaryFlywheelConfig = new SparkMaxConfig();
+    private final SparkMax indexMotor;
     private final RelativeEncoder indexEncoder;
-    private final SparkPIDController indexPIDController;
-    private final CANSparkMax secondaryIndexMotor;
+    private final SparkClosedLoopController indexPIDController;
+    private final SparkMaxConfig indexConfig = new SparkMaxConfig();
+    private final SparkMax secondaryIndexMotor;
     private final RelativeEncoder secondaryIndexEncoder;
-    private final SparkPIDController secondaryIndexPIDController;
-    private final CANSparkMax intakeMotor;
-    private final SparkPIDController intakePIDController;
+    private final SparkClosedLoopController secondaryIndexPIDController;
+    private final SparkMaxConfig secondaryIndexConfig = new SparkMaxConfig();
+    private final SparkMax intakeMotor;
+    private final SparkClosedLoopController intakePIDController;
     private final RelativeEncoder intakeEncoder;
+    private final SparkMaxConfig intakeConfig = new SparkMaxConfig();
 
     private double flywheelRPM = Constants.ScoringConstants.FLYWHEEL_SPEAKER_RPM;
     private boolean noteInside;
 
     public ScoringSubsystem() {
-        flywheelMotor = new ImprovedCanSpark(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.25);
+        flywheelConfig.closedLoop.pidf(Constants.ScoringConstants.FLYWHEEL_PID_P, 0, 0, Constants.ScoringConstants.FLYWHEEL_PID_FF);
+        flywheelMotor = new ImprovedCanSpark(Constants.CANAssignments.FLYWHEEL_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, flywheelConfig, IdleMode.kCoast, 12.25);
         flywheelMotor.setInverted(true);
         flywheelEncoder = flywheelMotor.getEncoder();
-        flywheelPIDController = flywheelMotor.getPIDController();
-        flywheelPIDController.setP(Constants.ScoringConstants.FLYWHEEL_PID_P);
-        flywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
+        flywheelPIDController = flywheelMotor.getClosedLoopController();
 
-        secondaryFlywheelMotor = new ImprovedCanSpark(Constants.CANAssignments.SECONDARY_FLYWHEEL_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.25);
+        secondaryFlywheelConfig.closedLoop.pidf(Constants.ScoringConstants.FLYWHEEL_PID_P, 0, 0, Constants.ScoringConstants.FLYWHEEL_PID_FF);
+        secondaryFlywheelConfig.follow(flywheelMotor, true);
+        secondaryFlywheelMotor = new ImprovedCanSpark(Constants.CANAssignments.SECONDARY_FLYWHEEL_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, secondaryFlywheelConfig, IdleMode.kCoast, 12.25);
         secondaryFlywheelEncoder = secondaryFlywheelMotor.getEncoder();
-        secondaryFlywheelPIDController = secondaryFlywheelMotor.getPIDController();
-        secondaryFlywheelPIDController.setP(Constants.ScoringConstants.FLYWHEEL_PID_P);
-        secondaryFlywheelPIDController.setFF(Constants.ScoringConstants.FLYWHEEL_PID_FF);
-        secondaryFlywheelMotor.follow(flywheelMotor, true);
+        secondaryFlywheelPIDController = secondaryFlywheelMotor.getClosedLoopController();
 
-        indexMotor = new ImprovedCanSpark(Constants.CANAssignments.INDEX_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.25);
+        indexConfig.closedLoop.pidf(0,0, 0, Constants.ScoringConstants.INDEX_PID_FF);
+        indexMotor = new ImprovedCanSpark(Constants.CANAssignments.INDEX_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, indexConfig, IdleMode.kCoast, 12.25);
         indexMotor.setInverted(true);
         indexEncoder = indexMotor.getEncoder();
-        indexPIDController = indexMotor.getPIDController();
-        indexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
+        indexPIDController = indexMotor.getClosedLoopController();
 
-        secondaryIndexMotor = new ImprovedCanSpark(Constants.CANAssignments.SECONDARY_INDEX_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kCoast, 12.25);
+        secondaryIndexConfig.closedLoop.pidf(0, 0, 0, Constants.ScoringConstants.INDEX_PID_FF);
+        secondaryFlywheelConfig.follow(indexMotor, true);
+        secondaryIndexMotor = new ImprovedCanSpark(Constants.CANAssignments.SECONDARY_INDEX_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, secondaryIndexConfig, IdleMode.kCoast, 12.25);
         secondaryIndexEncoder = secondaryIndexMotor.getEncoder();
-        secondaryIndexPIDController = secondaryIndexMotor.getPIDController();
-        secondaryIndexPIDController.setP(0); //TODO: set the same P value like the flywheel? Thats why it was losing traction because more load = less speed
-        secondaryIndexPIDController.setFF(Constants.ScoringConstants.INDEX_PID_FF);
-        secondaryIndexMotor.follow(indexMotor, true);
+        secondaryIndexPIDController = secondaryIndexMotor.getClosedLoopController(); 
+        //TODO: set the same P value like the flywheel? Thats why it was losing traction because more load = less speed
 
-        intakeMotor = new ImprovedCanSpark(Constants.CANAssignments.INTAKE_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO550, IdleMode.kCoast, 12.25);
+        intakeConfig.closedLoop.pidf(0, 0, 0, Constants.ScoringConstants.INTAKE_PID_FF);
+        intakeMotor = new ImprovedCanSpark(Constants.CANAssignments.INTAKE_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO550, intakeConfig, IdleMode.kCoast, 12.25);
         intakeMotor.setInverted(true);
         intakeEncoder = intakeMotor.getEncoder();
-        intakePIDController = intakeMotor.getPIDController();
-        intakePIDController.setP(0);
-        intakePIDController.setFF(Constants.ScoringConstants.INTAKE_PID_FF);
+        intakePIDController = intakeMotor.getClosedLoopController();
     }
 
     /**
@@ -220,7 +225,7 @@ public class ScoringSubsystem extends SubsystemBase {
     /*
      * TODO: This doesn't work right now
      */
-    public boolean didCurrentSpike(CANSparkMax motor) {
+    public boolean didCurrentSpike(SparkMax motor) {
         double current = motor.getOutputCurrent();
         double threshold = 40.0;
         return current > threshold;
@@ -229,7 +234,7 @@ public class ScoringSubsystem extends SubsystemBase {
     /*
      * TODO: This doesn't work right now
      */
-    public boolean didCurrentSpikeIntake(CANSparkMax motor) {
+    public boolean didCurrentSpikeIntake(SparkMax motor) {
         double current = motor.getOutputCurrent();
         double threshold = 20.0;
         return current > threshold;

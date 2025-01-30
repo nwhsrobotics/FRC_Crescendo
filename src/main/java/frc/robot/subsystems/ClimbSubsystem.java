@@ -1,14 +1,14 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.ImprovedCanSpark;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class ClimbSubsystem extends SubsystemBase {
-    private final CANSparkMax leftClimbMotor = new ImprovedCanSpark(Constants.CANAssignments.CLIMB_LEFT_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO550, CANSparkBase.IdleMode.kBrake);
-    private final CANSparkMax rightClimbMotor = new ImprovedCanSpark(Constants.CANAssignments.CLIMB_RIGHT_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO550, CANSparkBase.IdleMode.kBrake);
+    private final SparkMax leftClimbMotor = new ImprovedCanSpark(Constants.CANAssignments.CLIMB_LEFT_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO550, IdleMode.kBrake);
+    private final SparkMax rightClimbMotor = new ImprovedCanSpark(Constants.CANAssignments.CLIMB_RIGHT_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO550, IdleMode.kBrake);
 
     public ClimbSubsystem() {
         leftClimbMotor.setInverted(true);
