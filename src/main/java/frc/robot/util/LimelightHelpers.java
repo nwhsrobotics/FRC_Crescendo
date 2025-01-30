@@ -1,4 +1,4 @@
-//LimelightHelpers v1.10 (REQUIRES LLOS 2024.9.1 OR LATER)
+//LimelightHelpers v1.10 (REQUIRES LLOS 2025.9.1 OR LATER)
 
 package frc.robot.util;
 
