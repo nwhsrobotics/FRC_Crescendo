@@ -5,6 +5,7 @@
 package frc.robot.autos;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.FlippingUtil;
 import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -123,7 +124,7 @@ public class Auto extends SequentialCommandGroup {
     public void flipResetOdometry(Pose2d loc) {
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-            swerve.resetOdometry(GeometryUtil.flipFieldPose(loc));
+            swerve.resetOdometry(FlippingUtil.flipFieldPose(loc));
         } else {
             swerve.resetOdometry(loc);
         }

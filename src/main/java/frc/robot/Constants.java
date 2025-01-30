@@ -1,9 +1,10 @@
 package frc.robot;
 
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -235,12 +236,11 @@ public final class Constants {
         public static final double kPXController = 5;
         public static final double kPThetaController = 5;
 
-        public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+        public static final PPHolonomicDriveController pathFollowerConfig = new PPHolonomicDriveController(
                 new PIDConstants(AutoConstants.kPXController, 0, 0), // Translation constants
                 new PIDConstants(AutoConstants.kPThetaController, 0, 0), // Rotation constants
-                DriveConstants.kPhysicalMaxSpeedMetersPerSecond,
-                new Translation2d(DriveConstants.kWheelBase / 2, DriveConstants.kTrackWidth / 2).getNorm(),// Drive base radius (distance from center to furthest module)
-                new ReplanningConfig()
+                //DriveConstants.kPhysicalMaxSpeedMetersPerSecond// Drive base radius (distance from center to furthest module)
+                0.02
         );
 
         public static final PathConstraints kPathfindingConstraints = new PathConstraints(

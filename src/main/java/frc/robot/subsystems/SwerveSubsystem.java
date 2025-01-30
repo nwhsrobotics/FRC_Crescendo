@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.VecBuilder;
@@ -15,12 +16,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SerialPort.Port;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -116,36 +113,44 @@ public class SwerveSubsystem extends SubsystemBase {
      * Configures the AutoBuilder for holonomic/swerve path planning and initializes the gyro.
      */
     public SwerveSubsystem() {
-        // Configure AutoBuilder for holonomic/swerve path planning & paths
-        AutoBuilder.configureHolonomic(
-                this::getPose,               // Supplier for getting the robot's pose
-                this::resetOdometry,         // Runnable for resetting odometry
-                this::getSpeeds,             // Supplier for getting the robot's speeds
-                this::driveRobotRelative,    // Consumer for driving the robot relative to its orientation
-                AutoConstants.pathFollowerConfig, // Path follower configuration
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        RobotConfig config;
+        try {
+            config = RobotConfig.fromGUISettings();
 
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
-                this
-        );
+            // Configure AutoBuilder for holonomic/swerve path planning & paths
+            AutoBuilder.configure(
+                    this::getPose,               // Supplier for getting the robot's pose
+                    this::resetOdometry,         // Runnable for resetting odometry
+                    this::getSpeeds,             // Supplier for getting the robot's speeds
+                    this::driveRobotRelative,    // Consumer for driving the robot relative to its orientation
+                    AutoConstants.pathFollowerConfig, // Path follower configuration
+                    config,                     // Robot configuration
+                    () -> {
+                        // Boolean supplier that controls when the path will be mirrored for the red alliance
+                        // This will flip the path being followed to the red side of the field.
+                        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-        this.autonavigator = new AutoNavigation(this);
+                        var alliance = DriverStation.getAlliance();
+                        if (alliance.isPresent()) {
+                            return alliance.get() == DriverStation.Alliance.Red;
+                        }
+                        return false;
+                    },
+                    this
+            );
 
-        // Pause for 500 milliseconds to allow the gyro to stabilize.
-        // Set the yaw of the gyro to 0 afterwards.
-        // TODO: Do we need this anymore? Might cause conflicts with path planner
-        //gyro.reset();
-        Commands.waitUntil(() -> !gyro.isCalibrating()).andThen(new InstantCommand(() -> gyro.zeroYaw()));
-        /*Commands.waitSeconds(0.5)
-                .andThen(new RunCommand(() -> gyro.zeroYaw()));*/
+            this.autonavigator = new AutoNavigation(this);
+
+            // Pause for 500 milliseconds to allow the gyro to stabilize.
+            // Set the yaw of the gyro to 0 afterwards.
+            // TODO: Do we need this anymore? Might cause conflicts with path planner
+            //gyro.reset();
+            Commands.waitUntil(() -> !gyro.isCalibrating()).andThen(new InstantCommand(() -> gyro.zeroYaw()));
+            /*Commands.waitSeconds(0.5)
+                    .andThen(new RunCommand(() -> gyro.zeroYaw()));*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -175,6 +180,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public double getPitchDeg() {
         return -gyro.getPitch();
     }
+
     public boolean isFieldRelative() {
         return isFieldRelative;
     }
@@ -237,7 +243,7 @@ public class SwerveSubsystem extends SubsystemBase {
         odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), pose);
     }
 
-    public void zeroGyro(){
+    public void zeroGyro() {
         gyro.zeroYaw();
     }
 
@@ -287,22 +293,25 @@ public class SwerveSubsystem extends SubsystemBase {
     public void pathFindThenFollowPath(String pathName) {
         Command pathfindingCommand;
         // Load the path we want to pathfind to and follow
-        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        PathPlannerPath path;
+        try {
+            path = PathPlannerPath.fromPathFile(pathName);
 
-        // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
-        PathConstraints constraints = new PathConstraints(
-                DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 8.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 8.0,
-                AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
+            // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
+            PathConstraints constraints = new PathConstraints(
+                    DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 8.0, AutoConstants.kMaxAccelerationMetersPerSecondSquared / 8.0,
+                    AutoConstants.kMaxAngularSpeedRadiansPerSecond, AutoConstants.kMaxAngularAccelerationRadiansPerSecondSquared / 2.0);
 
-        // What pathfinding does is pathfind to the start of a path and then continue along that path.
-        // If you don't want to continue along the path, you can make it pathfind to a specific location.
+            // What pathfinding does is pathfind to the start of a path and then continue along that path.
+            // If you don't want to continue along the path, you can make it pathfind to a specific location.
 
-        pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
-                path,
-                constraints,
-                0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
-        );
-        pathfindingCommand.schedule();
+            pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
+                    path,
+                    constraints
+            );
+            pathfindingCommand.schedule();
+        } catch (Exception ignored) {
+        }
 
     }
 
@@ -316,8 +325,7 @@ public class SwerveSubsystem extends SubsystemBase {
         Command command = AutoBuilder.pathfindToPoseFlipped(
                 position,
                 AutoConstants.kPathfindingConstraints,
-                0.0, // Goal end velocity in meters/sec
-                0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+                0.0 // Goal end velocity in meters/sec
         );
         command.addRequirements(this);
         command.schedule();
@@ -340,7 +348,6 @@ public class SwerveSubsystem extends SubsystemBase {
         Logger.recordOutput("swerve.pitch", getPitchDeg());
         Logger.recordOutput("swerve.heading", getHeading());
 
-        
 
         // Log steering direction.
         Logger.recordOutput("swerve.steer.front.left.abs", frontLeft.getAbsoluteEncoderRad());
@@ -422,66 +429,56 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public void updateOdometry() {
         odometer.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
-    
-        /*if (Vision.isAprilTagPipeline("limelight")){
-        boolean useMegaTag2 = true; //set to false to use MegaTag1
-        // we might use megatag1 when disabled to auto orient and megatag2 when enable
-        // here: https://www.chiefdelphi.com/t/introducing-megatag2-by-limelight-vision/461243/78 
-        boolean doRejectUpdate = false;
-        if(useMegaTag2 == false)
-        {
-          LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-          
-          if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
-          {
-            if(mt1.rawFiducials[0].ambiguity > .7)
-            {
-              doRejectUpdate = true;
+        if (VisionGamePiece.isAprilTagPipeline("limelight")) {
+
+            boolean useMegaTag2 = true; //set to false to use MegaTag1
+            // we might use megatag1 when disabled to auto orient and megatag2 when enable
+            // here: https://www.chiefdelphi.com/t/introducing-megatag2-by-limelight-vision/461243/78 
+            boolean doRejectUpdate = false;
+            if (!useMegaTag2) {
+                LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+
+                if (mt1.tagCount == 1 && mt1.rawFiducials.length == 1) {
+                    if (mt1.rawFiducials[0].ambiguity > .7) {
+                        doRejectUpdate = true;
+                    }
+                    if (mt1.rawFiducials[0].distToCamera > 3) {
+                        doRejectUpdate = true;
+                    }
+                }
+                if (mt1.tagCount == 0) {
+                    doRejectUpdate = true;
+                }
+
+                if (!doRejectUpdate) {
+                    odometer.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
+                    odometer.addVisionMeasurement(
+                            mt1.pose,
+                            mt1.timestampSeconds);
+                }
+            } else if (useMegaTag2) {
+                LimelightHelpers.SetRobotOrientation("limelight", odometer.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+                LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+                if (Math.abs(gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+                {
+                    doRejectUpdate = true;
+                }
+                if (mt2.tagCount == 0) {
+                    doRejectUpdate = true;
+                }
+                if (!doRejectUpdate) {
+                    odometer.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
+                    odometer.addVisionMeasurement(
+                            mt2.pose,
+                            mt2.timestampSeconds);
+                }
+                Logger.recordOutput("swerve.odometer", odometer.getEstimatedPosition());
+                Logger.recordOutput("swerve.odometer.xCoordinate", odometer.getEstimatedPosition().getX());
+                Logger.recordOutput("swerve.odometer.yCoordinate", odometer.getEstimatedPosition().getY());
+                Logger.recordOutput("swerve.odometer.rotation", odometer.getEstimatedPosition().getRotation().getDegrees());
             }
-            if(mt1.rawFiducials[0].distToCamera > 3)
-            {
-              doRejectUpdate = true;
-            }
-          }
-          if(mt1.tagCount == 0)
-          {
-            doRejectUpdate = true;
-          }
-    
-          if(!doRejectUpdate)
-          {
-            odometer.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
-            odometer.addVisionMeasurement(
-                mt1.pose,
-                mt1.timestampSeconds);
-          }
         }
-        else if (useMegaTag2 == true)
-        {
-          LimelightHelpers.SetRobotOrientation("limelight", odometer.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-          LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-          if(Math.abs(gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-          {
-            doRejectUpdate = true;
-          }
-          if(mt2.tagCount == 0)
-          {
-            doRejectUpdate = true;
-          }
-          if(!doRejectUpdate)
-          {
-            odometer.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-            odometer.addVisionMeasurement(
-                mt2.pose,
-                mt2.timestampSeconds);
-          }
-        }
-          Logger.recordOutput("swerve.odometer", odometer.getEstimatedPosition());
-          Logger.recordOutput("swerve.odometer.xCoordinate", odometer.getEstimatedPosition().getX());
-          Logger.recordOutput("swerve.odometer.yCoordinate", odometer.getEstimatedPosition().getY());
-          Logger.recordOutput("swerve.odometer.rotation", odometer.getEstimatedPosition().getRotation().getDegrees());
-        }*/
-      }
+    }
 
     /**
      * Method to drive the robot using joystick info.

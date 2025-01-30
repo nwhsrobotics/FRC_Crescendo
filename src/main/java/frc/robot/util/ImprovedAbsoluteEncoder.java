@@ -29,8 +29,5 @@ public class ImprovedAbsoluteEncoder extends DutyCycleEncoder {
         this.offset = offset;
     }
 
-    @Override
-    public double getAbsolutePosition() {
-        return super.getAbsolutePosition();
-    }
+
 }

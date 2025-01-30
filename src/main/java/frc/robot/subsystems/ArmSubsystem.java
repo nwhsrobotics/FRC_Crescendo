@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.SparkPIDController.ArbFFUnits;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkClosedLoopController.ArbFFUnits;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -18,12 +21,12 @@ import org.littletonrobotics.junction.Logger;
  */
 public class ArmSubsystem extends SubsystemBase {
     // Motors for controlling the arm
-    private final CANSparkMax rightShoulderMotor;
-    private final CANSparkMax leftShoulderMotor;
+    private final SparkMax rightShoulderMotor;
+    private final SparkMax leftShoulderMotor;
 
     // PID controllers for the shoulder motors
-    private final SparkPIDController rightShoulderPidController;
-    private final SparkPIDController leftShoulderPidController;
+    private final SparkClosedLoopController rightShoulderPidController;
+    private final SparkClosedLoopController leftShoulderPidController;
 
     // Encoders for shoulder position feedback
     private final RelativeEncoder rightShoulderEncoder;
@@ -32,25 +35,28 @@ public class ArmSubsystem extends SubsystemBase {
     // Absolute encoder for shoulder position
     private final DutyCycleEncoder shoulderAbsoluteEncoder;
 
+    private final SparkMaxConfig rightShoulderConfig = new SparkMaxConfig();
+    private final SparkMaxConfig leftShoulderConfig = new SparkMaxConfig();
+
     // Target rotations for the arm
     private double targetRotations = 0;
 
     // Constructor for ArmSubsystem
     public ArmSubsystem() {
         // Initialize right shoulder motor
-        rightShoulderMotor = new ImprovedCanSpark(CANAssignments.RIGHT_SHOULDER_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
+        rightShoulderConfig.closedLoop.p(0.25);
+        rightShoulderConfig.closedLoop.outputRange(-ArmConstants.SHOULDER_OUTPUT_LIMIT, ArmConstants.SHOULDER_OUTPUT_LIMIT);
+        rightShoulderMotor = new ImprovedCanSpark(CANAssignments.RIGHT_SHOULDER_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kBrake);
         rightShoulderEncoder = rightShoulderMotor.getEncoder();
-        rightShoulderPidController = rightShoulderMotor.getPIDController();
-        rightShoulderPidController.setP(0.25);
-        rightShoulderPidController.setOutputRange(-ArmConstants.SHOULDER_OUTPUT_LIMIT, ArmConstants.SHOULDER_OUTPUT_LIMIT);
+        rightShoulderPidController = rightShoulderMotor.getClosedLoopController();
 
         // Initialize left shoulder motor
-        leftShoulderMotor = new ImprovedCanSpark(CANAssignments.LEFT_SHOULDER_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, CANSparkBase.IdleMode.kBrake);
+        leftShoulderConfig.closedLoop.p(0.25);
+        leftShoulderConfig.closedLoop.outputRange(-ArmConstants.SHOULDER_OUTPUT_LIMIT, ArmConstants.SHOULDER_OUTPUT_LIMIT);
+        leftShoulderMotor = new ImprovedCanSpark(CANAssignments.LEFT_SHOULDER_MOTOR_ID, ImprovedCanSpark.MotorKind.NEO, IdleMode.kBrake);
         leftShoulderMotor.setInverted(true);
         leftShoulderEncoder = leftShoulderMotor.getEncoder();
-        leftShoulderPidController = leftShoulderMotor.getPIDController();
-        leftShoulderPidController.setP(0.25); // Set proportional gain
-        leftShoulderPidController.setOutputRange(-ArmConstants.SHOULDER_OUTPUT_LIMIT, ArmConstants.SHOULDER_OUTPUT_LIMIT);
+        leftShoulderPidController = leftShoulderMotor.getClosedLoopController();
 
         // Initialize absolute encoder
         shoulderAbsoluteEncoder = new DutyCycleEncoder(ArmConstants.ABSOLUTE_ENCODER_DIO_CHANNEL);
@@ -125,14 +131,14 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Set target position for PID control
-        rightShoulderPidController.setReference(targetRotations, ControlType.kPosition, 0, -Math.signum(rightShoulderEncoder.getPosition()) * 0.35, ArbFFUnits.kVoltage);
-        leftShoulderPidController.setReference(targetRotations, ControlType.kPosition, 0, -Math.signum(leftShoulderEncoder.getPosition()) * 0.35, ArbFFUnits.kVoltage);
+        rightShoulderPidController.setReference(targetRotations, ControlType.kPosition, ClosedLoopSlot.kSlot0, -Math.signum(rightShoulderEncoder.getPosition()) * 0.35, ArbFFUnits.kVoltage);
+        leftShoulderPidController.setReference(targetRotations, ControlType.kPosition, ClosedLoopSlot.kSlot0, -Math.signum(leftShoulderEncoder.getPosition()) * 0.35, ArbFFUnits.kVoltage);
 
         // Log arm positions
         Logger.recordOutput("arm.targetposition", targetRotations);
         Logger.recordOutput("arm.left.position", leftShoulderEncoder.getPosition());
         Logger.recordOutput("arm.right.position", rightShoulderEncoder.getPosition());
         Logger.recordOutput("arm.absposition", getAbsoluteEncoderRotations());
-        Logger.recordOutput("arm.rawposition", shoulderAbsoluteEncoder.getAbsolutePosition());
+        Logger.recordOutput("arm.rawposition", shoulderAbsoluteEncoder.get());
     }
 }
