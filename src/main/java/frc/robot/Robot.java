@@ -33,11 +33,11 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         robotPD = new ImprovedPowerDistribution(CANAssignments.PDU_ID, Constants.PDU_TYPE);
 
-        Logger.recordMetadata("version", LoggerConstants.RUNNING_UNDER);
-        Logger.recordMetadata("build_commit", BuildConstants.GIT_SHA);
-        Logger.recordMetadata("build_branch", BuildConstants.GIT_BRANCH);
-        Logger.recordMetadata("build_git_uncommitted_changes", String.valueOf(BuildConstants.DIRTY));
-        Logger.recordMetadata("build_timestamp", BuildConstants.BUILD_DATE);
+        // Logger.recordMetadata("version", LoggerConstants.RUNNING_UNDER);
+        // Logger.recordMetadata("build_commit", BuildConstants.GIT_SHA);
+        // Logger.recordMetadata("build_branch", BuildConstants.GIT_BRANCH);
+        // Logger.recordMetadata("build_git_uncommitted_changes", String.valueOf(BuildConstants.DIRTY));
+        // Logger.recordMetadata("build_timestamp", BuildConstants.BUILD_DATE);
 
         switch (LoggerConstants.MODE) {
             case REAL:
